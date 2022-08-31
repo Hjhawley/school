@@ -6,7 +6,7 @@ def mergeSort(A):
     mid = len(A)//2
     L = A[:mid]
     R = A[mid:]
-    # Sort L and R with recursion
+    # Sort L and R recursively
     mergeSort(L)
     mergeSort(R)
     # Merge L and R over A
