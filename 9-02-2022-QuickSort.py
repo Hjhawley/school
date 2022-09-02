@@ -9,20 +9,21 @@ If there are 10 cities including the hometown, there are 9 options for the first
 # But worst case scenario is a list that's already mostly sorted, because it becomes N^2
 # If you KNOW the list is mostly sorted, you want to use the shaker sort.
 
-A = [-2, 4, 6, -3, 7, 6, 8]
+A = [-2, 4, 6, -3, 7, 6, 8, -2, 4, 6, -3, 7, 6, 8]
 
 # First number is called the pivot item
 
 def quickSort(A, low, high):
     if high - low <= 0:
-        return
+        return # Kill the loop if the list is only 1 item long
     lmgt = low + 1 # Leftmost of the greater-thans
-    for i in range(low + 1, high + 1):
-        if A[i]<A[low]:
-            A[i],A[lmgt] = A [lmgt],A[i]
+    for i in range(low + 1, high + 1): # Everything except for the first list item (the pivot point)
+        if A[i] < A[low]:
+            A[i], A[lmgt] = A [lmgt], A[i] # Swap the item into the less-than side
+            lmgt += 1
     pivot = lmgt - 1
-    A[low],A[pivot] = A[pivot],A[low]
-    quickSort(A, low, pivot-1)
+    A[low], A[pivot] = A[pivot], A[low]
+    quickSort(A, low, pivot-1) # Recurse on both sides
     quickSort(A, pivot+1, high)
 
 # Modified
@@ -30,18 +31,17 @@ def quickSort(A, low, high):
 def modifiedQuickSort(A, low, high):
     if high - low <= 0:
         return
-        
     mid = (low + high)//2
     A[low],A[mid] = A[mid],A[low]
-    
-    lmgt = low + 1 # Leftmost of the greater-thans
+    lmgt = low + 1
     for i in range(low + 1, high + 1):
         if A[i]<A[low]:
             A[i],A[lmgt] = A [lmgt],A[i]
+            lmgt += 1
     pivot = lmgt - 1
     A[low],A[pivot] = A[pivot],A[low]
     modifiedQuickSort(A, low, pivot-1)
     modifiedQuickSort(A, pivot+1, high)
 
-quickSort(A,0,6)
+modifiedQuickSort(A, 0, 13)
 print(A)
