@@ -53,35 +53,35 @@ def createRandomList(N):
 def main():
     # Bubble sort test
     list1 = createRandomList(15)
-    print(list1)
+    print("List 1: " + str(list1))
 
     list1Copy = list1[:]
     bubbleSort(list1)
     list1Copy.sort()
 
-    print(list1)
+    print("Bubble sort: " + str(list1))
     print(list1 == list1Copy)
 
     # Shaker sort test
     list2 = createRandomList(15)
-    print(list2)
+    print("List 2: " + str(list2))
 
     list2Copy = list2[:]
     shakerSort(list2)
     list2Copy.sort()
 
-    print(list2)
+    print("Shaker sort: " + str(list2))
     print(list2 == list2Copy)
 
     # Counting sort test
     list3 = createRandomList(15)
-    print(list3)
+    print("List 3: " + str(list3))
 
     list3Copy = list3[:]
     countingSort(list3)
     list3Copy.sort()
 
-    print(list3)
+    print("Counting sort: " + str(list3))
     print(list3 == list3Copy)
 
 main()
