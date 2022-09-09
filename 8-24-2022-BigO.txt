@@ -36,3 +36,5 @@ These numbers are incomprehensibly big.
 Binary search = log(base 2) of N
 Linear search = N
 Towers of Hanoi = 2 to the N
+Sat problem = 2 to the N 
+Traveling salesman = N factorial
