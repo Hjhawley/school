@@ -41,15 +41,13 @@ def mergeSort(A):
     mid = len(A)//2
     L = A[:mid]
     R = A[mid:]
-    # Sort L and R recursively
     mergeSort(L)
     mergeSort(R)
-    # Merge L and R over A
     i = 0 # Left index
     j = 0 # Right index
     k = 0 # Merged index
-    while i < len(L) and j < len(R): # Merge
-        if L[i] <= R[j]:
+    while i < len(L) and j < len(R):
+        if L[i] <= R[i]:
             A[k] = L[i]
             i+=1
             k+=1
@@ -57,15 +55,14 @@ def mergeSort(A):
             A[k] = R[j]
             j+=1
             k+=1
-    # Add the leftovers
-    while i < len(L):
-        A[k] = L[i]
-        i+=1
-        k+=1
-    while j < len(R):
-        A[k] = R[j]
-        j+=1
-        k+=1
+        while i < len(L):
+            A[k] = L[i]
+            i+=1
+            k+=1
+        while j < len(R):
+            A[k] = R[j]
+            j+=1
+            k+=1
 
 def createRandomList(N):
     A = []

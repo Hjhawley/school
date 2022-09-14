@@ -1,4 +1,4 @@
-A = [-2, 4, 6, -3, 7, 6, 8]
+A = [-2, 4, 6, -3, 7, 6, 8, 0, 2]
 
 def mergeSort(A):
     if len(A) <= 1:
@@ -14,7 +14,7 @@ def mergeSort(A):
     j = 0 # Right index
     k = 0 # Merged index
     while i < len(L) and j < len(R): # Merge
-        if L[i] <= R[i]:
+        if L[i] <= R[j]:
             A[k] = L[i]
             i+=1
             k+=1
@@ -22,15 +22,15 @@ def mergeSort(A):
             A[k] = R[j]
             j+=1
             k+=1
-        # Add the leftovers
-        while i < len(L):
-            A[k] = L[i]
-            i+=1
-            k+=1
-        while j < len(R):
-            A[k] = R[j]
-            j+=1
-            k+=1
+    # Add the leftovers
+    while i < len(L):
+        A[k] = L[i]
+        i+=1
+        k+=1
+    while j < len(R):
+        A[k] = R[j]
+        j+=1
+        k+=1
 
 mergeSort(A)
 print(A)
