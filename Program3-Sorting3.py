@@ -4,6 +4,7 @@ Measure all 6 sorting algorithms by counting the number of compares.
 Test on data ranging from size 8 to size 2k, by powers of 2.
 Test on random data and on mostly sorted data.
 (Make a new function to create mostly sorted data. Have it first call the MakeRandomData function, have Python sort it, then swap the first and last elements.)
+
 Print all this data in organized tables, that you can then copy into Excel spreadsheets for making charts.
 You will need to create two data sets, with 1 Excel chart for each.
 The first data set and chart should plot Problem Size versus number of Compares when using Random data.
@@ -16,3 +17,123 @@ Also, make an effort to organize your python code to reduce repeating code as mu
 '''
 
 import random
+
+def bubbleSort(A):
+    swap = True
+    while swap:
+        swap = False
+        for i in range(len(A)-1):
+            if A[i] > A[i+1]:
+                A[i],A[i+1] = A[i+1],A[i] # Swap
+                swap = True
+
+def shakerSort(A):
+    swap = True
+    while swap:
+        swap = False
+        for i in range(len(A)-1):
+            if A[i] > A[i+1]:
+                A[i],A[i+1] = A[i+1],A[i] # Swap
+                swap = True
+        for i in range(len(A)-1, 0, -1):
+            if A[i] < A[i-1]:
+                A[i],A[i-1] = A[i-1],A[i] # Swap
+                swap = True
+
+def countingSort(A):
+    tally = [0] * len(A)
+    for i in A:
+        tally[i] += 1
+    k = 0
+    for i in range(len(tally)):
+        value = i
+        count = tally[i]
+        for j in range(count):
+            A[k] = value
+            k += 1
+
+def quickSort(A, low, high):
+    if high - low <= 0:
+        return
+    lmgt = low + 1
+    for i in range(low + 1, high + 1):
+        if A[i] < A[low]:
+            A[i], A[lmgt] = A [lmgt], A[i]
+            lmgt += 1
+    pivot = lmgt - 1
+    A[low], A[pivot] = A[pivot], A[low]
+    quickSort(A, low, pivot-1)
+    quickSort(A, pivot+1, high)
+
+def modifiedQuickSort(A, low, high):
+    if high - low <= 0:
+        return
+    mid = (low + high)//2
+    A[low],A[mid] = A[mid],A[low] # Modified
+    lmgt = low + 1
+    for i in range(low + 1, high + 1):
+        if A[i]<A[low]:
+            A[i],A[lmgt] = A [lmgt],A[i]
+            lmgt += 1
+    pivot = lmgt - 1
+    A[low],A[pivot] = A[pivot],A[low]
+    modifiedQuickSort(A, low, pivot-1)
+    modifiedQuickSort(A, pivot+1, high)
+
+def mergeSort(A):
+    if len(A) <= 1:
+        return
+    mid = len(A)//2
+    L = A[:mid]
+    R = A[mid:]
+    mergeSort(L)
+    mergeSort(R)
+    i = 0 # Left index
+    j = 0 # Right index
+    k = 0 # Merged index
+    while i < len(L) and j < len(R): # Merge
+        if L[i] <= R[j]:
+            A[k] = L[i]
+            i+=1
+            k+=1
+        else:
+            A[k] = R[j]
+            j+=1
+            k+=1
+    while i < len(L):
+        A[k] = L[i]
+        i+=1
+        k+=1
+    while j < len(R):
+        A[k] = R[j]
+        j+=1
+        k+=1
+
+def createRandomList(N):
+    A = []
+    for i in range(N):
+        r = random.randrange(N)
+        A.append(r)
+    return A
+
+def createMostlySortedList(N):
+    A = createRandomList(N)
+    A.sort()
+    A[0],A[-1] = A[-1],A[0]
+    return A
+
+def main():
+    sorts = [bubble, shaker, ...]
+    for sort in sorts:
+        A = createRandomList(10)
+        B = A[:]
+        c = counter()
+        sort(A,c)
+        B.sort()
+        if A != B:
+            print("Error")
+
+my_l = createRandomList(15)
+print(my_l)
+my_l = createMostlySortedList(15)
+print(my_l)
