@@ -1,108 +1,18 @@
-# Sorting 2
-
+# Sorting 3
 '''
-Implement these additional sorting algorithms: Quick, Modified Quick, and Merge.
-Test your sorting algorithms as you did in the previous assignment.
+Measure all 6 sorting algorithms by counting the number of compares.
+Test on data ranging from size 8 to size 2k, by powers of 2.
+Test on random data and on mostly sorted data.
+(Make a new function to create mostly sorted data. Have it first call the MakeRandomData function, have Python sort it, then swap the first and last elements.)
+Print all this data in organized tables, that you can then copy into Excel spreadsheets for making charts.
+You will need to create two data sets, with 1 Excel chart for each.
+The first data set and chart should plot Problem Size versus number of Compares when using Random data.
+The second data set and chart should plot Problem Size versus number of Compares when using Mostly Sorted data instead of Random data.
+To pass off, show the data sets and charts that illustrate compares for random and mostly sorted data. Be prepared to explain what they mean.
+
+It is important to make the charts Log/Log. That is, modify your python code to print the Log of the Problem Size and the Log of the number of Comparisons.
+Otherwise it will be really hard to see and interpret the results.
+Also, make an effort to organize your python code to reduce repeating code as much as possible.
 '''
 
 import random
-
-def quickSort(A, low, high):
-    if high - low <= 0:
-        return
-    lmgt = low + 1
-    for i in range(low + 1, high + 1):
-        if A[i] < A[low]:
-            A[i], A[lmgt] = A [lmgt], A[i]
-            lmgt += 1
-    pivot = lmgt - 1
-    A[low], A[pivot] = A[pivot], A[low]
-    quickSort(A, low, pivot-1)
-    quickSort(A, pivot+1, high)
-
-def modifiedQuickSort(A, low, high):
-    if high - low <= 0:
-        return
-    mid = (low + high)//2
-    A[low],A[mid] = A[mid],A[low] # Modified
-    lmgt = low + 1
-    for i in range(low + 1, high + 1):
-        if A[i]<A[low]:
-            A[i],A[lmgt] = A [lmgt],A[i]
-            lmgt += 1
-    pivot = lmgt - 1
-    A[low],A[pivot] = A[pivot],A[low]
-    modifiedQuickSort(A, low, pivot-1)
-    modifiedQuickSort(A, pivot+1, high)
-
-def mergeSort(A):
-    if len(A) <= 1:
-        return
-    mid = len(A)//2
-    L = A[:mid]
-    R = A[mid:]
-    mergeSort(L)
-    mergeSort(R)
-    i = 0 # Left index
-    j = 0 # Right index
-    k = 0 # Merged index
-    while i < len(L) and j < len(R):
-        if L[i] <= R[i]:
-            A[k] = L[i]
-            i+=1
-            k+=1
-        else:
-            A[k] = R[j]
-            j+=1
-            k+=1
-        while i < len(L):
-            A[k] = L[i]
-            i+=1
-            k+=1
-        while j < len(R):
-            A[k] = R[j]
-            j+=1
-            k+=1
-
-def createRandomList(N):
-    A = []
-    for i in range(N):
-        r = random.randrange(N)
-        A.append(r)
-    return A
-
-def main():
-    # Quick sort test
-    list1 = createRandomList(15)
-    print("List 1: " + str(list1))
-
-    list1Copy = list1[:]
-    quickSort(list1, 0, 14)
-    list1Copy.sort()
-
-    print("Quick sort: " + str(list1))
-    print(list1 == list1Copy)
-
-    # Modified quick sort test
-    list2 = createRandomList(15)
-    print("List 2: " + str(list2))
-
-    list2Copy = list2[:]
-    modifiedQuickSort(list2, 0, 14)
-    list2Copy.sort()
-
-    print("Modified quick sort: " + str(list2))
-    print(list2 == list2Copy)
-
-    # Merge sort test
-    list3 = createRandomList(15)
-    print("List 3: " + str(list3))
-
-    list3Copy = list3[:]
-    mergeSort(list3)
-    list3Copy.sort()
-
-    print("Merge sort: " + str(list3))
-    print(list3 == list3Copy)
-
-main()
