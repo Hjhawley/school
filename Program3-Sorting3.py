@@ -18,6 +18,10 @@ Also, make an effort to organize your python code to reduce repeating code as mu
 
 import random
 
+class Counter:
+    def __init__(self):
+        self.compares = 0
+
 def bubbleSort(A):
     swap = True
     while swap:
@@ -88,26 +92,26 @@ def mergeSort(A):
     R = A[mid:]
     mergeSort(L)
     mergeSort(R)
-    i = 0 # Left index
-    j = 0 # Right index
-    k = 0 # Merged index
-    while i < len(L) and j < len(R): # Merge
-        if L[i] <= R[j]:
-            A[k] = L[i]
-            i+=1
-            k+=1
+    li = 0 # Left index
+    ri = 0 # Right index
+    mi = 0 # Merged index
+    while li < len(L) and ri < len(R): # Merge
+        if L[li] <= R[ri]:
+            A[mi] = L[li]
+            li+=1
+            mi+=1
         else:
-            A[k] = R[j]
-            j+=1
-            k+=1
-    while i < len(L):
-        A[k] = L[i]
-        i+=1
-        k+=1
-    while j < len(R):
-        A[k] = R[j]
-        j+=1
-        k+=1
+            A[mi] = R[ri]
+            ri+=1
+            mi+=1
+    while li < len(L):
+        A[mi] = L[li]
+        li+=1
+        mi+=1
+    while ri < len(R):
+        A[mi] = R[ri]
+        ri+=1
+        mi+=1
 
 def createRandomList(N):
     A = []
@@ -123,17 +127,23 @@ def createMostlySortedList(N):
     return A
 
 def main():
-    sorts = [bubble, shaker, ...]
+    sorts = [bubbleSort, shakerSort, countingSort, quickSort, modifiedQuickSort, mergeSort]
     for sort in sorts:
         A = createRandomList(10)
         B = A[:]
-        c = counter()
-        sort(A,c)
+        #c = counter()
+        print(str(A) + " - Unsorted")
+        sort(A)
+        print(str(A) +" - "+ str(sort))
         B.sort()
         if A != B:
             print("Error")
 
+'''
 my_l = createRandomList(15)
 print(my_l)
 my_l = createMostlySortedList(15)
 print(my_l)
+'''
+
+main()
