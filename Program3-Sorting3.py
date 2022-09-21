@@ -17,36 +17,41 @@ Also, make an effort to organize your python code to reduce repeating code as mu
 '''
 
 import random
+import math
 
 class Counter:
     def __init__(self):
         self.compares = 0
 
-def bubbleSort(A):
+def bubbleSort(A, low, high, c):
     swap = True
     while swap:
         swap = False
         for i in range(len(A)-1):
+            c.compares += 1
             if A[i] > A[i+1]:
-                A[i],A[i+1] = A[i+1],A[i] # Swap
+                A[i],A[i+1] = A[i+1],A[i]
                 swap = True
 
-def shakerSort(A):
+def shakerSort(A, low, high, c):
     swap = True
     while swap:
         swap = False
         for i in range(len(A)-1):
+            c.compares += 1
             if A[i] > A[i+1]:
-                A[i],A[i+1] = A[i+1],A[i] # Swap
+                A[i],A[i+1] = A[i+1],A[i]
                 swap = True
         for i in range(len(A)-1, 0, -1):
+            c.compares += 1
             if A[i] < A[i-1]:
-                A[i],A[i-1] = A[i-1],A[i] # Swap
+                A[i],A[i-1] = A[i-1],A[i]
                 swap = True
 
-def countingSort(A):
+def countingSort(A, low, high, c):
     tally = [0] * len(A)
     for i in A:
+        c.compares += 1
         tally[i] += 1
     k = 0
     for i in range(len(tally)):
@@ -56,46 +61,49 @@ def countingSort(A):
             A[k] = value
             k += 1
 
-def quickSort(A, low, high):
+def quickSort(A, low, high, c):
     if high - low <= 0:
         return
     lmgt = low + 1
     for i in range(low + 1, high + 1):
+        c.compares += 1
         if A[i] < A[low]:
             A[i], A[lmgt] = A [lmgt], A[i]
             lmgt += 1
     pivot = lmgt - 1
     A[low], A[pivot] = A[pivot], A[low]
-    quickSort(A, low, pivot-1)
-    quickSort(A, pivot+1, high)
+    quickSort(A, low, pivot-1, c)
+    quickSort(A, pivot+1, high, c)
 
-def modifiedQuickSort(A, low, high):
+def modifiedQuickSort(A, low, high, c):
     if high - low <= 0:
         return
     mid = (low + high)//2
     A[low],A[mid] = A[mid],A[low] # Modified
     lmgt = low + 1
     for i in range(low + 1, high + 1):
+        c.compares += 1
         if A[i]<A[low]:
             A[i],A[lmgt] = A [lmgt],A[i]
             lmgt += 1
     pivot = lmgt - 1
     A[low],A[pivot] = A[pivot],A[low]
-    modifiedQuickSort(A, low, pivot-1)
-    modifiedQuickSort(A, pivot+1, high)
+    modifiedQuickSort(A, low, pivot-1, c)
+    modifiedQuickSort(A, pivot+1, high, c)
 
-def mergeSort(A):
+'''
+def mergeSort(A, low, high, c):
     if len(A) <= 1:
         return
     mid = len(A)//2
     L = A[:mid]
     R = A[mid:]
-    mergeSort(L)
-    mergeSort(R)
-    li = 0 # Left index
-    ri = 0 # Right index
-    mi = 0 # Merged index
-    while li < len(L) and ri < len(R): # Merge
+    mergeSort(L, low, high, c)
+    mergeSort(R, low, high, c)
+    li = 0
+    ri = 0
+    mi = 0
+    while li < len(L) and ri < len(R):
         if L[li] <= R[ri]:
             A[mi] = L[li]
             li+=1
@@ -112,6 +120,11 @@ def mergeSort(A):
         A[mi] = R[ri]
         ri+=1
         mi+=1
+'''
+def logFormat(x):
+    if x!=0:
+        x = math.log(x)/math.log(2)
+    return x
 
 def createRandomList(N):
     A = []
@@ -127,17 +140,27 @@ def createMostlySortedList(N):
     return A
 
 def main():
-    sorts = [bubbleSort, shakerSort, countingSort, quickSort, modifiedQuickSort, mergeSort]
-    for sort in sorts:
-        A = createRandomList(10)
-        B = A[:]
-        #c = counter()
-        print(str(A) + " - Unsorted")
-        sort(A)
-        print(str(A) +" - "+ str(sort))
-        B.sort()
-        if A != B:
-            print("Error")
+    sorts = [bubbleSort, shakerSort, countingSort, quickSort, modifiedQuickSort] #, mergeSort]
+    dataSize = [8, 16, 32, 64, 128, 256, 512, 1024, 2048]
+    topRow = ["Bubble","Shaker","Counting","Quick", "MQuick"]
+    print("Counting compares on random data")
+    print("  ", end="")
+    for i in topRow:
+        print("%11s" % (i), end="")
+    print("")
+    for n in dataSize:
+        print("%02d" % (int(logFormat(n))), end="")
+        for sort in sorts:
+            A = createRandomList(n)
+            B = A[:]
+            c = Counter()
+            sort(A, 0, len(A)-1, c)
+            B.sort()
+            x = logFormat(c.compares)
+            print("      %05.2f" % (x), end="")
+            if A != B:
+                print("Error - not sorted properly")
+        print("")
 
 '''
 my_l = createRandomList(15)
