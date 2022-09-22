@@ -165,4 +165,5 @@ def main(dataSet, title):
         print("")
 
 main(createRandomList, "Counting compares on random data")
+print("")
 main(createMostlySortedList, "Counting compares on mostly sorted data")
