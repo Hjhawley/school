@@ -17,7 +17,7 @@ Also, make an effort to organize your python code to reduce repeating code as mu
 import random
 import math
 import sys
-sys.setrecursionlimit(1500) # For Quick Sort on mostly sorted data
+sys.setrecursionlimit(1800) # For Quick Sort on mostly sorted data
 
 class Counter:
     def __init__(self):
@@ -61,13 +61,45 @@ def countingSort(A, low, high, c):
             A[k] = value
             k += 1
 
+def mergeSort(A, low, high, c):
+    if len(A) <= 1:
+        return
+    mid = len(A)//2
+    L = A[:mid]
+    R = A[mid:]
+    mergeSort(L, low, high, c)
+    mergeSort(R, low, high, c)
+    li = 0
+    ri = 0
+    mi = 0
+    while li < len(L) and ri < len(R):
+        c.compares += 1
+        if L[li] <= R[ri]:
+            A[mi] = L[li]
+            li+=1
+            mi+=1
+        else:
+            A[mi] = R[ri]
+            ri+=1
+            mi+=1
+    while li < len(L):
+        c.compares += 1
+        A[mi] = L[li]
+        li+=1
+        mi+=1
+    while ri < len(R):
+        c.compares += 1
+        A[mi] = R[ri]
+        ri+=1
+        mi+=1
+
 def quickSort(A, low, high, c):
     if high - low <= 0:
         return
     lmgt = low + 1
     for i in range(low + 1, high + 1):
-        c.compares += 1
         if A[i] < A[low]:
+            c.compares += 1
             A[i], A[lmgt] = A [lmgt], A[i]
             lmgt += 1
     pivot = lmgt - 1
@@ -82,8 +114,8 @@ def modifiedQuickSort(A, low, high, c):
     A[low],A[mid] = A[mid],A[low] # Modified
     lmgt = low + 1
     for i in range(low + 1, high + 1):
-        c.compares += 1
         if A[i]<A[low]:
+            c.compares += 1
             A[i],A[lmgt] = A [lmgt],A[i]
             lmgt += 1
     pivot = lmgt - 1
@@ -91,36 +123,6 @@ def modifiedQuickSort(A, low, high, c):
     modifiedQuickSort(A, low, pivot-1, c)
     modifiedQuickSort(A, pivot+1, high, c)
 
-'''
-def mergeSort(A, low, high, c):
-    if len(A) <= 1:
-        return
-    mid = len(A)//2
-    L = A[:mid]
-    R = A[mid:]
-    mergeSort(L, low, high, c)
-    mergeSort(R, low, high, c)
-    li = 0
-    ri = 0
-    mi = 0
-    while li < len(L) and ri < len(R):
-        if L[li] <= R[ri]:
-            A[mi] = L[li]
-            li+=1
-            mi+=1
-        else:
-            A[mi] = R[ri]
-            ri+=1
-            mi+=1
-    while li < len(L):
-        A[mi] = L[li]
-        li+=1
-        mi+=1
-    while ri < len(R):
-        A[mi] = R[ri]
-        ri+=1
-        mi+=1
-'''
 def logFormat(x):
     if x!=0:
         x = math.log(x)/math.log(2)
@@ -140,9 +142,9 @@ def createMostlySortedList(N):
     return A
 
 def main(dataSet, title):
-    sorts = [bubbleSort, shakerSort, countingSort, quickSort, modifiedQuickSort] #, mergeSort]
+    sorts = [bubbleSort, shakerSort, countingSort, mergeSort, quickSort, modifiedQuickSort]
     dataSize = [8, 16, 32, 64, 128, 256, 512, 1024, 2048]
-    topRow = ["Bubble","Shaker","Counting","Quick", "MQuick"]
+    topRow = ["Bubble","Shaker","Counting","Merge","Quick","MQuick"]
     print(title)
     print("  ", end="")
     for i in topRow:
