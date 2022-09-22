@@ -4,13 +4,11 @@ Measure all 6 sorting algorithms by counting the number of compares.
 Test on data ranging from size 8 to size 2k, by powers of 2.
 Test on random data and on mostly sorted data.
 (Make a new function to create mostly sorted data. Have it first call the MakeRandomData function, have Python sort it, then swap the first and last elements.)
-
 Print all this data in organized tables, that you can then copy into Excel spreadsheets for making charts.
 You will need to create two data sets, with 1 Excel chart for each.
 The first data set and chart should plot Problem Size versus number of Compares when using Random data.
 The second data set and chart should plot Problem Size versus number of Compares when using Mostly Sorted data instead of Random data.
 To pass off, show the data sets and charts that illustrate compares for random and mostly sorted data. Be prepared to explain what they mean.
-
 It is important to make the charts Log/Log. That is, modify your python code to print the Log of the Problem Size and the Log of the number of Comparisons.
 Otherwise it will be really hard to see and interpret the results.
 Also, make an effort to organize your python code to reduce repeating code as much as possible.
@@ -18,6 +16,8 @@ Also, make an effort to organize your python code to reduce repeating code as mu
 
 import random
 import math
+import sys
+sys.setrecursionlimit(1500) # For Quick Sort on mostly sorted data
 
 class Counter:
     def __init__(self):
@@ -139,11 +139,11 @@ def createMostlySortedList(N):
     A[0],A[-1] = A[-1],A[0]
     return A
 
-def main():
+def main(dataSet, title):
     sorts = [bubbleSort, shakerSort, countingSort, quickSort, modifiedQuickSort] #, mergeSort]
     dataSize = [8, 16, 32, 64, 128, 256, 512, 1024, 2048]
     topRow = ["Bubble","Shaker","Counting","Quick", "MQuick"]
-    print("Counting compares on random data")
+    print(title)
     print("  ", end="")
     for i in topRow:
         print("%11s" % (i), end="")
@@ -151,7 +151,7 @@ def main():
     for n in dataSize:
         print("%02d" % (int(logFormat(n))), end="")
         for sort in sorts:
-            A = createRandomList(n)
+            A = dataSet(n)
             B = A[:]
             c = Counter()
             sort(A, 0, len(A)-1, c)
@@ -162,11 +162,5 @@ def main():
                 print("Error - not sorted properly")
         print("")
 
-'''
-my_l = createRandomList(15)
-print(my_l)
-my_l = createMostlySortedList(15)
-print(my_l)
-'''
-
-main()
+main(createRandomList, "Counting compares on random data")
+main(createMostlySortedList, "Counting compares on mostly sorted data")
