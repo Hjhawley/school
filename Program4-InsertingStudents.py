@@ -10,10 +10,10 @@ Note of clarification: You should not be changing the input files, or making any
 '''
 
 import time
-
-# Make a class called student
+from student import Student
 
 def main():
+    start = time.time()
     f = open("FakeNames.txt")
     allStudents = []
     for line in f:
@@ -21,10 +21,14 @@ def main():
         s = Student(fields[0], fields[1], fields[2], fields[3], fields[4])
         repeat = False
         for i in allStudents:
-            if i.SSN == s.SSN:
+            if i.mSSN == s.mSSN:
                 repeat = True
         if repeat:
             print("Error: Duplicate SSN")
         else:
             allStudents.append(s)
     f.close()
+    end = time.time()
+    print("Time: " + str(end - start) + " seconds")
+
+main()
