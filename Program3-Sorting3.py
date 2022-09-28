@@ -17,7 +17,7 @@ Also, make an effort to organize your python code to reduce repeating code as mu
 import random
 import math
 import sys
-sys.setrecursionlimit(1800) # For Quick Sort on mostly sorted data
+sys.setrecursionlimit(3000) # For Quick Sort on mostly sorted data
 
 class Counter:
     def __init__(self):
@@ -98,8 +98,8 @@ def quickSort(A, low, high, c):
         return
     lmgt = low + 1
     for i in range(low + 1, high + 1):
+        c.compares += 1
         if A[i] < A[low]:
-            c.compares += 1
             A[i], A[lmgt] = A [lmgt], A[i]
             lmgt += 1
     pivot = lmgt - 1
@@ -114,8 +114,8 @@ def modifiedQuickSort(A, low, high, c):
     A[low],A[mid] = A[mid],A[low] # Modified
     lmgt = low + 1
     for i in range(low + 1, high + 1):
+        c.compares += 1
         if A[i]<A[low]:
-            c.compares += 1
             A[i],A[lmgt] = A [lmgt],A[i]
             lmgt += 1
     pivot = lmgt - 1
@@ -144,7 +144,7 @@ def createMostlySortedList(N):
 def main(dataSet, title):
     sorts = [bubbleSort, shakerSort, countingSort, mergeSort, quickSort, modifiedQuickSort]
     dataSize = [8, 16, 32, 64, 128, 256, 512, 1024, 2048]
-    topRow = ["Bubble","Shaker","Counting","Merge","Quick","MQuick"]
+    topRow = [";Bubble",";Shaker",";Counting",";Merge",";Quick",";MQuick"]
     print(title)
     print("  ", end="")
     for i in topRow:
@@ -159,7 +159,7 @@ def main(dataSet, title):
             sort(A, 0, len(A)-1, c)
             B.sort()
             x = logFormat(c.compares)
-            print("      %05.2f" % (x), end="")
+            print(";      %05.2f" % (x), end="")
             if A != B:
                 print("Error - not sorted properly")
         print("")
