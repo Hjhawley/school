@@ -24,7 +24,7 @@ def main():
             if i.mSSN == s.mSSN:
                 repeat = True
         if repeat:
-            print("Error: Duplicate SSN")
+            print("Error: Duplicate SSN for " + s.mFirstName + " " + s.mLastName)
         else:
             allStudents.append(s)
     f.close()
