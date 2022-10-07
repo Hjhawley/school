@@ -94,6 +94,7 @@ def mergeSort(A, low, high, c):
         mi+=1
 
 def quickSort(A, low, high, c):
+    # "low" is our pivot point
     if high - low <= 0:
         return
     lmgt = low + 1
@@ -110,7 +111,7 @@ def quickSort(A, low, high, c):
 def modifiedQuickSort(A, low, high, c):
     if high - low <= 0:
         return
-    mid = (low + high)//2
+    mid = (low + high)//2         # Modified
     A[low],A[mid] = A[mid],A[low] # Modified
     lmgt = low + 1
     for i in range(low + 1, high + 1):

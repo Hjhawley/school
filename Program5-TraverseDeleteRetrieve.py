@@ -28,7 +28,7 @@ def main():
             allStudents.append(s)
     f.close()
     end = time.time()
-    print("Time: " + str(end - start) + " seconds")
+    print("Time for insert: " + str(end - start) + " seconds")
     
     # Traverse
     start = time.time()
@@ -40,20 +40,24 @@ def main():
     averageAge = totalAge/count
     print("Average age: " + str(averageAge))
     end = time.time()
-    print("Time: " + str(end - start) + " seconds")
+    print("Time for traverse: " + str(end - start) + " seconds")
 
     # Delete
     start = time.time()
     f = open("DeleteNames.txt")
+    for line in f:
+        for i in allStudents:
+            if i.mSSN == line:
+                allStudents.pop(i)
     f.close()
     end = time.time()
-    print("Time: " + str(end - start) + " seconds")
+    print("Time for delete: " + str(end - start) + " seconds")
     
     # Retrieve
     start = time.time()
     f = open("RetrieveNames.txt")
     f.close()
     end = time.time()
-    print("Time: " + str(end - start) + " seconds")
+    print("Time for retrieve: " + str(end - start) + " seconds")
 
 main()

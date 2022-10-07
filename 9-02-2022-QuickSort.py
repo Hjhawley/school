@@ -11,7 +11,7 @@ If there are 10 cities including the hometown, there are 9 options for the first
 
 A = [-2, 4, 6, -3, 7, 6, 8, -2, 4, 6, -3, 7, 6, 8]
 
-# First number is called the pivot item
+# First number (low) is called the pivot item
 
 def quickSort(A, low, high):
     if high - low <= 0:
@@ -31,8 +31,8 @@ def quickSort(A, low, high):
 def modifiedQuickSort(A, low, high):
     if high - low <= 0:
         return
-    mid = (low + high)//2
-    A[low],A[mid] = A[mid],A[low]
+    mid = (low + high)//2           # Modified
+    A[low],A[mid] = A[mid],A[low]   # Modified
     lmgt = low + 1
     for i in range(low + 1, high + 1):
         if A[i]<A[low]:
