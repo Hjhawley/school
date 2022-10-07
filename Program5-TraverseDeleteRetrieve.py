@@ -9,16 +9,11 @@ Also, be sure to print any SSN numbers from the Retrieve and Delete lists that w
 
 import time
 from student import Student
-from uuc import UUC
 
-# studentList = UUC()
-# for line in f
-
-def traverse():
+def main():
+    # Insert
     start = time.time()
-    f = open("FakeNames.txt")
-    count = 0
-    totalAge = 0
+    f = open("FakeNames.txt") # Replace 
     allStudents = []
     for line in f:
         fields = line.split()
@@ -27,26 +22,38 @@ def traverse():
         for i in allStudents:
             if i.mSSN == s.mSSN:
                 repeat = True
-            else:
-                count += 1
-                totalAge += int(i.mAge)
         if repeat:
             print("Error: Duplicate SSN for " + s.mFirstName + " " + s.mLastName)
         else:
             allStudents.append(s)
-    averageAge = totalAge/count
     f.close()
     end = time.time()
+    print("Time: " + str(end - start) + " seconds")
+    
+    # Traverse
+    start = time.time()
+    count = 0
+    totalAge = 0
+    for s in allStudents:
+        count += 1
+        totalAge += int(s.mAge)
+    averageAge = totalAge/count
     print("Average age: " + str(averageAge))
+    end = time.time()
     print("Time: " + str(end - start) + " seconds")
 
-def delete():
-    pass
-
-def retrieve():
-    pass
-
-def main():
-    traverse()
+    # Delete
+    start = time.time()
+    f = open("DeleteNames.txt")
+    f.close()
+    end = time.time()
+    print("Time: " + str(end - start) + " seconds")
+    
+    # Retrieve
+    start = time.time()
+    f = open("RetrieveNames.txt")
+    f.close()
+    end = time.time()
+    print("Time: " + str(end - start) + " seconds")
 
 main()
