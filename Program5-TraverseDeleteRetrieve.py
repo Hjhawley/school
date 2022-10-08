@@ -34,9 +34,9 @@ def main():
     start = time.time()
     count = 0
     totalAge = 0
-    for s in allStudents:
+    for i in allStudents:
         count += 1
-        totalAge += int(s.mAge)
+        totalAge += int(i.mAge)
     averageAge = totalAge/count
     print("Average age: " + str(averageAge))
     end = time.time()
@@ -47,15 +47,29 @@ def main():
     f = open("DeleteNames.txt")
     for line in f:
         for i in allStudents:
-            if i.mSSN == line:
-                allStudents.pop(i)
+            if i.mSSN == line.strip():
+                allStudents.remove(i)
     f.close()
     end = time.time()
     print("Time for delete: " + str(end - start) + " seconds")
-    
+
     # Retrieve
     start = time.time()
     f = open("RetrieveNames.txt")
+    count = 0
+    totalAge = 0
+    retrieveList = []
+    for line in f:
+        retrieveList.append(line.strip())
+    for i in allStudents:
+        if i.mSSN in retrieveList:
+            count += 1
+            totalAge += int(i.mAge)
+    if count == 0:
+        print("Error: count == 0")
+    else:
+        averageAge = totalAge/count
+        print("Average age: " + str(averageAge))
     f.close()
     end = time.time()
     print("Time for retrieve: " + str(end - start) + " seconds")
