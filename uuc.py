@@ -1,9 +1,30 @@
-from lib2to3.pytree import Node
+from node import Node
 
 class UUC:
     def __init__(self):
         self.mFirst = None
         
+    def exists(self, item):
+        current = self.mFirst
+        while current:
+            if current.mItem == item:
+                return True
+            current = current.mNext
+        return False
+
+    def insert(self, item):
+        if self.exists(item):
+            return False
+        else:
+            self.mFirst = Node(item, self.mFirst)
+            return True
+
+    def traverse(self, callback):
+        current = self.mFirst
+        while not (current == None):
+            callback(current.mItem)
+            current = current.mNext
+    
     def delete(self, item):
         if not self.exists(item):
             return False
@@ -15,28 +36,6 @@ class UUC:
         current.mNext = current.mNext.mNext
         return True
 
-    def size(self):
-        count = 0
-        current = self.mFirst
-        while not (current == None):
-            count += 1
-            current = current.mNext
-        return count
-
-    def traverse(self, callback):
-        current = self.mFirst
-        while not (current == None):
-            callback(current.mItem)
-            current = current.mNext
-
-    def exists(self, item):
-        current = self.mFirst
-        while current:
-            if current.mItem == item:
-                return True
-            current = current.mNext
-        return False
-
     def retrieve(self, item):
         if not self.exists(item):
             return None
@@ -45,9 +44,10 @@ class UUC:
             current = current.mNext
         return current
 
-    def insert(self, item):
-        if self.exists(item):
-            return False
-        else:
-            self.mFirst = Node(item, self.mFirst)
-            return True
+    def size(self):
+        count = 0
+        current = self.mFirst
+        while not (current == None):
+            count += 1
+            current = current.mNext
+        return count

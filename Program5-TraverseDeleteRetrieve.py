@@ -46,9 +46,13 @@ def main():
     start = time.time()
     f = open("DeleteNames.txt")
     for line in f:
+        DNE = True
         for i in allStudents:
             if i.mSSN == line.strip():
                 allStudents.remove(i)
+                DNE = False
+        if DNE:
+            print("Error: SSN " + line.strip() + " does not exist.")
     f.close()
     end = time.time()
     print("Time for delete: " + str(end - start) + " seconds")
