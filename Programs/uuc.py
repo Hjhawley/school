@@ -1,6 +1,7 @@
 from node import Node
 
 class UUC:
+    
     def __init__(self):
         self.mFirst = None
         
@@ -31,7 +32,7 @@ class UUC:
         if self.mFirst.mItem == item:
             self.mFirst = self.mFirst.mNext
         current = self.mFirst
-        while not(current.mNext.mItem == item):
+        while not (current.mNext.mItem == item):
             current = current.mNext
         current.mNext = current.mNext.mNext
         return True
