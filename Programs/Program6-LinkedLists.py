@@ -68,7 +68,7 @@ def main():
             print("Error: SSN " + SSN + " does not exist.")
         else:
             rTotal += 1
-            rAge += retrieved.mAge
+            rAge += int(retrieved.mItem.mAge)
     if rTotal == 0:
         print("Error: retrieve count == 0")
     else:
@@ -84,11 +84,11 @@ main()
 Program 5 Comparison
 
 Error: Duplicate SSN for DAMON POTTS
-Time for insert: 94.08422207832336 seconds
+Time for insert: 36.41500735282898 seconds
 Average age: 42.92993099769993
-Time for traverse: 0.03004002571105957 seconds
+Time for traverse: 0.020928382873535156 seconds
 Error: SSN 010-16-5079 does not exist.
-Time for delete: 214.47637152671814 seconds
+Time for delete: 45.17820739746094 seconds
 Average age: 49.537614132592296
-Time for retrieve: 2.5138745307922363 seconds
+Time for retrieve: 2.071270704269409 seconds
 '''
