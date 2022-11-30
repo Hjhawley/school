@@ -1,0 +1,26 @@
+Explain the difference between P, NP, and NP-Complete.
+NP is non-polynomial, NP-Complete means other problems can be mapped to it.
+
+Convert from infix to postfix:
+1 * 2 / (3 + 4 * (5 + 6 - 7) / 8) - 9
+12*3456+7-*8/+/9-
+
+Evaluate this postfix expression:
+24-36+387-*/+
+1
+
+Insert these letters into a BST:
+"the quick brown fox"
+
+Delete "T", "F", and "H" from the BST (in that order.)
+
+Insert the word "lizard" into a 2-3 tree.
+
+When would a "100 Tree" be a good idea?
+When you need the tree to be as flat as possible; when you want to
+minimize hard drive accesses
+
+Write code for the Linked List "Exists" method. Assume there is a class variable self.mFirst.
+def Exists(self, item):
+
+Write code for the BST "Exists" method and its recursive counterpart.
