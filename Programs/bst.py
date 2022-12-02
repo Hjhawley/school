@@ -21,6 +21,7 @@ class BST:
             current.mL = self.insertR(n, current.mL)
         else:
             current.mR = self.insertR(n, current.mR)
+        return current
     
     def retrieve(self, item):
         return self.retrieveR(item, self.mRoot)
@@ -61,35 +62,37 @@ class BST:
         exist = self.existsR(item, self.mRoot)
         return exist
     
-    def existsR(self, n, current):
+    def existsR(self, i, current):
         if current is None:
             return False
-        elif current.mItem == n.mItem:
+        elif current.mItem == i:
             return True
-        elif n.mItem < current.mItem:
-            return self.existsR(n, current.mL)
+        elif i < current.mItem:
+            return self.existsR(i, current.mL)
         else:
-            return self.existsR(n, current.mR)
+            return self.existsR(i, current.mR)
 
     def delete(self, item):
-        self.deleteR(item, self.mRoot)
+        if not self.exists(item):
+            return False
+        else:
+            self.mRoot = self.deleteR(item, self.mRoot)
+            return True
     
     def deleteR(self, item, current):
-        if current is None:
-            return False
         if current.mItem == item:
             if current.mL is None and current.mR is None:       # Leaf node
-                return None
+                current = None
             elif current.mL is None and current.mR is not None: # One child on the right
-                return current.mR
+                current = current.mR
             elif current.mL is not None and current.mR is None: # One child on the left
-                return current.mL
+                current = current.mL
             else:                                               # Two children
                 walkdown = current.mR                           # Walk down to find the in-order successor
                 while walkdown.mL:
                     walkdown = walkdown.mL
                 current.mItem = walkdown.mItem
-                current.mR = self.deleteR(current.mR, current.mItem)
+                current.mR = self.deleteR(current.mItem, current.mR)
         elif item < current.mItem:
             current.mL = self.deleteR(item, current.mL)
         elif item > current.mItem:

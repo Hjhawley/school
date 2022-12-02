@@ -57,6 +57,7 @@ def main():
     f.close()
     end = time.time()
     print("Time for delete: " + str(end - start) + " seconds")
+    return
     
     # Retrieve
     start = time.time()
