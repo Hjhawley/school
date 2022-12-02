@@ -23,13 +23,15 @@ def callbackFunction(s):
 def main():
     # Insert
     start = time.time()
-    f = open("FakeNames.txt")
+    f = open("FakeNamesMedium.txt")
+    duplicates = 0
     allStudents = BST()
     for line in f:
         fields = line.split()
         s = Student(fields[0], fields[1], fields[2], fields[3], fields[4])
         if allStudents.insert(s) == False:
-            print("Error: Duplicate SSN for " + s.mFirstName + " " + s.mLastName)
+            duplicates += 1
+    print(str(duplicates) + " duplicates for insertion.")
     f.close()
     end = time.time()
     print("Time for insert: " + str(end - start) + " seconds")
@@ -46,19 +48,23 @@ def main():
 
     # Delete
     start = time.time()
-    f = open("DeleteNames.txt")
+    f = open("DeleteNamesMedium.txt")
+    errors = 0
     for line in f:
         SSN = line.strip()
         s2 = Student("", "", SSN, "", "") # Dummy student
         if allStudents.delete(s2) == False:
-            print("Error: SSN " + SSN + " does not exist.")
+            errors += 1
+    print(str(errors) + " deletion errors: does not exist.")
     f.close()
     end = time.time()
     print("Time for delete: " + str(end - start) + " seconds")
     
     # Retrieve
     start = time.time()
-    f = open("RetrieveNames.txt")
+    f = open("RetrieveNamesMedium.txt")
+    errors = 0
+    duplicates = 0
     rTotal = 0
     rAge = 0
     for line in f:
@@ -69,30 +75,15 @@ def main():
             rTotal += 1
             rAge += int(retrieved.mAge)
         else:
-            print("Error: SSN " + SSN + " does not exist.")
+            errors += 1
     if rTotal == 0:
         print("Error: retrieve count == 0")
     else:
         averageAge = rAge/rTotal
         print("Average age: " + str(averageAge))
+    print(str(errors) + " retrieval errors: does not exist.")
     f.close()
     end = time.time()
     print("Time for retrieve: " + str(end - start) + " seconds")
 
 main()
-
-'''
-Program 5 Comparison
-
-Error: Duplicate SSN for DAMON POTTS
-Time for insert: 36.41500735282898 seconds
-Average age: 42.92993099769993
-Time for traverse: 0.020928382873535156 seconds
-Error: SSN 010-16-5079 does not exist.
-Time for delete: 45.17820739746094 seconds
-Average age: 49.537614132592296
-Time for retrieve: 2.071270704269409 seconds
-
-Program 6 Comparison
-
-'''

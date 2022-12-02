@@ -22,10 +22,10 @@ class Hash:
             return False
         key = int(item)
         index = key % len(self.mTable)
-        if not self.mTable[index]:
-            self.mTable[index] = item
-            return True
-        # Fix this; find an empty parking spot
+        while self.mTable[index]:
+            index += 1
+        self.mTable[index] = item
+        return True
 
     def retrieve(self, item):
         pass
@@ -49,10 +49,10 @@ class Hash:
                 count += 1
         return count
     
-    def traverse(self, callback, data):
+    def traverse(self, callback):
         for i in self.mTable:
             if i:
-                callback(i, data)
+                callback(i)
     
     def delete(self, item):
         pass
