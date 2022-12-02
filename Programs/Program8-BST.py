@@ -34,6 +34,7 @@ def main():
     end = time.time()
     print("Time for insert: " + str(end - start) + " seconds")
 
+    '''
     # Traverse
     start = time.time()
     averageAge = 0
@@ -43,8 +44,8 @@ def main():
     print("Average age: " + str(averageAge))
     end = time.time()
     print("Time for traverse: " + str(end - start) + " seconds")
+    '''
 
-'''
     # Delete
     start = time.time()
     f = open("DeleteNames.txt")
@@ -66,11 +67,11 @@ def main():
         SSN = line.strip()
         s2 = Student("", "", SSN, "", "")
         retrieved = allStudents.retrieve(s2)
-        if retrieved == None:
-            print("Error: SSN " + SSN + " does not exist.")
-        else:
+        if retrieved is not None:
             rTotal += 1
-            rAge += int(retrieved.mItem.mAge)
+            rAge += int(retrieved.mAge)
+        else:
+            print("Error: SSN " + SSN + " does not exist.")
     if rTotal == 0:
         print("Error: retrieve count == 0")
     else:
@@ -79,7 +80,7 @@ def main():
     f.close()
     end = time.time()
     print("Time for retrieve: " + str(end - start) + " seconds")
-'''
+
 main()
 
 '''

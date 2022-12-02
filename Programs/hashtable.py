@@ -1,4 +1,4 @@
-# Binary search tree
+# Hash table
 
 from node import BSTNode
 
