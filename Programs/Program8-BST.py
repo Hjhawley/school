@@ -10,11 +10,11 @@ After you get it working with the regular lists, try it on the Medium sized list
 In this case, do not print every student that failed to insert, delete, or retrieve. Just print the total fails in each category.
 '''
 
-# Modify this
-
 import time
 from student import Student
 from bst import BST
+
+ageTotal = 0
 
 def callbackFunction(s):
     global ageTotal
@@ -33,17 +33,18 @@ def main():
     f.close()
     end = time.time()
     print("Time for insert: " + str(end - start) + " seconds")
-    
+
     # Traverse
     start = time.time()
     averageAge = 0
     count = allStudents.size()
-    allStudents.traverse(callbackFunction)
+    allStudents.traverse(callbackFunction) # Data?
     averageAge = ageTotal/count
     print("Average age: " + str(averageAge))
     end = time.time()
     print("Time for traverse: " + str(end - start) + " seconds")
-    
+
+'''
     # Delete
     start = time.time()
     f = open("DeleteNames.txt")
@@ -78,7 +79,7 @@ def main():
     f.close()
     end = time.time()
     print("Time for retrieve: " + str(end - start) + " seconds")
-
+'''
 main()
 
 '''

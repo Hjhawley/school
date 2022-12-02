@@ -51,7 +51,7 @@ class BST:
         self.traverseR(callback, data, current)
     
     def traverseR(self, callback, data, current):
-        if current is None: # == ?
+        if current is None:
             return
         callback(current.mItem.data)
         self.traverseR(callback, data, current.mL)
@@ -70,30 +70,25 @@ class BST:
             return self.existsR(n, current.mL)
         else:
             return self.existsR(n, current.mR)
-    
-    def delete(self, item):
-        parent = None
-        return self.deleteR(item, self.mRoot, parent)
-    
-    def deleteR(self, item, current, parent):
+
+    def delete(self, item, current):
         if current is None:
             return False
+        if current.mItem == item:
+            if current.mL is None and current.mR is None:       # Leaf node
+                return None
+            elif current.mL is None and current.mR is not None: # One child on the right
+                return current.mR
+            elif current.mL is not None and current.mR is None: # One child on the left
+                return current.mL
+            else:                                               # Two children
+                walkdown = current.mR                           # Walk down to find the in-order successor
+                while walkdown.mL:
+                    walkdown = walkdown.mL
+                current.mItem = walkdown.mItem
+                current.mR = self.delete(current.mR, current.mItem)
         elif item < current.mItem:
-            parent = current
-            self.deleteR(item, current.mL)
+            current.mL = self.delete(item, current.mL)
         elif item > current.mItem:
-            parent = current
-            self.deleteR(item, current.mR)
-        else: # We've found the node to delete
-            if current.mL is None and current.mR is None:   # Leaf node
-                if parent.mL.mItem == current.mItem:
-                    parent.mL = None
-                else:
-                    parent.mR = None
-            if current.mL is None ^ current.mR is None:     # Branch with one child
-                if parent.mL.mItem == current.mItem:
-                    parent.mL = current.mL
-                else:
-                    parent.mR = current.mR
-            else:                                           # Branch with two children
-                pass # LEAST IN ORDER SUCCESSOR
+            current.mR = self.delete(item, current.mR)
+        return current
