@@ -17,6 +17,7 @@ class Hash:
             actualCount += 2 # Skip the evens to save time
         self.mTable = [None] * actualCount
 
+
     def insert(self, item):
         if self.exists(item):
             return False

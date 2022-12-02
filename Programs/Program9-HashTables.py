@@ -11,6 +11,12 @@ import time
 from student import Student
 from hashtable import Hash
 
+ageTotal = 0
+
+def callbackFunction(s):
+    global ageTotal
+    ageTotal += int(s.mAge)
+
 def main():
     # Insert
     start = time.time()
@@ -26,6 +32,16 @@ def main():
     f.close()
     end = time.time()
     print("Time for insert: " + str(end - start) + " seconds")
+
+    # Traverse
+    start = time.time()
+    averageAge = 0
+    count = allStudents.size()
+    allStudents.traverse(callbackFunction)
+    averageAge = ageTotal/count
+    print("Average age: " + str(averageAge))
+    end = time.time()
+    print("Time for traverse: " + str(end - start) + " seconds")
 
 main()
 
