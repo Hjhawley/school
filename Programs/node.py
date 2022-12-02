@@ -3,8 +3,8 @@ class Node:
         self.mItem = item
         self.mNext = next
 
-'''
 class BSTNode:
     def __init__(self, item):
         self.mItem = item
-        '''
+        self.mL = None
+        self.mR = None

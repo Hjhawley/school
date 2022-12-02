@@ -1,6 +1,6 @@
 # Binary search tree
 
-from node import Node
+from node import BSTNode
 
 class BST:
 
@@ -10,7 +10,7 @@ class BST:
     def insert(self, item):
         if self.exists(item):
             return False
-        n = Node(item)
+        n = BSTNode(item)
         self.mRoot = self.insertR(n, self.mRoot)
         return True
 
@@ -70,3 +70,30 @@ class BST:
             return self.existsR(n, current.mL)
         else:
             return self.existsR(n, current.mR)
+    
+    def delete(self, item):
+        parent = None
+        return self.deleteR(item, self.mRoot, parent)
+    
+    def deleteR(self, item, current, parent):
+        if current is None:
+            return False
+        elif item < current.mItem:
+            parent = current
+            self.deleteR(item, current.mL)
+        elif item > current.mItem:
+            parent = current
+            self.deleteR(item, current.mR)
+        else: # We've found the node to delete
+            if current.mL is None and current.mR is None:   # Leaf node
+                if parent.mL.mItem == current.mItem:
+                    parent.mL = None
+                else:
+                    parent.mR = None
+            if current.mL is None ^ current.mR is None:     # Branch with one child
+                if parent.mL.mItem == current.mItem:
+                    parent.mL = current.mL
+                else:
+                    parent.mR = current.mR
+            else:                                           # Branch with two children
+                pass # LEAST IN ORDER SUCCESSOR
