@@ -38,7 +38,7 @@ def main():
     start = time.time()
     averageAge = 0
     count = allStudents.size()
-    allStudents.traverse(callbackFunction, ageTotal) # Data?
+    allStudents.traverse(callbackFunction)
     averageAge = ageTotal/count
     print("Average age: " + str(averageAge))
     end = time.time()

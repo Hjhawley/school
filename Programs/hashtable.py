@@ -17,6 +17,19 @@ class Hash:
             actualCount += 2 # Skip the evens to save time
         self.mTable = [None] * actualCount
 
+    def insert(self, item):
+        if self.exists(item):
+            return False
+        key = int(item)
+        index = key % len(self.mTable)
+        if not self.mTable[index]:
+            self.mTable[index] = item
+            return True
+        # Fix this; find an empty parking spot
+
+    def retrieve(self, item):
+        pass
+    
     def exists(self, item):
         key = int(item)
         index = key % len(self.mTable)
@@ -40,3 +53,6 @@ class Hash:
         for i in self.mTable:
             if i:
                 callback(i, data)
+    
+    def delete(self, item):
+        pass

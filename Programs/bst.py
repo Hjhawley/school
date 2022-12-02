@@ -47,16 +47,16 @@ class BST:
         count += self.sizeR(current.mR)
         return count
     
-    def traverse(self, callback, data):
+    def traverse(self, callback):
         current = self.mRoot
-        self.traverseR(callback, data, current)
+        self.traverseR(callback, current)
     
-    def traverseR(self, callback, data, current):
+    def traverseR(self, callback, current):
         if current is None:
             return
-        callback(current.mItem.data)
-        self.traverseR(callback, data, current.mL)
-        self.traverseR(callback, data, current.mR)
+        callback(current.mItem)
+        self.traverseR(callback, current.mL)
+        self.traverseR(callback, current.mR)
     
     def exists(self, item):
         exist = self.existsR(item, self.mRoot)
