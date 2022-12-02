@@ -34,17 +34,15 @@ def main():
     end = time.time()
     print("Time for insert: " + str(end - start) + " seconds")
 
-    '''
     # Traverse
     start = time.time()
     averageAge = 0
     count = allStudents.size()
-    allStudents.traverse(callbackFunction) # Data?
+    allStudents.traverse(callbackFunction, ageTotal) # Data?
     averageAge = ageTotal/count
     print("Average age: " + str(averageAge))
     end = time.time()
     print("Time for traverse: " + str(end - start) + " seconds")
-    '''
 
     # Delete
     start = time.time()
@@ -57,7 +55,6 @@ def main():
     f.close()
     end = time.time()
     print("Time for delete: " + str(end - start) + " seconds")
-    return
     
     # Retrieve
     start = time.time()
