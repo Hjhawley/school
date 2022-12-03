@@ -43,6 +43,20 @@ def main():
     end = time.time()
     print("Time for traverse: " + str(end - start) + " seconds")
 
+    # Delete
+    start = time.time()
+    f = open("DeleteNamesMedium.txt")
+    errors = 0
+    for line in f:
+        SSN = line.strip()
+        s2 = Student("", "", SSN, "", "") # Dummy student
+        if allStudents.delete(s2) == False:
+            errors += 1
+    print(str(errors) + " deletion errors: does not exist.")
+    f.close()
+    end = time.time()
+    print("Time for delete: " + str(end - start) + " seconds")
+
 main()
 
 '''

@@ -17,7 +17,6 @@ class Hash:
             actualCount += 2 # Skip the evens to save time
         self.mTable = [None] * actualCount
 
-
     def insert(self, item):
         if self.exists(item):
             return False
@@ -29,7 +28,14 @@ class Hash:
         return True
 
     def retrieve(self, item):
-        pass
+        if self.exists(item):
+            return False
+        key = int(item)
+        index = key % len(self.mTable)
+        while self.mTable[index]:
+            index += 1
+        self.mTable[index] = item
+        return True
     
     def exists(self, item):
         key = int(item)
@@ -56,4 +62,14 @@ class Hash:
                 callback(i)
     
     def delete(self, item):
-        pass
+        if not self.exists(item):
+            return False
+        else:
+            key = int(item)
+            index = key % len(self.mTable)
+            while not self.mTable[index] == item:
+                index += 1
+                if index == len(self.mTable):
+                    index = 0
+            self.mTable[index] = False
+            return True

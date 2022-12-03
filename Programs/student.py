@@ -10,6 +10,8 @@ class Student:
         self.mAge = age
     
     def __eq__(self, rhs):
+        if rhs == False:
+            return False
         return self.mSSN == rhs.mSSN
 
     def __ne__(self, rhs):
