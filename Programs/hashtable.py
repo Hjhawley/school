@@ -28,14 +28,16 @@ class Hash:
         return True
 
     def retrieve(self, item):
-        if self.exists(item):
+        if not self.exists(item):
             return False
-        key = int(item)
-        index = key % len(self.mTable)
-        while self.mTable[index]:
-            index += 1
-        self.mTable[index] = item
-        return True
+        else:
+            key = int(item)
+            index = key % len(self.mTable)
+            while not self.mTable[index] == item:
+                index += 1
+                if index == len(self.mTable):
+                    index = 0
+            return self.mTable[index]
     
     def exists(self, item):
         key = int(item)

@@ -57,6 +57,32 @@ def main():
     end = time.time()
     print("Time for delete: " + str(end - start) + " seconds")
 
+    # Retrieve
+    start = time.time()
+    f = open("RetrieveNamesMedium.txt")
+    errors = 0
+    duplicates = 0
+    rTotal = 0
+    rAge = 0
+    for line in f:
+        SSN = line.strip()
+        s2 = Student("", "", SSN, "", "")
+        retrieved = allStudents.retrieve(s2)
+        if retrieved:
+            rTotal += 1
+            rAge += int(retrieved.mAge)
+        else:
+            errors += 1
+    if rTotal == 0:
+        print("Error: retrieve count == 0")
+    else:
+        averageAge = rAge/rTotal
+        print("Average age: " + str(averageAge))
+    print(str(errors) + " retrieval errors: does not exist.")
+    f.close()
+    end = time.time()
+    print("Time for retrieve: " + str(end - start) + " seconds")
+
 main()
 
 '''
