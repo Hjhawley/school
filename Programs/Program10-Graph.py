@@ -31,3 +31,5 @@ def main():
         words = f.readline().split()
         print(g.findPath(int(words[0]), int(words[1])))
     f.close()
+
+main()
