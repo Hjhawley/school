@@ -30,12 +30,12 @@ class Graph:
             if c == v1:
                 # Build a path and return it
                 path = [c]
-                while [c] != v0:
+                while [c] != v0:    # What is happening here??? 4 == 4
                     c = cameFrom[c]
                     path.append(c)
                 path.reverse()
                 return path
-            for n in range(len(self.mNeighbors)):
+            for n in self.mNeighbors[c]:
                 if cameFrom[n] == -1:   # If not visited yet
                     q.enqueue(n)
                     cameFrom[n] = c     # Mark that n came from c
