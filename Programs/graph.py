@@ -9,7 +9,7 @@ class Graph:
         self.mNeighbors = [[] for i in range(numVertices)] # A list of lists
     
     def addEdge(self, v0, v1):
-        self.mNeighbors[v0] = v1
+        self.mNeighbors[v0].append(v1)
         return True
 
     def isEdge(self, v0, v1):
