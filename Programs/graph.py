@@ -32,10 +32,10 @@ class Graph:
                 path = [c]
                 while [c] != v0:
                     c = cameFrom[c]
-                    path.append[c]
+                    path.append(c)
                 path.reverse()
                 return path
-            for n in self.mNeighbors:
+            for n in range(len(self.mNeighbors)):
                 if cameFrom[n] == -1:   # If not visited yet
                     q.enqueue(n)
                     cameFrom[n] = c     # Mark that n came from c

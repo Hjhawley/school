@@ -10,7 +10,7 @@ class Queue:
         self.mData.append(item)
 
     def dequeue(self):
-        self.mData.pop(0)
+        return self.mData.pop(0)
 
     def isEmpty(self):
         return (self.mData == [])
