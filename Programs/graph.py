@@ -30,7 +30,7 @@ class Graph:
             if c == v1:
                 # Build a path and return it
                 path = [c]
-                while c != v0:    # What is happening here??? 4 == 4
+                while c != v0:
                     c = cameFrom[c]
                     path.append(c)
                 path.reverse()
