@@ -1,0 +1,20 @@
+Programming in C++
+
+Equivalent to first 2 semesters of python
+
+- Functions, classes, STL elements
+- Stack, heap, static memory
+- Statically typed language
+- Use version control (git)
+- Memory checking and debugging tools
+- Construct unit tests
+
+hello.cpp
+
+v	compile
+
+hello.o
+
+v	link
+
+hello

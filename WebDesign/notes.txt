@@ -1,0 +1,4 @@
+DOM - Document Object Model
+
+h1 - heading1
+h2 - h6 etc
