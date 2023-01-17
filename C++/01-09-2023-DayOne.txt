@@ -18,3 +18,5 @@ hello.o
 v	link
 
 hello
+
+Interpreted vs Compiled language

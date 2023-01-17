@@ -1,0 +1,66 @@
+How to start every program:
+
+int main(){
+
+	return 0;
+}
+
+Example of gathering user input, called adder.cpp:
+
+#include <iostream>
+
+int main(){
+	int a;
+	std::cout << "Give me an integer: ";
+	std::cin >> a;
+	int b;
+	std::cout << "Give me another integer: ";
+	std::cin >> b;
+	std::cout << "The sum of " << a << " and " << b << " is " << a+b << "." << std::endl;
+	return 0;
+}
+
+The Makefile for this program:
+
+all: adder
+
+adder: adder.o
+	g++ -std=c++11 -o adder adder.o
+
+adder.o: adder.cpp
+	g++ -std=c++11 -c adder.cpp
+
+We could make this better by including a getInteger function to reduce redundant code.
+
+#include <string>
+
+int getInteger(std::istream& is, std::ostream& os, const std::string& prompt) {
+	int a;
+	os << prompt;
+	is >> a;
+	return a;
+}
+
+// const - static
+// & - don't copy
+// std::istream& is
+
+int main(){
+	int a = getInteger(std::cin, std::cout, "Give me an integer: ")
+	int b = getInteger(std::cin, std::cout, "Give me another integer: ")
+	std::cout << "The sum of " << a << " and " << b << " is " << a+b << "." << std::endl;
+	return 0;
+}
+
+The Makefile for this program:
+
+all: adder
+
+adder: adder.o user_io.o
+	g++ -std=c++11 -o adder adder.o user_io.o
+
+adder.o: adder.cpp functions.h
+	g++ -std=c++11 -c adder.cpp user_io.o.cpp
+
+user_io.o: user_io.cpp functions.h
+	g++ -std=c++11 -c user_io.cpp
