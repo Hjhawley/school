@@ -1,0 +1,66 @@
+A class has data members and methods (functions) that operate
+specifically on instances of the class.
+
+For example, take a Fraction class that takes two integers
+and whose methods are add, subtract, multiply, and divide.
+
+***Fraction.h***
+
+#ifndef _FRACTION_H_ // "If not defined"
+#define _FRACTION_H_ // Define the symbol
+
+// C++ allows multiple constructors; the first Fraction(); is the 'default'
+
+class Fraction {
+public:	// Things accessible to any code in your program
+	Fraction(); // Initialize to 1/1
+	Fraction(const int& numerator, const int& denominator);
+
+	int getNumerator() const;	// const indicates that this method does not alter the data member
+	int getDenominator() const;
+
+	void add(const int& addend);
+	void subtract(const int& subtrahend);
+	void multiply(const int& multiplier);
+	void divide(const int& divisor);
+
+private:	// Data members (and sometimes methods) only meant for use within the function
+	int mNumerator;	// The m stands for (data) member
+	int mDenominator;
+}; // <-- Don't forget this semicolon
+
+#endif /* _FRACTION_H_ */ // If _FRACTION_H_ is already defined, skip to here.
+
+***Fraction.cpp***
+
+#include "Fraction.h"
+
+// Constructors
+Fraction::Fraction() // Initialize both to 1 by default 
+	:mNumerator(1), mDenominator(1) {
+}
+Fraction::Fraction(const int& numerator, const int& denominator)
+	: mNumerator(numerator), mDenominator(denominator) {
+}
+
+// Methods
+int Fraction::getNumerator() const {
+	return this->mNumerator;
+}
+int Fraction::getDenominator() const {
+	return this->mDenominator;
+}
+
+void Fraction::add(const int& addend) {
+	mNumerator += addend * mDenominator
+}
+void Fraction::subtract(const int& subtrahend) {
+	mNumerator -= subtrahend * mDenominator
+}
+void Fraction::multiply(const int& multiplier) {
+	mNumerator *= multiplier
+}
+void Fraction::divide(const int& divisor) {
+	mDenominator *= divisor
+}
+

@@ -1,6 +1,15 @@
-#include<stdio.h>
+#include <iostream>
 
 int main() {
-    printf("Hello world");
+    std::cout << "Hello, world." << std::endl;
     return 0;
 }
+
+// Compile
+// g++ -std=c++11 -c hello.cpp
+
+// Link
+// g++ -std=c++11 -o hello hello.o
+
+// Run
+// ./hello

@@ -1,0 +1,36 @@
+#include "functions.h"
+#include <iostream>
+
+int main() {
+	return guess_my_number(std::cin, std:cout);
+}
+
+// We want to allow the user 10 attempts to guess the number before they fail.
+
+// For loops in C++:
+
+// for(initialization; condition; incrementation)
+// initialization - once
+// check if condition is true
+//	execute the body of the loop
+//	increment
+//	check condition again
+
+for(attempt = 0; attempt < 10; attempt++) {
+	// body
+}
+
+// If statements
+// Use "else if" instead of "elif"
+
+if(your_number < my_number) {
+	os << "Too low." << std::endl;
+} else if(your_number > my_number) {
+	os << "Too high." << std::endl;
+} else {
+	os << "Correct" << std:: endl;
+	break;
+}
+
+echo $?
+check the return value immediately after the program closes
