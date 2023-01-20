@@ -11,7 +11,8 @@
                 "_UNICODE"
             ],
             "intelliSenseMode": "windows-msvc-x64",
-            "configurationProvider": "ms-vscode.makefile-tools"
+            "configurationProvider": "ms-vscode.makefile-tools",
+            "cppStandard": "c++23"
         }
     ],
     "version": 4
