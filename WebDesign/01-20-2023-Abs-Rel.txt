@@ -1,0 +1,41 @@
+Absolute vs Relative
+
+<px> is absolute, <em> and <rem> are relative
+<em> stacks, <rem> does not
+<px> - pixels
+<em> - multiply the font based on the element on which it is used (stacks; default is 16px)
+<rem> - multiply based on the given root font-size
+
+<vh> 1% of the height of the browser window size
+<vw> 1% of the width of the browser window size
+
+Some new tools for style.css
+
+h1 {
+	padding: 4px 10px 4px 8px
+	margin:0;
+	font-weight:bold;
+	text-decoration:underline;
+	letter-spacing:.8rem;
+	text-shadow:-10px -5px 4px #000;
+	text-align:center;
+}
+
+Span tag
+
+<span class="classname"></span>
+
+.classname {
+	etc etc
+}
+
+Using a div tag as a wrapper
+<body>
+	<div id="wrapper">
+		<header>
+		<main>
+		<footer> //etc
+	</div>
+</body>
+
+
