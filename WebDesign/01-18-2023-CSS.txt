@@ -45,3 +45,6 @@ Hex code RGB values:
 
  color: #94C93D
  color: rgb(148, 201, 61)
+
+Descendant selector
+https://developer.mozilla.org/en-US/docs/Web/CSS/Descendant_combinator

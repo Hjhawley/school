@@ -1,0 +1,13 @@
+Integer1? 5
+Integer2? 8
+The sum of 5 and 8 is 13.
+
+--------------------------
+
+Guess number? 5
+Wrong, guess higher.
+Guess number? 10
+Wrong, guess lower.
+Guess number? 7
+Congrats!
+
