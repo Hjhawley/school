@@ -1,0 +1,66 @@
+New declarations
+
+Borders
+
+<div class="box">
+	<h2>This is a box</h2>
+</div>
+
+.box {
+	border-width: 1px; /* All four sides are the same */
+	border-width: 1px 2px 3px 4px; /* Different widths per side */
+	border-style: solid;
+	border-color: red;
+	padding: 15px;
+}
+
+There is a quicker way
+
+.box {
+	border: 1px solid red;
+	padding: 15px;
+}
+
+Bottom borders and margins
+
+nav {
+	border-bottom: 2px solid red;
+	padding: 10px 0; /* Top and bottom are 10, left and right are 0 */
+	margin-bottom: 30px; /* Adds some space down below */
+}
+
+Inline tags vs block tags
+
+Block tags will always start on a new line and will always take up the full width available
+Inline tags will ignore width and height styling, unless using display:inline-block
+
+Image formats
+
+.jpg	Pros - relatively small filesize, support 16.7mil colors, very common
+	Cons - lossy; compression artifacts, don't support transparency
+	Good to use on a web page if there's no need for transparency
+
+.png	Pros - supports transparency, millions of colors, lossless
+	Cons - large filesize
+	Best to use when transparency is needed
+
+.gif	Pros - supports animation and transparency
+	Cons - Only supports 256 colors, larger filesize, dithering
+	Only helpful when animation is needed
+
+.svg	Pros - small filesize, scalable ("scalable vector graphic")
+	Cons - difficult to create
+	Mostly used for simple things like logos
+
+.webp	Pros - supports transparency, millions of colors, relatively small filesize
+	Cons - newer, and not supported by all browsers
+	Can replace most other image formats
+
+Good rule of thumb is to keep images below 1MB. Otherwise your page will load very slowly.
+compressor.io is helpful
+
+<img src="Images/IMG_7283.jpg" alt="Mountain Dew Can">
+
+img {
+	width:100% /* Constrain the image so it can't break out of any wrappers */
+}
