@@ -17,9 +17,9 @@ ascii_image.o: ascii_image.cpp image_menu.h Image.h // References image_menu.h s
 Image.o: Image.cpp // Doesn't call any functions from image_menu.h so doesn't need it
 	g++ -c Image.cpp
 
-//	     //
+//	       //
 // Vectors //
-//	     //
+//	       //
 
 A linear collection of items, analagous to a Python list
 Stored in contiguous space in memory
@@ -50,4 +50,3 @@ char 				= 8-bit integer (-128 to 127)
 Signed			= the default; for when numbers may need to be negative
 Unsigned			= for when only positive numbers are needed,
 	and therefore offers twice as many valid integers with the same amount of memory
-

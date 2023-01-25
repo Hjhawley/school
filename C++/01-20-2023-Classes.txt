@@ -64,3 +64,16 @@ void Fraction::divide(const int& divisor) {
 	mDenominator *= divisor
 }
 
+Makefile problems
+
+"Undefined reference" is always a linker issue;
+check that your makefile has added all the necessary .o files
+
+To remove any derived files and prepare for a clean build,
+include this in your makefile:
+
+clean:
+	-rm -f filename
+	-rm -f *.o
+	-rm -f *~
+
