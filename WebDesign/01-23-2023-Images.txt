@@ -89,14 +89,14 @@ Hero tags
 
 in CSS
 #hero{
-	background-image:url('Images/IMG_7283.jpg')
+	background-image: url('Images/IMG_7283.jpg')
 	background-size: contain; /* Usually leaves a lot of whitespace */
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: 50% 50%;
 	background-attachment: fixed;
-	width: 100%		/* Does not have a default size; must be set */
-	height: 500px
+	width: 100%;	/* Does not have a default size; must be set */
+	height: 500px;
 }
 
 Image Map

@@ -1,0 +1,27 @@
+Debugging
+
+[copy from notes]
+
+Use std::cout to print variables and find errors
+Comment them out when they're no longer needed, delete when program is finished
+
+A higher-level way:
+
+### Debugging flag
+CXXFLAGS := $(CXXFLAGS) -g
+
+gdb - GNU debugger
+
+Lets you observe the value of variables as they execute
+
+gdb ./filename
+
+(gdb) run - run until it crashes or finishes
+(gdb) break main - if the main() function is called, pause execution
+(gdb) list - show the source code
+(gdb) continue - to keep going
+(gdb) next - execute the next statement in the program
+(gdb) print x - display the value of any variable
+(gdb) where - show the current call stack
+(gdb) up - move up the call stack
+(gdb) down - move down the call stack

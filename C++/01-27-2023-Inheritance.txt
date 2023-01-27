@@ -1,0 +1,10 @@
+Inheritance
+
+When a child class inherits attributes and methods from a parent
+
+#include "Parent.h"
+
+class Child: public Parent {
+    public:
+    // New methods etc
+}
