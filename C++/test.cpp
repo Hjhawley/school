@@ -6,10 +6,10 @@ int main() {
 }
 
 // Compile
-// g++ -std=c++11 -c hello.cpp
+// g++ -std=c++11 -c test.cpp
 
 // Link
-// g++ -std=c++11 -o hello hello.o
+// g++ -std=c++11 -o test test.o
 
 // Run
-// ./hello
+// ./test

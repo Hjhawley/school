@@ -22,5 +22,5 @@ array of bytes and appends it to the end of the stream
 unsigned char byte;
 byte = (unsigned char)i;
 &byte;  // A computation; the memory address of this particular variable
-        //& is a pointer to the memory location
+        // & is a pointer to the memory location
 bits.write((char *)&byte, 1);
