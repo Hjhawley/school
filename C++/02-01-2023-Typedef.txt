@@ -1,0 +1,190 @@
+// TYPEDEF - handy technique for shortening names
+
+class ABCDEFGHIJKLMNOPQRSTUVWXYZ {
+public:
+private:
+};
+
+typedef ABCDEFGHIJKLMNOPQRSTUVWXYZ Alpha; // Used to shorten class and type names
+typedef unsigned long long int u64;       // Another example: a 64-bit unsigned int
+
+int main() {
+  unsigned long long int i;
+  u64 j;
+
+  ABCDEFGHIJKLMNOPQRSTUVWXYZ a;
+  Alpha b;
+
+  return 0;
+}
+
+//////////
+
+#include <iostream>
+
+typedef unsigned long long int u_int64;
+
+double multiply(u_int64 a, double b) {
+  return a * b;
+}
+
+double add(u_int64 a, double b) {
+  return a + b;
+}
+
+
+
+typedef double (*MathFunction)(u_int64, double);  // Defining MathFunction as a pointer
+                                                  // which takes these two types amd returns a double
+
+int main() {
+  //double (*generic_function_pointer1)(int, double) = multiply;
+  //double (*generic_function_pointer2)(int, double) = add;
+  MathFunction generic_function_pointer1 = multiply;
+  MathFunction generic_function_pointer2 = add;
+  double (*g)(u_int64, double);
+
+  g = generic_function_pointer1;
+  
+  double r = generic_function_pointer1(25, 21.22);
+  std::cout << "r " << r << std::endl;
+
+  double p = multiply(3, 3.14);
+  std::cout << "p " << p << std::endl;
+
+  //double (*times)(int, double) = multiply;
+  MathFunction times = multiply;
+  
+  double q = times(2, 2.71);
+  
+  std::cout << "q " << q << std::endl;
+
+  return 0;
+}
+
+//////////
+
+// calculator.cpp
+
+#include "calculator.h"
+#include <iostream>
+
+int main() {
+  return calculator(std::cin, std::cout);
+}
+
+// calculator.h
+
+#ifndef _CALCULATOR_H_
+#define _CALCULATOR_H_
+#include <iostream>
+#include <string>
+
+std::string getString(std::istream& is, std::ostream& os, const std::string& prompt);
+
+int calculator(std::istream& is, std::ostream& os);
+
+typedef int (*CalcFunction)(const int&, const int&);
+
+int add(const int& a, const int& b);
+int subtract(const int& a, const int& b);
+int multiply(const int& a, const int& b);
+int divide(const int& a, const int& b);
+int quit(const int& a, const int& b);
+
+#endif /* _CALCULATOR_H_ */
+/* Local Variables: */
+/* mode:c++         */
+/* End:             */
+
+// calculator_controllers.cpp
+
+#include "calculator.h"
+#include <string>
+#include <map>
+
+std::string getString(std::istream& is, std::ostream& os, const std::string& prompt) {
+  std::string answer;
+  os << prompt;
+  is >> answer;
+  return answer;
+}
+
+int getInteger(std::istream& is, std::ostream& os, const std::string& prompt) {
+  int answer;
+  os << prompt;
+  is >> answer;
+  return answer;
+}
+
+int calculator(std::istream& is, std::ostream& os) {
+  std::map<std::string, CalcFunction> actions;
+  CalcFunction calc;
+  actions["add"] = add;
+  actions["subtract"] = subtract;
+  actions["multiply"] = multiply;
+  actions["divide"] = divide;
+  actions["quit"] = quit;
+  
+  std::string operation;
+  int total = 0;
+  int right_hand_operand;
+  bool done = false;
+
+  while(!done) {
+    os << "Current total: " << total << std::endl;
+
+    // Find user's selected function
+    operation = getString(is, os, "Action? ");
+    if(actions.find(operation) != actions.end()) {
+      calc = actions[operation];
+    } else {
+      calc = 0;
+    }
+
+    // Get operand if appropriate
+    // quit if appropriate
+    if(calc != 0 && operation != "quit") {
+      right_hand_operand = getInteger(is, os, "Operand? ");
+    } else if(operation == "quit") {
+      done = true;
+    }
+    
+    // Execute user's choice of function
+    if(calc != 0) {
+      total = calc(total, right_hand_operand);
+    } else {
+      os << "action: " << operation << " is not known." << std::endl;
+      os << "try: add, subtract, multiply, divide, or quit." << std::endl;
+    }
+  }
+
+  os << "Total: " << total << std::endl;
+  return total;
+}
+
+// 	calculator_operations.cpp
+
+#include "calculator.h"
+
+int add(const int& a, const int& b) {
+  return a + b;
+}
+
+int subtract(const int& a, const int& b) {
+  return a - b;
+}
+
+int multiply(const int& a, const int& b) {
+  return a * b;
+}
+
+int divide(const int& a, const int& b) {
+  return a / b;
+}
+
+int quit(const int& a, const int& b) {
+  (void) b;
+  // does not change a
+  return a;
+}

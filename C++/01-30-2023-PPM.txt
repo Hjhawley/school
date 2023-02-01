@@ -21,21 +21,3 @@ BINARY REPRESENTATION OF COLORS FOR EACH PIXEL
 PPM::writestream is sending text to a file, NOT to the terminal for the user to read
 
 Be sure to correctly set a new max color value, or the image will be mostly black
-
-//////////
-
-Python Dictionaries: Key-Value Pairs
-
-C++ equivalent is a Map
-
-std::map<std::string, int>  // This map uses strings as keys and ints as values
-Trying to use an int as a string will result in a syntax error
-
-favPrime["Hayden"] = 7;    // Written just like in Python
-If the key doesn't exist, it's created. If it does, its value is overwritten.
-
-int x = favPrime["Hayden"]
-
-Sidenote:
-"a string literal in C++ uses double quotes"
-'a character literal in C++ uses single quotes'
