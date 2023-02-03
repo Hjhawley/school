@@ -1,20 +1,27 @@
+CXXFLAGS := -std=c++11
+CXXFLAGS := $(CXXFLAGS) -Wall -Wpedantic -Wextra -Werror
+### debugging flag
+CXXFLAGS := $(CXXFLAGS) -g
+
 all: adder guessing
 
 guessing: guessing.o controllers.o user_io.o
-	g++ -std=c++11 -o guessing guessing.o controllers.o user_io.o
+	$(CXX) $(CXXFLAGS) -o guessing guessing.o controllers.o user_io.o
 
 guessing.o: guessing.cpp functions.h
-	g++ -std=c++11 -c guessing.cpp
+	$(CXX) $(CXXFLAGS) -c guessing.cpp
 
 adder: adder.o user_io.o controllers.o
-	g++ -std=c++11 -o adder adder.o user_io.o controllers.o
+	$(CXX) $(CXXFLAGS) -o adder adder.o user_io.o controllers.o
 
 adder.o: adder.cpp functions.h
-	g++ -std=c++11 -c adder.cpp
+	$(CXX) $(CXXFLAGS) -c adder.cpp
 
 controllers.o: controllers.cpp functions.h
-	g++ -std=c++11 -c controllers.cpp
+	$(CXX) $(CXXFLAGS) -c controllers.cpp
 
 user_io.o: user_io.cpp functions.h
-	g++ -std=c++11 -c user_io.cpp
+	$(CXX) $(CXXFLAGS) -c user_io.cpp
 
+clean:
+	-rm -f *.o adder guessing *~

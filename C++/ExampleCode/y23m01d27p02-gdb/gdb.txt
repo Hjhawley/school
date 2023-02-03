@@ -1,0 +1,10 @@
+gdb ./main
+run - runs the program
+break main - set a break point at the start of the main
+continue - resume running
+next - execute the next statement in the program
+step - step into the next statement
+print x - display the value of the expression x
+where - show the current call stack
+up - move up the call stack
+down - move down the call stack
