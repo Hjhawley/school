@@ -47,7 +47,11 @@ header h1 a {
 nav {
     font-weight: bold;
     color: #f3f3f3;
-    padding: 0.5rem 0.5rem 0.5rem 2rem;
+    background-color: #424242;
+    padding: 0px;
+    margin: 0px;
+    position: sticky;
+    top:0;
     grid-row-start: 2;
     grid-row-end: 3;
     grid-column-start: 2;
@@ -55,6 +59,23 @@ nav {
 }
 nav a {
     text-decoration: none;
+    color: #fff;
+    padding: 1rem 0rem;
+    display: block;
+    text-align: center;
+}
+nav a:hover {
+    background-color: #ba1c21;
+}
+nav ul {
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    flex-flow: row, nowrap;
+    list-style-type: none;
+}
+nav ul li {
+    width: 100%;
 }
 h2 {
     color: #424242;
