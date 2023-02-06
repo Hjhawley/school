@@ -1,18 +1,35 @@
+* {
+    box-sizing: border-box;
+}
 main {
     padding-left: 2rem;
     padding-right: 2rem;
+    grid-row-start: 4;
+    grid-row-end: 5;
+    grid-column-start: 2;
+    grid-column-end: 8;
+    background-color: #ffffff;
+}
+main img {
+    float: right;
+    padding-left: 2rem;
 }
 body {
-    background-color: #FFF;
+    background-color: #fff;
     color: #666;
     font-family: Verdana, Arial, sans-serif;
     background-image: linear-gradient(#eeeeee, #ffffff);
     background-attachment: fixed;
+    margin: 0px;
 }
 header {
     background-color: #003058;
-    color: #FFF;
+    color: #fff;
     font-family: Georgia, serif;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 2;
+    grid-column-end: 8;
 }
 header h1 { /*descendant selector*/
     line-height: 140%;
@@ -21,12 +38,20 @@ header h1 { /*descendant selector*/
     background-repeat: no-repeat;
     background-position: right;
     background-origin: content-box;
-    margin-bottom: 0;
+    margin: 0;
+}
+header h1 a {
+    text-decoration: none;
+    color: #ffffff;
 }
 nav {
     font-weight: bold;
-    color: #F3F3F3;
+    color: #f3f3f3;
     padding: 0.5rem 0.5rem 0.5rem 2rem;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 2;
+    grid-column-end: 8;
 }
 nav a {
     text-decoration: none;
@@ -43,7 +68,7 @@ dt {
     font-weight: bold;
 }
 .ut {
-    color: #BA1C21;
+    color: #ba1c21;
     font-weight: bold;
 }
 footer {
@@ -51,18 +76,19 @@ footer {
     font-style: italic;
     text-align: center;
     padding: 1rem;
+    grid-row-start: 5;
+    grid-row-end: 6;
+    grid-column-start: 2;
+    grid-column-end: 8;
 }
 img {
 	width: 300px;
 }
 #wrapper {
-    width: 80%;
-    margin-right: auto;
-    margin-left: auto;
-    background-color: #ffffff;
-    min-width: 960px;
-    max-width: 2048px;
-    box-shadow: 0px 3px 3px rgba(66,66,66,0.3);
+    display: grid;
+    grid-auto-rows: minmax(0px, auto);
+    grid-template-columns: minmax(0px, 1fr)
+        repeat(6, minmax(0, 175px)) minmax(0px, 1fr);
 }
 #homehero {
     background-image: url('Images/homehero.jpg');
@@ -70,6 +96,10 @@ img {
 	background-repeat: no-repeat;
 	background-position: center;
 	height: 300px;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    grid-column-start: 2;
+    grid-column-end: 8;
 }
 #studenthero {
     background-image: url('Images/studenthero.jpg');
@@ -77,6 +107,10 @@ img {
 	background-repeat: no-repeat;
 	background-position: center;
 	height: 300px;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    grid-column-start: 2;
+    grid-column-end: 8;
 }
 #facultyhero {
     background-image: url('Images/facultyhero.jpg');
@@ -84,4 +118,8 @@ img {
 	background-repeat: no-repeat;
 	background-position: center;
 	height: 300px;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    grid-column-start: 2;
+    grid-column-end: 8;
 }
