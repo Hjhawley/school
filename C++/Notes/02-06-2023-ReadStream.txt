@@ -1,0 +1,27 @@
+ii1 - input image 1
+ii2 - input image 2
+oi - output image
+
+for readStream()
+Just reverse the writeStream() function
+
+iostream will automatically pause when it detects whitespace
+
+std::string p6;
+is >> p6;                    // Not required, but you could check to see if the first two bytes are actually P6
+int width;
+is >> width;
+setWidth(width);
+int height;
+is >> height;
+setHeight(height);
+int maxColorValue;
+is >> maxColorValue;
+setMaxColorValue(maxColorValue);
+is.read((char *) &c, 1);     // Advance past the /n newline by reading one byte and throwing it away
+for(every row)
+    for(every column)
+        for(every channel)
+            int value;
+            value = is.read((char *) &c, 1);
+            setChannel(row, column, channel, value);

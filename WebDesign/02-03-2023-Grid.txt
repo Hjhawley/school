@@ -11,3 +11,5 @@ https://www.w3schools.com/css/css_grid.asp
     background-color: #8cffa0;
     padding: 10px;
 }
+
+https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas
