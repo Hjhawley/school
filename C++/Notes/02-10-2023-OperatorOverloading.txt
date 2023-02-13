@@ -1,0 +1,16 @@
+Check lecture notes
+
+int x, y;
+Widget w, v;
+w == v; // bool operator==(const Widget&, const Widget&)
+        // operator(v, w)
+        // bool Widget::operator==(const Widget&)
+        // w.operator==(v)
+
+w == x; // bool operator==(const Widget&, int)
+        // operator(w, x)
+        // bool operator==(const int&)
+        // w.operator==(x)
+
+x == w; // bool operator==(int, const Widget&)
+        // bool int::operator==(const Widget&) <--- Can't do this because you can't augment the int class

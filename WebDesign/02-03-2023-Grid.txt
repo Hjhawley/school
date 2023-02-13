@@ -13,3 +13,10 @@ https://www.w3schools.com/css/css_grid.asp
 }
 
 https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas
+
+For quiz:
+
+"Align all items to the left"
+
+Correct answer should be flex-start, but the quiz says
+align-items flex-end
