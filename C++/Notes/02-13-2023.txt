@@ -1,7 +1,0 @@
-std::ifstream f("...");
-
-if (f) {        // Check if everything is good with the stream; no errors, etc
-        // Body
-}
-
-can also use f.good()
