@@ -8,3 +8,14 @@ class Child: public Parent {
     public:
     // New methods etc
 }
+
+MULTIPLE HEADER FILES
+
+In general, if a header file includes another header file, any
+source file that includes the first header file must also include
+the second header file.
+
+This is because the preprocessor #include directive simply inserts
+the contents of the included header file into the source file, so
+any symbols declared in the included header file will not be
+available unless the source file includes the header file directly.

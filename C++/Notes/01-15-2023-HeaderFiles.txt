@@ -1,0 +1,38 @@
+A header file contains declarations of functions, classes, 
+constants, and other symbols that are defined in a corresponding
+.cpp file or library. It has a ".h" or ".hpp" extension and is 
+included in source code using the #include directive.
+
+When another file includes a header file, it tells the compiler 
+that the symbols declared in the header file are available and can 
+be used in the current file. The code contained in the associated 
+.cpp file is not automatically copied when a header file is 
+included. Instead, the header file provides a way for the compiler 
+to know the interface of the functions, classes, or constants that 
+are declared in the header file, and then link the corresponding 
+implementation from the .cpp file or library during the linking 
+phase of the compilation process.
+
+Header files serve two main purposes. First, they provide a 
+convenient way to share declarations across multiple source files, 
+allowing functions and classes to be defined in one file and used 
+in another. Second, they allow declarations to be separated from 
+the implementation details, making the code easier to read and 
+maintain.
+
+In practice, header files often contain only declarations, while 
+the implementation details are kept in corresponding .cpp files. 
+When the header file is included in a source file, the 
+declarations are made available to that file, and the 
+implementation details are linked in at compile time.
+
+MULTIPLE HEADER FILES
+
+In general, if a header file includes another header file, any
+source file that includes the first header file must also include
+the second header file.
+
+This is because the preprocessor #include directive simply inserts
+the contents of the included header file into the source file, so
+any symbols declared in the included header file will not be
+available unless the source file includes the header file directly.
