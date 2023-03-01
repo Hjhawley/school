@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/hjhaw/OneDrive/Documents/GitHub/School/C++/cs3005-202340-ie-Hjhawley/src",
-      "program": "c:/Users/hjhaw/OneDrive/Documents/GitHub/School/C++/cs3005-202340-ie-Hjhawley/src/build/Debug/outDebug",
+      "cwd": "c:/Users/hjhaw/OneDrive/Documents/GitHub/School",
+      "program": "c:/Users/hjhaw/OneDrive/Documents/GitHub/School/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
