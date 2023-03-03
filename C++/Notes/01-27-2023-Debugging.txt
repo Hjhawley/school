@@ -25,3 +25,4 @@ gdb ./filename
 (gdb) where - show the current call stack
 (gdb) up - move up the call stack
 (gdb) down - move down the call stack
+(gdb) q - quit

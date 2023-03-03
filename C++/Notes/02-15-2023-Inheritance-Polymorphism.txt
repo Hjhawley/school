@@ -1,0 +1,86 @@
+std::ifstream f("...");
+
+if (f) {        // Check if everything is good with the stream; no errors, etc
+        // Body
+}
+
+can also use f.good()
+
+////////////////////
+
+Inheritance / Polymorphism
+
+A child inherits data members AND methods.
+
+class X {
+public:
+        X();
+
+private:
+        int mData1;
+        double mData2;
+        bool mData3;
+}
+
+int     - 4 bytes
+double  - 8 bytes
+bool    - 1 byte
+
+What the memory looks like:
+
+* INT
+* INT
+* INT
+* INT
+* DOUBLE
+* DOUBLE
+* DOUBLE
+* DOUBLE
+* DOUBLE
+* DOUBLE
+* DOUBLE
+* DOUBLE
+* BOOL                 // Declare bools next to each other to
+* [empty space]        // utilize empty space
+* [empty space]
+* [empty space]
+
+class Y: public X {
+public:
+        Y();
+private:
+        int mData4;
+}
+
+#include "X.h"
+X::X() : mData(1), mData2(3.14), mData3(false) {
+
+}
+
+#include "X.h"
+Y::Y() : X(), mData4(2) {
+        return mData2; // This won't work because mData2 is private
+}
+
+We need to change private to protected.
+
+class X {
+public:
+        X();
+
+protected:
+        int mData1;
+        double mData2;
+        bool mData3;
+}
+
+private: ONLY this class can access this data member
+protected: This class and its descendants can access the data member
+public: ANY class can access this data member
+
+If a child class includes a method with the same name as one of the
+parent's methods, the child version takes precedence ("overrides")
+
+ex: if class X has a getValue() method, but child class Y also has
+a getValue() method, any Y object that calls getValue() will use the
+child version.

@@ -1,0 +1,10 @@
+- Install google test suite.
+- Accept team invitation.
+- Clone unit test repository. Make this repository be a sibling directory of your personal repository.
+- In the unit test repository, run ./unit-test.bash 4, where 4 is the assignment number.
+- Syntax errors?  Fix them.
+- Errors, and want to use the debugger?
+  + cd repo-name/04, where 04 is the assignment number
+  + gdb ./unit-test
+    ) debug from here.
+  + must re-run the unit-test.bash to recompile and link the unit-test program after code edits.
