@@ -1,22 +1,31 @@
 What does the ampersand & mean in C++?
 
-1) take the memory address of a variable
+1. To take the memory address of a variable. Here the variable p is a
+pointer to the memory address of the variable x.
 
 	int x;
 	void* p = &x;
 	//p will now point to x, as &x is the address of x
 
-2) pass an argument by reference to a function
+2. To pass an argument by reference to a function. When a function
+parameter is defined with the "&" symbol, it indicates that the
+argument should be passed by reference. This means that any
+modifications made to the argument inside the function will be
+reflected in the original variable outside the function.
 
 	void foo(CDummy& x);
 	//you pass x by reference
-	//if you modify x inside the function, the change will be applied to the original variable
+	//if you modify x inside the function, the change will be applied
+		//to the original variable
 	//a copy is not created for x, the original one is used
 	//this is preffered for passing large objects
 	//to prevent changes, pass by const reference:
 	void fooconst(const CDummy& x);
 
-3) declare a reference variable
+3. To declare a reference variable. A reference is a type of variable
+that acts as an alias to another variable. In the example provided,
+the reference variable r is declared as a reference to the variable k,
+which means that any changes made to r will also change the value of k.
 
 	int k = 0;
 	int& r = k;
@@ -24,7 +33,8 @@ What does the ampersand & mean in C++?
 	r = 3;
 	assert( k == 3 );
 
-4) bitwise "and" operator
+4. As a bitwise "and" operator. Here the expression 3 & 1 performs a
+bitwise "and" operation on the values 3 and 1, resulting in the value 1.
 
 	int a = 3 & 1; // a = 1
 

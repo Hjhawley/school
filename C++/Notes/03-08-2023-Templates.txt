@@ -1,0 +1,63 @@
+BagOfInt
+
+class BagOfInt {
+public:
+    BagOfInt();
+    BagOfInt(const BagOfInt&); // copy constructor
+    ~BagOfInt(); // destructor
+    int size() const;
+    void push_back(int);
+    const int& operator[](int) const;
+    int& operator[](int);
+private:
+    int *mPtr;
+    int mSize;
+}
+
+When we need to create a copy of something, pointers to the memory address
+get deleted when the destructor is called. This is a problem, because it also
+affects the original object.
+To fix this, we use a copy constructor so that the copy gets its own unique
+memory address.
+That's why we use two different index operators:
+const int& operator[](int) const;
+int& operator[](int);
+
+////////////////////
+
+A template allows a class or function to be defined with generic types,
+which can be replaced with specific types at compile time. In this example,
+a template class called BagOfValue is defined, which can hold any type of
+data. The T in the class definition is a placeholder for the type that will
+be substituted for T when an object of the BagOfValue class is created.
+
+A template is associated with a header file, but not a cpp file.
+It's pretty much the only time you'll see bodies of code inside a header file.
+
+template <class T> // "T" is a placeholder for any type we'd want to substitute
+class BagOfValue {
+public:
+    BagOfValue();
+    ~BagOfValue(); // destructor
+    void push_back(T);
+    const T& operator[](int) const;
+    T& operator[](int);
+private:
+    T *mPtr;
+    int mSize;
+};
+
+template <class T>
+BagOfValue<T>::BagOfValue()
+    : mPtr(0), mSize(0) {
+}
+
+BagOfValue<int> primes;
+BagOfValue<double> numbers;
+etc...
+
+This will copy BagOfValue and replace all instances of T with whatever data type you need.
+This avoids the human error that comes from copy-pasting large chunks of code.
+It's very helpful, but comes with the caveat that it should be generic enough to work with
+every data type you need. For example, be aware that you won't be able to use data types
+that aren't capable of using methods called for in the template.
