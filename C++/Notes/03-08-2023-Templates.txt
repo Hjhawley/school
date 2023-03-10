@@ -61,3 +61,36 @@ This avoids the human error that comes from copy-pasting large chunks of code.
 It's very helpful, but comes with the caveat that it should be generic enough to work with
 every data type you need. For example, be aware that you won't be able to use data types
 that aren't capable of using methods called for in the template.
+
+////////////////////
+
+#ifndef _FUNCTIONS_H_
+#define _FUNCTIONS_H_
+
+template <class Type> // Another example
+Type minimum(Type x, Type y) {
+    Type z;
+    if(X < y) {
+        z = x;
+    }
+    else {
+        z = y;
+    }
+    return z;
+}
+
+// in an implementation file
+
+#include "functions.h"
+
+int a = 17;
+int b = 13;
+int c = minimum(a, b);
+
+////////////////////
+
+Template of a template (copy from notes)
+
+Comparing a BagOfValue with another BagOfValue (both filled with strings)
+
+You need to decide how to compare one BagOfValue with another
