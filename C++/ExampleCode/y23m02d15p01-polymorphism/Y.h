@@ -7,6 +7,7 @@ class Y: public X {
 public:
   Y();
   double getData2() const;
+  void setData4(const int& v);
   virtual double getValue() const;
 private:
   int mData4;

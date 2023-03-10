@@ -5,4 +5,3 @@ hello: hello.o
 
 hello.o: hello.cpp
 	g++ -std=c++11 -c hello.cpp
-
