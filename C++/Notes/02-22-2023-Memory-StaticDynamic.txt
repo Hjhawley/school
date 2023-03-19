@@ -31,7 +31,7 @@ Can only handle a few MB of information
 THE HEAP (dynamic memory)
 
 A section of memory that can get much larger than the stack
-However, the compile won't automatically manage it; the programmer
+However, the compiler won't automatically manage it; the programmer
 has to manually allocate and de-allocate space
 Syntax:
 bar() {

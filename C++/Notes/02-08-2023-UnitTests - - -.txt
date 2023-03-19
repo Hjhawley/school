@@ -1,0 +1,38 @@
+Unit tests
+
+A unit test checks that given inputs produce expected outputs,
+and should check for edge cases. If a program takes in an int,
+pay special attention to zero values, negative values, abnormally
+large and abnormally small values, etc.
+
+Cascading dependency: If a higher-level function is failing its
+tests, check if it's because of a lower-level dependant function.
+
+a: .....
+b: a()
+c: b()
+
+Your unit test repo should be SIBLINGS with the source code repo,
+not a child.
+
+Go into the unit test and use gdb commands to debug
+
+Ex: (gdb) break drawAsciiImage
+    (gdb) next
+
+    Isolate and diagnose the problem
+
+Run tests on your machine before pushing from now on.
+
+Add and commit for incremental changes, but don't push yet.
+
+- Install google test suite.
+- Accept team invitation.
+- Clone unit test repository. Make this repository be a sibling directory of your personal repository.
+- In the unit test repository, run ./unit-test.bash 4, where 4 is the assignment number.
+- Syntax errors?  Fix them.
+- Errors, and want to use the debugger?
+  + cd repo-name/04, where 04 is the assignment number
+  + gdb ./unit-test
+    ) debug from here.
+  + must re-run the unit-test.bash to recompile and link the unit-test program after code edits.
