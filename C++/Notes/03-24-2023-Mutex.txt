@@ -89,11 +89,10 @@ void count_many_primes(std::vector<int>& possible_primes, int& count, std::mutex
             done = true;
         }
         count_lock.unlock();
-            if(is_prime(x)){
-                count_lock.lock();
-                count++;
-                count_lock.unlock();
-            }
+        if(is_prime(x)){
+            count_lock.lock();
+            count++;
+            count_lock.unlock();
         }
     }
     return;
