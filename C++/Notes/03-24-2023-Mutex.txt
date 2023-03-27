@@ -75,7 +75,7 @@ void count_many_primes(std::vector<int>& possible_primes, int& count, std::mutex
 // fix this, copy notes
 threads.push_back(std::thread(count_many_primes, 2, max_number/2, std::ref(count), std::ref(count_lock)))
 
-Sometimes this will cause a segfault.
+Sometimes this will cause a segfault
 
 void count_many_primes(std::vector<int>& possible_primes, int& count, std::mutex& count_lock){
     int x;

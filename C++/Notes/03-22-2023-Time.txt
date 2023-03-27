@@ -15,7 +15,7 @@ bool is-prime(int n){
     return r;
 }
 
-this is horribly inefficient btw, we're doing this to get time data
+this is intentionally inefficient, we're doing this to measure and compare time data
 
 int main(int argc, char *argv[]) { // argument count and argument vector
     int max_number = 10;
