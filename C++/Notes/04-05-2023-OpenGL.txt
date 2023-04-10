@@ -1,0 +1,27 @@
+OpenGL - Graphic Library
+GLUT - GL Utility Toolkit
+
+mouse event
+key event
+time event
+
+switch (c) {
+case 'q': // ascii for q
+case 27: // ascii for Esc - fall-through (multiple ways to do the same thing)
+    exit(0); // quit the program
+    break;
+case 'r':
+    // randomly change the color
+    // g_app_data->randomRecolorRectangle();
+    break;
+}
+
+void GlutApp::randomRecolorRectangle() {
+    std::cout << "Should recolor here." << std::endl; // incremental programming; test things bit by bit
+    // Add 3 data members representing rgb values, and randomly assign a float between 0 and 1
+    ex:
+    int max = 1001;
+    mRed = (std::rand() % max) / (max-1.0); // ensure that decimal division takes place, not integer
+    mGreen = (std::rand() % max) / (max-1.0);
+    mBlue = (std::rand() % max) / (max-1.0);
+}
