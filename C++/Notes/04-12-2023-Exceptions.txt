@@ -1,0 +1,27 @@
+Control Flow
+
+Function -> Call -> Return
+Conditionals (if, switch)
+Loops (for, while)
+Blocking (mutex lock & unlock)
+
+Exception - detected by a conditional statement
+When an exception is thrown, it is thrown all the way up the call stack
+until a function above it "catches" it.
+
+int main() {
+    std::cout << "Try to run code that may throw an exception." << std::endl;
+    try {
+        std::cout
+        int r = std::rand() % 2;
+        std::cout << "About to throw an ecxeption." << std::endl;
+        if(r == 0) {
+            throw 22;
+        }
+        std::cout << "Exception not thrown." << std::endl;
+    } catch (int e) {
+        std::cout << "Exception caught: " << e << std:endl;
+    }
+    std::cout <<
+    return 0;
+}
