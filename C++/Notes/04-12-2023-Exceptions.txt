@@ -25,3 +25,17 @@ int main() {
     std::cout <<
     return 0;
 }
+
+catch(...) { // Catch anything else
+    std::cout << "Caught an unexpected exception. "
+    << __FILE__ << ":" << __LINE__ << std:endl;
+    throw;
+}
+
+bad_alloc() - when you try to allocate more memory than is available
+
+Maximum amount of memory that can be allocated:
+Try to allocate 1, then 2, then 4, then 8... until you get bad_alloc()
+Binary search between the "too big" value and the one right before it
+
+char *allocate_space ( // find in notes)

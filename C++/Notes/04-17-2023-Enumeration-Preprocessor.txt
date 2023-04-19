@@ -1,0 +1,32 @@
+// Enumerator
+
+const int M_DRAWING = 0;
+const int M_INPUT = 1;
+
+int mode; // 0, 1, 2...
+
+// drawing
+mode = 0; // = M_DRAWING
+
+// input
+mode = 1; // = M_INPUT;
+
+.
+.
+.
+
+enum ModeType
+    {M_DRAWING, M_INPUT, ...};
+
+// Preprocessor
+
+// Macros
+
+Text substitution
+
+# define FILE_LINE __FILE__ << ":" << __LINE__ << " "
+// When you type "FILE_LINE" the preprocessor replaces it
+// with __FILE__ << ":" << __LINE__ << " "
+
+# define DEBUG_MESSAGE(msg) std::cout << FILE_LINE << msg << std::endl
+// This is a macro with a parameter
