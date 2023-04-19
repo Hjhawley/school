@@ -4,12 +4,6 @@ body, html {
   font-family: Arial, sans-serif;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
 .grid-container {
   display: grid;
   grid-template-rows: minmax(0px, 75px) 2fr 3fr 3fr 2fr;
@@ -21,11 +15,12 @@ img {
 .header {
   grid-row: 1 / 2;
   grid-column: 1 / 5;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-image: linear-gradient(rgba(240, 240, 240, 0.9), rgba(150, 150, 150, 0.9));
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 20px;
+  width: 100%;
+  z-index: 2;
 }
 
 nav ul {
@@ -33,7 +28,23 @@ nav ul {
   gap: 20px;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 15px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  transition: color 0.2s;
+}
+
+nav ul li a:hover {
+  color: rgba(25, 180, 190, 1);
+}
+
+.header img {
+  height: 50px;
+  width: auto;
+  padding: 0 20px
 }
 
 .hero {
@@ -60,7 +71,6 @@ nav ul {
 
 .text1,
 .text2 {
-  grid-column: 3 / 4;
   margin: 10px;
   display: flex;
   justify-content: center;
@@ -69,10 +79,12 @@ nav ul {
 
 .text1 {
   grid-row: 3 / 4;
+  grid-column: 3 / 4;
 }
 
 .text2 {
   grid-row: 4 / 5;
+  grid-column: 2 / 3;
 }
 
 .before-after {
@@ -85,13 +97,30 @@ nav ul {
   grid-column: 3 / 4;
 }
 
+.left-bar, .right-bar {
+  grid-row: 3 / 6;
+  background-image: linear-gradient(rgb(25, 180, 190), rgb(13, 101, 107));
+}
+
+.left-bar {
+  grid-column: 1 / 2;
+}
+
+.right-bar {
+  grid-column: 4 / 5;
+}
+
 .contact-info {
   grid-row: 5 / 6;
   grid-column: 2 / 3;
+  background-image: linear-gradient(#eee, #ddd);
   margin: 10px;
+  padding-left: 5%;
+  padding-right: 5%;
 }
 
 .map-image {
   grid-row: 5 / 6;
   grid-column: 3 / 4;
+  object-fit: contain;
 }
