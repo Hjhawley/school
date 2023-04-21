@@ -11,17 +11,20 @@ int main( ) {
   std::vector<int> x( 5 );
   unsigned int i;
   try {
+    
     std::cout << "Try to run code that may throw an exception." << std::endl;
     for( i = 0; i <= x.size( ); i++) {
       //       ---^^---------
       x[ i ] = i;
     }
     std::cout << "After [] problem." << std::endl;
+    
     for( i = 0; i <= x.size( ); i++) {
       //       ---^^---------
       x.at( i ) = i;
     }
     std::cout << "After at() problem." << std::endl;
+    
   } catch ( std::exception& e ) {
       std::cout << "Exception caught: " << e.what( ) << std::endl;
   }

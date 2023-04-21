@@ -15,8 +15,8 @@ int risky_function( ) {
   } else if( r == 1 ) {
     throw 20.1;             // double
   } else if( r == 2 ) {
-    throw "I rolled a 2!";  // string (const char *)
-    //throw std::string("I rolled a 2!");  // std::string
+    //throw "I rolled a 2!";  // string (const char *)
+    throw std::string("I rolled a 2!");  // std::string
   }
   return r;
 }
@@ -36,14 +36,18 @@ int main( ) {
     x = safe_function( );
     std::cout << "After safe_function." << std::endl;
   } catch ( int e ) {
-    std::cout << "Int exception caught: " << e << std::endl;
+    if(e < 20) {
+      std::cout << "Life goes on" << std::endl;
+    } else {
+      std::cout << "Int exception caught: " << e << std::endl;
+    }
   } catch ( double e ) {
     std::cout << "Double exception caught: " << e << std::endl;
-  } /* catch ( std::string e ) {
+  } catch ( std::string e ) {
     std::cout << "std::string exception caught: " << e << std::endl;
-    }  *//*catch ( const char *e ) {
+  } catch ( const char *e ) {
     std::cout << "C-string exception caught: " << e << std::endl;
-    }*/
+  }
   std::cout << "After try/catch." << std::endl;
   std::cout << "x = " << x << std::endl;
   return 0;

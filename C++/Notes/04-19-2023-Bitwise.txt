@@ -2,6 +2,14 @@
 
 Commands that haven't yet been added to GUI
 Grayscale toggle?
+Why are Julia Set and Mandelbrot Set so visually interesting?
+Plane window - manual control
+Formula (the a's and b's)
+How do we zoom in on "interesting" points?
+If all colors in the viewport are the same, it's a boring image.
+If there's a high escape count and lots of color, it's probably interesting.
+Look for a point with a high escape count that DOES still escape.
+How do we add more control to color selection?
 
 // Bitwise Or, Bitwise And
 What is a byte? 8 bits

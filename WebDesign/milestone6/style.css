@@ -163,7 +163,7 @@ footer {
 
 .gallery {
   grid-row: 2 / -1;
-  grid-column: 2 / 4;
+  grid-column: 1 / 5;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;

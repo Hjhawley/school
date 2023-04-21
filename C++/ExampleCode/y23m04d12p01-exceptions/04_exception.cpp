@@ -18,7 +18,7 @@ int risky_function() {
   return r;
 }
 
-int safe_function() {
+int safe_function_is_it_really() {
   int a = risky_function();
   int b = risky_function();
   return a + b;
@@ -29,7 +29,7 @@ int main( ) {
   int x = 0;
   try {
     std::cout << "Try to run code that may throw an exception." << std::endl;
-    x = safe_function();
+    x = safe_function_is_it_really();
     std::cout << "After safe_function." << std::endl;
   } catch ( int e ) {
     std::cout << "Int exception caught: " << e << std::endl;

@@ -13,7 +13,7 @@ int main() {
   primes[3] = 11;
   std::cout << primes[3] << std::endl;
 
-  BagOfValuBagOfValue<int>e<double> numbers; // check
+  BagOfValue<double> numbers; // check
   numbers.push_back(2.1); // check
   numbers.push_back(3.1); // check
   numbers.push_back(5.1); //[2] // check

@@ -14,7 +14,7 @@ int main() {
     try {
         std::cout
         int r = std::rand() % 2;
-        std::cout << "About to throw an ecxeption." << std::endl;
+        std::cout << "About to throw an exception." << std::endl;
         if(r == 0) {
             throw 22;
         }

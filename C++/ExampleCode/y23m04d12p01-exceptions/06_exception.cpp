@@ -42,7 +42,7 @@ int main( ) {
     std::cout << "Caught an unexpected exception. "
               << __FILE__ << ":" << __LINE__ << std::endl;
     throw;
-    }
+  }
   std::cout << "After try/catch." << std::endl;
   std::cout << "x = " << x << std::endl;
   return 0;

@@ -1,2 +1,4 @@
 main_no_loop
 fib_no_loop
+fib_with_loop
+fib_with_memo

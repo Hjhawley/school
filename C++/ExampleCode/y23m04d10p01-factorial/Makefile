@@ -1,7 +1,7 @@
 CXX := g++
 CXXFLAGS := -std=c++11 -Wall -Wextra -Wpedantic -Werror
 LDFLAGS := -lpthread
-TARGETS := main main_no_loop fib_no_loop
+TARGETS := main main_no_loop fib_no_loop fib_with_loop fib_with_memo
 
 all: $(TARGETS)
 
@@ -21,6 +21,18 @@ fib_no_loop: fib_no_loop.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 fib_no_loop.o: fib_no_loop.cpp
+	$(CXX) $(CXXFLAGS) -c $<
+
+fib_with_loop: fib_with_loop.o
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+fib_with_loop.o: fib_with_loop.cpp
+	$(CXX) $(CXXFLAGS) -c $<
+
+fib_with_memo: fib_with_memo.o
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+fib_with_memo.o: fib_with_memo.cpp
 	$(CXX) $(CXXFLAGS) -c $<
 
 clean:
