@@ -1,0 +1,18 @@
+Final exam possible assignments
+
+Filters
+PPM -> [filter] -> PPM
+including orange filter, grayscale, PPM operators, etc
+* Edge detection filter: identify bright pixels with dim neighboring pixels
+If the overall change in two neighboring pixels is high, make one output pixel bright
+if they are similar, the produced output pixel is dim.
+
+* Anti-aliasing: average neighboring pixels and smooth out sharp edges
+First option - resize to quarter size, and average colors per 4-pixel block
+Second option - similar to edge detection; use a block of 4 pixels to determine
+one output pixel (located in the top-left corner of the block)
+
+* Load input image 1 from the GUI and apply a filter, like grayscale
+[inside createFractal() copy output image to input image 1?]
+
+* New fractal type
