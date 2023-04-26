@@ -15,4 +15,17 @@ one output pixel (located in the top-left corner of the block)
 * Load input image 1 from the GUI and apply a filter, like grayscale
 [inside createFractal() copy output image to input image 1?]
 
-* New fractal type
+* New fractal type?
+
+* HSV - change the hue but keep saturation
+Hue - 0-360 on the color wheel, Saturation and Value - floats from 0 to 1
+Convert RGB to HSV and vice versa
+This lets you create RGB gradients, hue gradients, saturation gradients, etc
+
+* Randomly selecting an "interesting" region on the plane
+randomly select a handful of points and select the one with the highest 
+escape value that still escapes, and zoom in on it
+
+* "Zoom videos"
+a stitched-together series of frames of a fractal zooming in
+have the program spit out several frames that can be stitched together later
