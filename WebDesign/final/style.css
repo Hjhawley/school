@@ -110,6 +110,7 @@ img.small {
     figure,
     img.small {
         width: 100%;
+        margin: 0;
         padding: 0;
         float: none;
     }
