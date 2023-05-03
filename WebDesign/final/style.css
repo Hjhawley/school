@@ -1,0 +1,109 @@
+/* Structual Elements Go Here */
+body {
+    background-color: #edeeef;
+    color: #555;
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr repeat(6, 175px) 1fr;
+}
+
+nav {
+    grid-column: 2 / 3;
+    background-color: #edeeef;
+}
+
+main {
+    grid-column: 3 / -2;
+    background-color: #fff;
+    padding: 20px;
+}
+
+footer {
+    grid-column: 3 / -2;
+    background-color: #2d5ba6;
+    color: #fff;
+    font-size: 0.5rem;
+    padding: 20px;
+}
+
+/* Navigation Elements Go Here */
+nav ul {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    width: 100%;
+}
+
+nav ul li a {
+    width: 100%;
+    text-decoration: none;
+    color: #555;
+    display: block;
+    padding: 10px;
+}
+
+nav ul li a.active,
+nav ul li a:hover {
+    background-color: #fff;
+    color: #d53631;
+}
+
+/* Styling Elements Go Here */
+p {
+    line-height: 1.25rem;
+}
+
+a {
+    color: #d53631;
+}
+
+h2 {
+    border-bottom: 2px solid #555;
+}
+
+img.logo,
+img.hero,
+video {
+    width: 100%;
+    height: auto;
+}
+
+img.small,
+p.img-text {
+    width: 300px;
+    padding: 10px 10px 0 0;
+    font-style: italic;
+    font-size: 0.75rem;
+    float: right;
+}
+
+/* Media Query of 960 and less goes here */
+@media (max-width: 960px) {
+    nav,
+    main,
+    footer {
+        grid-column: 2 / -2;
+    }
+
+    nav ul {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: flex-end;
+    }
+
+    img.small,
+    p.img-text {
+        width: 100%;
+        padding: 0;
+        float: none;
+    }
+}

@@ -156,6 +156,17 @@ img {
     grid-column-start: 1;
     grid-column-end: -1;
 }
+#shophero {
+    background-image: url('Images/shophero.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 300px;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    grid-column-start: 1;
+    grid-column-end: -1;
+}
 #bluebar {
     background-color: #003058;
     grid-row: 1 / 2;
