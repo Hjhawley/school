@@ -28,6 +28,7 @@ footer {
     color: #fff;
     font-size: 0.5rem;
     padding: 20px;
+    text-align: center;
 }
 
 /* Navigation Elements Go Here */
@@ -36,6 +37,7 @@ nav ul {
     flex-direction: column;
     padding: 0;
     margin: 0;
+    list-style: none
 }
 
 nav ul li {
@@ -76,13 +78,17 @@ video {
     height: auto;
 }
 
-img.small,
-p.img-text {
+figure,
+img.small {
     width: 300px;
-    padding: 10px 10px 0 0;
     font-style: italic;
     font-size: 0.75rem;
     float: right;
+    text-align: center;
+}
+
+img.small {
+    padding: 10px 10px 0 0;
 }
 
 /* Media Query of 960 and less goes here */
@@ -98,10 +104,11 @@ p.img-text {
         flex-direction: row;
         justify-content: flex-end;
         align-items: flex-end;
+        text-align: center;
     }
 
-    img.small,
-    p.img-text {
+    figure,
+    img.small {
         width: 100%;
         padding: 0;
         float: none;
