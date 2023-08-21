@@ -1,0 +1,50 @@
+Inline CSS (worst option)
+
+<h1 style="color:red;">Mountain Dew</h1>
+
+Embedded CSS (second best option)
+Inside the head tag:
+<head>
+    <style>
+        /* CSS Rules */
+        p {
+            color:red;
+            font-size: 16px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
+
+External CSS (best option)
+Inside the head tag:
+<head>
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+
+Simply include a link to a css file and it will apply to every page that refers to it.
+
+CSS is "cascading" because it goes from top to bottom.
+If you set text color and then change it to something else, it will be overwritten.
+
+Imported CSS (alternative fourth option)
+Borrow CSS from somewhere else. Unable to fine tune and edit.
+
+Comments in HTML and CSS:
+/*
+Multi-line comments
+look like this
+*/
+
+Hex code RGB values:
+#000000
+
+ R  G  B
+ 00 00 00   0-9, a-f (Base 16; 256 values per color)
+
+ Mountain Dew Lime Green would be #94C93D
+
+ color: #94C93D
+ color: rgb(148, 201, 61)
+
+Descendant selector
+https://developer.mozilla.org/en-US/docs/Web/CSS/Descendant_combinator

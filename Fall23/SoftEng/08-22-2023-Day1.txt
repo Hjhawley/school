@@ -1,0 +1,7 @@
+Software Engineering
+
+- SE is about learning principles to develop ROBUST software
+- SE emphasizes the importance of STANDARDS
+- SE can impact the real world in major ways, for better or worse
+
+The Ariane 5 crashed due to a simple software mistake. Bugs matter

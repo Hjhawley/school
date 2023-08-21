@@ -1,0 +1,120 @@
+What does the ampersand & mean in C++?
+
+1. To take the memory address of a variable. Here the variable p is a
+pointer to the memory address of the variable x.
+
+	int x;
+	void* p = &x;
+	//p will now point to x, as &x is the address of x
+
+2. To pass an argument by reference to a function. When a function
+parameter is defined with the "&" symbol, it indicates that the
+argument should be passed by reference. This means that any
+modifications made to the argument inside the function will be
+reflected in the original variable outside the function.
+
+	void foo(CDummy& x);
+	//you pass x by reference
+	//if you modify x inside the function, the change will be applied
+		//to the original variable
+	//a copy is not created for x, the original one is used
+	//this is preffered for passing large objects
+	//to prevent changes, pass by const reference:
+	void fooconst(const CDummy& x);
+
+3. To declare a reference variable. A reference is a type of variable
+that acts as an alias to another variable. In the example provided,
+the reference variable r is declared as a reference to the variable k,
+which means that any changes made to r will also change the value of k.
+
+	int k = 0;
+	int& r = k;
+	//r is a reference to k
+	r = 3;
+	assert( k == 3 );
+
+4. As a bitwise "and" operator. Here the expression 3 & 1 performs a
+bitwise "and" operation on the values 3 and 1, resulting in the value 1.
+
+	int a = 3 & 1; // a = 1
+
+//////////
+
+A class has data members and methods (functions) that operate
+specifically on instances of the class.
+
+For example, take a Fraction class that takes two integers
+and whose methods are add, subtract, multiply, and divide.
+
+***Fraction.h***
+
+#ifndef _FRACTION_H_ // "If not defined"
+#define _FRACTION_H_ // Define the symbol
+
+// C++ allows multiple constructors; the first Fraction(); is the 'default'
+
+class Fraction {
+public:	// Things accessible to any code in your program
+	Fraction(); // Initialize to 1/1
+	Fraction(const int& numerator, const int& denominator);
+
+	int getNumerator() const;	// const indicates that this method does not alter the data member
+	int getDenominator() const;
+
+	void add(const int& addend);
+	void subtract(const int& subtrahend);
+	void multiply(const int& multiplier);
+	void divide(const int& divisor);
+
+private:	// Data members (and sometimes methods) only meant for use within the function
+	int mNumerator;	// The m stands for (data) member
+	int mDenominator;
+}; // <-- Don't forget this semicolon
+
+#endif /* _FRACTION_H_ */ // If _FRACTION_H_ is already defined, skip to here.
+
+***Fraction.cpp***
+
+#include "Fraction.h"
+
+// Constructors
+Fraction::Fraction() // Initialize both to 1 by default 
+	:mNumerator(1), mDenominator(1) {
+}
+Fraction::Fraction(const int& numerator, const int& denominator)
+	: mNumerator(numerator), mDenominator(denominator) {
+}
+
+// Methods
+int Fraction::getNumerator() const {
+	return this->mNumerator;
+}
+int Fraction::getDenominator() const {
+	return this->mDenominator;
+}
+
+void Fraction::add(const int& addend) {
+	mNumerator += addend * mDenominator
+}
+void Fraction::subtract(const int& subtrahend) {
+	mNumerator -= subtrahend * mDenominator
+}
+void Fraction::multiply(const int& multiplier) {
+	mNumerator *= multiplier
+}
+void Fraction::divide(const int& divisor) {
+	mDenominator *= divisor
+}
+
+Makefile problems
+
+"Undefined reference" is always a linker issue;
+check that your makefile has added all the necessary .o files
+
+To remove any derived files and prepare for a clean build,
+include this in your makefile:
+
+clean:
+	-rm -f filename
+	-rm -f *.o
+	-rm -f *~

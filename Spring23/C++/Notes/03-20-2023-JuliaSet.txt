@@ -1,0 +1,59 @@
+Julia Set
+
+x', y' <- f(x, y)
+The function takes two coordinates and returns two new coordinates
+
+The Julia set is a mathematical set defined from a function.
+In addition to its merits in complex dynamics, it can be used
+to generate interesting images. Every point in a 2 dimensional
+plane can be categorized as inside or outside of the Julia set
+for a particular function choice.
+
+The "escape radius" for our purposes is r = 2.
+
+If a number is outside the escape radius, it is not 
+part of the set.
+Points that take a long time to escape (a high escape count)
+have more vibrant colors.
+Once a point leaves the circle (r = 2) it won't come back;
+it's gone forever.
+
+The function we'll be using:
+x', y' <- f(x, y)
+x' = x^2 - y^2 + a 
+y' = 2xy + b
+
+The Julia Set class inherits from the ComplexFractal class.
+ComplexFractal is a child of NumberGrid but you don't have to
+specify that in the JuliaSet definition. It will handle that automatically.
+
+Pseudocode:
+
+x0 and y0 are doubles because they are plane coordinates
+escape_count is an integer (how many steps it took)
+
+def f(x, y):
+    a = 0.1
+    b = 0.22
+    x1 = x*x - y*y + a 
+    y1 = 2*x*y + b
+    return x1, y1 # C++ doesn't do tuples like this, so you'll need to return references and assign values
+
+def did_not_escape(x, y):
+    if math.sqrt(x*x + y*y) <= 2:
+        r = True
+    else:
+        r = False
+    return r
+
+def calculatePlaneEscapeCount(x0, y0):
+    max_escape_count = 100
+    x_in, y_in = x0, y0 # temp variables
+    escape_count = 0
+    while did_not_escape(x_in, y_in) and (escape_count < max_escape_count):
+        escape_count += 1
+        x_out, y_out = f(x_in, y_in)
+        x_in, y_in = x_out, y_out
+    return escape_count
+
+escape_count = calculatePlaneEscapeCount(0.5, 0.6)

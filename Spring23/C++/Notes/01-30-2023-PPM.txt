@@ -1,0 +1,23 @@
+PPM Image Format: a text header followed by binary data
+
+P6 WIDTH HEIGHT MAX_COLOR_VALUE\n
+BINARY REPRESENTATION OF COLORS FOR EACH PIXEL
+
+{
+    os << "P6" << " " << width << " " << height << " " << maxColorValue << "\n";
+
+    for(row) {
+        for(col) {
+            unsigned char c = getChannel(row, col, 0);
+            os.write((char *) &c, sizeof(c));           // Treat this as a character, not an int
+            c = getChannel(row, col, 1);
+            os.write((char *) &c, sizeof(c));
+            c = getChannel(row, col, 2);
+            os.write((char *) &c, sizeof(c));
+        }
+    } 
+}
+
+PPM::writestream is sending text to a file, NOT to the terminal for the user to read
+
+Be sure to correctly set a new max color value, or the image will be mostly black

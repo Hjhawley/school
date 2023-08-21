@@ -1,0 +1,41 @@
+Control Flow
+
+Function -> Call -> Return
+Conditionals (if, switch)
+Loops (for, while)
+Blocking (mutex lock & unlock)
+
+Exception - detected by a conditional statement
+When an exception is thrown, it is thrown all the way up the call stack
+until a function above it "catches" it.
+
+int main() {
+    std::cout << "Try to run code that may throw an exception." << std::endl;
+    try {
+        std::cout
+        int r = std::rand() % 2;
+        std::cout << "About to throw an exception." << std::endl;
+        if(r == 0) {
+            throw 22;
+        }
+        std::cout << "Exception not thrown." << std::endl;
+    } catch (int e) {
+        std::cout << "Exception caught: " << e << std:endl;
+    }
+    std::cout <<
+    return 0;
+}
+
+catch(...) { // Catch anything else
+    std::cout << "Caught an unexpected exception. "
+    << __FILE__ << ":" << __LINE__ << std:endl;
+    throw;
+}
+
+bad_alloc() - when you try to allocate more memory than is available
+
+Maximum amount of memory that can be allocated:
+Try to allocate 1, then 2, then 4, then 8... until you get bad_alloc()
+Binary search between the "too big" value and the one right before it
+
+char *allocate_space ( // find in notes)

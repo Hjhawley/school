@@ -1,0 +1,76 @@
+// static
+
+X x;
+Y y;
+x.getValue();
+y.getValue();
+
+// dynamic
+
+X x;
+Y y;
+X *p;
+p = &x;
+p -> getValue(); // The X version of getValue()
+p = &y;
+p -> getValue(); // The Y version of getValue()
+
+////////////////////////////////////////
+
+MEMORY
+
+Computer memory is effectively one large array
+You can write to a memory slot and read from it
+int x;
+Whenever we reference x, we are accessing the data stored in that space
+When we declare a variable, the compiler allocates memory onto a STACK
+The "call stack": which functions are currently active
+As soon as you exit a code block, all of the data is de-allocated
+Can only handle a few MB of information
+
+THE HEAP (dynamic memory)
+
+A section of memory that can get much larger than the stack
+However, the compiler won't automatically manage it; the programmer
+has to manually allocate and de-allocate space
+Syntax:
+bar() {
+    int *space = new int[100000];   // The 'new' operator accesses memory
+    return space;                   // The return value is a pointer
+}
+To call it:
+int *p = bar();     // *p is a pointer to the heap containing
+                    // these newly allocated 100,000 ints
+
+This is why we should initialize variables.
+If we don't initialize, say, 'int sum = 0;' and just say 'int sum;',
+it MAY default to 0 but it may be something else. It will default to 
+whatever is in that particular memory address.
+
+To delete pointers:
+delete [] p;        // This RELEASES the memory.
+You can immediately follow up with p = 0;
+This sets p as a NULL POINTER so that it can't be used anymore, for the
+sake of debugging; it will fail immediately, not later down the line.
+delete [] p doesn't delete the DATA at the previously allocated memory
+address. It just RELEASES it to be available to be overwritten, so most
+of the data remains the same (apart from some metadata associated with
+the old pointer)
+
+RESERVED SECTION
+Cannot be touched or even looked at
+
+TEXT SECTION
+Program Instruction
+Typically read-only
+
+STATIC SECTION
+Data that exists throughout the duration of the program
+String constants and global variables go up here
+Another example of a static:
+    int wilma() {
+        static int v = 1;
+        v++;
+        return v;
+    }
+    fred = check notes

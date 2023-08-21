@@ -1,0 +1,78 @@
+// Exam
+
+Commands that haven't yet been added to GUI
+Grayscale toggle?
+Why are Julia Set and Mandelbrot Set so visually interesting?
+Plane window - manual control
+Formula (the a's and b's)
+How do we zoom in on "interesting" points?
+If all colors in the viewport are the same, it's a boring image.
+If there's a high escape count and lots of color, it's probably interesting.
+Look for a point with a high escape count that DOES still escape.
+How do we add more control to color selection?
+
+// Bitwise Or, Bitwise And
+What is a byte? 8 bits
+What is a bit? A single value
+
+The integer 23 =
+0 0 0 1 0 1 1 1
+^msb          ^lsb (least significant bit)
+
+int main() {
+    unsigned char n = 0; // Needs to be unsigned so we get a positive number from 0 to 255, not -127 to 127
+    char b1   = 1;
+    char b2   = 1 << 1;
+    char b4   = 1 << 2;
+    char b8   = 1 << 3;
+    char b16  = 1 << 4;
+    char b32  = 1 << 5;
+    char b64  = 1 << 6;
+    char b128 = 1 << 7;
+    n = b1 | b2 | b4 | b16; // 23
+    std::cout << (int)n << std::endl;
+
+    n = 254;
+    if(n & b128) { // bitwise 'and'
+        bitpattern << "1";
+    } else {
+        bitpattern << "0";
+    }
+    if(n & b64) { 
+        bitpattern << "1";
+    } else {
+        bitpattern << "0";
+    }
+    if(n & b32) { 
+        bitpattern << "1";
+    } else {
+        bitpattern << "0";
+    }
+    if(n & b16) { 
+        bitpattern << "1";
+    } else {
+        bitpattern << "0";
+    }
+    if(n & b8) { 
+        bitpattern << "1";
+    } else {
+        bitpattern << "0";
+    }
+    if(n & b4) { 
+        bitpattern << "1";
+    } else {
+        bitpattern << "0";
+    }
+    if(n & b2) { 
+        bitpattern << "1";
+    } else {
+        bitpattern << "0";
+    }
+    if(n & b1) { 
+        bitpattern << "1";
+    } else {
+        bitpattern << "0";
+    }
+
+    return 0;
+}

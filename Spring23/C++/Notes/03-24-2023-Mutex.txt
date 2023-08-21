@@ -1,0 +1,99 @@
+// THREADS cont. //
+
+Threads refers to utilizing multiple CPU cores
+
+std::vector<std::thread> threads;
+
+// Create threads
+threads.push_back(std::thread(count_many_primes, 2, max_number/2, std::ref(count1)));
+threads.push_back(std::thread(count_many_primes, max_number/2, max_number, std::ref(count1)));
+
+// Destroy threads
+threads[0].join();
+threads[1].join();
+
+int count = count1 + count2;
+
+Having two count variables is kind of annoying, there's probably
+a better way.
+
+We'll have each thread use its own count++ method and increment
+one single count variable.
+
+Race condition - both cores read from the same memory address and
+cancel out each other's increments. ex: one core reads a 7 from
+the memory address before the other writes 8 to the memory address,
+so a count gets lost. This causes slight inaccuracies in results.
+(This is why YouTube view counts and Twitter likes are fuzzy)
+
+MUTUALLY EXCLUSIVE LOCK (mutex)
+Only one core can read from the memory address at a time (hall pass)
+The key is called a mutex, use #include <mutex>
+This does slow runtime, so be sure to get as much done as possible
+while the other core is "sleeping" (waiting)
+
+insert a lock() command before doing count++, and an unlock() after
+
+// check notes to make sure it's accurate
+threads.push_back(std::thread(count_many_primes, 2, max_number/2, std::ref(count), std::ref(count_lock))){
+    int i;
+    for(i = first; i < last; i++){
+        if(is_prime(i)){
+            count_lock.lock();
+            count++;
+            count_lock.unlock();
+        }
+    }
+    return
+}
+
+We still have a problem: the second half of the list will contain
+more work because the work increases exponentiially. Because we're
+dividing the work at the halfway point, but the second half
+contains significantly more work, we're not actually saving a ton
+of time.
+
+We can have them work from the same queue, but with multiple
+"cashiers". Whenever a cashier (a core) is ready, they take a
+customer (queue item). We will start with the HARDEST tasks and
+move to the easiest to maximize efficiency.
+
+void count_many_primes(std::vector<int>& possible_primes, int& count, std::mutex& count_lock){
+    int x;
+    for(/*some loop here*/){
+        x = possible_primes.back();
+        possible_primes.pop_back();
+        if(is_prime(x)){
+            count_lock.lock();
+            count++;
+            count_lock.unlock();
+        }
+    }
+    return;
+}
+
+// fix this, copy notes
+threads.push_back(std::thread(count_many_primes, 2, max_number/2, std::ref(count), std::ref(count_lock)))
+
+Sometimes this will cause a segfault
+
+void count_many_primes(std::vector<int>& possible_primes, int& count, std::mutex& count_lock){
+    int x;
+    bool done = false;
+    while(!done){
+        count_lock.lock();
+        if(possible_primes.size() > 0){
+            x = possible_primes.back();
+            possible_primes.pop_back();
+        } else {
+            done = true;
+        }
+        count_lock.unlock();
+        if(is_prime(x)){
+            count_lock.lock();
+            count++;
+            count_lock.unlock();
+        }
+    }
+    return;
+}

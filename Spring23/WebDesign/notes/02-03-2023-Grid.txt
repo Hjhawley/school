@@ -1,0 +1,22 @@
+https://www.w3schools.com/css/css_grid.asp
+
+#wrapper {
+    display: grid;
+    grid-template-columns: minmax(min-content, 300px) minmax(200px, 1fr) 150px;
+    grid-template-rows: auto;
+    grid-gap: 5px;
+    box-sizing: border-box;
+    height: 200px;
+    width: 100%;
+    background-color: #8cffa0;
+    padding: 10px;
+}
+
+https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas
+
+For quiz:
+
+"Align all items to the left"
+
+Correct answer should be flex-start, but the quiz says
+align-items flex-end

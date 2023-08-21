@@ -1,0 +1,18 @@
+Computer Organization and Architecture
+
+Learning objectives:
+1. Convert between number systems including binary, hexadecimal, octal, and decimal.
+2. Debate and compare the design of computer instruction sets and assembly languages.
+3. Compose low-level solutions to programming problems that interact directly with the OS.
+4. Generate structured assembly language solutions to algorithmic problems.
+
+The plan:
+1. Learn about CPU architecture at a very high level (RISC-V)
+2. Write assembly language for that CPU and learn how high-level language features work
+3. Learn C and how it relates to assembly
+
+computers-are-fast.github.io
+
+Knowing how a computer works will help you to write better, more efficient code.
+
+This week: assembly, registers, Von Neumann machines, RISC-V datapath
