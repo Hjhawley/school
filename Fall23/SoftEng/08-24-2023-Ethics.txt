@@ -1,0 +1,44 @@
+When do we use SE techniques? When is it overkill?
+
+Class assignment - 100 LOC (lines of code)
+Semester-long project - Hundreds of LOC
+Side project - Thousands
+Wikipedia - 193,091 LOC
+Linux - 1,232,192 LOC
+The bigger your code gets, the more important SE becomes.
+
+Sturgeon's Law: "90% of everything is crap."
+Linux contributor Al Viro thinks that's optimistic ^
+
+Good code is readable and easily understood by humans.
+Otherwise, you increase the risk of bugs.
+
+Programmers tend to have a hard time learning from our
+mistakes as well as our successes.
+
+Ken Thompson: "One of my most productive days was
+throwing away 1,000 lines of code."
+
+"SOFTWARE CRISIS"
+Djikstra talks about two false opinions:
+1) A really competent programmer should be puzzle-minded and
+very fond of "clever tricks"
+2) Programming is nothing more than optimizing the efficiency
+of the computational process, in one direction or the other
+The software crisis is: as the power of available machines grew
+dramatically, society’s ambition to apply these machines grew
+in proportion, and programmers have a harder and harder job.
+As technology becomes more complex, the applications and
+problems become more complex.
+
+Programmers' collective knowledge and productivity is
+increasing linearly over time, while software complexity is
+increasing exponentially. It's becoming easier and easier
+to write code that might harm or kill someone.
+
+There isn't yet an equivalent to "building codes" for
+programming, but there may be soon. For now, it's our job
+to be responsible and ethical. "With great power comes
+great responsibility."
+
+Software Engineering is IMPORTANT!
