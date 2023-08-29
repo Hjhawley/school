@@ -1,0 +1,16 @@
+The Trolley Problem - a dilemma between ethics and psychology
+What we think about what's "right" vs "wrong" depends on
+more than just a logical weighing of the pros and cons.
+90% of people would pull the lever to save 5 at the expense of
+1 life, but only 10% would push 1 person to save 5, even though
+they have effectively the same outcome.
+
+We need to decide how to value human life and how we judge what
+the "greater good" is.
+
+The trolley problem and its variants can give us a good analogue
+for real practical problems that software developers face. A program
+has no morals, so we have to make those decisions. When does one
+life outweigh another? Whatt's an appropriate threshold for what
+is an acceptable risk to human life? How do we make decisions when 
+we have incomplete data or unpredictable outcomes?
