@@ -14,3 +14,10 @@ has no morals, so we have to make those decisions. When does one
 life outweigh another? Whatt's an appropriate threshold for what
 is an acceptable risk to human life? How do we make decisions when 
 we have incomplete data or unpredictable outcomes?
+
+A specific example is the incident with Tesla's self-driving car.
+How did it decide what level of risk was acceptable? How did it
+assess risk in the first place? When was it supposed to swerve to
+avoid injuring or killing a person? How did it quantify the value
+of property compared to the value of a human life? Could that have
+played a part in causing the accident?
