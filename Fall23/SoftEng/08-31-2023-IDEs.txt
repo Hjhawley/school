@@ -1,0 +1,55 @@
+Software Engineering Tools: Language, Code, & IDEs
+
+***
+ACM (computer science club) meetings: Thursdays 7pm, Smith 116
+Workshops & presentations on interesting topics that wouldn't
+normally come up in classes. Also lots of social events
+***
+
+This class is somewhat meant to simulate an internship and allow us
+to feel some pressure and "fail" in a safe environment.
+
+A programming language is first and foremost a TOOL. Picking the
+right tool for the task is an important skill. Python will be
+better than C++ for some tasks and vice versa.
+
+Knowing the fundamentals of programming (and being able to learn
+new programming languages) is much more valuable than knowing any
+one particular language.
+
+A tech job interview is YOUR chance to interview the company. If
+they ask "how good are you at [particular language]" it's not a
+very good sign. Good companies might hope for proficiency in a
+language but they will mostly test for problem-solving skills and
+strong programming fundamentals. They can always teach you their
+preferred language.
+
+We're not here to "learn Node/JS/[insert tool here]". We're here
+to develop good skills and use [tool] as a way to practice.
+
+That said, pay attention to which languages and other tools are
+popular among programmers. It's good to have lots of tools in your
+tool belt. This includes programming languages, markup languages,
+scripting languages, web frameworks, IDEs, and other technology.
+Stack Overflow surveys are a good resource.
+
+Git is an essential tool that we will be using heavily.
+It's "version control" software (a way to organize and track
+updates to project files). It allows us to "stage" changes to be
+added later, go back in time to view previous file versions, and
+much more.
+
+PROGRAMMING STYLE
+
+Many companies enforce a particular coding "style" or standard.
+How to name variables, how to use whitespace, and other
+conventions that make code consistent. Google, for example, has
+published their required style guide. Coding languages also often
+publish their own recommended style guides (PEP-8 for Python, etc)
+Style will vary from one programmer to another, but consistency is
+important. Learn to value this principle. Clean and readable code
+is easier to understand, maintain, update, and share.
+
+Linter - like a "debugger" for syntax and style instead of bugs
+
+GitLab - another tool we'll be using this semester
