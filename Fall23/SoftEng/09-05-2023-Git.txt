@@ -1,0 +1,54 @@
+Recommended NOT to generate a passphrase the first time;
+ssh is pretty secure as-is
+
+Generat a new SSH key:
+
+    Open Git Bash. Paste the following, substituting your own email:
+    ssh-keygen -t ed25519 -C "your_email@example.com"
+
+Change the passphrase for an existing private key without regenerating
+the keypair by typing the following command:
+
+    $ ssh-keygen -p -f ~/.ssh/id_ed25519
+    > Enter old passphrase: [Type old passphrase]
+    > Key has comment 'your_email@example.com'
+    > Enter new passphrase (empty for no passphrase): [Type new passphrase]
+    > Enter same passphrase again: [Repeat the new passphrase]
+    > Your identification has been saved with the new passphrase.
+
+Common Git commands
+
+    git init - initialize a new git repository
+
+    git add [file] - stage the file. Ex: git add calc.py
+    git add -p - stage a "patch" (one specific change to a file)
+        Four states that a file may be found in:
+        untracked -> unmodified -> modified -> staged
+
+    git commit -m - create a "commit" including all staged changes + a message
+        The message should be helpful; explain what you changed and why.
+        Try to write in present-tense
+
+    git status - tells you about untracked / modified files that haven't been
+        staged, or if you're up to date
+
+    git log - gives a log of previous commits
+
+    git diff - view each change (patch) to a file
+
+    git help [command] - ask about [command] for ex: git help add
+        Use this before you use Google or ChatGPT. Learn to learn for yourself
+        Sidenote: LEARN TO READ DOCUMENTATION. It's a very useful skill.
+
+"Plumbing and Porcelain"
+    Plumbing - low-level commands that give fine-grained control (cat-file)
+    Porcelain - high-level user-friendly everyday commands (add, commit, etc)
+
+Git stores "objects" (file content and directory structures) in the
+.git/objects directory. These objects are identified by hexadecimal hashes.
+The first two characters of the hash create a subdirectory, and the other 38
+act as the object's filename. This helps to compress the data efficiently.
+
+Every commit is also contained as an object in the .git/objects directory.
+It contains the tree, parent, author & committer, and message.
+The tree is a list of files involved in the commit: "blobs" or other trees.
