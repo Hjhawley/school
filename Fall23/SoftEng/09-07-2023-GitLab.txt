@@ -1,0 +1,21 @@
+GitLab (and GitHub)
+
+A remote data center that keeps track of your version history.
+It also allows for collaboration.
+Like Google Drive or Dropbox but significantly more powerful.
+
+GitLab hasn't been around quite as long as GitHub but it's had
+free private repositories for much longer. The company is entirely
+remote and promotes working remotely whenever possible.
+
+We read and write to the remote repository by "pushing" and "pulling".
+The first time we pull a remote repository is called a "clone".
+
+GENERATE A NEW SSH KEY
+ssh -keygen
+(Recommended to use the default name and don't enter a password)
+
+ADD SSH KEY TO GITLAB
+cat id_rsa.pub
+This will give you the contents of the ssh key, copy and paste it in
+GitLab to authorize it
