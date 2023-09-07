@@ -1,3 +1,5 @@
+Git commands and SSH setup
+
 Recommended NOT to generate a passphrase the first time;
 ssh is pretty secure as-is
 
