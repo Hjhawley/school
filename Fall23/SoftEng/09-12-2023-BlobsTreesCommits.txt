@@ -1,0 +1,29 @@
+GitLab setup is now fixed; login with your d number as a password (lowercase)
+Create a private project (repo) and add Ren (@renquinn) as a Reporter
+
+///////////////////////////////////////////////////////////////////////////
+
+blobs, trees, & commits - three types of data that Git manages
+
+blob - a file containing text or binary data
+tree - a directory / folder, holds blobs or other trees
+commit - a snapshot of tracked changes
+
+"SHA" - a unique hash referring to a commit
+"ref" (reference) - a pointer to keep track of specific commits
+    branches - a fork of the project with its own history of changes
+    tags - a human-readable label for a SHA hash
+    HEAD - the version / commit you're viewing in your local repo
+
+"master"/"main" - the original and default branch of a project where priority
+    changes are committed
+
+"issues"/"tickets" - problems or to-do items
+
+git fetch origin - retrieves updates from the remote repository named 'origin'
+    but does not merge or modify your working directory, unlike git pull
+    which fetches and then merges
+
+///////////////////////////////////////////////////////////////////////////
+
+Join a group, create a project and each indivual create 3 issues
