@@ -1,0 +1,41 @@
+Software Process
+"What should we do next?"
+"How much time should we allow to complete it?"
+Questions you'll ask yourself often
+
+A "software process" is a chosen methodology by which we engineer software.
+A software process determines the order and the transition of software
+phases according to software engineering ideals.
+
+The components:
+- Requirements (gathering ideas; what is goal of the software?)
+- Design (the architecture of the software)
+- Implementation (building a working model)
+- Verification (validation, unit testing, "QA")
+- Deployment (mostly automated nowadays)
+- Maintenance (fix bugs, improve, iterate)
+
+Examples of different software processes:
+    Waterfall (kind of a myth, not an ideal process)
+    Spiral
+    V-model
+    Incremental
+    Prototyping
+    Rational Unified Process (RUP)
+    Agile (Scrum)
+    Lean 
+    Extreme Programming (XP)
+
+"The Mythical Man-Month" by Fred Brooks
+TL;DR - If you take a team of 5 software engineers and throw 5 more into
+the mix, the output will be cut in half, not doubled. Adding manpower to
+a software project that is behind schedule will delay it even longer.
+
+Comparing processes
+    How well do we understand the requirements?
+    How well do we understand the target market?
+    What is the expected timeline?
+    Does the project have potential for risk?
+    Will the team require any training to follow the ideal processes?
+    Is the process too complex?
+

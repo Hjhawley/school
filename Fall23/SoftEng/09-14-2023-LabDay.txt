@@ -1,0 +1,78 @@
+Lab day
+
+Instructions
+This assignment will give you an opportunity to practice collaborating with a team using Gitlab. You will be part of a Gitlab group, work with Gitlab issues, implement minor changes to a shared source code repository (i.e., code grinder), and submit a Merge Request.
+
+Groups may not exceed 5 members, no exceptions.
+
+Before you get started, here is a list of DO NOTs:
+
+DO NOT implement the issues you create.
+DO NOT merge the issues you implement.
+DO NOT delete the source branch or squash the commits when merging.
+(Sorry about that, sometimes people don't read directions.)
+
+Group Setup
+Have a single person in the group perform the following steps (ideally when sitting together):
+
+Create group.
+From Gitlab, click the "New..." button dropdown in the navbar (on the right side, looks like a +).
+Select "New group"
+At a minimum, enter a group name, select "Private" visibility, and click "Create Group".
+You may customize your group with other options but this is not required.
+Add members to the group.
+From the group page, click "Members" from the menu on the right.
+Search for and add each member of your group as Maintainers.
+Add me to your group as a Reporter.
+Fork repo to group
+Navigate to the original repo page (https://gitlab2450.cs.utahtech.edu/renquinn/git-teamsLinks to an external site.).
+Click the "Fork" button towards the top right of the page.
+Select your group as the target namespace for the forked repo.
+Once the repo has been successfully forked into your group's namespace, you will need to remove the fork relationship from the original repo.
+Go to Settings > General.
+Scroll down to the bottom of the page and click "Expand" next to "Advanced."
+Scroll down to the bottom of the page and click "Remove fork relationship"
+Gitlab Issues
+Creating Issues.
+Everyone needs to create three different issues. For each one, perform the following steps:
+
+Navigate to the repo on Gitlab.
+Click "Issues" on the left menu.
+Click the green "New Issue" button.
+Fill in the Title and Description for the function that is the subject of the issue you are creating (see exampleLinks to an external site.).
+Don't assign the issue (later you will assign other issues to yourself). Don't worry about milestones, labels, or due date. However, your group may choose to include any of these if you would like.
+Click "Submit Issue" and repeat the previous steps for other issues.
+Implementing Issues.
+Everyone needs to implement three different issues (different from the three you created). For each one, perform the following steps:
+
+Make sure you have been added to your group on Gitlab.
+Make sure you have correctly cloned your group's repo.
+Pick an issue to implement.
+Make sure the issue is assigned to you (you can do this step while sitting together as a group, after all the issues have been created, or pick ones yourself that you are sure have not yet been assigned to anyone).
+Click the arrow next to "Create merge request" on the issue page.
+Make sure the option "Create merge request and branch" is selected (a checkmark will appear next to it).
+I'd recommend leaving the default branch name.
+Click the green "Create merge request" button.
+Locally, check out the new branch mentioned on the merge request page, implement, commit, and merge the required changes, then push. Here are the steps:
+Fetch and check out the branch for this merge request
+git fetch origin
+git checkout -b <branch_name> origin/<branch_name> (For the exact command, click on the "Check out branch" button on the merge request page.)
+If you get lost switching branches, you can run git status or git branch to make sure you're in the right place.
+I recommend running the corresponding tests (and watching them fail) before implementing your changes. 
+Implement the necessary changes according to the description in the issue.
+Make sure the corresponding tests pass.
+Commit your changes. I recommend a commit message along the lines of "Implement <function_name>", replacing <function_name> with the name of the function you implemented.
+Push your branch
+git push
+The push output will provide you with a link to the GitLab page of your Merge Request.
+Do not merge and close the request. Someone else should review your changes and merge them if they approve.
+You should also resolve the WIP status so that your group members know you have resolved the issue and your changes are ready for review. Click "Mark as Ready" to do that.
+Merging Issues
+Everyone needs to merge/close three different requests/issues. For each one, perform the following steps:
+
+Select the request you wish to merge from the Merge Requests page.
+Alternately, select the request you are going to merge from the list of Issues. If the merge request has been made, there will be a section on the issue page titled "Related Merge Requests".
+Review the submitted changes (click the "Changes" tab on the Merge Request page).
+Normally, you would also verify that the pipeline build (that runs the tests) passed. But since the pipeline is oversimplified for this project, don't worry about it. But try your best to read the output of the tests and make sure none of the failures are for the function implemented in the merge request (they should be passing at least one test).
+If there are no conflicts, you can click "Merge". DO NOT delete the source branch or squash the commits. (Generally, you will want to do this to keep your repo clean, but for grading purposes, please don't this time).
+If there are conflicts click "Resolve conflicts" to use the Gitlab web GUI to get the request merged. You may also click "Merge locally" if you prefer to use your local client to merge the request.
