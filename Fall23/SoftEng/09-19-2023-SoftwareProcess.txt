@@ -38,4 +38,3 @@ Comparing processes
     Does the project have potential for risk?
     Will the team require any training to follow the ideal processes?
     Is the process too complex?
-

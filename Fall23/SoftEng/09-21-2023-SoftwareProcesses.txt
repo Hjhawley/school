@@ -1,0 +1,58 @@
+Prototyping
+    The difference between prototyping and the waterfall approach is that
+    instead of jumping into the main product, you build a quick prototype and
+    get evaluation, and refine requirements based on feedback. Once the client
+    is satisfied, you move forward and work on the main product.
+    Advantages: quick feedback from clients, flexible, risk mitigation
+    Disadvantages: upfront cost, not as scalable, focus may change
+    Example: early Microsoft Windows
+
+V-model
+    "Validation and Verification" model. Create tests as you go; work from
+    high-scope to low, and then from low to high using the tests that were written.
+    Pretty close to Waterfall, but testing is planned in parallel with development
+    stages, and each development phase has a corresponding test phase.
+    Advantages: Simple and easy to use, small-to-medium projects, easy testing
+    Disadvantages: Intensive planning, rigid linear development, red herrings (looking for problems in the wrong place)
+    Example: Aerospace, railway systems
+
+Spiral
+    Combines elements of the Waterfall and Prototyping models. Consists of
+    cycles (or "spirals") that go through planning, risk analysis, engineering,
+    and evaluation stages, over and over and over.
+    Advantages: reduced maintenance cost in the long run, very adaptable
+    Disadvantages: high training cost, lots of documentation, deadlines hard to meet
+    Example: Security Development Lifecycle (SDL)
+
+RUP
+    Sort of like "zigzagging" through waterfall. Divides the development process
+    into four phases: inception, elaboration, construction, and transition. Pretty
+    much decided by upper management, a lot of training and memorization and not
+    as much autonomy. Extremely complex and structured. Rigidly planned.
+    Advantages: iterative and incremental, risk-focused, reusable components and templates
+    Disadvantages: complex and high learning curve, costly tools, lots of documentation
+    Example:
+
+Agile (Scrum)
+    Agile is a philosophy focused on iterative progress, collaboration, and
+    customer-centricity. The principles:
+    - Individuals and interactions over processes and tools
+    - Working software over comprehensive documentation
+    - Customer collaboration over contract negotiation
+    - Responding to change over following a plan
+    Scrum is a specific Agile application that breaks down the development process
+    into "sprints," typically lasting two to four weeks. In a sprint, a
+    pre-defined set of features is developed, tested, and made ready for release.
+    Advantages: productive, flexible, transparent, collaborative, empowers programmers
+    Disadvantages: not suitable for large rigidly-defined projects, poor documentation, burnout
+    Example: VistaPrint, Sony
+
+XP (Extreme Programming)
+    Developed during the '90s dot-com bubble as a way to quickly put out a working product.
+    Focused on frequent testing, adapting to customer specs, short release periods.
+    "Stories": Use cases for the software. "How would it be used?" Tied to a timeframe.
+    A type of Agile development, like Scrum. Done in a communal, open area. No hierarchy.
+    It's against the rules to "code ahead" with features that are not yet needed
+    Advantages: customer satisfaction, flexibility, software quality (lots of testing)
+    Disadvantages: non-expert micromanagement, some prefer not to work in large teams
+    Example: E-commerce sites
