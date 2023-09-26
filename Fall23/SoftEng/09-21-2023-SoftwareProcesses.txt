@@ -41,8 +41,9 @@ Agile (Scrum)
     - Customer collaboration over contract negotiation
     - Responding to change over following a plan
     Scrum is a specific Agile application that breaks down the development process
-    into "sprints," typically lasting two to four weeks. In a sprint, a
+    into "sprints," typically lasting two to four weeks. In a sprint,
     pre-defined set of features is developed, tested, and made ready for release.
+    *** MOST COMPANIES USE THIS NOWADAYS ***
     Advantages: productive, flexible, transparent, collaborative, empowers programmers
     Disadvantages: not suitable for large rigidly-defined projects, poor documentation, burnout
     Example: VistaPrint, Sony
@@ -56,3 +57,10 @@ XP (Extreme Programming)
     Advantages: customer satisfaction, flexibility, software quality (lots of testing)
     Disadvantages: non-expert micromanagement, some prefer not to work in large teams
     Example: E-commerce sites
+
+Lean
+    Improve quality, eliminate waste, reduce production times, reduce total costs
+    Similar to Agile. Applied to manufacturing more than software. Identifies seven types of
+    wastes (muda) - Overproduction, Inventory, Extra Processing, Motion, Defects, Waiting, 
+    nd Transportation - and seeks to eliminate them to create more value.
+    Example: Toyota
