@@ -1,0 +1,148 @@
+Requirements Engineering
+
+Consists of activities which identify and communicate the purpose of the
+software and the context in which it will be used, i.e., the services a
+customer requires given the constraints under which the system operates.
+
+Software Intensive Systems
+Software + Hardware + Context
+Software runs on hardware to accomplish some purpose.
+For example, ATM , mobile apps, Google Home / Alexa, etc.
+
+Identifying Purpose
+Software Quality: How well the software fulfill its purpose
+Level of quality is within the Venn diagram intersection of
+"Software Function" and "Software Purpose"
+The main goal of Requirements Engineering is to identify the purpose
+of a software system.
+"Is it worth it? Do we need new software for this?"
+Solve the CORRECT PROBLEM. Don't reinvent the wheel unless you have to.
+This is difficult often due to the following reasons:
+    The complexity of the requirements makes them hard to define.
+    Often people don't know what they want (until you show it to them).
+    Requirements might eventually change.
+    Multiple stakeholders could have conflicting requirements.
+
+Defining "Requirement"
+From the IEEE Standard Glossary of SE Terminology:
+A condition or capability needed by a user to solve a problem or
+achieve an objective.
+Computer Science IS problem solving!
+
+Two Main Domains in Software
+The Machine
+    (the computer or program)
+The Application
+    (the real world properties, assumptions about the domain, the user)
+SRS - Software Requirements Specification (document that bridges the two)
+An SRS connects events in the real world that the machine can detect,
+or actions performed by the machine that can be observed in the real world.
+
+https://cdn-images-1.medium.com/v2/resize:fit:2000/1*ApoaIZicyU0b7Jgg9MMJhw.jpeg
+^ What happens when the client, project leader, programmer, and
+consultants are not all on the same page.
+These are COMMUNICATION problems, not software / programming problems.
+To get by in SE you HAVE to learn how to communicate ideas and requirements.
+
+Knowledge as an iceberg
+Above the water: explicit (lives in books and heads)
+Below the water: tacit (lives in people and their practices)
+
+////////////////////
+
+Two Planes
+User vs System
+Functional vs Nonfunctional
+
+User Requirements
+https://en.wikipedia.org/wiki/User_requirements_document
+    What the user expects the software to do
+    Written in natural language, without technical details
+System Requirements
+    What functions the system needs to perform
+    Detailed functional and non-functional requirements
+    Clearly and more rigorously specified/defined
+
+Functional
+https://en.wikipedia.org/wiki/Functional_requirement
+    Has to do with what the system does, it's functionality.
+    Business rules, calculations, reporting, etc.
+Nonfunctional
+https://en.wikipedia.org/wiki/Non-functional_requirement
+    The quality of the functions. How the function is performed (think
+    adjective, not procedural). It's not always clear how to fulfill these
+    requirements, but if that's the case, the requirement should be refined.
+    E.g., saying the software performs quickly vs requiring that it executes
+    some function within a given time limit.
+     - security
+     - accuracy
+     - performance
+     - cost
+     - usability
+     - adaptability
+Ex: A music player.
+Functional: "play music"
+Nonfunctional: volume, playback speed
+
+////////////////////
+
+Cycle:
+Elicitation > Modeling > Analysis (repeat)
+
+Elicitation
+Source of Requirements
+    Stakeholders: anyone affected by the product
+	(e.g., customs, users, investors)
+    Restraints incurred by the application domain
+	(e.g., banking regulations, FERPA, HIPAA)
+    Documentation describing functionality of system
+	(e.g., notes, papers, manuals, books)
+Elicitation Problems
+What makes extracting requirements so hard?
+    The thin spread of domain knowledge. It is almost never written down
+    and often distributed in multiple people's heads, acquired by unique experiences.
+    Knowledge is tacit, or understood without being easily explained.
+    Limited observability. Stakeholders might not be able to see the big picture.
+    Information bias from different contributors, intentional (competing objectives)
+    or unintentional (different backgrounds and expertises, also misinterpretation).
+Traditional Techniques
+    People: interviews, meetings, brainstorming
+    Reading (existing documents, company reports, policy manuals, job descriptions,
+    documentation of existing systems). Problems with reading: written documents
+    might be out of date, might be long and boring, and include irrelevant details.
+    Hard data and samples, facts, figures (e.g., forms, invoices, financial info,
+    marketing data, survey results)
+    Advanced social science techniques
+    Cognitive science techniques
+
+Modeling
+Once you extract requirements, you need to MODEL them.
+Abstraction:
+v    Goals
+v    -
+v    - -
+v    - - -
+v    Specification
+Start with high level goals and continue to refine them until you have detailed
+enough goals to operationalize.
+Software Requirements Specification (SRS) Document: A medium by which teams can
+communicate requirements to others.
+Modern teams generally use project management platforms that organize
+requirements into issues. In this class we'll use Gitlab for that.
+
+Analysis
+Verification. Check the quality, completeness, or pertinence of the software.
+Validation. Assess the extent to which the requirements match the goals
+of the stakeholders.
+Risk analysis. Identify potential risks caused by defined requirements.
+Requirements Prioritization. Due to limited resources (time and money),
+sometimes we have to omit or deprioritize certain requirements.
+    Completeness vs. Pertinence
+    - Completeness: covering all the requirements of the software. It is difficult
+    to form a complete picture of the software before it's actually completed
+    (think of a puzzle that's in progress, or with pieces missing).
+    - Pertinence: covering all relevant requirements while leaving out irrelevant
+    features. It is hard to not create irrelevant features to the purpose.
+    Think of a puzzle with extra pieces. Even when not complete, there might be
+    pieces that don't fit.
+    "Scope Creep"
