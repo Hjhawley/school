@@ -1,0 +1,90 @@
+Foundations for the Study of Software Architecture
+Perry & Wolf
+
+The modularization and detailed interfaces of the software elements to
+satisfy the requirements; a visual framework for satisfying
+requirements. i.e. the blueprint of a software system.
+
+There are many perspectives you can have on the big picture, just like
+there are many ways to diagram the same building. It all depends on
+your needs.
+
+Elements (what)
+    Processing: components that transform data.
+    Data: the information itself.
+    Connecting: components that connect processing and data pieces.
+Form (how)
+    Properties: constrain the choice of architectural elements.
+    Relationships: constrain the “placement” of architectural
+    elements - organization and interaction.
+Rationale (why)
+    Motivation/justification for the choice of architectural style,
+    the choice of elements, and the form.
+
+It's a mistake to begin a project by just jumping into a code editor.
+Spend plenty of time preparing and thinking about the requirements.
+
+Think about how a house is built.
+In building architecture, you first change the blueprint
+(prescriptive architecture, aka "as-conceived") followed by the actual
+building (descriptive architecture, aka "as-implemented").
+In software, the opposite often occurs. Why?
+- Developer Sloppiness (I don't want to go update the docs for this...)
+- Short deadlines (what about agile then?)
+- Lack of documentation
+- What about our understanding of the laws of physics? We've had years
+of perfecting building construction, but much less experience with
+software construction. What are the "laws" of computational physics?
+- Highly varied environments for software
+- Software is so easily changed/malleable
+
+Architectural Degradation
+    - Architectural Drift: introduction of architectural design
+    decisions orthogonal to a system's prescriptive architecture.
+    E.g., think if you added rooms to your house ad hoc as you
+    need/want more features.
+    - Architectural Erosion: introduction of architectural design
+    decisions that violate a system's prescriptive architecture.
+    E.g., think of a poorly designed house from the beginning, the
+    architecture was originally bad.
+This happens to software projects. Scope creep is real!
+
+Prescriptive vs. Descriptive Architecture
+Prescriptive: captures design decisions made prior to implementation
+    "as-conceived" architecture
+Descriptive: how the system has actually been built
+    "as-implemented" architecture
+Key Observation: The two architectures often end up different.
+PLANNING IS USEFUL
+
+Common architectural styles:
+    Pipes and Filters
+    Layered
+    Event-driven
+    Publish-subscribe
+    Client-server 
+    Peer-to-peer
+    Representational State Transfer (REST)
+    Model-View-Controller
+    Microservices
+    Data-centric
+
+Real-World Example: The Linux Kernel
+Linux developers were interviewed about what the Linux architecture
+looked like. What came out of that was a nice clean architecture.
+Researchers then looked at the code and inferred the architecture
+themselves. What came out of it was a much messier architecture than
+what was described by the developers. There are always more "arrows"
+than you think!
+
+A great architecture is a ticket to success
+    (poor architectures create problems)
+A great architecture reflects deep understanding of problem domain
+    (context)
+A great architecture combines aspects of several simpler architectures
+    (don't reinvent the wheel)
+
+https://www.youtube.com/watch?v=x30DcBfCJRI
+https://www.georgefairbanks.com/assets/jesa/Just_Enough_Software_Architecture__Fairbanks_2010-demo.pdf
+https://mermaidjs.github.io/#/
+https://www.gkogan.co/blog/simple-systems/
