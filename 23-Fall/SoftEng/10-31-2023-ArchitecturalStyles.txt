@@ -1,0 +1,89 @@
+Client-Server
+Extremely simple one-way connection
+Most other architectures are made of modified client-server connections
+
+//////////////////////////////
+
+Layered Architecture
+A "sandwich" of interconnected services.
+Ex: Network Layerd Architecture
+    Presentation Layer
+    v
+    Business Layer
+    v
+    Persistence Layer
+    v
+    Database Layer
+You go through one "layer" to get to the next
+Pros: Updating is easy (modularity)
+Cons: Difficult to scale, data is slow to go through every layer
+
+//////////////////////////////
+
+Pipes and Filters
+Data flows through "pipes" and filters are modules that perform a
+specific operation as the data passes through.
+Modular - allows filters to be maintained independently
+Scalable - easy to add more pipes and filters
+Maintainable - easy to fix individual filters
+Parallelism - many filters can work at the same time
+ || ||   <-filter
+=||=||=  <-pipe
+ || ||
+BASH is a good example
+Managing how data moves through many filters can get complicated
+Data consistency and error correction is difficult 
+Overhead is also a problem
+
+//////////////////////////////
+
+Publish & Subscribe (Pub-Sub)
+A message is published to a channel, and whoever is subscribed
+to that channel can see it.
+Charles Schwab and Spotify are examples of this
+Pros: Extremely scalable and flexible, async processing, low overhead,
+user-friendly, enhanced security
+Cons: Testing is difficult, bottlenecks, requires a formatting policy,
+one-way data flow
+
+//////////////////////////////
+
+Peer-to-Peer
+Instead of server to client, clients share data with each other
+Workload is distributed among peers
+Used for filesharing (Bittorrent)
+Skype originally implemented P2P until it was bought by Microsoft
+Pros: Highly scalable, more peers can just be added; easy file sharing,
+error tolerant (not a big deal if one client fails)
+Cons: difficult to track changes, no security, can be slow,
+can't view files before downloading, fosters illegal filesharing
+
+//////////////////////////////
+
+Representational State Transfer (REST)
+Provides a standard for communicating between computer systems.
+REST systems are "stateless" which means the server doesn't store context
+about the client's session. Each HTTP request from the client contains
+the necessary data for the server to fulfill the request.
+Pros: Easily understood, standardized, can handle multiple types of calls,
+allows for the frontend and backend to evolve independently
+Cons: Constant requests, multiple endpoints
+REST isn't easily explained with a box-and-arrows diagram; it's more
+about the standards and protocols than the elements.
+
+//////////////////////////////
+
+Model-View-Controller (MVC)
+Model (backend) and View (frontend) separated and managed by Controller
+User interacts with the controller directly, model interacts with database
+Controller interacts with the model and the view as needed
+
+//////////////////////////////
+
+Microservices
+Variant of SOA (service-oriented architecture)
+Splits code up into fucntional services which communicate through a bus
+Amazon, Netflix, and Uber use this
+Pros: modules are not dependent on each other (scalable)
+Cons: global testing is difficult, arduous for small companies
+Excellent for large companies which can work fast and afford it
