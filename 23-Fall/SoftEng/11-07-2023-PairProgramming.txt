@@ -1,0 +1,11 @@
+Pair Programming
+
+The "driver" holds the mouse and keyboard while the "navigator"
+answers questions, catches mistakes, and makes suggestions
+The driver handles small details, the navigator handles big picture
+
+Be respectful, communicate, think ahead
+Don't be a bossy "navigator", don't touch the keyboard if
+you're not "driving". Respect the roles
+Keep the conversation going, stay locked in
+SWITCH ROLES OFTEN 
