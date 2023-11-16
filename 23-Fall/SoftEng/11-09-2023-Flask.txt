@@ -1,0 +1,34 @@
+Flask & miscellaneous Python stuff for YouFace
+
+A Python "Package" is essentially a directory (or folder) of Python files.
+Each package in Python is a directory which MUST contain a special file
+called __init__.py. This file can be empty, and it indicates that the
+directory it resides in is a Python package, so its modules can be imported.
+
+A "Decorator" starts with an @ sign. Think of it as tagging a function.
+It's like a label or a mode indicating how a function will be used. They
+can be thought of as wrappers that add additional functionality to the
+existing code without changing its structure.
+
+Web frameworks like Flask are the backend of a website, while HTML/CSS/JS
+are the frontend (the stuff the user interacts with). Flask is for small
+to medium projects. "Blueprints" are used for making components and
+supporting common patterns within an app.
+
+Jinja is a templating engine for Python (usually associated with Flask).
+Used to generate HTML, allows the programmer to create a skeleton that
+contains all the common elements of a website and defines blocks that
+child templates can override.
+
+JSON (JavaScript Object Notation) is a format used to store simple data
+structures and objects. It will consist of a bunch of maps (dictionaries)
+and/or arrays (lists). Often used for sending data in web apps from the
+server to the clients.
+
+Cookies - tell the browser "hey, remember this". Small pieces of data
+stored on the client's computer which remember useful information.
+
+//////////////////////////////////////////////////
+
+Sidenote: for our project specifically, we can encode images with base64
+This will store binary image data as a base-64 string
