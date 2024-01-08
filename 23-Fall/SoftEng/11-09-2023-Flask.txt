@@ -28,7 +28,7 @@ server to the clients.
 Cookies - tell the browser "hey, remember this". Small pieces of data
 stored on the client's computer which remember useful information.
 
-//////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 
 Sidenote: for our project specifically, we can encode images with base64
 This will store binary image data as a base-64 string
