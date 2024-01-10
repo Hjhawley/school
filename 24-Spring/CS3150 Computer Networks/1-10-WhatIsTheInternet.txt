@@ -1,0 +1,27 @@
+The difference between a "client" and a "host" is just a matter of perspective
+They both fetch and send to each other. Both are "end systems"
+
+Modems, routers, switches, WiFi access points, etc are not end systems.
+They're somewhere in the middle and they pass data along.
+
+
+NUTS & BOLTS vs SERVICES
+
+"Nuts & Bolts"
+The internet is a network of networks
+A collection of billions of devices interconnected by links
+Protocols that define the format and the order of messages exchanged between
+two or more communicating entities
+("Protocol" - A rule which describes how an activity should be performed)
+In networking terms, a protocol defines the format and order of messages sent & recieved
+among network entities, and actions taken on message transmition & receipt
+
+"Services"
+Infrastructure that provides services to applications
+Proides a programming interface to distributed applications
+Hooks allowing sending/recieving apps to connect to,
+use internet transport service
+Examples: social media, e-commerce, email, streaming
+
+
+Networks can be a CS thing, not just an IT thing!
