@@ -1,0 +1,3 @@
+The difference between a "client" and a "host" is just a matter of perspective
+They both fetch and send to each other. Both are "end systems"
+
