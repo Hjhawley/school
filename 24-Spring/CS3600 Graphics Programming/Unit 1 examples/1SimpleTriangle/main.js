@@ -10,7 +10,7 @@ const vertexShaderText = `
 		fragColor = vertColor;
 		gl_Position = vec4(vertPosition, 0.0, 1.0);
 	}
-`;
+`; 			// This language is called GLSL ^
 
 const fragmentShaderText = `
 	precision mediump float;
