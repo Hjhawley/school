@@ -1,0 +1,34 @@
+The Network Core: a mesh of interconnected routers
+Packet-switching: hosts break application-layer messages into packets.
+
+
+
+Network Core Functions
+
+Forwarding (aka Switching)
+A local action; move arriving packets from the router's input link
+to the appropriate router output link.
+
+Routing
+A global action; determine source-destination paths taken by packets
+using routing algorithms (think Djisktra's algorithm)
+
+
+
+Packet-switching: store-and-forward
+Packet transmission delay: takes L/R seconds to transmit (push out)
+L-bit packet into link at R bps.
+store and forward: entire packet must  arrive at router before it
+can be transmitted on next link.
+
+One-hop numerical example:
+L = 10 Kbits
+R = 100 Mbps
+one-hop transmission delay = 0.1 msec
+
+Queueing occurs when work arrives faster than it can be serviced
+
+Packet queuing and loss: if arrival rate (in bps) to link exceeds
+transmission rate (bps) of link for some period of time,
+packets will queue, waiting to be transmitted on output link and
+packets can be dropped (lost) if memory (buffer) in router fills up
