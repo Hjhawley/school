@@ -32,3 +32,16 @@ Packet queuing and loss: if arrival rate (in bps) to link exceeds
 transmission rate (bps) of link for some period of time,
 packets will queue, waiting to be transmitted on output link and
 packets can be dropped (lost) if memory (buffer) in router fills up
+
+
+
+Nodal Delay
+Each node has delay at processing, queue, transmission, and propagation
+Dnodal = Dproc + Dqueue + Dtrans + Dprop
+Processing - how long does it take for the software to receive & interpret data
+Queue - how long does the data have to wait in line
+Transmission - how long does it take to push the data through (limited by bandwidth)
+Propagation - how long does it take for the data to travel (distance / speed of light)
+
+"Faster internet" is really wider bandwidth. Bad "speeds" means low throughput /
+transmission rate, but the data still moves at the speed of light

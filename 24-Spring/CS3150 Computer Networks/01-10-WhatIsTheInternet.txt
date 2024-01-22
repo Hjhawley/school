@@ -5,6 +5,7 @@ Modems, routers, switches, WiFi access points, etc are not end systems.
 They're somewhere in the middle and they pass data along.
 
 
+
 NUTS & BOLTS vs SERVICES
 
 "Nuts & Bolts"
@@ -24,4 +25,11 @@ use internet transport service
 Examples: social media, e-commerce, email, streaming
 
 
+
 Networks can be a CS thing, not just an IT thing!
+
+
+
+Internet Exchange Point (IXP)
+Allow ISPs to connect their networks
+Increases internet speed because traffic doesn't have to travel as far
