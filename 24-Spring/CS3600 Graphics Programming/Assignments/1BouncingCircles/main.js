@@ -8,12 +8,6 @@ function main() {
     }
 
     function Circle() {
-        // Initialize position, velocity, size, color
-        this.position = {x: randomX, y: randomY};
-        this.velocity = {x: randomVx, y: randomVy};
-        this.radius = randomRadius;
-        this.color = [randomR, randomG, randomB, 1.0];
-        
         this.position = {
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height
@@ -42,10 +36,6 @@ function main() {
         // Animation logic
         requestAnimationFrame(update);
         // Update each circle's position and handle collisions
-        circles.forEach(circle => {
-            // Update circle position based on velocity
-            // Check and handle collisions
-        });
     
         // Clear the canvas
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -58,7 +48,7 @@ function main() {
     }
     
     // Initialize circles
-    const numberOfCircles = 10;
+    const numberOfCircles = 7;
     const circles = [];
     for (let i = 0; i < numberOfCircles; i++) {
         circles.push(new Circle());
