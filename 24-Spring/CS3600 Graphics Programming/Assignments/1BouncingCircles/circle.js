@@ -1,67 +1,96 @@
-class Circle {
-    constructor(gl, shaderProgram) {
-        this.gl = gl;
-        this.shaderProgram = shaderProgram;
-
-        // Define properties
-        this.position = { x: Math.random() * 2 - 1, y: Math.random() * 2 - 1 }; // Random position
-        this.velocity = { x: Math.random() * 0.01 - 0.005, y: Math.random() * 0.01 - 0.005 }; // Random velocity
-        this.radius = Math.random() * 0.1 + 0.05; // Random radius between 0.05 and 0.15
-        this.color = [Math.random(), Math.random(), Math.random(), 1.0]; // Random color
-
-        // Initialize the vertex buffer
-        this.vertexBuffer = this.gl.createBuffer();
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
-        const vertices = this.createCircleVertices(64); // Use 64 vertices to approximate the circle
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertices), this.gl.STATIC_DRAW);
-
-        // Get attribute and uniform locations
-        this.positionAttribLocation = this.gl.getAttribLocation(this.shaderProgram, 'vertPosition');
-        this.colorUniformLocation = this.gl.getUniformLocation(this.shaderProgram, 'uColor');
+class Circle{
+    constructor(xlow, xhigh, ylow, yhigh){ // make the circles inside these World Coordinates
+        this.xlow = xlow;
+        this.xhigh = xhigh;
+        this.ylow = ylow;
+        this.yhigh = yhigh;
+        this.color = [Math.random(), Math.random(), Math.random(), 1]
+        this.size = 1.0 + Math.random(); // half edge between 1.0 and 2.0
+        const minx = xlow+this.size;
+        const maxx = xhigh-this.size;
+        this.x = minx + Math.random()*(maxx-minx);
+        const miny = ylow+this.size;
+        const maxy = yhigh-this.size;
+        this.y = miny + Math.random()*(maxy-miny);
+        this.degrees = Math.random()*90;
+        this.dx = Math.random()*2+2; // 2 to 4
+        if (Math.random()>.5)
+            this.dx = -this.dx;
+        this.dy = Math.random()*2+2;
+        if (Math.random()>.5)
+            this.dy = - this.dy;
     }
+    update(DT){
+        const degreesPerSecond = 45;
+        this.degrees += degreesPerSecond*DT;
+        this.degrees = 0.0; // turn off the rotation, for now
 
-    createCircleVertices(numSides) {
-        const vertices = [];
-        for (let i = 0; i <= numSides; i++) {
-            let angle = i * 2 * Math.PI / numSides;
-            let x = this.radius * Math.cos(angle);
-            let y = this.radius * Math.sin(angle);
-            vertices.push(x + this.position.x, y + this.position.y);
+        if(this.x+this.dx*DT +this.size > this.xhigh){
+            this.dx = -Math.abs(this.dx);
         }
-        return vertices;
-    }
-
-    update() {
-        // Update circle position based on velocity
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
-
-        // Simple collision detection with boundaries
-        if (this.position.x + this.radius > 1 || this.position.x - this.radius < -1) {
-            this.velocity.x *= -1;
+        if(this.x+this.dx*DT -this.size < this.xlow){
+            this.dx = Math.abs(this.dx);
         }
-        if (this.position.y + this.radius > 1 || this.position.y - this.radius < -1) {
-            this.velocity.y *= -1;
+        if(this.y+this.dy*DT +this.size > this.yhigh){
+            this.dy = -Math.abs(this.dy);
+        }
+        if(this.y+this.dy*DT -this.size < this.ylow){
+            this.dy = Math.abs(this.dy);
         }
 
-        // Update the vertex buffer data
-        const vertices = this.createCircleVertices(64);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertices), this.gl.STATIC_DRAW);
+
+        this.x += this.dx*DT;
+        this.y += this.dy*DT;
     }
-
-    draw() {
-        // Bind the vertex buffer
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
-        this.gl.vertexAttribPointer(this.positionAttribLocation, 2, this.gl.FLOAT, false, 0, 0);
-        this.gl.enableVertexAttribArray(this.positionAttribLocation);
-
-        // Set the color uniform
-        this.gl.uniform4fv(this.colorUniformLocation, this.color);
-
-        // Draw the circle
-        this.gl.drawArrays(this.gl.TRIANGLE_FAN, 0, 65); // 64 vertices + 1 for the loop closure
+    draw(gl, shaderProgram){
+        drawCircle(gl, shaderProgram, this.color, this.degrees, this.x, this.y, this.size);
     }
+}
+
+function drawCircle(gl, shaderProgram, color, degrees, x, y, size){
+    //
+    // Create the vertexBufferObject
+    //
+    const vertices = [-1,1, -1,-1, +1,+1, +1,-1];
+
+	const vertexBufferObject = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBufferObject);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+	//
+	// Set Vertex Attributes
+	//
+	const positionAttribLocation = gl.getAttribLocation(shaderProgram, 'vertPosition');
+	gl.vertexAttribPointer(
+		positionAttribLocation, // Attribute location
+		2, // Number of elements per attribute
+		gl.FLOAT, // Type of elements
+		gl.FALSE,
+		2 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
+		0 // Offset from the beginning of a single vertex to this attribute
+	);
+	gl.enableVertexAttribArray(positionAttribLocation);
+
+	//
+	// Set Uniform uColor
+	//
+	const colorUniformLocation = gl.getUniformLocation(shaderProgram, "uColor");
+	gl.uniform4fv(colorUniformLocation, color);
+
+	//
+	// Set Uniform uModelViewMatrix
+	//
+    const modelViewMatrixUniformLocation = gl.getUniformLocation(shaderProgram, "uModelViewMatrix");
+    const modelViewMatrix = mat4.create();
+    mat4.translate(modelViewMatrix, modelViewMatrix, [x, y, 0]);
+    mat4.scale(modelViewMatrix, modelViewMatrix, [size, size, 1]);
+    mat4.rotate(modelViewMatrix, modelViewMatrix, (degrees* Math.PI / 180), [0, 0, 1]);
+    gl.uniformMatrix4fv( modelViewMatrixUniformLocation, false, modelViewMatrix);	  	
+
+    //
+    // Starts the Shader Program, which draws the current object to the screen.
+    //
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 }
 
 export { Circle, drawCircle };

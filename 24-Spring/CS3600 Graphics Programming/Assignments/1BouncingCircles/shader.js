@@ -1,51 +1,57 @@
-/**
- * Creates and compiles a shader.
- *
- * @param {WebGLRenderingContext} gl - The WebGL context.
- * @param {number} type - The type of the shader (gl.VERTEX_SHADER or gl.FRAGMENT_SHADER).
- * @param {string} source - The GLSL source code for the shader.
- * @return {WebGLShader} The compiled shader.
- */
-function loadShader(gl, type, source) {
-  const shader = gl.createShader(type);
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
+// NOTE: This file never needs to be changed.
+function initShaderProgram(gl, vsSource, fsSource) {
+  // Create and compile the two shaders.
+  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 
-  // Check if shader compiled successfully
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
-      gl.deleteShader(shader);
-      return null;
-  }
-
-  return shader;
-}
-
-/**
-* Initializes a shader program by linking a vertex and a fragment shader.
-*
-* @param {WebGLRenderingContext} gl - The WebGL context.
-* @param {string} vertexShaderSource - The GLSL source code for the vertex shader.
-* @param {string} fragmentShaderSource - The GLSL source code for the fragment shader.
-* @return {WebGLProgram} The shader program.
-*/
-function initShaderProgram(gl, vertexShaderSource, fragmentShaderSource) {
-  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
-
-  // Create the shader program
+  // Combine the two shaders into a shader program
   const shaderProgram = gl.createProgram();
   gl.attachShader(shaderProgram, vertexShader);
   gl.attachShader(shaderProgram, fragmentShader);
   gl.linkProgram(shaderProgram);
 
-  // Check if program was linked successfully
+  // If creating the shader program failed, alert
   if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-      alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
-      return null;
+    alert(
+      `Unable to initialize the shader program: ${gl.getProgramInfoLog(
+        shaderProgram
+      )}`
+    );
+    return null;
+  }
+
+  gl.validateProgram(shaderProgram);
+  if (!gl.getProgramParameter(shaderProgram, gl.VALIDATE_STATUS)) {
+    console.error('ERROR validating program!', gl.getProgramInfoLog(shaderProgram));
+    return;
   }
 
   return shaderProgram;
 }
 
-export { initShaderProgram };
+//
+// creates a shader of the given type with the given source code, and compiles it.
+//
+function loadShader(gl, type, source) {
+  // Make an empty shader
+  const shader = gl.createShader(type);
+
+  // Send the source to the shader object
+  gl.shaderSource(shader, source);
+
+  // Compile the shader program
+  gl.compileShader(shader);
+
+  // If compiling the shader failed, alert
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    alert(
+      `An error occurred compiling the shaders: ${gl.getShaderInfoLog(shader)}`
+    );
+    gl.deleteShader(shader);
+    return null;
+  }
+
+  return shader;
+}
+
+export {initShaderProgram};

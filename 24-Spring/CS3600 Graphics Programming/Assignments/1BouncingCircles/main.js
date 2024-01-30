@@ -1,48 +1,87 @@
-// Import Circle class and shader initialization function
 import { Circle } from "./circle.js";
-import { initShaderProgram } from "./shader.js";
+import {initShaderProgram} from "./shader.js";
 
+main();
 async function main() {
-    const canvas = document.getElementById('glcanvas');
-    const gl = canvas.getContext('webgl');
+	console.log('This is working');
 
-    if (!gl) {
-        alert('Your browser does not support WebGL');
-        return;
-    }
+	//
+	// Init gl
+	// 
+	const canvas = document.getElementById('glcanvas');
+	const gl = canvas.getContext('webgl');
 
-    // Load shaders
-    const vertexShaderText = await (await fetch("simple.vs")).text();
+	if (!gl) {
+		alert('Your browser does not support WebGL');
+	}
+
+	gl.clearColor(0.75, 0.85, 0.8, 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+	//
+	// Create shaderProgram
+	// 
+	const vertexShaderText = await (await fetch("simple.vs")).text();
     const fragmentShaderText = await (await fetch("simple.fs")).text();
-    const shaderProgram = initShaderProgram(gl, vertexShaderText, fragmentShaderText);
+	let shaderProgram = initShaderProgram(gl, vertexShaderText, fragmentShaderText);
+	gl.useProgram(shaderProgram);
 
-    // Use the shader program
-    gl.useProgram(shaderProgram);
 
-    // Set up projection matrix uniform
-    const projectionMatrixUniformLocation = gl.getUniformLocation(shaderProgram, "uProjectionMatrix");
-    // ... [Code to set up the projection matrix] ...
+	//
+	// Set Uniform uProjectionMatrix
+	//	
+	const projectionMatrixUniformLocation = gl.getUniformLocation(shaderProgram, "uProjectionMatrix");
+	const aspect = canvas.clientWidth / canvas.clientHeight;
+	const projectionMatrix = mat4.create();
+	const yhigh = 10;
+	const ylow = -yhigh;
+	const xlow = ylow * aspect;
+	const xhigh = yhigh * aspect;
+	mat4.ortho(projectionMatrix, xlow, xhigh, ylow, yhigh, -1, 1);
+	gl.uniformMatrix4fv(
+		projectionMatrixUniformLocation,
+		false,
+		projectionMatrix
+	);
 
-    // Initialize circles
-    const numCircles = 10;
-    const circles = [];
-    for (let i = 0; i < numCircles; i++) {
-        circles.push(new Circle(gl, shaderProgram));
-    }
+	//
+	// Create the objects in the scene:
+	//
+	const NUM_CIRCLES = 2;
+	const circleList = []
+	for (let i = 0; i < NUM_CIRCLES; i++) {
+	  let r = new Circle(xlow, xhigh, ylow, yhigh);
+	  circleList.push(r);
+	}
 
-    // Animation loop
-    function drawScene() {
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	//
+	// Main render loop
+	//
+	let previousTime = 0;
+	function redraw(currentTime) {
+		currentTime*= .001; // milliseconds to seconds
+		let DT = currentTime - previousTime;
+		previousTime = currentTime;
+		if(DT > .1){
+			DT = .1;
+		}
+	
+		// Clear the canvas before we start drawing on it.
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        circles.forEach(circle => {
-            circle.update(); // Update circle position based on velocity
-            circle.draw(); // Draw the circle
-        });
+		// Update the scene
+		for (let i = 0; i < NUM_CIRCLES; i++) {
+			circleList[i].update(DT);
+		}
 
-        requestAnimationFrame(drawScene);
-    }
+		// Draw the scene
+		for (let i = 0; i < NUM_CIRCLES; i++) {
+			circleList[i].draw(gl, shaderProgram);
+		}
+	  
+	
+		requestAnimationFrame(redraw);
+	  }	
+	  requestAnimationFrame(redraw);
+};
 
-    drawScene();
-}
-
-window.onload = main;
