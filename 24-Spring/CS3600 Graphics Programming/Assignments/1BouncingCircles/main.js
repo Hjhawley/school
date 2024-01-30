@@ -1,60 +1,48 @@
-function main() {
-    const canvas = document.getElementById("webgl-canvas");
-    const gl = canvas.getContext("webgl");
+// Import Circle class and shader initialization function
+import { Circle } from "./circle.js";
+import { initShaderProgram } from "./shader.js";
+
+async function main() {
+    const canvas = document.getElementById('glcanvas');
+    const gl = canvas.getContext('webgl');
 
     if (!gl) {
-        alert("Unable to initialize WebGL.");
+        alert('Your browser does not support WebGL');
         return;
     }
 
-    function Circle() {
-        this.position = {
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height
-        };
-        this.velocity = {
-            x: (Math.random() - 0.5) * 2, // Random velocity between -1 and 1
-            y: (Math.random() - 0.5) * 2
-        };
-        this.radius = Math.random() * 20 + 5; // Random radius between 5 and 25
-        this.color = [Math.random(), Math.random(), Math.random(), 1.0];
-    }
+    // Load shaders
+    const vertexShaderText = await (await fetch("simple.vs")).text();
+    const fragmentShaderText = await (await fetch("simple.fs")).text();
+    const shaderProgram = initShaderProgram(gl, vertexShaderText, fragmentShaderText);
 
-    Circle.prototype.draw = function() {
-        // Set up WebGL to draw this circle, e.g., set uniforms, bind buffers
-        // ...
-        gl.drawArrays(gl.TRIANGLE_FAN, 0, circleVertexCount);
-    };
+    // Use the shader program
+    gl.useProgram(shaderProgram);
 
-    Circle.prototype.update = function() {
-        // Update circle position based on velocity
-        // Check and handle collisions with canvas boundaries
-        // ...
-    };
-    
-    function update() {
-        // Animation logic
-        requestAnimationFrame(update);
-        // Update each circle's position and handle collisions
-    
-        // Clear the canvas
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        
-        // Draw each circle
-        circles.forEach(circle => {
-            circle.update();
-            circle.draw();
-        });
-    }
-    
+    // Set up projection matrix uniform
+    const projectionMatrixUniformLocation = gl.getUniformLocation(shaderProgram, "uProjectionMatrix");
+    // ... [Code to set up the projection matrix] ...
+
     // Initialize circles
-    const numberOfCircles = 7;
+    const numCircles = 10;
     const circles = [];
-    for (let i = 0; i < numberOfCircles; i++) {
-        circles.push(new Circle());
+    for (let i = 0; i < numCircles; i++) {
+        circles.push(new Circle(gl, shaderProgram));
     }
 
-    update(); // Start the animation loop
+    // Animation loop
+    function drawScene() {
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        circles.forEach(circle => {
+            circle.update(); // Update circle position based on velocity
+            circle.draw(); // Draw the circle
+        });
+
+        requestAnimationFrame(drawScene);
+    }
+
+    drawScene();
 }
 
 window.onload = main;
