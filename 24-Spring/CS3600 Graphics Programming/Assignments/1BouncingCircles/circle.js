@@ -19,6 +19,7 @@ class Circle{
         this.dy = Math.random()*2+2;
         if (Math.random()>.5)
             this.dy = - this.dy;
+        this.sides = 64;
     }
     update(DT){
         const degreesPerSecond = 45;
@@ -43,15 +44,16 @@ class Circle{
         this.y += this.dy*DT;
     }
     draw(gl, shaderProgram){
-        drawCircle(gl, shaderProgram, this.color, this.degrees, this.x, this.y, this.size);
-    }
+        drawCircle(gl, shaderProgram, this.color, this.degrees, this.x, this.y, this.size, this.sides);
+    }    
 }
 
-function drawCircle(gl, shaderProgram, color, degrees, x, y, size){
-    //
-    // Create the vertexBufferObject
-    //
-    const vertices = [-1,1, -1,-1, +1,+1, +1,-1];
+function drawCircle(gl, shaderProgram, color, degrees, x, y, size, sides) {
+    const vertices = [];
+    for (let i = 0; i <= sides; i++) {
+        const angle = 2 * Math.PI * i / sides;
+        vertices.push(Math.cos(angle), Math.sin(angle));
+    }
 
 	const vertexBufferObject = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBufferObject);
@@ -90,7 +92,7 @@ function drawCircle(gl, shaderProgram, color, degrees, x, y, size){
     //
     // Starts the Shader Program, which draws the current object to the screen.
     //
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, sides + 1);
 }
 
 export { Circle, drawCircle };
