@@ -47,7 +47,7 @@ async function main() {
 	//
 	// Create the objects in the scene:
 	//
-	const NUM_CIRCLES = 2;
+	const NUM_CIRCLES = 7;
 	const circleList = []
 	for (let i = 0; i < NUM_CIRCLES; i++) {
 	  let r = new Circle(xlow, xhigh, ylow, yhigh);

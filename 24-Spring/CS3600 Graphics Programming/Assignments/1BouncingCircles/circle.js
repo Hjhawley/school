@@ -13,10 +13,10 @@ class Circle{
         const maxy = yhigh-this.size;
         this.y = miny + Math.random()*(maxy-miny);
         this.degrees = Math.random()*90;
-        this.dx = Math.random()*2+2; // 2 to 4
+        this.dx = Math.random()*19+1; // 1 to 20
         if (Math.random()>.5)
             this.dx = -this.dx;
-        this.dy = Math.random()*2+2;
+        this.dy = Math.random()*19+1; // 1 to 20
         if (Math.random()>.5)
             this.dy = - this.dy;
         this.sides = 64;

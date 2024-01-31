@@ -1,0 +1,29 @@
+Transport Layer
+
+What transport service does an app need?
+
+* data integrity - some apps require 100% reliable data transfer (file transfers)
+    while others don't care as much (Zoom calls)
+
+* throughput - some apps require a minimum amount of throughput to be effective
+    (streaming movies and other multimedia)
+
+* timing - some apps require low delay to be effective (online games)
+
+* security - encryption, etc
+
+RTT - round trip time
+TTL - time to live
+
+TCP (Transmission Control Protocol) is the most well-known transport Protocol
+
+
+
+  Application layer
+^ Transport layer
+^ Network layer (the overall web of connected systems)
+^ Link layer (individual end-to-end software connections)
+^ Physical layer (the hardware itself)
+
+Each layer directly depends on the one below it, but it doesn't have to
+    worry about the rest (abstraction)
