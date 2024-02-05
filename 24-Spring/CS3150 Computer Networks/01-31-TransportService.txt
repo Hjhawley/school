@@ -15,7 +15,11 @@ What transport service does an app need?
 RTT - round trip time
 TTL - time to live
 
-TCP (Transmission Control Protocol) is the most well-known transport Protocol
+TCP (Transmission Control Protocol) is the most well-known transport protocol
+UDP (User Datagram Protocol) another commonly used one
+
+TCP: reliable, congestion control, connection-oriented, does not provide timing, security
+UDP: unreliable data transfer
 
 
 
