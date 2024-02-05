@@ -9,9 +9,9 @@ async function main() {
 	//
 	// Constants for physics
 	//
-	const gravity = -9.8;
+	const gravity = -10;
 	const airFriction = 0.005;
-	const collisionFriction = 0.999; // Less than 1 to simulate energy loss
+	const collisionFriction = 0.995; // Less than 1 to slow down
 
 	//
 	// Init gl
@@ -56,10 +56,23 @@ async function main() {
 	// Create the objects in the scene:
 	//
 	const NUM_CIRCLES = 7;
-	const circleList = []
+	const circleList = [];
 	for (let i = 0; i < NUM_CIRCLES; i++) {
-	  let r = new Circle(xlow, xhigh, ylow, yhigh);
-	  circleList.push(r);
+		let overlap, r;
+		do {
+			overlap = false;
+			r = new Circle(xlow, xhigh, ylow, yhigh);
+			
+			// Check for overlap with existing circles
+			for (let j = 0; j < circleList.length; j++) {
+				if (isColliding(r, circleList[j])) {
+					overlap = true;
+					break; 	// Exit the for loop, there's an overlap
+				}
+			}
+			
+		} while (overlap); 	// Repeat if we found an overlap
+		circleList.push(r); // No overlap found, add the circle to the list
 	}
 
 	function isColliding(circle1, circle2) {
@@ -74,10 +87,12 @@ async function main() {
 	//
 	let previousTime = 0;
 	function redraw(currentTime) {
-		currentTime *= 0.001; // Convert to seconds
+		currentTime *= 0.001;
 		let DT = currentTime - previousTime;
 		previousTime = currentTime;
-		DT = Math.min(DT, 0.1);
+		if(DT > .1){
+			DT = .1;
+		}
 	  
 		// Apply gravity and air friction
 		circleList.forEach(circle => {
@@ -95,14 +110,22 @@ async function main() {
 		  }
 		}
 	  
-		// Update and draw each circle
-		circleList.forEach(circle => {
-		  circle.update(DT, gravity, airFriction);
-		  circle.draw(gl, shaderProgram);
-		});
+		// Clear the canvas before we start drawing on it.
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+		// Update the scene
+		for (let i = 0; i < NUM_CIRCLES; i++) {
+			circleList[i].update(DT, gravity, airFriction);
+		}
+
+		// Draw the scene
+		for (let i = 0; i < NUM_CIRCLES; i++) {
+			circleList[i].draw(gl, shaderProgram);
+		}
 	  
 		requestAnimationFrame(redraw);
 	  }
+
 	  requestAnimationFrame(redraw);
 };
 
