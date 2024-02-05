@@ -21,10 +21,17 @@ class Circle{
             this.dy = - this.dy;
         this.sides = 64;
     }
-    update(DT){
+    update(DT, gravity, airFriction){
         const degreesPerSecond = 45;
         this.degrees += degreesPerSecond*DT;
         this.degrees = 0.0; // turn off the rotation, for now
+
+        // Apply gravity
+        this.dy += gravity * DT;
+
+        // Apply air friction
+        this.dx *= 1 - airFriction;
+        this.dy *= 1 - airFriction;
 
         if(this.x+this.dx*DT +this.size > this.xhigh){
             this.dx = -Math.abs(this.dx);
@@ -38,7 +45,6 @@ class Circle{
         if(this.y+this.dy*DT -this.size < this.ylow){
             this.dy = Math.abs(this.dy);
         }
-
 
         this.x += this.dx*DT;
         this.y += this.dy*DT;

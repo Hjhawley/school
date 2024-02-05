@@ -7,6 +7,13 @@ async function main() {
 	console.log('This is working');
 
 	//
+	// Constants for physics
+	//
+	const gravity = -9.8;
+	const airFriction = 0.005;
+	const collisionFriction = 0.5; // Less than 1 to simulate energy loss
+
+	//
 	// Init gl
 	// 
 	const canvas = document.getElementById('glcanvas');
@@ -55,34 +62,47 @@ async function main() {
 	  circleList.push(r);
 	}
 
+	function isColliding(circle1, circle2) {
+		const dx = circle1.x - circle2.x;
+		const dy = circle1.y - circle2.y;
+		const distance = Math.sqrt(dx * dx + dy * dy);
+		return distance < (circle1.radius + circle2.radius);
+	  }	  
+
 	//
 	// Main render loop
 	//
 	let previousTime = 0;
 	function redraw(currentTime) {
-		currentTime*= .001; // milliseconds to seconds
+		currentTime *= 0.001; // Convert to seconds
 		let DT = currentTime - previousTime;
 		previousTime = currentTime;
-		if(DT > .1){
-			DT = .1;
-		}
-	
-		// Clear the canvas before we start drawing on it.
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-		// Update the scene
-		for (let i = 0; i < NUM_CIRCLES; i++) {
-			circleList[i].update(DT);
-		}
-
-		// Draw the scene
-		for (let i = 0; i < NUM_CIRCLES; i++) {
-			circleList[i].draw(gl, shaderProgram);
+		DT = Math.min(DT, 0.1);
+	  
+		// Apply gravity and air friction
+		circleList.forEach(circle => {
+		  circle.dy += gravity * DT; // Gravity
+		  circle.dx *= 1 - airFriction; // Air friction
+		  circle.dy *= 1 - airFriction;
+		});
+	  
+		// Detect and resolve collisions
+		for (let i = 0; i < NUM_CIRCLES - 1; i++) {
+		  for (let j = i + 1; j < NUM_CIRCLES; j++) {
+			if (isColliding(circleList[i], circleList[j])) {
+			  collideParticles(circleList[i], circleList[j], DT, collisionFriction);
+			}
+		  }
 		}
 	  
-	
+		// Update and draw each circle
+		circleList.forEach(circle => {
+		  circle.update(DT, gravity, airFriction);
+		  circle.draw(gl, shaderProgram);
+		});
+	  
 		requestAnimationFrame(redraw);
-	  }	
+	  }
 	  requestAnimationFrame(redraw);
 };
 
