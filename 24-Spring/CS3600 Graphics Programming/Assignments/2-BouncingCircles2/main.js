@@ -1,5 +1,6 @@
 import { Circle } from "./circle.js";
-import {initShaderProgram} from "./shader.js";
+import { initShaderProgram } from "./shader.js";
+import { collideParticles } from "./collisions.js";
 
 main();
 async function main() {
