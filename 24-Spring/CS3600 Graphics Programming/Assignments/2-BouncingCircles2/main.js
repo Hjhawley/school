@@ -11,7 +11,7 @@ async function main() {
 	//
 	const gravity = -9.8;
 	const airFriction = 0.005;
-	const collisionFriction = 0.5; // Less than 1 to simulate energy loss
+	const collisionFriction = 0.999; // Less than 1 to simulate energy loss
 
 	//
 	// Init gl
@@ -66,8 +66,8 @@ async function main() {
 		const dx = circle1.x - circle2.x;
 		const dy = circle1.y - circle2.y;
 		const distance = Math.sqrt(dx * dx + dy * dy);
-		return distance < (circle1.radius + circle2.radius);
-	  }	  
+		return distance < (circle1.size + circle2.size);
+	}
 
 	//
 	// Main render loop
