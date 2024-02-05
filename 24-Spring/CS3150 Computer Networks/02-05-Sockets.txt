@@ -1,0 +1,17 @@
+Socket programming
+
+"Socket" - a door between application process and end-end transport protocol
+
+- Application layer
+    /// ^ Socket ^ ///
+- Transport layer
+- Network layer
+- Link layer
+- Physical layer
+
+EXAMPLE
+1. client reads a line of data from its keyboard and sends data to the server
+2. server receives the data and converts characters to uppercase
+3. server sends modified data to client
+4. client receives modified data and displays the line onscreen
+
