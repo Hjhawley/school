@@ -7,11 +7,11 @@ async function main() {
 	console.log('This is working');
 
 	//
-	// Constants for physics
+	// Constants
 	//
 	const gravity = -10;
-	const airFriction = 0.005;
-	const collisionFriction = 0.995; // Less than 1 to slow down
+	const airFriction = 0.009;
+	const collisionFriction = 0.99; // Less than 1 to slow down
 
 	//
 	// Init gl
@@ -58,12 +58,11 @@ async function main() {
 	const NUM_CIRCLES = 7;
 	const circleList = [];
 	for (let i = 0; i < NUM_CIRCLES; i++) {
+		// Check for overlap with existing circles
 		let overlap, r;
 		do {
 			overlap = false;
 			r = new Circle(xlow, xhigh, ylow, yhigh);
-			
-			// Check for overlap with existing circles
 			for (let j = 0; j < circleList.length; j++) {
 				if (isColliding(r, circleList[j])) {
 					overlap = true;
@@ -78,7 +77,7 @@ async function main() {
 	function isColliding(circle1, circle2) {
 		const dx = circle1.x - circle2.x;
 		const dy = circle1.y - circle2.y;
-		const distance = Math.sqrt(dx * dx + dy * dy);
+		const distance = Math.sqrt((dx * dx) + (dy * dy));
 		return distance < (circle1.size + circle2.size);
 	}
 
