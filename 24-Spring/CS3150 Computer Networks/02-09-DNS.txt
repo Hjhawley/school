@@ -1,0 +1,17 @@
+IP address is a network level protocol (144.38.232.54)
+DNS is an application level protocol (google.com)
+
+DNS translates the domain name to an IP address, like a phone book
+
+An IP address more or less corresponds 1-to-1 to a physical port
+
+Imagine a rack at one of Google's data centers.
+
+App         [................]
+Transport   [................]
+Net         []......[]......[]
+Link        []......[]......[]
+Physical    []......[]......[]
+
+At the transport layer, IP addresses can sort of "fan out" and mix-and-match;
+one port does not necessarily correspond to on single IP address
