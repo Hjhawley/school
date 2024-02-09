@@ -9,11 +9,11 @@ An IP address more or less corresponds 1-to-1 to a physical port
 
 Imagine a rack at one of Google's data centers.
 
-App         [................]
-Transport   [................]
-Net         []......[]......[]
-Link        []......[]......[]
-Physical    []......[]......[]
+App         [................] DNS
+Transport   [................] Ports (TCP/UDP)
+Net         []......[]......[] IP address
+Link        []......[]......[] MAC address
+Physical    []......[]......[] Hardware (Cables, switches, NICs)
 
 At the transport layer, IP addresses can sort of "fan out" and mix-and-match;
 one port does not necessarily correspond to on single IP address

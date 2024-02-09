@@ -15,12 +15,12 @@ Protocols that define the format and the order of messages exchanged between
 two or more communicating entities
 ("Protocol" - A rule which describes how an activity should be performed)
 In networking terms, a protocol defines the format and order of messages sent & recieved
-among network entities, and actions taken on message transmition & receipt
+among network entities, and actions taken on message transmission & receipt
 
 "Services"
 Infrastructure that provides services to applications
-Proides a programming interface to distributed applications
-Hooks allowing sending/recieving apps to connect to,
+Provides a programming interface to distributed applications
+Hooks allowing sending/receiving apps to connect to,
 use internet transport service
 Examples: social media, e-commerce, email, streaming
 
@@ -33,3 +33,13 @@ Networks can be a CS thing, not just an IT thing!
 Internet Exchange Point (IXP)
 Allow ISPs to connect their networks
 Increases internet speed because traffic doesn't have to travel as far
+
+
+
+The OSI Model
+
+App Layer...........DNS
+Transport...........Ports (TCP/UDP)
+Net.................IP address
+Link................MAC address
+Physical............Hardware (Cables, switches, NICs)
