@@ -1,5 +1,7 @@
+DNS (Domain Name System)
+
 IP address is a network level protocol (144.38.232.54)
-DNS is an application level protocol (google.com)
+DNS is an application level protocol (Google.com)
 
 DNS translates the domain name to an IP address, like a phone book
 

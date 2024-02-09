@@ -13,5 +13,5 @@ EXAMPLE
 1. client reads a line of data from its keyboard and sends data to the server
 2. server receives the data and converts characters to uppercase
 3. server sends modified data to client
-4. client receives modified data and displays the line onscreen
+4. client receives modified data and displays the line on-screen
 
