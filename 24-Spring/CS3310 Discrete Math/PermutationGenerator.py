@@ -1,8 +1,10 @@
 def generatePermutations(n):
     num_list = list(range(n))
+    permutations = []  # Initialize an empty list to store the permutations
     
     while True:
-        printPermutations(num_list)
+        permutations.append(num_list.copy())
+        
         # Find the rightmost number that is smaller than its next number
         i = n - 2
         while i >= 0 and num_list[i] >= num_list[i + 1]:
@@ -20,23 +22,26 @@ def generatePermutations(n):
         
         # Reverse
         num_list[i + 1:] = reversed(num_list[i + 1:])
+    
+    return permutations  # Return the list of permutations
 
-def printPermutations(num_list):
-    num_string = ""
-    for i in num_list:
-        num_string += str(i)
-    print(num_string, end=' ')
+def printPermutations(permutations):
+    for num_list in permutations:
+        num_string = "".join(str(i) for i in num_list)  # Convert each permutation to a string
+        print(num_string, end=' ')
 
-def main():
-    while True:
-        try:
-            N = int(input("Give me an integer N between 1 and 9: "))
-            if 1 <= N <= 9:
-                generatePermutations(N)
-                print()
-            else:
-                print("N must be between 1 and 9.")
-        except ValueError:
-            print("Please enter a valid integer.")
+if __name__ == "__main__":
+    def main():
+        while True:
+            try:
+                N = int(input("Give me an integer N between 1 and 9: "))
+                if 1 <= N <= 9:
+                    perms = generatePermutations(N)
+                    printPermutations(perms)
+                    print()
+                else:
+                    print("N must be between 1 and 9.")
+            except ValueError:
+                print("Please enter a valid integer.")
 
-main()
+    main()

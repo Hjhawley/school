@@ -12,7 +12,7 @@ async function main() {
 		alert('Your browser does not support WebGL');
 	}
 
-	gl.clearColor(0.75, 0.85, 0.8, 1.0);
+	gl.clearColor(0.04, 0.51, 0.51, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	//
@@ -32,7 +32,7 @@ async function main() {
 	mat4.ortho(projectionMatrix, xlow, xhigh, ylow, yhigh, -1, 1);
 	gl.uniformMatrix4fv(projectionMatrixUniformLocation, false, projectionMatrix);
 
-	const NUM_CIRCLES = 7;
+	const NUM_CIRCLES = 12;
 	const circleList = [];
 	let tries = 0;
 	while(circleList.length<NUM_CIRCLES && tries < 10000){

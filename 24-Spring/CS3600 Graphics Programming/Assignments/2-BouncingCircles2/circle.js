@@ -19,11 +19,11 @@ class Circle{
 
     update0(){
         // Gravity:
-        const G = -1.25;
+        const G = -1;
         this.dy += G;
 
         // Air friction:
-        const AIR_FRICTION = .995;
+        const AIR_FRICTION = 0.999;
         this.dx *= AIR_FRICTION;
         this.dy *= AIR_FRICTION;
     }
@@ -49,7 +49,7 @@ class Circle{
             const r2 = circleList[j].size;
             const distance = (nextx2-nextx1)**2 + (nexty2-nexty1)**2;
             if (distance < (r1+r2)**2){
-                const COLLISION_FRICTION = .9
+                const COLLISION_FRICTION = 0.9
                 collideParticles(this, circleList[j], DT, COLLISION_FRICTION);
             }
         }
