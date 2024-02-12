@@ -29,6 +29,7 @@ class Circle{
     }
 
     update1(DT, xlow, xhigh, ylow, yhigh, circleList, me){        
+        const FLOOR_FRICTION = 0.7; // To stop it from "vibrating" on the floor
         // ball-wall
         if (this.x+this.dx*DT+this.size > xhigh)
             this.dx = -Math.abs(this.dx);
@@ -37,7 +38,7 @@ class Circle{
         if (this.y+this.dy*DT+this.size > yhigh)
             this.dy = -Math.abs(this.dy);
         if (this.y+this.dy*DT-this.size < ylow)
-            this.dy = Math.abs(this.dy);
+            this.dy = Math.abs(this.dy)*FLOOR_FRICTION;
 
         // ball-ball
         const r1 = this.size;
