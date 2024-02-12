@@ -19,7 +19,7 @@ class Circle{
 
     update0(){
         // Gravity:
-        const G = -1;
+        const G = -0.9;
         this.dy += G;
 
         // Air friction:
@@ -29,7 +29,7 @@ class Circle{
     }
 
     update1(DT, xlow, xhigh, ylow, yhigh, circleList, me){        
-        const FLOOR_FRICTION = 0.7; // To stop it from "vibrating" on the floor
+        const FLOOR_FRICTION = 0.75; // To stop it from "vibrating" on the floor
         // ball-wall
         if (this.x+this.dx*DT+this.size > xhigh)
             this.dx = -Math.abs(this.dx);
@@ -50,7 +50,7 @@ class Circle{
             const r2 = circleList[j].size;
             const distance = (nextx2-nextx1)**2 + (nexty2-nexty1)**2;
             if (distance < (r1+r2)**2){
-                const COLLISION_FRICTION = 0.9
+                const COLLISION_FRICTION = 0.925
                 collideParticles(this, circleList[j], DT, COLLISION_FRICTION);
             }
         }
