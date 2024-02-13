@@ -16,6 +16,38 @@ async function main() {
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	//
+	// Accelerometer
+	//
+	let gravity = [0, 0];
+
+	if (!(window.DeviceOrientationEvent == undefined)) {
+		window.addEventListener("deviceorientation", handleOrientation);
+		}
+		
+	function handleOrientation(event) {
+		let x = event.beta; // In degree in the range [-180,180)
+		let y = event.gamma; // In degree in the range [-90,90)
+
+		if (x==null || y==null){
+			gravity[0] = 0;
+			gravity[1] = -1;
+		}
+		else{
+			// Because we don't want to have the device upside down
+			// We constrain the x value to the range [-90,90]
+			if (x > 90) {
+			x = 90;
+			}
+			if (x < -90) {
+			x = -90;
+			}
+
+			gravity[0] = y/90; // -1 to +1
+			gravity[1] = -x/90; // flip y upside down.
+		}
+	}
+	
+	//
 	// Create shaders
 	// 
 	const vertexShaderText = await(await fetch("simple.vs")).text();
@@ -79,7 +111,7 @@ async function main() {
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		for(let i=0; i<circleList.length; i++){
-			circleList[i].update0();
+			circleList[i].update0(gravity);
 		}
 		for(let reps=0; reps<circleList.length; reps++){
 			for(let i=0; i<circleList.length; i++){

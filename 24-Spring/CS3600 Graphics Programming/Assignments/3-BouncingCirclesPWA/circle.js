@@ -17,13 +17,12 @@ class Circle{
         return this.y + this.dy*DT;
     }
 
-    update0(){
-        // Gravity:
-        const G = -0.9;
-        this.dy += G;
+    update0(gravity){
+        this.dx += gravity[0];
+        this.dy += gravity[1];
 
         // Air friction:
-        const AIR_FRICTION = 0.999;
+        const AIR_FRICTION = 0.99;
         this.dx *= AIR_FRICTION;
         this.dy *= AIR_FRICTION;
     }
