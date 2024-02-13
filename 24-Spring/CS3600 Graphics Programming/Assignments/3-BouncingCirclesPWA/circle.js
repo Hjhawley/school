@@ -50,7 +50,7 @@ class Circle{
             const r2 = circleList[j].size;
             const distance = (nextx2-nextx1)**2 + (nexty2-nexty1)**2;
             if (distance < (r1+r2)**2){
-                const COLLISION_FRICTION = 0.925
+                const COLLISION_FRICTION = 0.85
                 collideParticles(this, circleList[j], DT, COLLISION_FRICTION);
             }
         }
