@@ -20,9 +20,32 @@ async function main() {
 	//
 	let gravity = [0, 0];
 
-	if (!(window.DeviceOrientationEvent == undefined)) {
-		window.addEventListener("deviceorientation", handleOrientation);
-		}
+	// Check for iOS to request permission for accelerometer
+	if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+		// iOS 13+ devices
+		// Create a button to request permission
+		const button = document.createElement("button");
+		button.innerText = "Click to enable accelerometer";
+		button.style.position = "absolute";
+		button.style.left = "50%";
+		button.style.top = "50%";
+		button.addEventListener("click", () => {
+			DeviceOrientationEvent.requestPermission()
+				.then(permissionState => {
+					if (permissionState === "granted") {
+						window.addEventListener("deviceorientation", handleOrientation, true);
+					} else {
+						alert("Permission to access accelerometer was denied.");
+					}
+					button.remove();
+				})
+				.catch(console.error);
+		});
+		document.body.appendChild(button);
+	} else {
+		// Non-iOS 13+ devices
+		window.addEventListener("deviceorientation", handleOrientation, true);
+	}
 		
 	function handleOrientation(event) {
 		let x = event.beta; // In degree in the range [-180,180)
