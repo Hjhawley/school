@@ -6,7 +6,7 @@ main();
 
 let selectedPointIndex = -1; // Index of the selected control point, -1 if none
 let selectedCurveIndex = -1; // Index of the selected Bezier curve, -1 if none
-let curveOffset = 4; // Adjust
+let curveOffset = 5; // Adjust
 
 async function main() {
 	console.log('This is working');
