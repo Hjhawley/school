@@ -3,6 +3,11 @@ import { drawCircle, drawRectangle, drawTriangle, drawLineStrip } from "./shapes
 import { randomDouble } from "./random.js";
 
 main();
+
+let selectedPointIndex = -1; // Index of the selected control point, -1 if none
+let selectedCurveIndex = -1; // Index of the selected Bezier curve, -1 if none
+let curveOffset = 4; // Adjust
+
 async function main() {
 	console.log('This is working');
 
@@ -65,6 +70,7 @@ async function main() {
 	class Bezier {
 		constructor(points) {
 		  this.points = points; // An array of 4 Point2 objects
+		  this.color = [randomDouble(0, 1), randomDouble(0, 1), randomDouble(0, 1), 1];
 		}
 	  
 		evaluate(t) {
@@ -89,20 +95,19 @@ async function main() {
 		drawCurve(gl, shaderProgram) {
 			const pointsForCurve = [];
 			for (let i = 0; i <= 20; i++) {
-			let t = i / 20;
-			let p = this.evaluate(t);
-			pointsForCurve.push(p.x, p.y);
+				let t = i / 20;
+				let p = this.evaluate(t);
+				pointsForCurve.push(p.x, p.y);
 			}
-			drawLineStrip(gl, shaderProgram, pointsForCurve, [0, 0, 0, 1]); // Using default black color
+			drawLineStrip(gl, shaderProgram, pointsForCurve, this.color);
 		}
 
 		drawControlPoints(gl, shaderProgram) {
 			this.points.forEach(point => {
-			drawCircle(gl, shaderProgram, point.x, point.y, 0.2, [1, 0, 0, 1]); // Example: red color for control points
+			drawCircle(gl, shaderProgram, point.x, point.y, 0.2, this.color); // Red control points
 			});
 		}
 
-		// Inside the Bezier class
 		isPicked(x, y) {
 			const pickingRadius = 0.5; // Adjust
 			for (let i = 0; i < this.points.length; i++) {
@@ -123,17 +128,14 @@ async function main() {
 		}
 	  }
 	
-	let bezierCurve = new Bezier([
-		new Point2(-5, -5),
-		new Point2(-2, 5),
-		new Point2(2, -5),
-		new Point2(5, 5)
-	  ]);
+	let bezierCurves = [];
 
-	//
-	// Register Listeners
-	//
-	let selectedPointIndex = -1; // Index of the selected control point, -1 if none
+	bezierCurves.push(new Bezier([
+        new Point2(-5, -5),
+        new Point2(-2, 5),
+        new Point2(2, -5),
+        new Point2(5, 5)
+    ]));
 
 	/*
 	addEventListener("click", click);
@@ -149,24 +151,49 @@ async function main() {
 		const rect = canvas.getBoundingClientRect();
 		const xWorld = xlow + (event.clientX - rect.left) / canvas.clientWidth * (xhigh - xlow);
 		const yWorld = yhigh - (event.clientY - rect.top) / canvas.clientHeight * (yhigh - ylow);
-		selectedPointIndex = bezierCurve.isPicked(xWorld, yWorld);
-	}	
-
+		selectedPointIndex = -1; // Reset to -1 before checking
+		selectedCurveIndex = -1; // Reset to -1 before checking
+		bezierCurves.forEach((curve, index) => {
+			const pickedIndex = curve.isPicked(xWorld, yWorld);
+			if (pickedIndex !== -1) {
+				selectedCurveIndex = index;
+				selectedPointIndex = pickedIndex;
+			}
+		});
+	}    
+	
 	canvas.addEventListener('mousemove', mousemove);
 	function mousemove(event) {
-		if (selectedPointIndex !== -1) { // Only move if a point is selected
+		if (selectedCurveIndex !== -1 && selectedPointIndex !== -1) {
 			const rect = canvas.getBoundingClientRect();
 			const xWorld = xlow + (event.clientX - rect.left) / canvas.clientWidth * (xhigh - xlow);
 			const yWorld = yhigh - (event.clientY - rect.top) / canvas.clientHeight * (yhigh - ylow);
-			bezierCurve.setPoint(selectedPointIndex, xWorld, yWorld);
+			bezierCurves[selectedCurveIndex].setPoint(selectedPointIndex, xWorld, yWorld);
 		}
-	}	
-
+	}    
+	
 	canvas.addEventListener('mouseup', mouseup);
 	function mouseup(event) {
+		selectedCurveIndex = -1;
 		selectedPointIndex = -1;
-	}
+	}	
 
+	function setupAddCurveButton() {
+		const addButton = document.getElementById('addBezierCurve');
+		addButton.addEventListener('click', () => {
+			const newPoints = [
+				new Point2(randomDouble(-curveOffset, curveOffset) - 5, randomDouble(-curveOffset, curveOffset) - 5),
+            	new Point2(randomDouble(-curveOffset, curveOffset) - 2, randomDouble(-curveOffset, curveOffset) + 5),
+            	new Point2(randomDouble(-curveOffset, curveOffset) + 2, randomDouble(-curveOffset, curveOffset) - 5),
+            	new Point2(randomDouble(-curveOffset, curveOffset) + 5, randomDouble(-curveOffset, curveOffset) + 5)
+			];
+			const newCurve = new Bezier(newPoints);
+			bezierCurves.push(newCurve);
+		});
+	}
+	
+	setupAddCurveButton();
+	
 	//
 	// Main render loop
 	//
@@ -179,14 +206,17 @@ async function main() {
 		previousTime = currentTime;
 
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-		bezierCurve.drawCurve(gl, shaderProgram);
-		bezierCurve.drawControlPoints(gl, shaderProgram);
 
 		/*
 		drawCircle(gl, shaderProgram, 5,5,1);
 		drawRectangle(gl, shaderProgram, 0,0,2,1, [1,0,0,1]); // override the default color with red.
 		drawTriangle(gl, shaderProgram, -1,0, -1,2, -2,3);
 		drawLineStrip(gl, shaderProgram, [0,0,-1,-1,-2,-1])*/
+
+		bezierCurves.forEach(curve => {
+			curve.drawCurve(gl, shaderProgram);
+			curve.drawControlPoints(gl, shaderProgram);
+		});
 		
 		requestAnimationFrame(redraw);
 	}
