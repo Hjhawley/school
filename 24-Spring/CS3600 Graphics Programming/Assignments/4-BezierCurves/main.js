@@ -14,7 +14,7 @@ async function main() {
 	if (!gl) {
 		alert('Your browser does not support WebGL');
 	}
-	gl.clearColor(0.75, 0.85, 0.8, 1.0);
+	gl.clearColor(0.04, 0.51, 0.51, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	//
@@ -55,7 +55,61 @@ async function main() {
 	//
 	// Create content to display
 	//
+	class Point2 {
+		constructor(x, y) {
+		  this.x = x;
+		  this.y = y;
+		}
+	  }
+	  
+	  class Bezier {
+		constructor(points) {
+		  this.points = points; // An array of 4 Point2 objects
+		}
+	  
+		evaluate(t) {
+		  const p0 = this.points[0],
+				p1 = this.points[1],
+				p2 = this.points[2],
+				p3 = this.points[3];
+	  
+		  const x = Math.pow(1 - t, 3) * p0.x +
+					3 * Math.pow(1 - t, 2) * t * p1.x +
+					3 * (1 - t) * Math.pow(t, 2) * p2.x +
+					Math.pow(t, 3) * p3.x;
+	  
+		  const y = Math.pow(1 - t, 3) * p0.y +
+					3 * Math.pow(1 - t, 2) * t * p1.y +
+					3 * (1 - t) * Math.pow(t, 2) * p2.y +
+					Math.pow(t, 3) * p3.y;
+	  
+		  return new Point2(x, y);
+		}
 
+		drawCurve(gl, shaderProgram) {
+			const pointsForCurve = [];
+			for (let i = 0; i <= 20; i++) {
+			let t = i / 20;
+			let p = this.evaluate(t);
+			pointsForCurve.push(p.x, p.y);
+			}
+			drawLineStrip(gl, shaderProgram, pointsForCurve, [0, 0, 0, 1]); // Using default black color
+		}
+
+		// Inside Bezier class
+		drawControlPoints(gl, shaderProgram) {
+			this.points.forEach(point => {
+			drawCircle(gl, shaderProgram, point.x, point.y, 0.2, [1, 0, 0, 1]); // Example: red color for control points
+			});
+		} 
+	  }
+	
+	let bezierCurve = new Bezier([
+		new Point2(-5, -5),
+		new Point2(-2, 5),
+		new Point2(2, -5),
+		new Point2(5, 5)
+	  ]);
 
 	//
 	// Register Listeners
@@ -80,6 +134,8 @@ async function main() {
 		previousTime = currentTime;
 
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		bezierCurve.drawCurve(gl, shaderProgram);
+		bezierCurve.drawControlPoints(gl, shaderProgram);
 
 		drawCircle(gl, shaderProgram, 5,5,1);
 		drawRectangle(gl, shaderProgram, 0,0,2,1, [1,0,0,1]); // override the default color with red.
@@ -90,4 +146,3 @@ async function main() {
 	}
 	requestAnimationFrame(redraw);
 };
-
