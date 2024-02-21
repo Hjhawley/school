@@ -62,7 +62,7 @@ async function main() {
 		}
 	  }
 	  
-	  class Bezier {
+	class Bezier {
 		constructor(points) {
 		  this.points = points; // An array of 4 Point2 objects
 		}
@@ -96,12 +96,31 @@ async function main() {
 			drawLineStrip(gl, shaderProgram, pointsForCurve, [0, 0, 0, 1]); // Using default black color
 		}
 
-		// Inside Bezier class
 		drawControlPoints(gl, shaderProgram) {
 			this.points.forEach(point => {
 			drawCircle(gl, shaderProgram, point.x, point.y, 0.2, [1, 0, 0, 1]); // Example: red color for control points
 			});
-		} 
+		}
+
+		// Inside the Bezier class
+		isPicked(x, y) {
+			const pickingRadius = 0.5; // Adjust
+			for (let i = 0; i < this.points.length; i++) {
+				const dx = x - this.points[i].x;
+				const dy = y - this.points[i].y;
+				if (Math.sqrt(dx * dx + dy * dy) < pickingRadius) {
+					return i;
+				}
+			}
+			return -1;
+		}
+
+		setPoint(i, x, y) {
+			if (i >= 0 && i < this.points.length) {
+			this.points[i].x = x;
+			this.points[i].y = y;
+			}
+		}
 	  }
 	
 	let bezierCurve = new Bezier([
@@ -114,12 +133,38 @@ async function main() {
 	//
 	// Register Listeners
 	//
+	let selectedPointIndex = -1; // Index of the selected control point, -1 if none
+
+	/*
 	addEventListener("click", click);
 	function click(event) {
 		console.log("click");
 		const xWorld = xlow + event.clientX / gl.canvas.clientWidth * (xhigh - xlow);
 		const yWorld = ylow + (gl.canvas.clientHeight - event.clientY) / gl.canvas.clientHeight * (yhigh - ylow);
 		// Do whatever you want here, in World Coordinates.
+	}*/
+
+	canvas.addEventListener('mousedown', mousedown);
+	function mousedown(event) {
+		const rect = canvas.getBoundingClientRect();
+		const xWorld = xlow + (event.clientX - rect.left) / canvas.clientWidth * (xhigh - xlow);
+		const yWorld = yhigh - (event.clientY - rect.top) / canvas.clientHeight * (yhigh - ylow);
+		selectedPointIndex = bezierCurve.isPicked(xWorld, yWorld);
+	}	
+
+	canvas.addEventListener('mousemove', mousemove);
+	function mousemove(event) {
+		if (selectedPointIndex !== -1) { // Only move if a point is selected
+			const rect = canvas.getBoundingClientRect();
+			const xWorld = xlow + (event.clientX - rect.left) / canvas.clientWidth * (xhigh - xlow);
+			const yWorld = yhigh - (event.clientY - rect.top) / canvas.clientHeight * (yhigh - ylow);
+			bezierCurve.setPoint(selectedPointIndex, xWorld, yWorld);
+		}
+	}	
+
+	canvas.addEventListener('mouseup', mouseup);
+	function mouseup(event) {
+		selectedPointIndex = -1;
 	}
 
 	//
@@ -137,10 +182,11 @@ async function main() {
 		bezierCurve.drawCurve(gl, shaderProgram);
 		bezierCurve.drawControlPoints(gl, shaderProgram);
 
+		/*
 		drawCircle(gl, shaderProgram, 5,5,1);
 		drawRectangle(gl, shaderProgram, 0,0,2,1, [1,0,0,1]); // override the default color with red.
 		drawTriangle(gl, shaderProgram, -1,0, -1,2, -2,3);
-		drawLineStrip(gl, shaderProgram, [0,0,-1,-1,-2,-1])
+		drawLineStrip(gl, shaderProgram, [0,0,-1,-1,-2,-1])*/
 		
 		requestAnimationFrame(redraw);
 	}
