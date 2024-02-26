@@ -1,3 +1,8 @@
+precision highp float;
+varying vec4 fragPosition;
+
+const int MAX_ITER = 1000;
+
 int MandelbrotTest(float cr, float ci)
 {
     int count = 0;
