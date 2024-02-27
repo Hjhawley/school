@@ -14,7 +14,7 @@ async function main() {
 	if (!gl) {
 		alert('Your browser does not support WebGL');
 	}
-	gl.clearColor(0.75, 0.85, 0.8, 1.0);
+	gl.clearColor(0.04, 0.51, 0.51, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	//
@@ -45,6 +45,9 @@ async function main() {
 	//
 	// Register Listeners
 	//
+	let zoomLevel = 1.0;
+	const zoomSpeed = 0.1;
+
 	addEventListener("click", click);
 	function click(event) {
 		console.log("click");
@@ -55,10 +58,28 @@ async function main() {
 
 	addEventListener("mousewheel", mousewheel);
 	function mousewheel(event) {
-		console.log("click");
-		const xWorld = xlow + event.offsetX / gl.canvas.clientWidth * (xhigh - xlow);
-		const yWorld = ylow + (gl.canvas.clientHeight - event.offsetY) / gl.canvas.clientHeight * (yhigh - ylow);
-		// Do whatever you want here, in World Coordinates.
+		console.log("mousewheel");
+		// Determine the direction of the scroll (up or down)
+		const direction = event.deltaY < 0 ? 1 : -1;
+
+		// Adjust the zoom level
+		zoomLevel *= 1.0 + direction * zoomSpeed;
+		zoomLevel = Math.max(0.1, Math.min(100, zoomLevel)); // clamp the zoom level to prevent inverting the view or zooming too far
+
+		// Adjust projection bounds based on the new zoom level
+		const width = (xhigh - xlow) / zoomLevel;
+		const height = (yhigh - ylow) / zoomLevel;
+		const centerX = (xlow + xhigh) / 2;
+		const centerY = (ylow + yhigh) / 2;
+
+		xlow = centerX - width / 2;
+		xhigh = centerX + width / 2;
+		ylow = centerY - height / 2;
+		yhigh = centerY + height / 2;
+
+		// Update the projection matrix
+		mat4.ortho(projectionMatrix, xlow, xhigh, ylow, yhigh, -1, 1);
+		gl.uniformMatrix4fv(projectionMatrixUniformLocation, false, projectionMatrix);
 	}
 
 	//
