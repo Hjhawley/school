@@ -1,5 +1,6 @@
 precision highp float;
-varying vec4 fragPosition;
+uniform vec4 uColor;
+varying vec2 fragPosition;
 
 const int MAX_ITER = 1000;
 
@@ -27,4 +28,13 @@ int MandelbrotTest(float cr, float ci)
     }
 
     return count;
+}
+
+void main()
+{
+    int count = MandelbrotTest(fragPosition[0], fragPosition[1]);
+    if (count == MAX_ITER)
+        gl_FragColor = vec4(0.,0.,0.,1.);
+    else
+        gl_FragColor = vec4(0.,0.,1., 1.);
 }
