@@ -30,11 +30,32 @@ int MandelbrotTest(float cr, float ci)
     return count;
 }
 
-void main()
-{
+void main() {
     int count = MandelbrotTest(fragPosition[0], fragPosition[1]);
-    if (count == MAX_ITER)
-        gl_FragColor = vec4(0.,0.,0.,1.);
-    else
-        gl_FragColor = vec4(0.,0.,1., 1.);
+    float t = float(count) / float(MAX_ITER); // Normalized iteration count
+
+    // Interpolate between colors based on the normalized iteration count
+    if (count == MAX_ITER) {
+        gl_FragColor = vec4(0., 0., 0., 1.); // Black for points inside the set
+    } else if (t < 0.1) {
+        gl_FragColor = mix(vec4(1.0, 0.0, 0.0, 1.0), vec4(1.0, 0.5, 0.0, 1.0), t / 0.1);
+    } else if (t < 0.2) {
+        gl_FragColor = mix(vec4(1.0, 0.5, 0.0, 1.0), vec4(1.0, 1.0, 0.0, 1.0), (t - 0.1) / 0.1);
+    } else if (t < 0.3) {
+    gl_FragColor = mix(vec4(0.5, 1.0, 0.0, 1.0), vec4(0.0, 1.0, 0.5, 1.0), (t - 0.2) / 0.1);
+    } else if (t < 0.4) {
+        gl_FragColor = mix(vec4(0.0, 1.0, 0.5, 1.0), vec4(0.0, 1.0, 1.0, 1.0), (t - 0.3) / 0.1);
+    } else if (t < 0.5) {
+        gl_FragColor = mix(vec4(0.0, 1.0, 1.0, 1.0), vec4(0.0, 0.5, 1.0, 1.0), (t - 0.4) / 0.1);
+    } else if (t < 0.6) {
+        gl_FragColor = mix(vec4(0.0, 0.5, 1.0, 1.0), vec4(0.0, 0.0, 1.0, 1.0), (t - 0.5) / 0.1);
+    } else if (t < 0.7) {
+        gl_FragColor = mix(vec4(0.0, 0.0, 1.0, 1.0), vec4(0.5, 0.0, 1.0, 1.0), (t - 0.6) / 0.1);
+    } else if (t < 0.8) {
+        gl_FragColor = mix(vec4(0.5, 0.0, 1.0, 1.0), vec4(1.0, 0.0, 1.0, 1.0), (t - 0.7) / 0.1);
+    } else if (t < 0.9) {
+        gl_FragColor = mix(vec4(1.0, 0.0, 1.0, 1.0), vec4(1.0, 0.0, 0.5, 1.0), (t - 0.8) / 0.1);
+    } else {
+        gl_FragColor = mix(vec4(1.0, 0.0, 0.5, 1.0), vec4(1.0, 0.0, 0.0, 1.0), (t - 0.9) / 0.1);
+    }
 }
