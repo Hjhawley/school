@@ -41,30 +41,63 @@ class Maze{
         this.RemoveWalls(0,0);
     }
 
-    RemoveWalls(r,c){
+    RemoveWalls(r, c) {
         this.cells[r][c].visited = true;
         const left = 0;
         const bottom = 1;
         const right = 2;
         const top = 3;
-
-        while (true){
+    
+        while (true) {
             // Find all the directions we could go:
             const possibilities = [];
-            if (c>0 && this.cells[r][c-1].visited == false){
+            if (c > 0 && !this.cells[r][c - 1].visited) {
                 possibilities.push(left);
             }
-            // repeat 3 more times
-
-            // if possibilites is none then return
-
+            if (r > 0 && !this.cells[r - 1][c].visited) {
+                possibilities.push(bottom);
+            }
+            if (c < this.width - 1 && !this.cells[r][c + 1].visited) {
+                possibilities.push(right);
+            }
+            if (r < this.height - 1 && !this.cells[r + 1][c].visited) {
+                possibilities.push(top);
+            }
+    
+            // if possibilities is none then return
+            if (possibilities.length === 0) {
+                return;
+            }
+    
             // randomly choose which direction
-
-            // Go that direction by knocking out walls, and recursing.
+            const direction = possibilities[Math.floor(Math.random() * possibilities.length)];
+    
+            // Go that direction by knocking out walls recursively
+            switch (direction) {
+                case left:
+                    this.cells[r][c].left = false;
+                    this.cells[r][c - 1].right = false;
+                    this.RemoveWalls(r, c - 1);
+                    break;
+                case bottom:
+                    this.cells[r][c].bottom = false;
+                    this.cells[r - 1][c].top = false;
+                    this.RemoveWalls(r - 1, c);
+                    break;
+                case right:
+                    this.cells[r][c].right = false;
+                    this.cells[r][c + 1].left = false;
+                    this.RemoveWalls(r, c + 1);
+                    break;
+                case top:
+                    this.cells[r][c].top = false;
+                    this.cells[r + 1][c].bottom = false;
+                    this.RemoveWalls(r + 1, c);
+                    break;
+            }
         }
+    }    
 
-
-    }
     draw(gl, shaderProgram){
         for(let r=0; r<this.height; r++){
             for(let c= 0; c<this.width; c++){

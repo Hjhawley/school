@@ -30,7 +30,7 @@ function drawLineStrip(gl, shaderProgram, vertices, color=[0,0,0,1]){
 	drawVertices(gl, shaderProgram, vertices, color, gl.LINE_STRIP);
 }
 
-function drawLine(gl, shaderProgram, vertices, color=[0,0,0,1]){
+function drawLine(gl, shaderProgram, vertices, color=[1,1,1,1]){
 	drawVertices(gl, shaderProgram, vertices, color, gl.LINES);
 }
 
