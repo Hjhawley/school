@@ -8,13 +8,14 @@ class Cell{
         this.top = true;
         this.visited = false;
     }
+
     draw(gl, shaderProgram, x,y){
         const vertices = [];
         if (this.left){
-            vertices.push(x,y, x, y+1);
+            vertices.push(x, y, x, y+1);
         }
         if (this.bottom){
-            vertices.push(x,y, x+1,y);
+            vertices.push(x, y, x+1, y);
         }
         if(this.top){
             vertices.push(x, y+1, x+1, y+1);
@@ -25,6 +26,7 @@ class Cell{
         drawLine(gl, shaderProgram, vertices);
     }
 }
+
 class Maze{
     constructor(width, height){
         this.width = width;
@@ -38,6 +40,7 @@ class Maze{
         }
         this.RemoveWalls(0,0);
     }
+
     RemoveWalls(r,c){
         this.cells[r][c].visited = true;
         const left = 0;
@@ -71,4 +74,4 @@ class Maze{
     }
 }
 
-export {Maze};
+export { Maze };

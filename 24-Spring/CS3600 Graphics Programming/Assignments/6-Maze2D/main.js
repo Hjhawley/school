@@ -1,7 +1,7 @@
 import { initShaderProgram } from "./shader.js";
 import { drawCircle, drawRectangle, drawTriangle, drawLineStrip } from "./shapes2d.js";
 import { randomDouble } from "./random.js";
-import { Maze} from "./maze.js";
+import { Maze } from "./maze.js";
 
 main();
 async function main() {
@@ -15,7 +15,7 @@ async function main() {
 	if (!gl) {
 		alert('Your browser does not support WebGL');
 	}
-	gl.clearColor(0.75, 0.85, 0.8, 1.0);
+	gl.clearColor(0.04, 0.51, 0.51, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	//
