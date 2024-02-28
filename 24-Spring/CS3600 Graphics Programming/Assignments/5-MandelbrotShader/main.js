@@ -14,7 +14,7 @@ async function main() {
 	if (!gl) {
 		alert('Your browser does not support WebGL');
 	}
-	gl.clearColor(0.04, 0.51, 0.51, 1.0);
+	gl.clearColor(0.75, 0.85, 0.8, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	//
@@ -45,9 +45,6 @@ async function main() {
 	//
 	// Register Listeners
 	//
-	let zoomLevel = 1.0;
-	const zoomSpeed = 0.1;
-
 	addEventListener("click", click);
 	function click(event) {
 		console.log("click");
@@ -57,25 +54,39 @@ async function main() {
 	}
 
 	addEventListener("mousewheel", mousewheel);
+	let zoomLevel = 1.0; // Initial zoom level
+	const zoomSpeed = 0.1; // Speed of zoom
+
 	function mousewheel(event) {
-		console.log("mousewheel");
-		// Determine the direction of the scroll (up or down)
-		const direction = event.deltaY < 0 ? 1 : -1;
+		event.preventDefault(); // Prevent default scrolling behavior
 
-		// Adjust the zoom level
-		zoomLevel *= 1.0 + direction * zoomSpeed;
-		zoomLevel = Math.max(0.1, Math.min(100, zoomLevel)); // clamp the zoom level to prevent inverting the view or zooming too far
+		// Determine zoom direction
+		let direction;
+		if (event.deltaY < 0) {
+			direction = 1;
+		} else {
+			direction = -1;
+		}
 
-		// Adjust projection bounds based on the new zoom level
-		const width = (xhigh - xlow) / zoomLevel;
-		const height = (yhigh - ylow) / zoomLevel;
-		const centerX = (xlow + xhigh) / 2;
-		const centerY = (ylow + yhigh) / 2;
+		// Adjust zoom level
+		zoomLevel *= (1 + direction * zoomSpeed);
+		zoomLevel = Math.max(0.1, Math.min(10, zoomLevel)); // Clamp zoom level
 
-		xlow = centerX - width / 2;
-		xhigh = centerX + width / 2;
-		ylow = centerY - height / 2;
-		yhigh = centerY + height / 2;
+		const centerX = xlow + (xhigh - xlow) / 2;
+		const centerY = ylow + (yhigh - ylow) / 2;
+		
+		// Update projection bounds based on new zoom level
+		// This example assumes zoom affects both x and y axis equally
+		const aspectRatio = (xhigh - xlow) / (yhigh - ylow);
+		const zoomWidth = (2.5 + 0.5) / zoomLevel;
+		const zoomHeight = zoomWidth / aspectRatio;
+
+		// After calculating new zoomWidth and zoomHeight
+		xlow = centerX - zoomWidth / 2;
+		xhigh = centerX + zoomWidth / 2;
+		ylow = centerY - zoomHeight / 2;
+		yhigh = centerY + zoomHeight / 2;
+
 
 		// Update the projection matrix
 		mat4.ortho(projectionMatrix, xlow, xhigh, ylow, yhigh, -1, 1);
