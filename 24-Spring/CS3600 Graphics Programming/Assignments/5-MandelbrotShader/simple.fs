@@ -42,7 +42,7 @@ void main() {
     } else if (t < 0.2) {
         gl_FragColor = mix(vec4(1.0, 0.5, 0.0, 1.0), vec4(1.0, 1.0, 0.0, 1.0), (t - 0.1) / 0.1);
     } else if (t < 0.3) {
-    gl_FragColor = mix(vec4(0.5, 1.0, 0.0, 1.0), vec4(0.0, 1.0, 0.5, 1.0), (t - 0.2) / 0.1);
+        gl_FragColor = mix(vec4(0.5, 1.0, 0.0, 1.0), vec4(0.0, 1.0, 0.5, 1.0), (t - 0.2) / 0.1);
     } else if (t < 0.4) {
         gl_FragColor = mix(vec4(0.0, 1.0, 0.5, 1.0), vec4(0.0, 1.0, 1.0, 1.0), (t - 0.3) / 0.1);
     } else if (t < 0.5) {
