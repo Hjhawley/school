@@ -1,4 +1,5 @@
 import {drawLineLoop} from "./shapes2d.js";
+
 class Rat{
     constructor(x,y, degrees){
         this.x = x;
@@ -20,6 +21,7 @@ class Rat{
         const vertices = [.3,0, -.2,.1, -.2,-.1];
         drawLineLoop(gl, shaderProgram, vertices, [0.5,.5,1., 1.]);
     }
+
     spinLeft(DT){
         this.degrees += this.SPIN_SPEED*DT;
         if (this.degrees >=360){
@@ -29,6 +31,11 @@ class Rat{
             this.degrees += 360;
         }
     }
+
+    spinRight(DT){
+        this.spinLeft(-DT);
+    }
+
     scurryForward(DT){
         const dx = Math.cos(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;
         const dy = Math.sin(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;
@@ -55,6 +62,10 @@ class Rat{
         const dy = Math.sin(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;   
         this.x += -dy;
         this.y += dx; 
+    }
+
+    strafeRight(DT){
+        this.strafeLeft(-DT);
     }
 }
 

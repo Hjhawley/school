@@ -16,7 +16,7 @@ async function main() {
 	if (!gl) {
 		alert('Your browser does not support WebGL');
 	}
-	gl.clearColor(0.75, 0.85, 0.8, 1.0);
+	gl.clearColor(0.04, 0.51, 0.51, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	//
@@ -89,12 +89,17 @@ async function main() {
 	}
 
 	let spinLeft = false;
+	let spinRight = false;
 	let scurryForward = false;
 	let strafeLeft = false;
+	let strafeRight = false;
 	window.addEventListener("keydown", keyDown);
 	function keyDown(event){
 		if (event.code == 'KeyQ'){
 			spinLeft = true;
+		}
+		if (event.code == 'KeyE'){
+			spinRight = true;
 		}		
 		if (event.code == 'KeyW'){
 			scurryForward = true;
@@ -102,17 +107,26 @@ async function main() {
 		if (event.code == 'KeyA'){
 			strafeLeft = true;
 		}
+		if (event.code == 'KeyD'){
+			strafeRight = true;
+		}
 	}
 	window.addEventListener("keyup", keyUp);
 	function keyUp(event){
 		if (event.code == 'KeyQ'){
 			spinLeft = false;
 		}
+		if (event.code == 'KeyE'){
+			spinRight = false;
+		}
 		if (event.code == 'KeyW'){
 			scurryForward = false;
 		}
 		if (event.code == 'KeyA'){
 			strafeLeft = false;
+		}
+		if (event.code == 'KeyD'){
+			strafeRight = false;
 		}
 	}
 
@@ -132,11 +146,17 @@ async function main() {
 		if(spinLeft){
 			r.spinLeft(DT);
 		}
+		if(spinRight){
+			r.spinRight(DT);
+		}
 		if(scurryForward){
 			r.scurryForward(DT);
 		}
 		if(strafeLeft){
 			r.strafeLeft(DT);
+		}
+		if(strafeRight){
+			r.strafeRight(DT);
 		}
 
 		gl.uniformMatrix4fv(modelViewMatrixUniformLocation, false, identityMatrix);

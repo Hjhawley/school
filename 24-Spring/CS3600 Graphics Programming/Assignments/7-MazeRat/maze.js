@@ -25,7 +25,7 @@ class Cell{
             vertices.push(x,y+1, x+1,y+1);
         }
 
-        drawLines(gl, shaderProgram, vertices, [0,0,0, 1]);
+        drawLines(gl, shaderProgram, vertices, [1,1,1,1]);
     }
 }
 
@@ -121,6 +121,15 @@ class Maze{
     drawPath(gl, shaderProgram){
         drawLineStrip(gl, shaderProgram, this.path, [1,0,1,1]);
     }
+
+    /* TODO: drawSmoothPath(gl, shaderProgram){
+        for(let curve=0; curve < this.path.length/2 - 3; curve++){
+            const bsplinePoints = [];
+            for (let i=0; i<4)
+        }
+    }
+
+    bsplineToBezier(bsplinePoints) */
 
     removeWalls(c,r){
         this.cells[r][c].visited = true;
