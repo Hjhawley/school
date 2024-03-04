@@ -1,0 +1,28 @@
+Miller's Algorithm
+
+def IsMillerPrime(P):
+	for i in range(20):
+		ok = MillerTest(P)
+		if not ok:
+			return False # Definitely composite (not prime)
+	return True # Almost certainly prime
+
+def MillerTest(P):
+	T = P-1
+	S = 0
+	while T%2 == 0:
+		T = T//2
+		S += 1
+	b = random.randrange(2,P)
+	if pow(b,T,P) == 1:
+		return True
+	for i in range S:
+		if pow(b,T,P) == P-1:
+			return True
+		T *= 2
+
+def IsPrime(P):
+	for i in range(2, int(P**0.5)+1):
+		if P % i == 0:
+			return False
+	return True
