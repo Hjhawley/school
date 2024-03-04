@@ -51,6 +51,36 @@ class Maze{
         this.findPath(0,0);
     }
 
+    isSafe(x, y, radius){
+        const c = Math.floor(x);
+        const r = Math.floor(y);
+        const offsetX = x - c;
+        const offsetY = y - r;
+        
+        // Test right wall
+        if (this.cells[r][c].right && offsetX + radius > 1.0){
+            return false;
+        }
+        /* // Test left wall
+        if (this.cells[r][c].right && offsetX + radius > 1.0){
+            return false
+        }
+        // Test top wall
+        if (this.cells[r][c].right && offsetX + radius > 1.0){
+            return false
+        }
+        // Test bottom wall
+        if (this.cells[r][c].right && offsetX + radius > 1.0){
+            return false
+        } */
+        // Test bottom right corner
+        if (offsetX + radius > 1.0 && offsetY - radius < 0.0){
+            return false;
+        }
+        // repeat for other 3 corners
+        return true;
+    }
+
     findPath(c,r){
         this.cells[r][c].visited = true;
         this.path.push(c+.5,r+.5);

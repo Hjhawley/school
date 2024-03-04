@@ -31,13 +31,25 @@ class Rat{
     }
     scurryForward(DT){
         const dx = Math.cos(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;
-        const dy = Math.sin(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;   
-        this.x += dx;
-        this.y += dy; 
+        const dy = Math.sin(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;
+        const newX = this.x + dx;
+        const newY = this.y + dy;
+        if (this.maze.isSafe(newX,newY, this.FATNESS)){
+            this.x = newX;
+            this.y = newY;
+        }
+        else if (this.maze.isSafe(newX, this.y, this.FATNESS)){
+            this.x = newX;
+        }
+        else if (this.maze.isSafe(this.x, newY, this.FATNESS)){
+            this.y = newY;
+        }
     }
+
     scurryBackwards(DT){
         this.scurryForward(-DT);
     }
+
     strafeLeft(DT){
         const dx = Math.cos(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;
         const dy = Math.sin(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;   
