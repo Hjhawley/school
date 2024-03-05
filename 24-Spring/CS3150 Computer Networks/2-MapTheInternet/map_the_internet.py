@@ -3,10 +3,26 @@ import re
 import graphviz
 
 urls = [
+    'utahtech.edu',
     'wikipedia.org',
     'youtube.com',
+    'archive.org',
+    'twitch.tv',
+    'leetcode.com',
     'pcpartpicker.com',
-    # ... add more URLs to meet the requirement of at least 20 different URLs
+    'digital.fidelity.com',
+    'bandcamp.com',
+    'emulation.gametechwiki.com',
+    'chase.com',
+    'bbc.co.uk',
+    'uefa.com',
+    'dw.de',
+    'timesofindia.indiatimes.com',
+    'niue.nu',
+    'hughesnet.com',
+    'giantbomb.com',
+    'president.ir',
+    'kcna.kp',
 ]
 
 # Initialize Graphviz graph
