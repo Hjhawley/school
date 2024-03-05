@@ -8,8 +8,8 @@ class Rat{
         this.maze = maze;
 
         this.SPIN_SPEED = 180; // degrees per second
-        this.MOVE_SPEED = 1.0; // cells per second
-        this.FATNESS = .1; // for bounding circle
+        this.MOVE_SPEED = 1.4; // cells per second
+        this.FATNESS = .14; // for bounding circle
     }
 
     draw(gl, shaderProgram){
@@ -44,6 +44,12 @@ class Rat{
         const newY = this.y + dy;
         if (this.maze.isSafe(newX, newY, this.FATNESS)){
             this.x = newX;
+            this.y = newY;
+        }
+        else if (this.maze.isSafe(newX, this.y, this.FATNESS)){
+            this.x = newX;
+        }
+        else if (this.maze.isSafe(this.x, newY, this.FATNESS)){
             this.y = newY;
         }
     }

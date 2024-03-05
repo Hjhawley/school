@@ -56,7 +56,6 @@ class Maze{
         const r = Math.floor(y);
         const offsetX = x - c;
         const offsetY = y - r;
-        
         // Test right wall
         if (this.cells[r][c].right && offsetX + radius > 1.0){
             return false;
@@ -114,7 +113,7 @@ class Maze{
     }
 
     drawPath(gl, shaderProgram){
-        drawLineStrip(gl, shaderProgram, this.path, [0.5,.5,1., 1.]);
+        drawLineStrip(gl, shaderProgram, this.path, [0.2,.7,.7, 1.]);
     }
 
     /* TODO: drawSmoothPath(gl, shaderProgram){
