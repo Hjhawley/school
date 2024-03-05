@@ -2,64 +2,51 @@ import subprocess
 import re
 import graphviz
 
-# A list of URLs to perform traceroute on
 urls = [
-    'www.wikipedia.org',
-    'www.youtube.com',
-    # ... add at least 20 different URLs here
+    'wikipedia.org',
+    'youtube.com',
+    'pcpartpicker.com',
+    # ... add more URLs to meet the requirement of at least 20 different URLs
 ]
 
-# This will store the traceroute paths as a dictionary where each URL is a key
-traceroutes = {}
-
-# The regex pattern to match IP addresses in the traceroute output
-ip_pattern = re.compile(r"\((\d+\.\d+\.\d+\.\d+)\)")
-
-# Run traceroute for each URL and capture the output
-for url in urls:
-    print(f"Tracing route to {url}")
-    tr = subprocess.Popen(["tracert", "-d", url], stdout=subprocess.PIPE)
-    hops = []
-
-    while True:
-        line = tr.stdout.readline().decode().strip()
-        if not line:
-            break  # End of output
-
-        # Extract the IP address from the line
-        match = ip_pattern.search(line)
-        if match:
-            ip = match.group(1)
-            hops.append(ip)
-
-    traceroutes[url] = hops
-    tr.wait()  # Ensure the subprocess has finished
-
-# Initialize a new Graphviz graph
+# Initialize Graphviz graph
 dot = graphviz.Graph('Internet', strict=True)
 
-# Keep track of all unique hops to avoid adding duplicate nodes
-unique_hops = set()
+def get_tracert_hops(url):
+    print(f"Running tracert for {url}")
+    # Run tracert and wait for it to complete, then capture its output
+    tr = subprocess.run(["tracert", "-d", url], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    output = tr.stdout
 
-# Add nodes and edges for each traceroute
-for url, hops in traceroutes.items():
+    lines = output.strip().split('\n')
+    hops = []
+
+    for line in lines:
+        print(f"Read line: {line}")
+        ip_match = re.search(r'\d+\s+ms\s+\d+\s+ms\s+\d+\s+ms\s+(\d+\.\d+\.\d+\.\d+)', line)
+        if ip_match:
+            hops.append(ip_match.group(1))
+        else:
+            # Fallback in case the line does not contain an IP address
+            hop_match = re.search(r'\d+\s+\d+ ms .*\s([a-zA-Z0-9.-]*)', line)
+            if hop_match and not hop_match.group(1).startswith('['):
+                hops.append(hop_match.group(1))
+
+    return hops
+
+for url in urls:
     previous_hop = None
+    hops = get_tracert_hops(url)
+    if not hops:
+        print(f"No hops found for {url}. Skipping...")
+        continue
     for hop in hops:
-        # Add the hop as a node if it's not already added
-        if hop not in unique_hops:
-            dot.node(hop)
-            unique_hops.add(hop)
-
-        # Add an edge from the previous hop to the current hop
-        if previous_hop is not None:
+        dot.node(hop)
+        if previous_hop:
             dot.edge(previous_hop, hop)
         previous_hop = hop
-
-    # Add an edge from the last hop to the destination URL
-    # The URL itself is represented as a node
-    if hops:
+    if previous_hop:
         dot.node(url, label=url)
-        dot.edge(hops[-1], url)
+        dot.edge(previous_hop, url)
 
-# Render the graph to a PDF
-dot.render('traceroute_map', format='pdf', view=True)
+dot.render('internet_map', view=True)
