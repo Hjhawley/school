@@ -1,14 +1,15 @@
 import {drawLineLoop} from "./shapes2d.js";
 
 class Rat{
-    constructor(x,y, degrees){
+    constructor(x, y, degrees, maze){
         this.x = x;
         this.y = y;
         this.degrees = degrees;
+        this.maze = maze;
 
-        this.SPIN_SPEED = 90; // degrees per second
+        this.SPIN_SPEED = 180; // degrees per second
         this.MOVE_SPEED = 1.0; // cells per second
-        this.FATNESS = .3; // for bounding circle
+        this.FATNESS = .1; // for bounding circle
     }
 
     draw(gl, shaderProgram){
@@ -19,7 +20,7 @@ class Rat{
         gl.uniformMatrix4fv(modelViewMatrixUniformLocation, false, modelViewMatrix);
 
         const vertices = [.3,0, -.2,.1, -.2,-.1];
-        drawLineLoop(gl, shaderProgram, vertices, [0.5,.5,1., 1.]);
+        drawLineLoop(gl, shaderProgram, vertices, [0,1,1,1]);
     }
 
     spinLeft(DT){
@@ -58,11 +59,15 @@ class Rat{
     }
 
     strafeLeft(DT){
-        const dx = Math.cos(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;
-        const dy = Math.sin(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;   
-        this.x += -dy;
-        this.y += dx; 
-    }
+        const dx = Math.cos((this.degrees + 90) * Math.PI / 180) * this.MOVE_SPEED * DT; // cos for x, but offset by 90 degrees
+        const dy = Math.sin((this.degrees + 90) * Math.PI / 180) * this.MOVE_SPEED * DT; // sin for y, also offset by 90 degrees
+        const newX = this.x + dx;
+        const newY = this.y + dy;
+        if (this.maze.isSafe(newX, newY, this.FATNESS)){
+            this.x = newX;
+            this.y = newY;
+        }
+    }    
 
     strafeRight(DT){
         this.strafeLeft(-DT);

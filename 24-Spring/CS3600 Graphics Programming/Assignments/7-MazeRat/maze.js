@@ -61,25 +61,37 @@ class Maze{
         if (this.cells[r][c].right && offsetX + radius > 1.0){
             return false;
         }
-        /* // Test left wall
-        if (this.cells[r][c].right && offsetX + radius > 1.0){
-            return false
+        // Test left wall
+        if (this.cells[r][c].left && offsetX - radius < 0.0){
+            return false;
         }
         // Test top wall
-        if (this.cells[r][c].right && offsetX + radius > 1.0){
-            return false
+        if (this.cells[r][c].top && offsetY - radius < 0.0){
+            return false;
         }
         // Test bottom wall
-        if (this.cells[r][c].right && offsetX + radius > 1.0){
-            return false
-        } */
-        // Test bottom right corner
+        if (this.cells[r][c].bottom && offsetY + radius > 1.0){
+            return false;
+        }
+        // Bottom Right Corner
         if (offsetX + radius > 1.0 && offsetY - radius < 0.0){
             return false;
         }
-        // repeat for other 3 corners
+        // Top Right Corner
+        if (offsetX + radius > 1.0 && offsetY + radius > 1.0) {
+            return false;
+        }
+        // Bottom Left Corner
+        if (offsetX - radius < 0.0 && offsetY - radius < 0.0) {
+            return false;
+        }
+        // Top Left Corner
+        if (offsetX - radius < 0.0 && offsetY + radius > 1.0) {
+            return false;
+        }
+    
         return true;
-    }
+    }    
 
     findPath(c,r){
         this.cells[r][c].visited = true;
@@ -119,7 +131,7 @@ class Maze{
     }
 
     drawPath(gl, shaderProgram){
-        drawLineStrip(gl, shaderProgram, this.path, [1,0,1,1]);
+        drawLineStrip(gl, shaderProgram, this.path, [0.5,.5,1., 1.]);
     }
 
     /* TODO: drawSmoothPath(gl, shaderProgram){

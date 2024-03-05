@@ -32,7 +32,7 @@ async function main() {
 	const WIDTH = 5;
 	const HEIGHT = 4;
 	const m = new Maze(WIDTH, HEIGHT);
-	const r = new Rat(.5, .5, 90);
+	const r = new Rat(.5, .5, 90, m);
 
 	//
 	// load a projection matrix onto the shader
@@ -91,6 +91,7 @@ async function main() {
 	let spinLeft = false;
 	let spinRight = false;
 	let scurryForward = false;
+	let scurryBackwards = false;
 	let strafeLeft = false;
 	let strafeRight = false;
 	window.addEventListener("keydown", keyDown);
@@ -103,6 +104,9 @@ async function main() {
 		}		
 		if (event.code == 'KeyW'){
 			scurryForward = true;
+		}
+		if (event.code == 'KeyS'){
+			scurryBackwards = true;
 		}
 		if (event.code == 'KeyA'){
 			strafeLeft = true;
@@ -121,6 +125,9 @@ async function main() {
 		}
 		if (event.code == 'KeyW'){
 			scurryForward = false;
+		}
+		if (event.code == 'KeyS'){
+			scurryBackwards = false;
 		}
 		if (event.code == 'KeyA'){
 			strafeLeft = false;
@@ -151,6 +158,9 @@ async function main() {
 		}
 		if(scurryForward){
 			r.scurryForward(DT);
+		}
+		if(scurryBackwards){
+			r.scurryBackwards(DT);
 		}
 		if(strafeLeft){
 			r.strafeLeft(DT);
