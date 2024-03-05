@@ -42,14 +42,8 @@ class Rat{
         const dy = Math.sin(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;
         const newX = this.x + dx;
         const newY = this.y + dy;
-        if (this.maze.isSafe(newX,newY, this.FATNESS)){
+        if (this.maze.isSafe(newX, newY, this.FATNESS)){
             this.x = newX;
-            this.y = newY;
-        }
-        else if (this.maze.isSafe(newX, this.y, this.FATNESS)){
-            this.x = newX;
-        }
-        else if (this.maze.isSafe(this.x, newY, this.FATNESS)){
             this.y = newY;
         }
     }

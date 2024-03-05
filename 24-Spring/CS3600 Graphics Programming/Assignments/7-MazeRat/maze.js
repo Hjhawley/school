@@ -66,30 +66,13 @@ class Maze{
             return false;
         }
         // Test top wall
-        if (this.cells[r][c].top && offsetY - radius < 0.0){
+        if (this.cells[r][c].top && offsetY + radius > 1.0){
             return false;
         }
         // Test bottom wall
-        if (this.cells[r][c].bottom && offsetY + radius > 1.0){
+        if (this.cells[r][c].bottom && offsetY - radius < 0.0){
             return false;
         }
-        // Bottom Right Corner
-        if (offsetX + radius > 1.0 && offsetY - radius < 0.0){
-            return false;
-        }
-        // Top Right Corner
-        if (offsetX + radius > 1.0 && offsetY + radius > 1.0) {
-            return false;
-        }
-        // Bottom Left Corner
-        if (offsetX - radius < 0.0 && offsetY - radius < 0.0) {
-            return false;
-        }
-        // Top Left Corner
-        if (offsetX - radius < 0.0 && offsetY + radius > 1.0) {
-            return false;
-        }
-    
         return true;
     }    
 
