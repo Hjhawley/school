@@ -1,12 +1,12 @@
 import random
 
-def isMillerPrime(P, iterations=20):
+def checkPrime(P, iterations=20):
     if P < 2:
         return False
     if P != 2 and P % 2 == 0:
         return False  # Early return for even numbers > 2
 
-    for _ in range(iterations):
+    for i in range(iterations):
         if not millerTest(P):
             return False  # Definitely composite (not prime)
     return True  # Almost certainly prime
@@ -29,20 +29,13 @@ def millerTest(P):
             return True
     return False
 
-def isPrime(P):
-    if P < 2:
-        return False
-    for i in range(2, int(P**0.5) + 1):
-        if P % i == 0:
-            return False
-    return True
+def main():
+    while True:
+        try:
+            n = int(input("Give me an integer larger than 2.\n"))
+            print(f"{n} is {'prime.' if checkPrime(n) else 'not prime.'}\n")
+        except:
+            print("Not a valid integer.\n")
 
-def checkPrime(P):
-    if isPrime(P) and isMillerPrime(P):
-        return True
-    else:
-        return False
-
-# Example
-P = 6972593
-print(f"{P} is {'prime' if checkPrime(P) else 'not prime'}")
+if __name__ == "__main__":
+    main()
