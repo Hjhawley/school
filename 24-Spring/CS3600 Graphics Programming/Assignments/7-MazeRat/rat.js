@@ -19,7 +19,7 @@ class Rat{
         mat4.rotate(modelViewMatrix, modelViewMatrix,(this.degrees*Math.PI/180), [0,0,1]);
         gl.uniformMatrix4fv(modelViewMatrixUniformLocation, false, modelViewMatrix);
 
-        const vertices = [.3,0, -.2,.1, -.2,-.1];
+        const vertices = [.2,0, -.2,.2, 0,0, -.2,-.2];
         drawLineLoop(gl, shaderProgram, vertices, [0,1,1,1]);
     }
 
@@ -42,10 +42,10 @@ class Rat{
         const dy = Math.sin(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;
         const newX = this.x + dx;
         const newY = this.y + dy;
-        /* if (this.maze.isSafe(newX, newY, this.FATNESS)){
+        if (this.maze.isSafe(newX, newY, this.FATNESS)){
             this.x = newX;
             this.y = newY;
-        } */
+        }
         if (this.maze.isSafe(newX, this.y, this.FATNESS)){
             this.x = newX;
         }
