@@ -1,0 +1,5 @@
+const TOP_VIEW = 1;
+const OBSERVATION_VIEW = 0;
+const RATS_VIEW = 0;
+
+export {TOP_VIEW, OBSERVATION_VIEW, RATS_VIEW}
