@@ -20,6 +20,35 @@ async function main() {
 	//
 	let gravity = [0, 0];
 
+	window.addEventListener('keydown', handleKeyDown, false);
+	function handleKeyDown(event) {
+		switch (event.key) {
+			case 'w':
+			case 'W':
+				gravity[0] = 0; // No horizontal movement
+				gravity[1] = 1; // Move up
+				break;
+			case 'a':
+			case 'A':
+				gravity[0] = -1; // Move left
+				gravity[1] = 0; // No vertical movement
+				break;
+			case 's':
+			case 'S':
+				gravity[0] = 0; // No horizontal movement
+				gravity[1] = -1; // Move down (default)
+				break;
+			case 'd':
+			case 'D':
+				gravity[0] = 1; // Move right
+				gravity[1] = 0; // No vertical movement
+				break;
+			default:
+				// Ignore other keys
+				break;
+		}
+	}
+	
 	// Check for iOS to request permission for accelerometer
 	if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
 		// iOS 13+ devices

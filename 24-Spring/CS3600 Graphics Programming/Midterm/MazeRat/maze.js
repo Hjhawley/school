@@ -51,29 +51,40 @@ class Maze{
         this.findPath(0,0);
     }
 
-    isSafe(x, y, radius){
+    isSafe(x, y, radius) {
         const c = Math.floor(x);
         const r = Math.floor(y);
         const offsetX = x - c;
         const offsetY = y - r;
-        // Test right wall
-        if (this.cells[r][c].right && offsetX + radius > 1.0){
-            return false;
+        let safe = true;
+    
+        // If moving into the right wall, remove the right wall
+        if (this.cells[r][c].right && offsetX + radius > 1.0) {
+            this.cells[r][c].right = false;
+            if (c + 1 < this.WIDTH) this.cells[r][c + 1].left = false;
+            safe = false;
         }
-        // Test left wall
-        if (this.cells[r][c].left && offsetX - radius < 0.0){
-            return false;
+        // If moving into the left wall, remove the left wall
+        if (this.cells[r][c].left && offsetX - radius < 0.0) {
+            this.cells[r][c].left = false;
+            if (c - 1 >= 0) this.cells[r][c - 1].right = false;
+            safe = false;
         }
-        // Test top wall
-        if (this.cells[r][c].top && offsetY + radius > 1.0){
-            return false;
+        // If moving into the top wall, remove the top wall
+        if (this.cells[r][c].top && offsetY + radius > 1.0) {
+            this.cells[r][c].top = false;
+            if (r + 1 < this.HEIGHT) this.cells[r + 1][c].bottom = false;
+            safe = false;
         }
-        // Test bottom wall
-        if (this.cells[r][c].bottom && offsetY - radius < 0.0){
-            return false;
+        // If moving into the bottom wall, remove the bottom wall
+        if (this.cells[r][c].bottom && offsetY - radius < 0.0) {
+            this.cells[r][c].bottom = false;
+            if (r - 1 >= 0) this.cells[r - 1][c].top = false;
+            safe = false;
         }
-        return true;
-    }    
+    
+        return safe;
+    }       
 
     findPath(c,r){
         this.cells[r][c].visited = true;
