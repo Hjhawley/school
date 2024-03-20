@@ -10,6 +10,7 @@ class Rat{
         this.SPIN_SPEED = 180; // degrees per second
         this.MOVE_SPEED = 1.4; // cells per second
         this.FATNESS = .14; // for bounding circle
+        this.TURBO = false;
     }
 
     draw(gl, shaderProgram){
@@ -38,8 +39,12 @@ class Rat{
     }
 
     scurryForward(DT){
-        const dx = Math.cos(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;
-        const dy = Math.sin(this.degrees*Math.PI/180)*this.MOVE_SPEED*DT;
+        let speed = this.MOVE_SPEED;
+        if (this.TURBO == true){
+            speed *= 2;
+        }
+        const dx = Math.cos(this.degrees*Math.PI/180)*speed*DT;
+        const dy = Math.sin(this.degrees*Math.PI/180)*speed*DT;
         const newX = this.x + dx;
         const newY = this.y + dy;
         if (this.maze.isSafe(newX, newY, this.FATNESS)){

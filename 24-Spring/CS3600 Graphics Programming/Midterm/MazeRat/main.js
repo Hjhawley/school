@@ -94,6 +94,7 @@ async function main() {
 	let scurryBackwards = false;
 	let strafeLeft = false;
 	let strafeRight = false;
+	let turbo = false;
 	window.addEventListener("keydown", keyDown);
 	function keyDown(event){
 		if (event.code == 'KeyQ'){
@@ -113,6 +114,9 @@ async function main() {
 		}
 		if (event.code == 'KeyD'){
 			strafeRight = true;
+		}
+		if (event.code == 'KeyX'){
+			turbo = true;
 		}
 	}
 	window.addEventListener("keyup", keyUp);
@@ -134,6 +138,9 @@ async function main() {
 		}
 		if (event.code == 'KeyD'){
 			strafeRight = false;
+		}
+		if (event.code == 'KeyX'){
+			turbo = false;
 		}
 	}
 
@@ -167,6 +174,12 @@ async function main() {
 		}
 		if(strafeRight){
 			r.strafeRight(DT);
+		}
+		if(turbo){
+			r.TURBO = true;
+		}
+		if(!turbo){
+			r.TURBO = false;
 		}
 
 		gl.uniformMatrix4fv(modelViewMatrixUniformLocation, false, identityMatrix);
