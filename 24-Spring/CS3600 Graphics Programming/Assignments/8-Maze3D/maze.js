@@ -1,4 +1,4 @@
-import {drawLines, drawLineStrip, drawQuad} from "./shapes2d.js";
+import {drawLines, drawLineStrip, drawQuad, drawVertices3d} from "./shapes2d.js";
 import {Bezier, Point2} from "./bezier.js";
 import {myRandom} from "./random.js";
 
@@ -33,7 +33,19 @@ class Cell{
         const g = Math.sin(x * 9321 + y * 27543 + 2) * .5 + .5;
         const b = Math.sin(x * 1268 + y * 12771 + 7) * .5 + .5;
         if(this.left){
-            drawQuad(gl, shaderProgram, [x,y,0, x,y+1,0, x,y+1,1, x,y,1], [r,g,b, 1]);
+            drawQuad(gl, shaderProgram, x,y,0, x,y+1,0, x,y+1,1, x,y,1, r,g,b);
+        }
+    }
+    drawOptimized(gl, shaderProgram, x, y, vertices){
+
+        // Draw walls as 3D quads:
+        const r = Math.sin(x * 3712 + y * 34857 + 1) * .5 + .5;
+        const g = Math.sin(x * 9321 + y * 27543 + 2) * .5 + .5;
+        const b = Math.sin(x * 1268 + y * 12771 + 7) * .5 + .5;
+        if(this.left){
+            //drawQuad(gl, shaderProgram, x,y,0, x,y+1,0, x,y+1,1, x,y,1, r,g,b);
+            vertices.push(x,y,0,r,g,b, x,y+1,0,r,g,b, x,y+1,1,r,g,b);
+            vertices.push(x,y,0,r,g,b, x,y+1,1,r,g,b, x,y,1 ,r,g,b);
         }
     }
 }
@@ -211,6 +223,15 @@ class Maze{
                 this.cells[r][c].draw(gl, shaderProgram, c, r);
             }
         }
+    }
+    drawOptimized(gl, shaderProgram){
+        let vertices = [];
+        for(let r=0; r<this.HEIGHT; r++){
+            for(let c=0; c<this.WIDTH; c++){
+                this.cells[r][c].drawOptimized(gl, shaderProgram, c, r, vertices);
+            }
+        }
+        drawVertices3d(gl, shaderProgram, vertices, gl.TRIANGLES);
     }
     isSafe(x,y,radius){ // returns true if the given circle parameters do not intersect any existing wall or corner
         const c = Math.floor(x);

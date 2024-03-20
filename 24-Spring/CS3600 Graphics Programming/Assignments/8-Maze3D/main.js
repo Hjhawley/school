@@ -3,7 +3,7 @@ import { drawCircle, drawRectangle, drawTriangle, drawLineStrip } from "./shapes
 import { randomDouble } from "./random.js";
 import { Maze} from "./maze.js";
 import { Rat} from "./rat.js";
-import { TOP_VIEW, OBSERVATION_VIEW, RATS_VIEW} from "./constants.js"
+import { TOP_VIEW, OBSERVATION_VIEW, RATS_VIEW } from "./constants.js";
 
 main();
 async function main() {
@@ -42,6 +42,12 @@ async function main() {
 	//
 	// load a projection matrix onto the shader
 	// 
+	//squareWorld();
+	//window.addEventListener('resize', squareWorld)
+
+
+	function squareWorld(){
+	}
 
 	//
 	// Setup keyboard events:
@@ -73,6 +79,12 @@ async function main() {
 	  if (event.code == 'KeyD') {
 		strafeRight = true;
 	  }
+	  if (event.code == 'KeyO') {
+		currentView = OBSERVATION_VIEW;
+	  }
+	  if (event.code == 'KeyT') {
+		currentView = TOP_VIEW;
+	  }
 	}
 	window.addEventListener("keyup", keyUp);
 	function keyUp(event) {
@@ -93,12 +105,6 @@ async function main() {
 	  }
 	  if (event.code == 'KeyD') {
 		strafeRight = false;
-	  }
-	  if (event.code == 'KeyO') {
-		currentView = OBSERVATION_VIEW;
-	  }
-	  if (event.code == 'KeyT') {
-		currentView = TOP_VIEW;
 	  }
 	}
   
@@ -153,21 +159,19 @@ async function main() {
 			r.strafeRight(DT);
 		}
 
-		//
+		// Choose the correct projection matrix
 		if (currentView == OBSERVATION_VIEW){
-			setObservationView(gl, shaderProgram, WIDTH, HEIGHT, canvas)
+			setObservationView(gl, shaderProgram, WIDTH, HEIGHT, canvas);
 		}
 		else if (currentView == TOP_VIEW){
-			setTopView(gl, shaderProgram, WIDTH, HEIGHT, canvas)
+			setTopView(gl, shaderProgram, WIDTH, HEIGHT, canvas);
 		}
-		/* else if (currentView == RATS_VIEW){
-			setRatsView()
-		} */
 
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		gl.uniformMatrix4fv(modelViewMatrixUniformLocation, false, identityMatrix);
-		m.draw(gl, shaderProgram);
+		//m.draw(gl, shaderProgram);
+		m.drawOptimized(gl, shaderProgram);
 		//m.drawPath(gl, shaderProgram)
 		m.drawPathCurved(gl, shaderProgram);
 		r.draw(gl, shaderProgram, DT, currentTime);
@@ -179,10 +183,10 @@ async function main() {
 
 function setObservationView(gl, shaderProgram, WIDTH, HEIGHT, canvas){
 	const projectionMatrix = mat4.create();
-	const fov = 90 * Math.PI/180;
+	const fov = 90 *Math.PI/180;
 	const canvasAspect = canvas.clientWidth / canvas.clientHeight;
-	const near = 1;
-	const far = 20;
+	const near = .2;
+	const far = WIDTH+HEIGHT;
 	mat4.perspective(projectionMatrix, fov, canvasAspect, near, far);
 
 	const lookAtMatrix = mat4.create();
@@ -201,7 +205,7 @@ function setTopView(gl, shaderProgram, WIDTH, HEIGHT, canvas){
 	let xhigh = WIDTH+margin;
 	let ylow = 0.0-margin;
 	let yhigh = HEIGHT+margin;
-	
+
 	const projectionMatrixUniformLocation = gl.getUniformLocation(shaderProgram, "uProjectionMatrix");
 	const projectionMatrix = mat4.create();
 
@@ -223,8 +227,6 @@ function setTopView(gl, shaderProgram, WIDTH, HEIGHT, canvas){
 		mat4.ortho(projectionMatrix, xlow, xhigh, ylowNew, yhighNew, -1, 1);
 	}
 	gl.uniformMatrix4fv(projectionMatrixUniformLocation, false, projectionMatrix);
+
 }
 
-/* function setRatsView(){
-	
-} */
