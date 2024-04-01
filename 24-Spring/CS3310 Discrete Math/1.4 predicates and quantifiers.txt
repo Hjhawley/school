@@ -1,0 +1,5 @@
+1.4 predicates and quantifiers
+
+x > 3 is not a proposition because it is not provably true or false; it's a propositional FUNCTION. By supplying a particular value to x, we turn it into a proposition.
+
+∀x P(x) Universe of discourse domain
