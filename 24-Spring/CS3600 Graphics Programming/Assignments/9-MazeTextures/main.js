@@ -1,5 +1,5 @@
 import { initShaderProgram } from "./shader.js";
-import { storeQuad, drawColorVertices } from "./shapes2d.js";
+import { storeQuad, drawUVVertices } from "./shapes2d.js";
 
 main();
 async function main() {
@@ -24,15 +24,25 @@ async function main() {
 
 	// Load a texture and move it to the gpu
 	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, loadTexture(gl, 'sandra512.jpg'));
+	gl.bindTexture(gl.TEXTURE_2D, loadTexture(gl, 'wall-4-granite-TEX.jpg'));
 	gl.uniform1i(gl.getUniformLocation(shaderProgram, "uTexture0"), 0);
 
+	gl.activeTexture(gl.TEXTURE1);
+	gl.bindTexture(gl.TEXTURE_2D, loadTexture(gl, 'sandra512.jpg'));
+	gl.uniform1i(gl.getUniformLocation(shaderProgram, "uTexture1"), 1);
+
 	gl.activeTexture(gl.TEXTURE3);// Do we need this?
-  
+
 	//
 	// Create content to display
 	//
 
+	const colorUniformLocation = gl.getUniformLocation(shaderProgram, "uColor");
+	const theColor = [0, 0, 1, 1];
+	gl.uniform4fv(
+		colorUniformLocation,
+		theColor
+	);
 
 
 	//
@@ -72,17 +82,25 @@ async function main() {
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		const vertices = [];
-		let H=1;
-		let u1=0; let v1=H;
-		let u2=H; let v2=H;
-		let u3=H; let v3=0;
-		let u4=0; let v4=0;
-		storeQuad(vertices, 
-			0, 0, 0, u1,v1,
-			10, 0, 0, u2,v2,
-			10, 10, 0, u3,v3,
-			0, 10, 0, u4,v4);
-		drawColorVertices(gl, shaderProgram, vertices, gl.TRIANGLES);
+		let H = 2;
+		let u1 = 0; let v1 = H;
+		let u2 = H; let v2 = H;
+		let u3 = H; let v3 = 0;
+		let u4 = 0; let v4 = 0;
+		let i = 0; // index as to which texture map to use
+		storeQuad(vertices,
+			0, 0, 0, u1, v1, i,
+			10, 0, 0, u2, v2, i,
+			10, 10, 0, u3, v3, i,
+			0, 10, 0, u4, v4, i);
+		i = 2;
+		storeQuad(vertices,
+			11, 0, 0, u1, v1, i,
+			21, 0, 0, u2, v2, i,
+			21, 10, 0, u3, v3, i,
+			11, 10, 0, u4, v4, i);
+	
+		drawUVVertices(gl, shaderProgram, vertices, gl.TRIANGLES);
 
 		requestAnimationFrame(redraw);
 	}
@@ -110,19 +128,18 @@ function setObservationView(gl, shaderProgram, canvasAspect) {
 function loadTexture(gl, url) {
 	const texture = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, texture);
-  
+
 	// Fill the texture with a 1x1 blue pixel while waiting for the image to load
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 255]));
-  
+
 	const image = new Image();
 	image.onload = function () {
-	  gl.bindTexture(gl.TEXTURE_2D, texture);
-	  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-	  gl.generateMipmap(gl.TEXTURE_2D);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+		gl.generateMipmap(gl.TEXTURE_2D);
 	};
 	image.src = url;
-  
+
 	return texture;
-  }
-  
-  
+}
+
