@@ -1,0 +1,23 @@
+SDN (software defined networking) control plane
+
+Remote controller computes, installs forwarding tables in routers
+
+Forwarding - sending the data along
+Routing - deciding where to forward data
+
+The Internet offers no QoS guarantee bandwidth, packet loss, order, timing
+It gives its "best effort" and good enough is often good enough
+SIMPLICITY OF MECHANISM has allowed the Internet to be widely deployed and
+adopted. It's simple, so it works
+
+Router architecture overview
+DATA PLANE
+    - Input & Output ports
+    - High-speed switching fabric (composed of smaller things)
+CONTROL PLANE
+    - Routing processor
+
+PoE: Power over Ethernet
+
+Physical layer - bit-level reception
+Link Layer - Ethernet
