@@ -149,6 +149,42 @@ class RSA:
             for decrypted_text in decrypted_blocks:
                 fout.write(decrypted_text.encode("utf-8"))
 
-# rsa = RSA()
-# rsa.GenerateKeys("your_prime_string1", "your_prime_string2")
-# rsa.Encrypt("input.txt", "output.txt")
+    # rsa = RSA()
+    # rsa.GenerateKeys("your_prime_string1", "your_prime_string2")
+    # rsa.Encrypt("input.txt", "output.txt")
+
+def main():
+    rsa = RSA()
+
+    # Generate keys using two very long strings
+    # These strings are just examples; use appropriately secure methods in practice
+    long_string1 = "a" * 300  # Example long string of repeated 'a's
+    long_string2 = "b" * 300  # Example long string of repeated 'b's
+    rsa.GenerateKeys(long_string1, long_string2)
+
+    # Create a plain text file with more than 216 characters
+    plain_text = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" * 15  # Repeats to exceed 1000 characters
+    input_filename = "input.txt"
+    with open(input_filename, "w") as f:
+        f.write(plain_text)
+
+    # Encrypt the plain text
+    encrypted_filename = "encrypted_output.txt"
+    rsa.Encrypt(input_filename, encrypted_filename)
+
+    # Decrypt the text
+    decrypted_filename = "decrypted_output.txt"
+    rsa.Decrypt(encrypted_filename, decrypted_filename)
+
+    # Verify that the decrypted text matches the original plain text
+    with open(decrypted_filename, "r") as f:
+        decrypted_text = f.read()
+
+    # Check for equivalence and print the result
+    if decrypted_text == plain_text:
+        print("Success: The decrypted text matches the original plain text.")
+    else:
+        print("Failure: The decrypted text does not match the original plain text.")
+
+if __name__ == "__main__":
+    main()
