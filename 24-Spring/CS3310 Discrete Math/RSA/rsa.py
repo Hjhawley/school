@@ -1,13 +1,22 @@
 class RSA:
     def __init__(self):
         self.alphabet1 = "abcdefghijklmnopqrstuvwxyz"
+        self.alphabet2 = ".,?! \t\n\rabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
-    def text_to_number(self, text):
-        base = len(self.alphabet1)
+    def text_to_number(self, text, alphabet):
+        base = len(alphabet)
         number = 0
         for char in text:
-            number = number * base + self.alphabet1.index(char)
+            number = number * base + alphabet.index(char)
         return number
+
+    def number_to_text(self, number, alphabet):
+        base = len(alphabet)
+        text = ""
+        while number > 0:
+            text = alphabet[number % base] + text
+            number //= base
+        return text
 
     def make_odd(self, n):
         if n % 2 == 0:
@@ -83,6 +92,63 @@ class RSA:
         with open("private.txt", "w") as priv_file:
             priv_file.write(f"{n}\n{d}\n")
 
-# Usage:
+    def Encrypt(self, inputfile, outputfile):
+        # Read the input file
+        with open(inputfile, "rb") as fin:
+            PlainTextBinary = fin.read()
+        PlainText = PlainTextBinary.decode("utf-8")
+
+        # Read n and e from public.txt
+        with open("public.txt", "r") as pub_file:
+            n = int(pub_file.readline().strip())
+            e = int(pub_file.readline().strip())
+
+        # Process the plaintext in blocks
+        block_size = 216
+        blocks = [PlainText[i:i + block_size] for i in range(0, len(PlainText), block_size)]
+
+        # Convert blocks to numbers, encrypt, and convert back to base 70 text
+        encrypted_blocks = []
+        for block in blocks:
+            block_number = self.text_to_number(block, self.alphabet2)
+            encrypted_number = pow(block_number, e, n)  # RSA encryption
+            encrypted_text = self.number_to_text(encrypted_number, self.alphabet2) + '$'
+            encrypted_blocks.append(encrypted_text)
+
+        # Write the encrypted blocks to the output file
+        with open(outputfile, "wb") as fout:
+            for encrypted_text in encrypted_blocks:
+                fout.write(encrypted_text.encode("utf-8"))
+
+    def Decrypt(self, inputfile, outputfile):
+        # Read the input file
+        with open(inputfile, "rb") as fin:
+            encrypted_text = fin.read().decode("utf-8")
+        
+        # Read n and d from private.txt
+        with open("private.txt", "r") as priv_file:
+            n = int(priv_file.readline().strip())
+            d = int(priv_file.readline().strip())
+        
+        # Split the encrypted text into blocks using $ as a delimiter
+        encrypted_blocks = encrypted_text.split('$')
+        
+        # Remove any empty strings that might have been added due to trailing $
+        encrypted_blocks = [block for block in encrypted_blocks if block]
+
+        # Decrypt each block
+        decrypted_blocks = []
+        for block in encrypted_blocks:
+            block_number = self.text_to_number(block, self.alphabet2)
+            decrypted_number = pow(block_number, d, n)  # RSA decryption
+            decrypted_text = self.number_to_text(decrypted_number, self.alphabet2)
+            decrypted_blocks.append(decrypted_text)
+        
+        # Write the decrypted text to the output file
+        with open(outputfile, "wb") as fout:
+            for decrypted_text in decrypted_blocks:
+                fout.write(decrypted_text.encode("utf-8"))
+
 # rsa = RSA()
 # rsa.GenerateKeys("your_prime_string1", "your_prime_string2")
+# rsa.Encrypt("input.txt", "output.txt")
