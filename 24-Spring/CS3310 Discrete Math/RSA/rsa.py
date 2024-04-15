@@ -1,3 +1,5 @@
+import random
+
 class RSA:
     def __init__(self):
         self.alphabet1 = "abcdefghijklmnopqrstuvwxyz"
@@ -23,23 +25,38 @@ class RSA:
             n += 1
         return n
 
-    def is_prime(self, n):
-        if n <= 1:
+    def check_prime(self, P, iterations=20):
+        if P < 2:
             return False
-        if n <= 3:
-            return True
-        if n % 2 == 0 or n % 3 == 0:
-            return False
-        i = 5
-        while i * i <= n:
-            if n % i == 0 or n % (i + 2) == 0:
+        if P != 2 and P % 2 == 0:
+            return False  # Early return for even numbers > 2
+
+        for i in range(iterations):
+            if not self.miller_test(P):
                 return False
-            i += 6
         return True
 
+    def miller_test(self, P):
+        T = P - 1
+        S = 0
+        while T % 2 == 0:
+            T //= 2
+            S += 1
+
+        b = random.randrange(2, P)
+        x = pow(b, T, P)
+        if x == 1 or x == P - 1:
+            return True
+
+        for _ in range(S - 1):
+            x = pow(x, 2, P)
+            if x == P - 1:
+                return True
+        return False
+
     def find_next_prime(self, n):
-        while not self.is_prime(n):
-            n += 2
+        while not self.check_prime(n):
+            n += 2  # Optionally adjust to add larger gaps
         return n
 
     def gcd(self, a, b):
@@ -60,9 +77,11 @@ class RSA:
             t += n
         return t
 
-    def GenerateKeys(self, text1, text2):
-        p = self.text_to_number(text1)
-        q = self.text_to_number(text2)
+    def generate_keys(self, text1, text2):
+        p = self.text_to_number(text1, self.alphabet1)
+        q = self.text_to_number(text2, self.alphabet1)
+        """ print("Converted p:", p)
+        print("Converted q:", q) """
 
         if p < 10**200 or q < 10**200:
             print("Error: Input strings are too short.")
@@ -70,12 +89,18 @@ class RSA:
 
         p = p % (10**200)
         q = q % (10**200)
+        """ print("Modulo p:", p)
+        print("Modulo q:", q) """
 
         p = self.make_odd(p)
         q = self.make_odd(q)
+        """ print("Made odd p:", p)
+        print("Made odd q:", q) """
 
         p = self.find_next_prime(p)
         q = self.find_next_prime(q)
+        """ print("Prime p:", p)
+        print("Prime q:", q) """
 
         n = p * q
         r = (p - 1) * (q - 1)
@@ -92,7 +117,9 @@ class RSA:
         with open("private.txt", "w") as priv_file:
             priv_file.write(f"{n}\n{d}\n")
 
-    def Encrypt(self, inputfile, outputfile):
+        print("Files generated successfully.")
+
+    def encrypt(self, inputfile, outputfile):
         # Read the input file
         with open(inputfile, "rb") as fin:
             PlainTextBinary = fin.read()
@@ -120,7 +147,7 @@ class RSA:
             for encrypted_text in encrypted_blocks:
                 fout.write(encrypted_text.encode("utf-8"))
 
-    def Decrypt(self, inputfile, outputfile):
+    def decrypt(self, inputfile, outputfile):
         # Read the input file
         with open(inputfile, "rb") as fin:
             encrypted_text = fin.read().decode("utf-8")
@@ -136,7 +163,7 @@ class RSA:
         # Remove any empty strings that might have been added due to trailing $
         encrypted_blocks = [block for block in encrypted_blocks if block]
 
-        # Decrypt each block
+        # decrypt each block
         decrypted_blocks = []
         for block in encrypted_blocks:
             block_number = self.text_to_number(block, self.alphabet2)
@@ -149,18 +176,13 @@ class RSA:
             for decrypted_text in decrypted_blocks:
                 fout.write(decrypted_text.encode("utf-8"))
 
-    # rsa = RSA()
-    # rsa.GenerateKeys("your_prime_string1", "your_prime_string2")
-    # rsa.Encrypt("input.txt", "output.txt")
-
 def main():
     rsa = RSA()
 
     # Generate keys using two very long strings
-    # These strings are just examples; use appropriately secure methods in practice
-    long_string1 = "a" * 300  # Example long string of repeated 'a's
-    long_string2 = "b" * 300  # Example long string of repeated 'b's
-    rsa.GenerateKeys(long_string1, long_string2)
+    long_string1 = "x" * 300  # Example long string of repeated 'x's
+    long_string2 = "y" * 300  # Example long string of repeated 'y's
+    rsa.generate_keys(long_string1, long_string2)
 
     # Create a plain text file with more than 216 characters
     plain_text = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" * 15  # Repeats to exceed 1000 characters
@@ -168,13 +190,13 @@ def main():
     with open(input_filename, "w") as f:
         f.write(plain_text)
 
-    # Encrypt the plain text
+    # encrypt the plain text
     encrypted_filename = "encrypted_output.txt"
-    rsa.Encrypt(input_filename, encrypted_filename)
+    rsa.encrypt(input_filename, encrypted_filename)
 
-    # Decrypt the text
+    # decrypt the text
     decrypted_filename = "decrypted_output.txt"
-    rsa.Decrypt(encrypted_filename, decrypted_filename)
+    rsa.decrypt(encrypted_filename, decrypted_filename)
 
     # Verify that the decrypted text matches the original plain text
     with open(decrypted_filename, "r") as f:
@@ -182,9 +204,9 @@ def main():
 
     # Check for equivalence and print the result
     if decrypted_text == plain_text:
-        print("Success: The decrypted text matches the original plain text.")
+        print("Success!")
     else:
-        print("Failure: The decrypted text does not match the original plain text.")
+        print("Failure...")
 
 if __name__ == "__main__":
     main()
