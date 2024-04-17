@@ -179,34 +179,14 @@ class RSA:
 def main():
     rsa = RSA()
 
-    # Generate keys using two very long strings
+    """ # Generate keys using two very long strings
     long_string1 = "x" * 300  # Example long string of repeated 'x's
     long_string2 = "y" * 300  # Example long string of repeated 'y's
-    rsa.generate_keys(long_string1, long_string2)
+    rsa.generate_keys(long_string1, long_string2) """
 
-    # Create a plain text file with more than 216 characters
-    plain_text = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" * 15  # Repeats to exceed 1000 characters
-    input_filename = "input.txt"
-    with open(input_filename, "w") as f:
-        f.write(plain_text)
-
-    # encrypt the plain text
-    encrypted_filename = "encrypted_output.txt"
-    rsa.encrypt(input_filename, encrypted_filename)
-
-    # decrypt the text
+    input_filename = "HaydenEncrypted.txt"
     decrypted_filename = "decrypted_output.txt"
-    rsa.decrypt(encrypted_filename, decrypted_filename)
-
-    # Verify that the decrypted text matches the original plain text
-    with open(decrypted_filename, "r") as f:
-        decrypted_text = f.read()
-
-    # Check for equivalence and print the result
-    if decrypted_text == plain_text:
-        print("Success!")
-    else:
-        print("Failure...")
+    rsa.decrypt(input_filename, decrypted_filename)
 
 if __name__ == "__main__":
     main()
