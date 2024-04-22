@@ -10,28 +10,33 @@ class ChessSet {
         this.boardTexture = loadTexture(gl, 'pieces/TableroDiffuse02.png', [255, 171, 0, 255]);
         this.buffers = {};
         await readObj(gl, "pieces/PiezasAjedrezAdjusted.obj", this.buffers);
-        /*
-                const vertices = [];
-                this.vertexBufferObject = gl.createBuffer();
-                this.vertexBufferObject.vertexCount = vertices.length / 8;
-                gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBufferObject);
-                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-        */
-    }
+    }    
 
     draw(gl, shaderProgram, currentTime) {
-        gl.bindTexture(gl.TEXTURE_2D, this.boardTexture);
+        // Draw the board
+        this.drawPiece(gl, shaderProgram, this.boardTexture, "cube");
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers["cube"]);
+        // Draw a white bishop
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "bishop");
+
+        // Draw a black queen
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "queen");
+
+        // ... draw other pieces as needed
+    }
+
+    drawPiece(gl, shaderProgram, texture, piece) {
+        // Bind the texture for the piece
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+
+        // Bind the buffer for the piece
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[piece]);
+
+        // Set the shader attributes
         setShaderAttributes(gl, shaderProgram);
-        gl.drawArrays(gl.TRIANGLES, 0, this.buffers["cube"].vertexCount);
 
-
-        gl.bindTexture(gl.TEXTURE_2D, this.whiteTexture);
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers["bishop"]);
-        setShaderAttributes(gl, shaderProgram);
-        gl.drawArrays(gl.TRIANGLES, 0, this.buffers["bishop"].vertexCount);
+        // Draw the piece
+        gl.drawArrays(gl.TRIANGLES, 0, this.buffers[piece].vertexCount);
     }
 }
 
@@ -40,20 +45,20 @@ async function readObj(gl, filename, buffers) {
     const response = await fetch(filename);
     const text = await response.text()
 
-    //    const output = {};
+    const output = {};
     const lines = text.split("\n");
     let objectName = "";
     const vertexList = [];
     const normalList = [];
     const uvList = [];
     let currentFaceList = [];
-    //    output.objectList = {};
+    output.objectList = {};
 
     for (const line of lines) {
         const values = line.split(' ');
         if (values[0] == 'o') {
             if (currentFaceList.length > 0) {
-                //output.objectList[objectName] = currentFaceList
+                output.objectList[objectName] = currentFaceList
                 AddVertexBufferObject(gl, buffers, objectName, vertexList, uvList, normalList, currentFaceList)
                 currentFaceList = []
             }
@@ -81,13 +86,13 @@ async function readObj(gl, filename, buffers) {
         }
     }
     if (currentFaceList.length > 0) {
-        //output.objectList[objectName] = currentFaceList
+        output.objectList[objectName] = currentFaceList
         AddVertexBufferObject(gl, buffers, objectName, vertexList, uvList, normalList, currentFaceList)
     }
-    //    output.vertexList = vertexList;
-    //    output.normalList = normalList;
-    //    output.uvList = uvList;
-    //    return output;
+    output.vertexList = vertexList;
+    output.normalList = normalList;
+    output.uvList = uvList;
+    return output;
 }
 
 

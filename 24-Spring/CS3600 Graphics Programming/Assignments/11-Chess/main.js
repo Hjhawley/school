@@ -1,7 +1,5 @@
 import { initShaderProgram } from "./shader.js";
 import { ChessSet } from "./chessSet.js";
-/* import { Sandra } from "./sandra.js"; */
-/* import { Granite } from "./granite.js"; */
 
 main();
 async function main() {
@@ -80,8 +78,6 @@ async function main() {
 
 	const c = new ChessSet(gl);
 	await c.init(gl);
-	/* const s = new Sandra(gl); */
-    /* const g = new Granite(gl); */
 
 	window.addEventListener("resize", reportWindowSize);
 	function reportWindowSize() {
