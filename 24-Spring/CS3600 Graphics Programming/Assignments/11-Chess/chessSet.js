@@ -7,7 +7,7 @@ class ChessSet {
     async init(gl) {
         this.blackTexture = loadTexture(gl, 'pieces/PiezasAjedrezDiffuseMarmolBlackBrighter.png', [80, 80, 80, 255]);
         this.whiteTexture = loadTexture(gl, 'pieces/PiezasAjedrezDiffuseMarmol.png', [220, 220, 220, 255]);
-        this.boardTexture = loadTexture(gl, 'pieces/TableroDiffuse01.png', [255, 171, 0, 255]);
+        this.boardTexture = loadTexture(gl, 'pieces/TableroDiffuse02.png', [255, 171, 0, 255]);
         this.buffers = {};
         await readObj(gl, "pieces/PiezasAjedrezAdjusted.obj", this.buffers);
         /*

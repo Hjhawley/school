@@ -1,7 +1,7 @@
 import { initShaderProgram } from "./shader.js";
 import { ChessSet } from "./chessSet.js";
 /* import { Sandra } from "./sandra.js"; */
-import { Granite } from "./granite.js";
+/* import { Granite } from "./granite.js"; */
 
 main();
 async function main() {
@@ -15,7 +15,7 @@ async function main() {
 	if (!gl) {
 		alert('Your browser does not support WebGL');
 	}
-	gl.clearColor(0.75, 0.85, 0.8, 1.0);
+	gl.clearColor(0.04, 0.51, 0.51, 1.0);
 	gl.enable(gl.DEPTH_TEST); // Enable depth testing
 	gl.depthFunc(gl.LEQUAL); // Near things obscure far things
 	gl.enable(gl.CULL_FACE);
@@ -81,7 +81,7 @@ async function main() {
 	const c = new ChessSet(gl);
 	await c.init(gl);
 	/* const s = new Sandra(gl); */
-	const g = new Granite(gl);
+    /* const g = new Granite(gl); */
 
 	window.addEventListener("resize", reportWindowSize);
 	function reportWindowSize() {
