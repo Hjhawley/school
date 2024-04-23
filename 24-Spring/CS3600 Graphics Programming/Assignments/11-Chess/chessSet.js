@@ -17,23 +17,23 @@ class ChessSet {
         // Draw the board
         this.drawPiece(gl, shaderProgram, this.boardTexture, "cube", 0.0, 0.0, 0.0);
 
-        // Draw the white pieces
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "rook", ...chessToCoordinates("a1"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "knight", ...chessToCoordinates("b1"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "bishop", ...chessToCoordinates("c1"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "queen", ...chessToCoordinates("d1"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "king", ...chessToCoordinates("e1"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "bishop", ...chessToCoordinates("f1"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "knight", ...chessToCoordinates("g1"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "rook", ...chessToCoordinates("h1"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("a2"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("b2"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("c2"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("d2"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("e2"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("f2"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("g2"));
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("h2"));
+        // Draw the white pieces, use Math.PI to rotate white pieces 180 degrees
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "rook", ...chessToCoordinates("a1"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "knight", ...chessToCoordinates("b1"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "bishop", ...chessToCoordinates("c1"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "queen", ...chessToCoordinates("d1"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "king", ...chessToCoordinates("e1"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "bishop", ...chessToCoordinates("f1"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "knight", ...chessToCoordinates("g1"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "rook", ...chessToCoordinates("h1"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("a2"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("b2"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("c2"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("d2"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("e2"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("f2"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("g2"), Math.PI);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("h2"), Math.PI);
 
         // Draw a black pieces
         this.drawPiece(gl, shaderProgram, this.blackTexture, "rook", ...chessToCoordinates("a8"));
@@ -56,7 +56,7 @@ class ChessSet {
         // ... draw other pieces as needed
     }
 
-    drawPiece(gl, shaderProgram, texture, piece, x, y, z) {
+    drawPiece(gl, shaderProgram, texture, piece, x, y, z, rotationY = 0) {
         // Bind the texture for the piece
         gl.bindTexture(gl.TEXTURE_2D, texture);
     
@@ -68,9 +68,14 @@ class ChessSet {
             // Set the shader attributes
             setShaderAttributes(gl, shaderProgram);
     
-            // Create a translation matrix to move the piece to the desired location
+            // Create a model view matrix to move the piece to the desired location
             var modelViewMatrix = mat4.create();
             mat4.translate(modelViewMatrix, modelViewMatrix, [x, y, z]);
+    
+            // Rotate the piece if a rotation is specified
+            if (rotationY !== 0) {
+                mat4.rotateY(modelViewMatrix, modelViewMatrix, rotationY);
+            }
     
             // Pass the model view matrix to the shader
             gl.uniformMatrix4fv(
