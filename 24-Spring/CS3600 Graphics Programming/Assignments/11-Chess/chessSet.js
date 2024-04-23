@@ -17,11 +17,41 @@ class ChessSet {
         // Draw the board
         this.drawPiece(gl, shaderProgram, this.boardTexture, "cube", 0.0, 0.0, 0.0);
 
-        // Draw a white bishop
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "bishop", -3.5, 0.0, 3.5);
+        // Draw the white pieces
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "rook", ...chessToCoordinates("a1"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "knight", ...chessToCoordinates("b1"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "bishop", ...chessToCoordinates("c1"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "queen", ...chessToCoordinates("d1"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "king", ...chessToCoordinates("e1"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "bishop", ...chessToCoordinates("f1"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "knight", ...chessToCoordinates("g1"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "rook", ...chessToCoordinates("h1"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("a2"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("b2"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("c2"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("d2"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("e2"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("f2"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("g2"));
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("h2"));
 
-        // Draw a black queen
-        this.drawPiece(gl, shaderProgram, this.blackTexture, "queen", -0.5, 0.0, -3.5);
+        // Draw a black pieces
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "rook", ...chessToCoordinates("a8"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "knight", ...chessToCoordinates("b8"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "bishop", ...chessToCoordinates("c8"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "queen", ...chessToCoordinates("d8"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "king", ...chessToCoordinates("e8"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "bishop", ...chessToCoordinates("f8"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "knight", ...chessToCoordinates("g8"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "rook", ...chessToCoordinates("h8"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "pawn", ...chessToCoordinates("a7"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "pawn", ...chessToCoordinates("b7"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "pawn", ...chessToCoordinates("c7"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "pawn", ...chessToCoordinates("d7"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "pawn", ...chessToCoordinates("e7"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "pawn", ...chessToCoordinates("f7"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "pawn", ...chessToCoordinates("g7"));
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "pawn", ...chessToCoordinates("h7"));
 
         // ... draw other pieces as needed
     }
@@ -135,6 +165,23 @@ function AddVertexBufferObject(gl, buffers, objectName, vertexList, uvList, norm
         vertexCount: vertices.length / 8,
         // Add any additional properties you may need
     };
+}
+
+function chessToCoordinates(position) {
+    const fileToX = {
+        'a': -3.5, 'b': -2.5, 'c': -1.5, 'd': -0.5,
+        'e': 0.5, 'f': 1.5, 'g': 2.5, 'h': 3.5
+    };
+    const rankToZ = {
+        '8': -3.5, '7': -2.5, '6': -1.5, '5': -0.5,
+        '4': 0.5, '3': 1.5, '2': 2.5, '1': 3.5
+    };
+
+    const x = fileToX[position[0]];
+    const z = rankToZ[position[1]];
+    const y = 0; // As per your system, y is always 0
+
+    return [x, y, z];
 }
 
 export { ChessSet };
