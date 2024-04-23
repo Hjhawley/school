@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../Scheduler"
+		},
+		{
+			"path": "../../RandomStuff/itunes-to-spotify"
+		},
+		{
+			"path": "../../Course_material"
+		},
+		{
+			"path": "../../TechClass"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "24-Spring"
+	}
+}

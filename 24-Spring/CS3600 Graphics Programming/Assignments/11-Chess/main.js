@@ -64,11 +64,10 @@ async function main() {
 	//setLightDirection(0, -1, -1);
 	setLightDirection(1, -1, -1);
 
-	const eye = [0, 6, 9];
-	const at = [0, 1.5, 2.3]
-	//const eye = [0, 10, -8];
-	//const at = [0, 0, 0];
+	const eye = [0, 10, .01];
+	const at = [0, 0, 0];
 	const up = [0, 1, 0];
+
 	setObservationView(gl, shaderProgram, eye, at, up, canvas.clientWidth / canvas.clientHeight)
 
 
