@@ -4,6 +4,7 @@ class ChessSet {
     constructor(gl) {
 
     }
+
     async init(gl) {
         this.blackTexture = loadTexture(gl, 'pieces/PiezasAjedrezDiffuseMarmolBlackBrighter.png', [80, 80, 80, 255]);
         this.whiteTexture = loadTexture(gl, 'pieces/PiezasAjedrezDiffuseMarmol.png', [220, 220, 220, 255]);
@@ -14,29 +15,45 @@ class ChessSet {
 
     draw(gl, shaderProgram, currentTime) {
         // Draw the board
-        this.drawPiece(gl, shaderProgram, this.boardTexture, "cube");
+        this.drawPiece(gl, shaderProgram, this.boardTexture, "cube", 0.0, 0.0, 0.0);
 
         // Draw a white bishop
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "bishop");
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "bishop", -3.5, 0.0, 3.5);
 
         // Draw a black queen
-        this.drawPiece(gl, shaderProgram, this.blackTexture, "queen");
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "queen", -0.5, 0.0, -3.5);
 
         // ... draw other pieces as needed
     }
 
-    drawPiece(gl, shaderProgram, texture, piece) {
+    drawPiece(gl, shaderProgram, texture, piece, x, y, z) {
         // Bind the texture for the piece
         gl.bindTexture(gl.TEXTURE_2D, texture);
-
-        // Bind the buffer for the piece
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[piece]);
-
-        // Set the shader attributes
-        setShaderAttributes(gl, shaderProgram);
-
-        // Draw the piece
-        gl.drawArrays(gl.TRIANGLES, 0, this.buffers[piece].vertexCount);
+    
+        // Make sure to bind the correct buffer before setting attributes
+        const pieceBufferInfo = this.buffers[piece];
+        if (pieceBufferInfo) {
+            gl.bindBuffer(gl.ARRAY_BUFFER, pieceBufferInfo.buffer);
+    
+            // Set the shader attributes
+            setShaderAttributes(gl, shaderProgram);
+    
+            // Create a translation matrix to move the piece to the desired location
+            var modelViewMatrix = mat4.create();
+            mat4.translate(modelViewMatrix, modelViewMatrix, [x, y, z]);
+    
+            // Pass the model view matrix to the shader
+            gl.uniformMatrix4fv(
+                gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
+                false,
+                modelViewMatrix
+            );
+    
+            // Draw the piece
+            gl.drawArrays(gl.TRIANGLES, 0, pieceBufferInfo.vertexCount);
+        } else {
+            console.error(`Buffer info for piece ${piece} not found.`);
+        }
     }
 }
 
@@ -109,10 +126,15 @@ function AddVertexBufferObject(gl, buffers, objectName, vertexList, uvList, norm
     }
 
     const vertexBufferObject = gl.createBuffer();
-    vertexBufferObject.vertexCount = vertices.length / 8;
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBufferObject);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-    buffers[objectName] = vertexBufferObject;
+
+    // Store additional properties as part of the buffer object for easier access later
+    buffers[objectName] = {
+        buffer: vertexBufferObject,
+        vertexCount: vertices.length / 8,
+        // Add any additional properties you may need
+    };
 }
 
 export { ChessSet };
