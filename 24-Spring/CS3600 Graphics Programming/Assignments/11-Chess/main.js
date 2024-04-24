@@ -64,7 +64,7 @@ async function main() {
 	//setLightDirection(0, -1, -1);
 	setLightDirection(1, -1, -1);
 
-	const eye = [0, 10, .01];
+	const eye = [0, 10, -6];
 	const at = [0, 0, 0];
 	const up = [0, 1, 0];
 

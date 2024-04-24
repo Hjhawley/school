@@ -13,12 +13,21 @@ class ChessSet {
         await readObj(gl, "pieces/PiezasAjedrezAdjusted.obj", this.buffers);
     }    
 
+    interpolate(t, t0, t1, v0, v1){
+        let ratio = (t - t0) / (t1 - t0);
+        ratio = Math.max(ratio, 0);
+        ratio = Math.min(ratio, 1);
+        return v0 + (v1 - v0) * ratio;
+    }
+
     draw(gl, shaderProgram, currentTime) {
         // Draw the board
         this.drawPiece(gl, shaderProgram, this.boardTexture, "cube", 0.0, 0.0, 0.0);
 
         // Draw the white pieces, use Math.PI to rotate white pieces 180 degrees
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "rook", ...chessToCoordinates("a1"), Math.PI);
+        let [x,y,z] = chessToCoordinates("a1");
+        z = this.interpolate(currentTime, 2, 4, z, z-2)
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "rook", x,y,z, Math.PI);
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "knight", ...chessToCoordinates("b1"), Math.PI);
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "bishop", ...chessToCoordinates("c1"), Math.PI);
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "queen", ...chessToCoordinates("d1"), Math.PI);
@@ -52,8 +61,6 @@ class ChessSet {
         this.drawPiece(gl, shaderProgram, this.blackTexture, "pawn", ...chessToCoordinates("f7"));
         this.drawPiece(gl, shaderProgram, this.blackTexture, "pawn", ...chessToCoordinates("g7"));
         this.drawPiece(gl, shaderProgram, this.blackTexture, "pawn", ...chessToCoordinates("h7"));
-
-        // ... draw other pieces as needed
     }
 
     drawPiece(gl, shaderProgram, texture, piece, x, y, z, rotationY = 0) {
