@@ -20,6 +20,36 @@ class ChessSet {
         return v0 + (v1 - v0) * ratio;
     }
 
+    drawPiece(gl, shaderProgram, texture, piece, x, y, z, sx, sy, sz, rx, ry, rz, degrees){
+        // Bind the texture for the piece
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+    
+        // Make sure to bind the correct buffer before setting attributes
+        const pieceBufferInfo = this.buffers[piece];
+        if (pieceBufferInfo) {
+            gl.bindBuffer(gl.ARRAY_BUFFER, pieceBufferInfo.buffer);
+            setShaderAttributes(gl, shaderProgram);
+    
+            // Create a model view matrix to move, scale, rotate the piece to the desired location
+            var modelViewMatrix = mat4.create();
+            mat4.translate(modelViewMatrix, modelViewMatrix, [x, y, z]);
+            mat4.scale(modelViewMatrix, modelViewMatrix, [sx, sy, sz]);
+            mat4.rotate(modelViewMatrix, modelViewMatrix, degrees * Math.PI / 180, [rx, ry, rz]);
+    
+            // Pass the model view matrix to the shader
+            gl.uniformMatrix4fv(
+                gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
+                false,
+                modelViewMatrix
+            );
+    
+            // Draw the piece
+            gl.drawArrays(gl.TRIANGLES, 0, pieceBufferInfo.vertexCount);
+        } else {
+            console.error(`Buffer info for piece ${piece} not found.`);
+        }
+    }
+
     draw(gl, shaderProgram, currentTime) {
         // Draw the board
         this.drawPiece(gl, shaderProgram, this.boardTexture, "cube", 0, 0, 0, 1, 1, 1, 0, 1, 0, 0);
@@ -43,7 +73,16 @@ class ChessSet {
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("c2"), 1, 1, 1, 0, 1, 0, 180);
         let [xd2, yd2, zd2] = chessToCoordinates("d2");
         zd2 = this.interpolate(currentTime, 4.5, 5, zd2, zd2-2);
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", xd2, yd2, zd2, 1, 1, 1, 0, 1, 0, 180); // fifth move, d4; gets captured later
+        xd2 = this.interpolate(currentTime, 5.5, 6.2, xd2, xd2-2.5); // capture
+        yd2 = this.interpolate(currentTime, 5.5, 6.2, yd2, yd2+5);
+        zd2 = this.interpolate(currentTime, 5.5, 6.2, zd2, zd2-5);
+        let [sxd2, syd2, szd2] = [1, 1, 1]
+        // sxd2 = this.interpolate(currentTime, 5.5, 6.2, sxd2, 0.01) // squish
+        let [rxd2, ryd2, rzd2, degreesd2] = [0, 1, 0, 180]
+        degreesd2 = this.interpolate(currentTime, 5.5, 6.2, degreesd2, 720) // rotate
+        rxd2 = this.interpolate(currentTime, 5.5, 6.2, rxd2, 1)
+        rzd2 = this.interpolate(currentTime, 5.5, 6.2, rzd2, 1)
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", xd2, yd2, zd2, sxd2, syd2, szd2, rxd2, ryd2, rzd2, degreesd2); // fifth move, d4; gets captured later
         let [xe2, ye2, ze2] = chessToCoordinates("e2");
         ze2 = this.interpolate(currentTime, 0.5, 1, ze2, ze2-2);
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", xe2, ye2, ze2, 1, 1, 1, 0, 1, 0, 180); // first move, e4
@@ -76,35 +115,6 @@ class ChessSet {
         this.drawPiece(gl, shaderProgram, this.blackTexture, "pawn", ...chessToCoordinates("h7"), 1, 1, 1, 0, 1, 0, 0);
     }
 
-    drawPiece(gl, shaderProgram, texture, piece, x, y, z, sx, sy, sz, rx, ry, rz, degrees){
-        // Bind the texture for the piece
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-    
-        // Make sure to bind the correct buffer before setting attributes
-        const pieceBufferInfo = this.buffers[piece];
-        if (pieceBufferInfo) {
-            gl.bindBuffer(gl.ARRAY_BUFFER, pieceBufferInfo.buffer);
-            setShaderAttributes(gl, shaderProgram);
-    
-            // Create a model view matrix to move, scale, rotate the piece to the desired location
-            var modelViewMatrix = mat4.create();
-            mat4.translate(modelViewMatrix, modelViewMatrix, [x, y, z]);
-            mat4.scale(modelViewMatrix, modelViewMatrix, [sx, sy, sz]);
-            mat4.rotate(modelViewMatrix, modelViewMatrix, degrees * Math.PI / 180, [rx, ry, rz]);
-    
-            // Pass the model view matrix to the shader
-            gl.uniformMatrix4fv(
-                gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
-                false,
-                modelViewMatrix
-            );
-    
-            // Draw the piece
-            gl.drawArrays(gl.TRIANGLES, 0, pieceBufferInfo.vertexCount);
-        } else {
-            console.error(`Buffer info for piece ${piece} not found.`);
-        }
-    }
 }
 
 // filename to dictionary this.buffers
