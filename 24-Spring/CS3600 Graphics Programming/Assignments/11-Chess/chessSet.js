@@ -22,7 +22,7 @@ class ChessSet {
 
     draw(gl, shaderProgram, currentTime) {
         // Draw the board
-        this.drawPiece(gl, shaderProgram, this.boardTexture, "cube", 0, 0, 0, 1, 1, 1, 0, 0, 0, 180);
+        this.drawPiece(gl, shaderProgram, this.boardTexture, "cube", 0, 0, 0, 1, 1, 1, 0, 1, 0, 0);
 
         // Draw the white pieces, use Math.PI to rotate white pieces 180 degrees
         /* let [x,y,z] = chessToCoordinates("a1");
