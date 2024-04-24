@@ -34,7 +34,12 @@ class ChessSet {
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "queen", ...chessToCoordinates("d1"), 1, 1, 1, 0, 1, 0, 180);
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "king", ...chessToCoordinates("e1"), 1, 1, 1, 0, 1, 0, 180);
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "bishop", ...chessToCoordinates("f1"), 1, 1, 1, 0, 1, 0, 180);
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "knight", ...chessToCoordinates("g1"), 1, 1, 1, 0, 1, 0, 180); // third move, f3
+        let [xg1, yg1, zg1] = chessToCoordinates("g1");
+        zg1 = this.interpolate(currentTime, 2.5, 3, zg1, zg1-2);
+        xg1 = this.interpolate(currentTime, 2.5, 3, xg1, xg1-1);
+        yg1 = this.interpolate(currentTime, 2.5, 2.75, yg1, yg1+3); // hop!
+        yg1 = this.interpolate(currentTime, 2.75, 3, yg1, yg1-3);
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "knight", xg1, yg1, zg1, 1, 1, 1, 0, 1, 0, 180); // third move, f3
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "rook", ...chessToCoordinates("h1"), 1, 1, 1, 0, 1, 0, 180);
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("a2"), 1, 1, 1, 0, 1, 0, 180);
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("b2"), 1, 1, 1, 0, 1, 0, 180);
