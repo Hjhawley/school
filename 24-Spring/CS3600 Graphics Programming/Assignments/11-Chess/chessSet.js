@@ -77,10 +77,11 @@ class ChessSet {
         yd2 = this.interpolate(currentTime, 5.5, 6.2, yd2, yd2+5);
         zd2 = this.interpolate(currentTime, 5.5, 6.2, zd2, zd2-5);
         let [sxd2, syd2, szd2] = [1, 1, 1]
-        // sxd2 = this.interpolate(currentTime, 5.5, 6.2, sxd2, 0.01) // squish
+        // sxd2 = this.interpolate(currentTime, 5.5, 6, sxd2, 0.001) // squish
         let [rxd2, ryd2, rzd2, degreesd2] = [0, 1, 0, 180]
-        degreesd2 = this.interpolate(currentTime, 5.5, 6.2, degreesd2, 720) // rotate
+        degreesd2 = this.interpolate(currentTime, 5.5, 6.2, degreesd2, 1800) // rotate
         rxd2 = this.interpolate(currentTime, 5.5, 6.2, rxd2, 1)
+        ryd2 = this.interpolate(currentTime, 5.5, 6.2, ryd2, 0)
         rzd2 = this.interpolate(currentTime, 5.5, 6.2, rzd2, 1)
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", xd2, yd2, zd2, sxd2, syd2, szd2, rxd2, ryd2, rzd2, degreesd2); // fifth move, d4; gets captured later
         let [xe2, ye2, ze2] = chessToCoordinates("e2");
