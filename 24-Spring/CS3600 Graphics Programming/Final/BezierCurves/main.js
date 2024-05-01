@@ -19,7 +19,9 @@ async function main() {
 	if (!gl) {
 		alert('Your browser does not support WebGL');
 	}
-	gl.clearColor(0.04, 0.51, 0.51, 1.0);
+	
+	/* gl.clearColor(0.04, 0.51, 0.51, 1.0); */
+	gl.clearColor(1, 1, 1, 1);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	//
@@ -69,28 +71,25 @@ async function main() {
 	  
 	class Bezier {
 		constructor(points) {
-		  this.points = points; // An array of 4 Point2 objects
+		  this.points = points;
 		  this.color = [randomDouble(0, 1), randomDouble(0, 1), randomDouble(0, 1), 1];
 		}
 	  
 		evaluate(t) {
 		  const p0 = this.points[0],
 				p1 = this.points[1],
-				p2 = this.points[2],
-				p3 = this.points[3];
-	  
-		  const x = Math.pow(1 - t, 3) * p0.x +
-					3 * Math.pow(1 - t, 2) * t * p1.x +
-					3 * (1 - t) * Math.pow(t, 2) * p2.x +
-					Math.pow(t, 3) * p3.x;
-	  
-		  const y = Math.pow(1 - t, 3) * p0.y +
-					3 * Math.pow(1 - t, 2) * t * p1.y +
-					3 * (1 - t) * Math.pow(t, 2) * p2.y +
-					Math.pow(t, 3) * p3.y;
-	  
+				p2 = this.points[2];
+	
+		  const x = Math.pow(1 - t, 2) * p0.x +
+					2 * (1 - t) * t * p1.x +
+					Math.pow(t, 2) * p2.x;
+	
+		  const y = Math.pow(1 - t, 2) * p0.y +
+					2 * (1 - t) * t * p1.y +
+					Math.pow(t, 2) * p2.y;
+	
 		  return new Point2(x, y);
-		}
+		}	
 
 		drawCurve(gl, shaderProgram) {
 			const pointsForCurve = [];
@@ -131,11 +130,10 @@ async function main() {
 	let bezierCurves = [];
 
 	bezierCurves.push(new Bezier([
-        new Point2(-5, -5),
-        new Point2(-2, 5),
-        new Point2(2, -5),
-        new Point2(5, 5)
-    ]));
+		new Point2(-5, -5),
+		new Point2(0, 5),
+		new Point2(5, -5)
+	]));
 
 	/*
 	addEventListener("click", click);
@@ -183,9 +181,8 @@ async function main() {
 		addButton.addEventListener('click', () => {
 			const newPoints = [
 				new Point2(randomDouble(-curveOffset, curveOffset) - 5, randomDouble(-curveOffset, curveOffset) - 5),
-            	new Point2(randomDouble(-curveOffset, curveOffset) - 2, randomDouble(-curveOffset, curveOffset) + 5),
-            	new Point2(randomDouble(-curveOffset, curveOffset) + 2, randomDouble(-curveOffset, curveOffset) - 5),
-            	new Point2(randomDouble(-curveOffset, curveOffset) + 5, randomDouble(-curveOffset, curveOffset) + 5)
+				new Point2(randomDouble(-curveOffset, curveOffset), randomDouble(-curveOffset, curveOffset) + 5),
+				new Point2(randomDouble(-curveOffset, curveOffset) + 5, randomDouble(-curveOffset, curveOffset) - 5)
 			];
 			const newCurve = new Bezier(newPoints);
 			bezierCurves.push(newCurve);
