@@ -12,7 +12,8 @@ async function main() {
 		alert('Your browser does not support WebGL');
 	}
 
-	gl.clearColor(0.04, 0.51, 0.51, 1.0);
+	/* gl.clearColor(0.04, 0.51, 0.51, 1.0); */
+	gl.clearColor(1, 1, 1, 1);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	//
@@ -116,19 +117,29 @@ async function main() {
 	mat4.ortho(projectionMatrix, xlow, xhigh, ylow, yhigh, -1, 1);
 	gl.uniformMatrix4fv(projectionMatrixUniformLocation, false, projectionMatrix);
 
-	const NUM_CIRCLES = 12;
 	const circleList = [];
+
 	let tries = 0;
-	while(circleList.length<NUM_CIRCLES && tries < 10000){
+	const red = [1.0, 0.0, 0.0, 1.0];
+	while(circleList.length<5 && tries < 10000){
 		tries += 1;
 		const size=randomDouble(1,2);
 		const x=randomDouble(xlow+size, xhigh-size);
 		const y=randomDouble(ylow+size, yhigh-size);
-		AddNewCircle(x,y,size);
+		AddNewCircle(x,y,size,red);
 	}
 
-	function AddNewCircle(x,y,size){
-		const color = [myRandom(), myRandom(), myRandom(), 1];
+	tries = 0;
+	const green = [0.0, 1.0, 0.0, 1.0];
+	while(circleList.length<10 && tries < 10000){
+		tries += 1;
+		const size=randomDouble(1,2);
+		const x=randomDouble(xlow+size, xhigh-size);
+		const y=randomDouble(ylow+size, yhigh-size);
+		AddNewCircle(x,y,size,green);
+	}
+
+	function AddNewCircle(x,y,size,color){
 		let dx = randomDouble(1,3);
 		let dy = randomDouble(1,3);
 		if (myRandom()>.5)
@@ -137,15 +148,15 @@ async function main() {
 			dy = -dy;
 		const c = new Circle(color, x, y, dx, dy, size);
 		let intersect = false;
-		for(let i=0; i<circleList.length; i++){
-			const distance = (x-circleList[i].x)**2 + (y-circleList[i].y)**2;
-			if (distance < (size+circleList[i].size)**2){
+		for(let i = 0; i < circleList.length; i++){
+			const distance = (x - circleList[i].x) ** 2 + (y - circleList[i].y) ** 2;
+			if (distance < (size + circleList[i].size) ** 2){
 				intersect = true;
 				console.log("intersects");
 			}
 		}
 		if (!intersect){
-			circleList.push(c)
+			circleList.push(c);
 		}
 	}
 

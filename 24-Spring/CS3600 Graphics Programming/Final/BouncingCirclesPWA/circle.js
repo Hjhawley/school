@@ -28,7 +28,7 @@ class Circle{
     }
 
     update1(DT, xlow, xhigh, ylow, yhigh, circleList, me){        
-        const FLOOR_FRICTION = 0.75; // To stop it from "vibrating" on the floor
+        const FLOOR_FRICTION = 0.99; // To stop it from "vibrating" on the floor
         // ball-wall
         if (this.x+this.dx*DT+this.size > xhigh)
             this.dx = -Math.abs(this.dx);
@@ -48,8 +48,8 @@ class Circle{
             const nexty2 = circleList[j].y + circleList[j].dy*DT;
             const r2 = circleList[j].size;
             const distance = (nextx2-nextx1)**2 + (nexty2-nexty1)**2;
-            if (distance < (r1+r2)**2){
-                const COLLISION_FRICTION = 0.85
+            if (distance < (r1+r2)**2 && this.color == circleList[j].color){ // Check if colors are the same
+                const COLLISION_FRICTION = 0.85;
                 collideParticles(this, circleList[j], DT, COLLISION_FRICTION);
             }
         }
