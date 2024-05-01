@@ -56,7 +56,7 @@ class ChessSet {
 
         // Draw the white pieces
         let [xa1, ya1, za1] = chessToCoordinates("a1");
-        let [sxa1, sya1, sza1] = [1, 1, 1]
+        let [sxa1, sza1] = [1, 1]
         sxa1 = this.interpolate(currentTime, 4, 6, sxa1, 0.01); // scale white rook
         sza1 = this.interpolate(currentTime, 4, 6, sza1, 0.01); // scale white rook
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "rook", xa1, ya1, za1, sxa1, 1, sza1, 0, 1, 0, 180);
@@ -71,7 +71,6 @@ class ChessSet {
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("b2"), 1, 1, 1, 0, 1, 0, 180);
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("c2"), 1, 1, 1, 0, 1, 0, 180);
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("d2"), 1, 1, 1, 0, 1, 0, 180);
-        /* this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", ...chessToCoordinates("e2"), 1, 1, 1, 0, 1, 0, 180); */
         let [xe2, ye2, ze2] = chessToCoordinates("e2");
         ze2 = this.interpolate(currentTime, 1, 3, ze2, ze2-2); // white king's pawn forward 2
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "pawn", xe2, ye2, ze2, 1, 1, 1, 0, 1, 0, 180);
@@ -84,7 +83,11 @@ class ChessSet {
         this.drawPiece(gl, shaderProgram, this.blackTexture, "knight", ...chessToCoordinates("b8"), 1, 1, 1, 0, 1, 0, 0);
         this.drawPiece(gl, shaderProgram, this.blackTexture, "bishop", ...chessToCoordinates("c8"), 1, 1, 1, 0, 1, 0, 0);
         this.drawPiece(gl, shaderProgram, this.blackTexture, "queen", ...chessToCoordinates("d8"), 1, 1, 1, 0, 1, 0, 0);
-        this.drawPiece(gl, shaderProgram, this.blackTexture, "king", ...chessToCoordinates("e8"), 1, 1, 1, 0, 1, 0, 0);
+        let [xe8, ye8, ze8] = chessToCoordinates("e8");
+        let [rxe8, rye8, rze8, degreese8] = [1, 0, 0, 0];
+        degreese8 = this.interpolate(currentTime, 7, 9, degreese8, 90) // black king rotate forward
+        this.drawPiece(gl, shaderProgram, this.blackTexture, "king", xe8, ye8, ze8, 1, 1, 1, rxe8, rye8, rze8, degreese8);
+        
         this.drawPiece(gl, shaderProgram, this.blackTexture, "bishop", ...chessToCoordinates("f8"), 1, 1, 1, 0, 1, 0, 0);
         this.drawPiece(gl, shaderProgram, this.blackTexture, "knight", ...chessToCoordinates("g8"), 1, 1, 1, 0, 1, 0, 0);
         this.drawPiece(gl, shaderProgram, this.blackTexture, "rook", ...chessToCoordinates("h8"), 1, 1, 1, 0, 1, 0, 0);
