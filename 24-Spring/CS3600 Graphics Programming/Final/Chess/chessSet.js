@@ -55,7 +55,11 @@ class ChessSet {
         this.drawPiece(gl, shaderProgram, this.boardTexture, "cube", 0, 0, 0, 1, 1, 1, 0, 1, 0, 0);
 
         // Draw the white pieces
-        this.drawPiece(gl, shaderProgram, this.whiteTexture, "rook", ...chessToCoordinates("a1"), 1, 1, 1, 0, 1, 0, 180);
+        let [xa1, ya1, za1] = chessToCoordinates("a1");
+        let [sxa1, sya1, sza1] = [1, 1, 1]
+        sxa1 = this.interpolate(currentTime, 4, 6, sxa1, 0.01); // scale white rook
+        sza1 = this.interpolate(currentTime, 4, 6, sza1, 0.01); // scale white rook
+        this.drawPiece(gl, shaderProgram, this.whiteTexture, "rook", xa1, ya1, za1, sxa1, 1, sza1, 0, 1, 0, 180);
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "knight", ...chessToCoordinates("b1"), 1, 1, 1, 0, 1, 0, 180);
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "bishop", ...chessToCoordinates("c1"), 1, 1, 1, 0, 1, 0, 180);
         this.drawPiece(gl, shaderProgram, this.whiteTexture, "queen", ...chessToCoordinates("d1"), 1, 1, 1, 0, 1, 0, 180);
