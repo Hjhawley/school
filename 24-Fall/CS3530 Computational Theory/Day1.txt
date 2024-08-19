@@ -15,7 +15,8 @@ Key Concepts:
         Easier to compute
         Harder to compute
     Goal:
-        Assess the computability of a given problem by comparing it to other problems. This has practical implications for determining whether a problem is solvable.
+        Assess the computability of a given problem by comparing it to other problems.
+        This has practical implications for determining whether a problem is solvable.
     Pseudocode:
         This semester, pseudocode will be written on paper, not real code.
         Consider how to modularize your code.
@@ -27,40 +28,67 @@ Assignments and Exams:
 
 * * * * * * * * * * * * * * * * * * * *
 
-intro to formal systems and computation
-what are the fundamental capabilities and limitations of computers?
-what is a computation?
-"processing of information based on an algorithm (a finite set of operations or rules)"
-i.e. arithmetic, babbage wheels, ruler & comapass geometry instructions, digital computers, cells and DNA, the internet and other distributed systems
-for our purposes, our precide definition of a computation is: "processing information by unlimited application of a finite set of operations or rules"
+Introduction to Formal Systems and Computation
 
-"this must be hard because i cant do it"
-"this method seems right because its worked on every case i tried"
-"it ran once" / "it didnt run once"
-These are NOT proofs
+Fundamental Questions:
 
-we use formal mathematical language and we try to be as precise as we can. we are PROVING theorems
-positive - can be computed
-negative - cannot be computed
+    What are the capabilities and limitations of computers?
+    What is a computation?
 
-generality
-technology independent
-abstraction: ignore inessential details
+Definition of Computation:
 
-alphabet - a finite (but arbitrarily large) collection of symbols to work with: letters, digits, made up characters, etc
-strings - a finite (but arbitrarily large) concatenation of alphabet symbols, where order matters. ex: qaz, abbab. Epsilon (ε) indicates an empty string (length 0)
-inputs and outputs of computations are strings - we focus on DISCRETE computations
-computational problem or "task" - usually a yes/no question that has infinitely many instances.
-    examples - parity: given a string x, does it have an even number of a's? majority: given a string x, does it have more a's than b's?
-problems are defined extentionally. a problem is: the set of all instances of the question to which their answer is positive, the set of all question-answer pairs
+    The processing of information based on an algorithm (a finite set of operations or rules).
+        Examples include arithmetic, Babbage wheels, ruler and compass geometry, digital computers, DNA processes, the internet, etc.
+    For our purposes, computation is defined as: "processing information by the unlimited application of a finite set of operations or rules."
 
-<'Does "aabaaba" have an even number of a's?', 'No'>   <--- a question-answer pair
-if we are using the set {a, b}, how many questions are associated with this parity problem? Infinite! we can always add more characters to the string.
-But the answer is always either 'Yes' or 'No' and it can be solved programmatically.
+Common Misconceptions (Not Proofs):
 
-whatever can be computed can be written down.
-a language is any set of strings
-"solving a yes/no computational problem" <-> "determining if a string is in a given language"
-so, all strings in which there is an even number of a's is in that language.
-the language is all the "correct" answers. in the case of the parity problem, there is an infinite set of strings in that language.
-examples of languages: all words in the american heritage dictionary, all strings with an even number of a's, all syntactically correct C programs (counting 'space' and 'newline' as characters)
+    "This must be hard because I can't do it."
+    "This method seems right because it's worked on every case I tried."
+    "It ran once" / "It didn’t run once."
+
+Proofs:
+
+    We use formal mathematical language and strive for precision in proving theorems.
+    Positive results indicate a problem can be computed; negative results indicate it cannot.
+
+Generality in Computation:
+
+    Technology-independent.
+    Abstraction is used to ignore inessential details.
+
+Key Terms:
+
+    Alphabet:
+        A finite (but arbitrarily large) collection of symbols to work with, such as letters, digits, or made-up characters.
+
+    Strings:
+        A finite (but arbitrarily large) concatenation of alphabet symbols where order matters (e.g., 'qaz', 'abbab').
+        Epsilon (ε) indicates an empty string (length 0).
+
+    Inputs and Outputs:
+        In computations, inputs and outputs are strings, focusing on discrete computations.
+
+    Computational Problem (Task):
+        Typically a yes/no question with infinitely many instances.
+        Examples:
+            Parity Problem: Given a string x, does it have an even number of 'a's?
+            Majority Problem: Given a string x, does it have more 'a's than 'b's?
+        Problems are defined extensionally: a problem is the set of all instances of the question where the answer is positive
+        (i.e., the set of all question-answer pairs).
+
+    Question-Answer Pair:
+        Example: <'Does "aabaaba" have an even number of a's?', 'No'>
+        If we use the set {a, b}, the number of questions associated with the parity problem is infinite since more characters can always be added to the string.
+        However, the answer is always either 'Yes' or 'No' and can be solved programmatically.
+
+    Language:
+        A language is any set of strings.
+        "Solving a yes/no computational problem" is equivalent to "determining if a string is in a given language."
+        Example: In the parity problem, all strings with an even number of 'a's belong to the language of correct answers.
+        The language is an infinite set of strings that meet the condition (e.g., all strings with an even number of 'a's).
+
+    Examples of Languages:
+        All words in the American Heritage Dictionary.
+        All strings with an even number of 'a's.
+        All syntactically correct C programs (counting 'space' and 'newline' as characters).
