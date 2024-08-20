@@ -10,60 +10,69 @@ By the end of the course, students will be able to:
     Integrate third-party libraries into solutions for large software projects.
     Collaborate to solve large and complex problems.
 
-We will definitely cover planning & searching agents, NLP, and LLMs. Probably won't cover ML or CV.
+Topics Covered:
+    Planning & Searching Agents
+    Natural Language Processing (NLP)
+    Large Language Models (LLMs)
+Probably Not Covered:
+    Machine Learning (ML)
+    Computer Vision (CV)
 
-Assignments and Exams:
-    No exams; assignments due every week Thursday morning before class
+Grading:
+    Assignments are due every week on Thursday morning before class.
+    No exams in this course.
 
 * * * * * * * * * * * * * * * * * * * *
 
-WHAT IS AI?
-    The term encompasses lots and lots of things.
-    Some of the biggest fields and terms:
-    Recently "machine learning" ML has gotten a lot of attention and most people assume that's what AI is,
-    but really it's just a part of it.
-    Large language models LLMs are especially in the public eye. LLMs are trained WITH machine learning techniques
-    ChatGPT is powered by an LLM.
-    Natural language processing NLP is when text (or voice commands) are processed and turned into commands.
-    Siri is an example of this.
-    Image processing / computer vision CV is also a branch of AI and is trained with ML.
-    OCR is also part of this.
-    An "agent" is an entity with an objective to accomplish.
-    Outside of agentic AI you have "planning & searching", which encompasses things like video game "AIs."
-    These might have super rudimentary hard-coded functions compared to the complex capabilities of ML powered agents.
+What is AI?
 
-            THINK                                               ACT
+    The term "AI" covers a wide range of fields and techniques.
+    Key Areas:
+        Machine Learning (ML): A subset of AI that has recently gained significant attention. It's often mistaken as the entirety of AI.
+        Large Language Models (LLMs): A specific application of ML that powers systems like ChatGPT. LLMs are currently in the public eye.
+        Natural Language Processing (NLP): Processes text or voice commands into actionable instructions. Siri is an example.
+        Computer Vision (CV): Another branch of AI that involves image processing, often trained using ML techniques. Optical Character Recognition (OCR) is part of CV.
+        Agents: Entities with objectives, ranging from simple, hard-coded video game AIs to complex ML-powered systems.
 
-HUMAN-LIKE  * Limited by biochemistry, physiology, emotions     * Can pass the Turing Test (Natural conversation)
-            * Memory limitations                                * Makes decisions
-            * Maybe defined by principles of psychology?        * Not optimal
-            * We probably don't want this!
+AI Framework: Thinking and Acting
 
-RATIONAL    * Actions -> consequences                           * Comes to rational decisions and acts on them 
-            * "proof"                                           * THIS IS OUR GOAL 
-            * Math, logic, probabilities, statistics
+    Human-Like AI:
+        Thinking:
+            Limited by human biochemistry, physiology, and emotions.
+            Subject to memory limitations.
+            Possibly defined by psychological principles.
+        Acting:
+            Capable of natural conversation (e.g., passing the Turing Test).
+            Makes decisions, though not always optimal.
+            Note: Human-like AI is not necessarily the desired goal.
 
-Intelligent agents
+    Rational AI (Our Goal):
+        Thinking:
+            Considers actions and their consequences.
+            Relies on proof, using mathematics, logic, probabilities, and statistics.
+        Acting:
+            Makes rational decisions and acts on them.
 
-Agent / environment model
+Intelligent Agents
 
-    The environment is everything outside of the agent that it perceives.
-    For a self-driving car it's the road and weather conditions it can sense. For an LLM it's the user's input.
-    An agent has sensors to perceive, an agent function to process information, and actuators to perform actions.
-    A "percept" is something that an agent perceives. Percept is an abstraction, sensors are concrete.
-    Ex: "the car in front of me tapped its brakes" is a percept we want the agent to recognize.
-    The actuator is the concrete system that completes a more abstract action.
-    "I want to move forward" is an action. The actuator is what depresses the gas pedal.
-    The agent function decides to move and tells the actuator it wants to move, the actuator does the moving.
+    Agent/Environment Model:
+        The environment is everything outside the agent that it perceives. For example, a self-driving car's environment includes the road and weather conditions, while an LLM’s environment includes user input.
+        An agent has:
+            Sensors to perceive the environment.
+            An agent function to process information.
+            Actuators to perform actions.
+        A percept is something that an agent perceives (e.g., "the car in front of me tapped its brakes"). A percept is an abstraction, while sensors are concrete.
+        Action: The decision to perform a task, which is executed by an actuator (e.g., "I want to move forward" leads to the actuator depressing the gas pedal).
+        The agent function decides what action to take and instructs the actuator to execute it.
 
     Rationality:
-        Performance measure - how well is the agent performing its task? Must be judged against something
-        Prior knowledge
-        Possible actions
-        Percept sequence
-    
-    PEAS assessment:
-        Performance - client or stakeholders must agree to a performance measure so the agent does what they want
-        Environment - must understand all aspects of the environment as it pertains to the objective
-        Actuators - what tools are available for the agent to use?
-        Sensors - what tools are available for the agent to use?
+        Performance Measure: Evaluates how well the agent is performing its task, compared against a standard or goal.
+        Prior Knowledge: What the agent knows before acting.
+        Possible Actions: The options available to the agent.
+        Percept Sequence: The sequence of perceptions that informs the agent's decisions.
+
+    PEAS Assessment:
+        Performance: The client or stakeholders must agree on a performance measure to ensure the agent meets their objectives.
+        Environment: The agent must understand all relevant aspects of the environment to achieve its objective.
+        Actuators: The tools available to the agent to perform actions.
+        Sensors: The tools available to the agent to perceive the environment.
