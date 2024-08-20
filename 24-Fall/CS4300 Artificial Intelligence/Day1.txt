@@ -18,28 +18,52 @@ Assignments and Exams:
 * * * * * * * * * * * * * * * * * * * *
 
 WHAT IS AI?
-The term encompasses lots and lots of things.
-Some of the biggest fields and terms:
-Recently "machine learning" ML has gotten a lot of attention and most people assume that's what AI is,
-but really it's just a part of it.
-Large language models LLMs are especially in the public eye. LLMs are trained WITH machine learning techniques
-ChatGPT is powered by an LLM.
-Natural language processing NLP is when text (or voice commands) are processed and turned into commands.
-Siri is an example of this.
-Image processing / computer vision CV is also a branch of AI and is trained with ML.
-OCR is also part of this.
-An "agent" is an entity with an objective to accomplish.
-Outside of agentic AI you have "planning & searching", which encompasses things like video game "AIs."
-These might have super rudimentary hard-coded functions compared to the complex capabilities of ML powered agents.
+    The term encompasses lots and lots of things.
+    Some of the biggest fields and terms:
+    Recently "machine learning" ML has gotten a lot of attention and most people assume that's what AI is,
+    but really it's just a part of it.
+    Large language models LLMs are especially in the public eye. LLMs are trained WITH machine learning techniques
+    ChatGPT is powered by an LLM.
+    Natural language processing NLP is when text (or voice commands) are processed and turned into commands.
+    Siri is an example of this.
+    Image processing / computer vision CV is also a branch of AI and is trained with ML.
+    OCR is also part of this.
+    An "agent" is an entity with an objective to accomplish.
+    Outside of agentic AI you have "planning & searching", which encompasses things like video game "AIs."
+    These might have super rudimentary hard-coded functions compared to the complex capabilities of ML powered agents.
 
             THINK                                               ACT
 
-HUMAN-LIKE  Limited by biochemistry, physiology, emotions       Can pass the Turing Test (Natural conversation)
-            Memory limitations                                  Makes decisions (not always optimal)
-            Maybe defined by principles of psychology?
-            We probably don't want this!
+HUMAN-LIKE  * Limited by biochemistry, physiology, emotions     * Can pass the Turing Test (Natural conversation)
+            * Memory limitations                                * Makes decisions
+            * Maybe defined by principles of psychology?        * Not optimal
+            * We probably don't want this!
 
-RATIONAL    Actions -> consequences                             Comes to rational decisions and acts on them 
-            "proof"                                             THIS IS OUR GOAL 
-            Math, logic, probabilities, statistics
+RATIONAL    * Actions -> consequences                           * Comes to rational decisions and acts on them 
+            * "proof"                                           * THIS IS OUR GOAL 
+            * Math, logic, probabilities, statistics
 
+Intelligent agents
+
+Agent / environment model
+
+    The environment is everything outside of the agent that it perceives.
+    For a self-driving car it's the road and weather conditions it can sense. For an LLM it's the user's input.
+    An agent has sensors to perceive, an agent function to process information, and actuators to perform actions.
+    A "percept" is something that an agent perceives. Percept is an abstraction, sensors are concrete.
+    Ex: "the car in front of me tapped its brakes" is a percept we want the agent to recognize.
+    The actuator is the concrete system that completes a more abstract action.
+    "I want to move forward" is an action. The actuator is what depresses the gas pedal.
+    The agent function decides to move and tells the actuator it wants to move, the actuator does the moving.
+
+    Rationality:
+        Performance measure - how well is the agent performing its task? Must be judged against something
+        Prior knowledge
+        Possible actions
+        Percept sequence
+    
+    PEAS assessment:
+        Performance - client or stakeholders must agree to a performance measure so the agent does what they want
+        Environment - must understand all aspects of the environment as it pertains to the objective
+        Actuators - what tools are available for the agent to use?
+        Sensors - what tools are available for the agent to use?
