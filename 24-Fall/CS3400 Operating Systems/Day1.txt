@@ -1,1 +1,5 @@
 Operating Systems
+
+In this class, when we say OS we really mean "operating system kernel"
+
+xv6 is a little Unix-like kernel for educational purposes
