@@ -1,16 +1,45 @@
 Artificial Intelligence
 
 Course Overview:
-    
+    Introduces the broad field of artificial intelligence in computer software followed by specific applications in computer gaming strategies.
 
 By the end of the course, students will be able to:
-    
+    Construct solutions for a range of problems using search algorithms.
+    Infer problems that can be solved using propositional logic and build appropriate solutions.
+    Design and implement Bayesian networks.
+    Integrate third-party libraries into solutions for large software projects.
+    Collaborate to solve large and complex problems.
 
-Key Concepts:
-    
+We will definitely cover planning & searching agents, NLP, and LLMs. Probably won't cover ML or CV.
 
 Assignments and Exams:
-    
+    No exams; assignments due every week Thursday morning before class
 
 * * * * * * * * * * * * * * * * * * * *
+
+WHAT IS AI?
+The term encompasses lots and lots of things.
+Some of the biggest fields and terms:
+Recently "machine learning" ML has gotten a lot of attention and most people assume that's what AI is,
+but really it's just a part of it.
+Large language models LLMs are especially in the public eye. LLMs are trained WITH machine learning techniques
+ChatGPT is powered by an LLM.
+Natural language processing NLP is when text (or voice commands) are processed and turned into commands.
+Siri is an example of this.
+Image processing / computer vision CV is also a branch of AI and is trained with ML.
+OCR is also part of this.
+An "agent" is an entity with an objective to accomplish.
+Outside of agentic AI you have "planning & searching", which encompasses things like video game "AIs."
+These might have super rudimentary hard-coded functions compared to the complex capabilities of ML powered agents.
+
+            THINK                                               ACT
+
+HUMAN-LIKE  Limited by biochemistry, physiology, emotions       Can pass the Turing Test (Natural conversation)
+            Memory limitations                                  Makes decisions (not always optimal)
+            Maybe defined by principles of psychology?
+            We probably don't want this!
+
+RATIONAL    Actions -> consequences                             Comes to rational decisions and acts on them 
+            "proof"                                             THIS IS OUR GOAL 
+            Math, logic, probabilities, statistics
 
