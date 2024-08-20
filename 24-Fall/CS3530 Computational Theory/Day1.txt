@@ -1,6 +1,6 @@
 Computational Theory
-Course Overview:
 
+Course Overview:
     This course covers the theory of computation, focusing on finite-state automata, pushdown automata, Turing machines, and equivalent formalisms.
     Complexity theory is also introduced.
 
