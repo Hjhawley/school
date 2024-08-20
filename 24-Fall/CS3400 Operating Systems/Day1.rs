@@ -101,10 +101,13 @@ fn main() {
 
     // A fixed-size array
     let four_ints: [i32; 4] = [1, 2, 3, 4];
+    // Actual arrays are rarely used; arrays of different lengths are incompatible with each other
+    // because they take up a different amount of memory.
 
     // A dynamic array (vector)
     let mut vector: Vec<i32> = vec![1, 2, 3, 4];
     vector.push(5);
+    // Vectors are what are mostly used; an array that can grow and shrink dynamically.
 
     // A slice – an immutable view into a vector or array
     // This is much like a string slice, but for vectors
