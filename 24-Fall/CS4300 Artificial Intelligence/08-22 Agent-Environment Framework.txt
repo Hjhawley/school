@@ -1,0 +1,28 @@
+Agent-Environment Framework
+
+The environment is the setting that the agent is interacting with
+in order to solve some sort of problem that exists in that environment.
+
+The agent receives percepts through sensors, which we will abstract away for the sake of this class.
+The agent function handles decision-making.
+The agent uses actautors to affect the environment.
+
+Performance: The client or stakeholders must agree on a performance measure to ensure the agent meets their objectives.
+Environment: The agent must understand all relevant aspects of the environment to achieve its objective.
+Actuators: The tools available to the agent to perform actions.
+Sensors: The tools available to the agent to perceive the environment.
+
+Environment Properties:
+    Observability (fully vs partial) ex: a chess bot has a fully observable environment; a bot playing a strategy game with fog of war has only partial visibility.
+    Deterministic vs non Deterministic (Stochastic) - refers to the effects of the agent's actions. in chess, a move is completely deterministic; a legal move will always behave the same way. However, if it's a ROBOT moving a physical chess piece in the real world, there is some non-determinism; what if the piece got dropped?
+    Episodic vs sequential - episodic is when every agent action is isolated in a single instance. sequential is when the agent recevies more information in the same instance of the environment after each action.
+    static vs dynamic - does the environment change or not *when the agent isn't doing anything*? ex: a chess board is static, a road is dynamic.
+    discrete vs continuous - integers vs decimal numbers.
+    single vs multiple agent - how many agents are in the environment? ex: chess is a 2-agent environment. You could also just consider these part of the dynamic environment.
+    known vs unknown - "what does this button do?" the agent might need to do some "button mashing" to learn what does what. Account for unknowns when describing an environment
+
+Ideal environment for ease of development: fully observable, deterministic, episodic, static, discrete, single-agent, with known variables. We try to abstract environments into this state when we can.
+Obviously, this isn't always possible, but we try.
+
+Rationality should be measured as the average performance measure of an agent over a large number of instances from an environment class.
+
