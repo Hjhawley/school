@@ -26,3 +26,58 @@ Obviously, this isn't always possible, but we try.
 
 Rationality should be measured as the average performance measure of an agent over a large number of instances from an environment class.
 
+Table-Driven Agent:
+    A table with all possible percept sequences as keys, mapped to actions as values.
+    Problems: this can get exponentially large with a large number of values.
+    This is completely impossible in a continuous environment.
+    But with a simple, discrete environment with few variables, it can provide a good amount of control.
+    Cannot deal with unknowns; it can't record what it learned by button-mashing.
+
+Simple Reflex Agent:
+    Kind of the opposite of a table driven agent.
+    Does not keep track of the entire percept history; makes a decision based on what the environment state is RIGHT NOW.
+    Condition-action rules; still uses if-else statements but doesn't rely on large permutations of percept history.
+    Example: wasp experiment: a wasp neutralizing its prey to feed to its young, but when researchers drag the prey away it forgets what step of the process it was in. It only acts reflexively based on its immediate environment.
+    Having no history can cause problems of its own, but it can be useful in some instances.
+
+Model Based Reflex Agent:
+    More sophisticated but more difficult to implement.
+    - "What is the world like right now?"
+        - Update state 
+        - See how the world changes
+        - What do my actions do
+    - THEN go to condition-action rules and act
+    Ex: if the wasp was capable of remembering "i already grabbed that caterpillar, I don't need to keep checking my nest, I can just drag it in there"
+
+Model Based Goal Agent:
+    Much more sophisticated but also more difficult.
+    The agent is looking forward to a goal; uses what-if scenarios. "What if i did action C followed by action A?"
+    It is seeking a specific win condition and finds a way there.
+    - "What is the world like right now? What will the world be like next?"
+        - Update state 
+        - See how the world changes
+        - What do my actions do
+    - Goals
+    - What should I do now?
+    More effective at dealing with continuous environments.
+
+Model Based Utility Agent:
+    Instead of saying "is this a goal state or not" it RANKS the utility of all potential states.
+    - "What is the world like right now? What will the world be like next?"
+        - Update state 
+        - See how the world changes
+        - What do my actions do
+    - How happy will I be then?
+        - Utility rating
+    - What should I do now?
+
+Learning Agent:
+    All the agents we have discussed until now CAN be hand-crafted by a developer OR influenced by learning elements.
+    Ex: a learning table-driven agent can rewrite its own table as it gains experience, based on the performance measure.
+    - Critic -> feedback
+    - Learning element provides changes to performance element, and sends learning goals to problem generator
+    - Performance element provides knowledge to learning element
+    - Problem Generator
+    Most of machine learning is embedded beneath this idea.
+
+Ask, "What is the simplest of these agent implementations that will work for my problem?"
