@@ -1,0 +1,44 @@
+The task: Read a file of text, determine the n most frequently used words, and print out a sorted list of those words along with their frequencies.
+
+McIlroy’s solution, which despite the passing of time is still a beautifully elegant illustration of why Unix is timeless.
+
+```
+tr -cs A-Za-z '\n' |
+tr A-Z a-z |
+sort |
+uniq -c |
+sort -rn |
+sed ${1}q
+```
+
+The code is self-explanatory if you are familiar with basic Unix command-line tools. The pipeline just transforms data starting from standard input until the desired result is computed.
+
+What is beautiful about the code is that it decomposes the solution to intuitively and does not require any mutable state. McIlroy’s program is a purely functional program.
+
+Breakdown:
+
+    tr -cs A-Za-z '\n':
+        tr stands for "translate" or "transform."
+        -cs A-Za-z '\n':
+            -c: Complements the set of characters, meaning it matches anything not in A-Za-z (non-alphabetic characters).
+            -s: Squeezes (replaces multiple consecutive occurrences with a single one) the matched characters.
+            A-Za-z: Specifies the alphabetic characters (both uppercase and lowercase).
+            \n: Replaces any non-alphabetic characters with a newline.
+        This step cleans up the input text by converting any sequence of non-alphabetic characters into a newline, effectively splitting the text into individual words.
+
+    tr A-Z a-z:
+        Converts all uppercase letters to lowercase. This ensures that words are case-insensitive (e.g., "Word" and "word" are treated as the same word).
+
+    sort:
+        Sorts the words alphabetically.
+
+    uniq -c:
+        uniq removes duplicate lines (adjacent duplicates only), but when combined with -c, it prefixes each unique line with the number of occurrences.
+        This step counts how many times each word appears in the text.
+
+    sort -rn:
+        Sorts the words numerically (-n) and in reverse order (-r), so the most frequent words appear first.
+
+    sed ${1}q:
+        sed is a stream editor. ${1}q tells it to quit after printing the first n lines (where n is the value of the first command-line argument, ${1}).
+        This step limits the output to the top n words, as required by the task.
