@@ -1,83 +1,93 @@
 Agent-Environment Framework
+The Agent-Environment Framework is a fundamental concept in AI, where the agent interacts with its environment to solve problems.
+The agent perceives the environment through sensors and acts upon it using actuators to achieve its objectives.
+The effectiveness of the agent is measured by a performance measure agreed upon by stakeholders.
 
-The environment is the setting that the agent is interacting with
-in order to solve some sort of problem that exists in that environment.
+Key Components:
 
-The agent receives percepts through sensors, which we will abstract away for the sake of this class.
-The agent function handles decision-making.
-The agent uses actautors to affect the environment.
+    Agent:
+        Sensors: Tools used by the agent to perceive the environment.
+        Actuators: Tools used by the agent to take actions in the environment.
+        Agent Function: The decision-making process that determines the actions the agent takes based on percepts.
 
-Performance: The client or stakeholders must agree on a performance measure to ensure the agent meets their objectives.
-Environment: The agent must understand all relevant aspects of the environment to achieve its objective.
-Actuators: The tools available to the agent to perform actions.
-Sensors: The tools available to the agent to perceive the environment.
+    Environment:
+        The setting or context in which the agent operates. The agent must understand all relevant aspects of the environment to achieve its objectives.
+
+    Performance Measure:
+        A criterion used to evaluate the success of the agent in fulfilling its goals. This measure must be agreed upon by clients or stakeholders to ensure the agent meets their objectives.
 
 Environment Properties:
-    Observability (fully vs partial) ex: a chess bot has a fully observable environment; a bot playing a strategy game with fog of war has only partial visibility.
-    Deterministic vs non Deterministic (Stochastic) - refers to the effects of the agent's actions. in chess, a move is completely deterministic; a legal move will always behave the same way. However, if it's a ROBOT moving a physical chess piece in the real world, there is some non-determinism; what if the piece got dropped?
-    Episodic vs sequential - episodic is when every agent action is isolated in a single instance. sequential is when the agent recevies more information in the same instance of the environment after each action.
-    static vs dynamic - does the environment change or not *when the agent isn't doing anything*? ex: a chess board is static, a road is dynamic.
-    discrete vs continuous - integers vs decimal numbers.
-    single vs multiple agent - how many agents are in the environment? ex: chess is a 2-agent environment. You could also just consider these part of the dynamic environment.
-    known vs unknown - "what does this button do?" the agent might need to do some "button mashing" to learn what does what. Account for unknowns when describing an environment
 
-Ideal environment for ease of development: fully observable, deterministic, episodic, static, discrete, single-agent, with known variables. We try to abstract environments into this state when we can.
-Obviously, this isn't always possible, but we try.
+    Observability:
+        Fully Observable: The agent has complete visibility of the environment (e.g., a chess bot).
+        Partially Observable: The agent has limited visibility of the environment (e.g., a bot playing a strategy game with a fog of war).
 
-Rationality should be measured as the average performance measure of an agent over a large number of instances from an environment class.
+    Determinism:
+        Deterministic: The outcome of actions is predictable (e.g., making a legal move in chess).
+        Stochastic (Non-Deterministic): The outcome of actions is uncertain (e.g., a robot moving a chess piece could drop it).
 
-Table-Driven Agent:
-    A table with all possible percept sequences as keys, mapped to actions as values.
-    Problems: this can get exponentially large with a large number of values.
-    This is completely impossible in a continuous environment.
-    But with a simple, discrete environment with few variables, it can provide a good amount of control.
-    Cannot deal with unknowns; it can't record what it learned by button-mashing.
+    Episodic vs. Sequential:
+        Episodic: Actions are independent, with each episode isolated (e.g., image classification tasks).
+        Sequential: Actions are interconnected, where each action can affect future perceptions and decisions (e.g., playing a game of chess).
 
-Simple Reflex Agent:
-    Kind of the opposite of a table driven agent.
-    Does not keep track of the entire percept history; makes a decision based on what the environment state is RIGHT NOW.
-    Condition-action rules; still uses if-else statements but doesn't rely on large permutations of percept history.
-    Example: wasp experiment: a wasp neutralizing its prey to feed to its young, but when researchers drag the prey away it forgets what step of the process it was in. It only acts reflexively based on its immediate environment.
-    Having no history can cause problems of its own, but it can be useful in some instances.
+    Static vs. Dynamic:
+        Static: The environment does not change when the agent is not acting (e.g., a chess board).
+        Dynamic: The environment changes even when the agent is inactive (e.g., a busy street).
 
-Model Based Reflex Agent:
-    More sophisticated but more difficult to implement.
-    - "What is the world like right now?"
-        - Update state 
-        - See how the world changes
-        - What do my actions do
-    - THEN go to condition-action rules and act
-    Ex: if the wasp was capable of remembering "i already grabbed that caterpillar, I don't need to keep checking my nest, I can just drag it in there"
+    Discrete vs. Continuous:
+        Discrete: A finite number of distinct states (e.g., turn-based games).
+        Continuous: An infinite number of states or a continuous range of values (e.g., robot navigation).
 
-Model Based Goal Agent:
-    Much more sophisticated but also more difficult.
-    The agent is looking forward to a goal; uses what-if scenarios. "What if i did action C followed by action A?"
-    It is seeking a specific win condition and finds a way there.
-    - "What is the world like right now? What will the world be like next?"
-        - Update state 
-        - See how the world changes
-        - What do my actions do
-    - Goals
-    - What should I do now?
-    More effective at dealing with continuous environments.
+    Single vs. Multi-Agent:
+        Single-Agent: Only one agent interacts with the environment (e.g., a solo puzzle game).
+        Multi-Agent: Multiple agents interact with the environment, possibly competing or cooperating (e.g., chess, multiplayer video games).
 
-Model Based Utility Agent:
-    Instead of saying "is this a goal state or not" it RANKS the utility of all potential states.
-    - "What is the world like right now? What will the world be like next?"
-        - Update state 
-        - See how the world changes
-        - What do my actions do
-    - How happy will I be then?
-        - Utility rating
-    - What should I do now?
+    Known vs. Unknown:
+        Known: The agent knows the effects of all actions in advance (e.g., a pre-defined rule-based system).
+        Unknown: The agent must explore and learn the effects of actions (e.g., trial and error in an unfamiliar environment).
 
-Learning Agent:
-    All the agents we have discussed until now CAN be hand-crafted by a developer OR influenced by learning elements.
-    Ex: a learning table-driven agent can rewrite its own table as it gains experience, based on the performance measure.
-    - Critic -> feedback
-    - Learning element provides changes to performance element, and sends learning goals to problem generator
-    - Performance element provides knowledge to learning element
-    - Problem Generator
-    Most of machine learning is embedded beneath this idea.
+Agent Types:
 
-Ask, "What is the simplest of these agent implementations that will work for my problem?"
+    Table-Driven Agent:
+        Description: Uses a precomputed table mapping percept sequences to actions.
+        Pros: Simple control in discrete environments with limited variables.
+        Cons: Infeasible in complex or continuous environments due to the exponential growth of the table. Cannot adapt to unknowns.
+
+    Simple Reflex Agent:
+        Description: Makes decisions based on the current percept, using condition-action rules. It does not store the history of percepts.
+        Pros: Effective in simple environments where past states do not matter.
+        Cons: Fails in environments where history or context is essential (e.g., the wasp experiment where the wasp forgets its previous actions).
+
+    Model-Based Reflex Agent:
+        Description: Maintains an internal state to track changes in the environment and uses this state to inform decisions.
+        Pros: Can handle partially observable environments by remembering previous states.
+        Cons: More complex to implement and requires accurate modeling of the environment.
+
+    Goal-Based Agent:
+        Description: Considers future states to achieve specific goals. It uses a model of the environment to evaluate potential actions based on their outcomes.
+        Pros: Effective in dynamic environments where the agent must plan ahead.
+        Cons: Computationally intensive due to the need to evaluate multiple possible future states.
+
+    Utility-Based Agent:
+        Description: Evaluates actions based on a utility function that ranks states by their desirability, rather than just achieving a goal.
+        Pros: Provides a nuanced decision-making process that balances different objectives.
+        Cons: Requires a well-defined utility function, which may be difficult to design.
+
+    Learning Agent:
+        Description: An agent that can improve its performance over time through learning from experience. It consists of several components:
+            Critic: Evaluates the agent's actions against the performance measure.
+            Learning Element: Adjusts the agent's behavior based on feedback from the critic.
+            Performance Element: Executes actions in the environment.
+            Problem Generator: Suggests exploratory actions to discover new strategies.
+        Pros: Can adapt to unknown environments and improve with experience.
+        Cons: Requires a learning process, which can be slow and may involve trial and error.
+
+Ideal Environment for Development:
+    Fully observable, deterministic, episodic, static, discrete, single-agent, and with known variables.
+    These properties simplify the development process by reducing the complexity of the environment, allowing for easier implementation and testing of agents.
+
+Rationality is the measure of how well an agent performs, averaged over many instances within an environment class.
+An agent is considered rational if it maximizes the expected performance measure.
+
+Always ask, "What is the simplest agent that can solve my problem effectively?"
+The complexity of the agent should match the complexity of the environment and the problem it needs to solve.
