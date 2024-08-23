@@ -1,0 +1,36 @@
+Alphabets are a finite but non-empty set of symbols, usually denoted by ∑
+Strings are a finite numver of symbols joined together in a sequence
+Empty string denoted by ε
+∑* is the set of ALL strings over alphabet ∑
+    For ex: {a,b}* = {ε,a,b,aa,ab,ba,bb,aaa...}
+The length of a string x is written as |x|
+    |abba| = 4 
+    |ab| = 2
+    |ε| = 0
+
+Concantenation of strings
+    written as x • y or just xy
+    x = aa, y = b → xy = aab
+Reversal of a string is a superscripted R
+    x = abc → x^R = cba
+
+A language L over some alphabet ∑ is a set of strings over ∑
+    L ⊆ ∑*
+    A language can be finite or infinite and does not require a discernible pattern.
+    Any YES/NO problem can be cast as a language.
+    Ex: the set of strings x ∈ {a,b}* such that x has an even number of a's.
+
+ε the empty STRING
+∅ the empty SET
+
+The concatenation of the empty set ∅ with any other set is ∅ (it's like multiplying by zero)
+
+Kleene star *
+A set operation meaning all strings that can be produced by concatenating any number of symbols from the original language.
+    {aa}* = {ε,aa,aaaa,...}
+
+RECAP
+Alphabet - 
+Language - 
+String - 
+Set - 
