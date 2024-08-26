@@ -1,0 +1,129 @@
+%
+% Assignment 0b for CS3530 Computational Theory:
+% LaTeX
+% Fall 2024
+%
+% Problems taken from Sipser
+%
+
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{ae,aecompl}
+\usepackage{emp,ifpdf}
+\usepackage{graphicx}
+
+\ifpdf\DeclareGraphicsRule{*}{mps}{*}{}\fi
+
+\empprelude{input boxes; input theory}
+
+% skip for paragraphs, don't indent
+\addtolength{\parskip}{0.5\baselineskip}
+\parindent=0pt
+
+\begin{document}
+\begin{empfile}
+
+\begin{center}
+\textbf{\Large CS 3530: Assignment 0b} \\[2mm]
+Fall 2024
+
+\emph{Hayden Hawley}
+\end{center}
+
+\raggedright
+
+\section*{Exercise 0.1def (6 points)}
+
+\subsection*{Problem}
+
+Examine the following formal descriptions of sets so that you understand which members they contain.  Write a short informal English description of each set.
+
+\begin{itemize}
+\item[d.] $\{ n | n = 2m $ for some $m$ in $\mathbb{N}$, and $n = 3k$ for some $k$ in $\mathbb{N} \}$
+
+\textbf{Solution}
+
+The set of all numbers n where n is a multiple of both 2 and 3.
+
+\item[e.] $\{ w | w $ is a string of $0$s and $1$s and $w$ equals the reverse of $w \}$
+
+\textbf{Solution}
+
+The set of all numbers w where w is a palindrome made of 1's and 0's.
+
+\item[f.] $\{ n | n $ is an integer and $n = n + 1 \}$
+
+\textbf{Solution}
+
+The set of all numbers n where n is 1 greater than itself (impossible; this is an empty set)
+
+\end{itemize}
+
+\section*{Exercise 0.2b (2 points)}
+
+\subsection*{Problem}
+
+Write formal descriptions of the following sets.
+
+\begin{itemize}
+\item[b.] The set containing all integers that are greater than 5.
+
+\textbf{Solution}
+
+\{n \mid n \in \mathbb{Z}, \, n > 5\}
+
+\end{itemize}
+
+\section*{Exercise 0.3abcdef (12 points)}
+
+\subsection*{Problem}
+
+Let $A$ be the set $\{ x, y, z \}$ and $B$ be the set $\{ x, y \}$.
+
+\begin{itemize}
+\item[a.] Is $A$ a subset of $B$?
+
+\textbf{Solution}
+
+No, z is not part of B
+
+\item[b.] Is $B$ a subset of $A$?
+
+\textbf{Solution}
+
+Yes
+
+\item[c.] What is $A \cup B$?
+
+\textbf{Solution}
+
+$A \cup B$ = \{x, y, z\}
+
+\item[d.] What is $A \cap B$?
+
+\textbf{Solution}
+
+$A \cap B$ = \{x, y\}
+
+\item[e.] What is $A \times B$?
+
+\textbf{Solution}
+
+$A \times B$ = \{(x, x), (x, y), (y, x), (y, y), (z, x), (z, y)\}
+
+\item[f.] What is the power set of $B$?
+
+\textbf{Solution}
+
+The set of all subsets of $B$, which is: \{\emptyset, \{x\}, \{y\}, \{x, y\}\}.
+
+\end{itemize}
+
+\end{empfile}
+\immediate\write18{mpost -tex=latex \jobname}
+\end{document}

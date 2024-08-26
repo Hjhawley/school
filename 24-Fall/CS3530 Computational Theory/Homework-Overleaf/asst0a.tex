@@ -1,0 +1,79 @@
+%
+% Assignment 0a for CS3530 Computational Theory:
+% LaTeX
+% Fall 2024
+%
+% Problems taken from Sipser
+%
+
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{ae,aecompl}
+\usepackage{emp,ifpdf}
+\usepackage{graphicx}
+
+\ifpdf\DeclareGraphicsRule{*}{mps}{*}{}\fi
+
+\empprelude{input boxes; input theory}
+
+% skip for paragraphs, don't indent
+\addtolength{\parskip}{0.5\baselineskip}
+\parindent=0pt
+
+\begin{document}
+\begin{empfile}
+
+\begin{center}
+\textbf{\Large CS 3530: Assignment 0a} \\[2mm]
+Fall 2024
+
+\emph{Hayden Hawley}
+\end{center}
+
+\raggedright
+
+\section*{LaTeX Setup (10 points)}
+
+\subsection*{Problem}
+
+%%%Follow the instructions for setting up your GitHub repository and connecting it to Overleaf. Build a PDF file from this source file.
+Find and follow the instructions for setting up Overleaf. Build a PDF file from this source file.
+
+\section*{Exercise 0.1a (5 points)}
+
+\subsection*{Problem}
+
+Examine the following formal descriptions of sets so that you understand which members they contain.  Write a short informal English description of each set.
+
+\begin{itemize}
+\item[a.] $\{ 1, 3, 5, 7, ...\}$
+
+\textbf{Solution}
+
+All odd positive integers.
+
+\end{itemize}
+
+\section*{Exercise 0.2a (5 points)}
+
+\subsection*{Problem}
+
+Write formal descriptions of the following sets.
+
+\begin{itemize}
+\item[a.] The set containing the numbers 1, 10, and 100.
+
+\textbf{Solution}
+
+\{1,10,100\}
+
+\end{itemize}
+
+\end{empfile}
+\immediate\write18{mpost -tex=latex \jobname}
+\end{document}

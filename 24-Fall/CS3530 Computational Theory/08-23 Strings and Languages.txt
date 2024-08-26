@@ -29,8 +29,9 @@ Kleene star *
 A set operation meaning all strings that can be produced by concatenating any number of symbols from the original language.
     {aa}* = {ε,aa,aaaa,...}
 
-RECAP
-Alphabet - 
-Language - 
-String - 
-Set - 
+Alphabet ∑: A finite set of symbols.
+String: A finite sequence of symbols from an alphabet.
+    Empty String ε
+Language L: A set of strings over an alphabet, which can be finite or infinite.
+Set: A collection of distinct elements, which in this context typically refers to strings or symbols.
+    Empty Set ∅ = {}
