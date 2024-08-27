@@ -1,74 +1,38 @@
-Ch 0.2,0.3
+Computational Models:
 
-What is a computer? First try a "mathematical automaton".
+    Finite Automata:
+        Head scans left to right.
+        Checks simple patterns.
+        Uses finite table lookup.
+        Cannot count without a limit.
 
-Finite Automata
-    Head scans left to right
-    Check simle patterns
-    Finite table lookup
-    Can't count without limit
+    Pushdown Automata:
+        Finite control plus a stack.
+        Uses stack for counting and balancing parentheses.
+        Can check many syntax rules.
 
-Pushdown Automata
-    Finite control + stack
-    Uses stack to count, balance parentheses
-    Check many syntax rules
+    Turing Machine:
+        Finite control with a head that moves left and right.
+        Can read and write.
+        Equivalent to a modern computer.
 
-Turing Machine
-    Control is still finite
-    Head moves left AND right
-    Can read AND write
-    Basically equivalent to a modern computer
+Set Theory:
 
-* * * * * * * * * * * * * * * * * * * *
+    Sets: Defined by their members. A=BA=B means every element in AA is also in BB and vice versa.
+    Cardinality: Sets can be finite or infinite. The empty set has a cardinality of zero.
+    Subsets: A⊆BA⊆B means every element in AA is also in BB.
 
-Sets are defined by their members.
-A = B means that for every x, x ∈ A iff x ∈ B.
-"iff" = "if and only if"
+Functions:
 
-Cardinality - sets can be finite or infinite 
-The empty set 0 has cardinality zero
+    A function maps an input to an output, consistently producing the same output for the same input.
+    Domain and Range: The domain is the set of possible inputs, and the range is the set of possible outputs.
+    Injective (1-1): Each element of the domain maps to a unique element of the range.
+    Surjective (Onto): Every element of the range has a corresponding element in the domain.
+    Bijective: A function that is both injective and surjective.
 
-A subset is a set whose members are contained in another set.
-A ⊆ B means that for every x, x ∈ A ⇒ x ∈ B.
-{1,3,5,7...} ⊆ W    This set is a subset of all whole numbers
-{0,2,4,6...} ⊄ N    This set is NOT a subset of all natural numbers
+Set Operations:
 
-Functions are central to mathematics. A function is an object that sets up an
-input–output relationship. A function takes an input and produces an output.
-In every function, the same input always produces the same output. If f is a
-function whose output value is b when the input value is a, we write
-
-f (a) = b.
-
-A function also is called a mapping, and, if f (a) = b, we say that f maps a to b.
-For example, the absolute value function abs takes a number x as input and
-returns x if x is positive and −x if x is negative.
-Thus abs(2) = abs(−2) = 2.
-Addition is another example of a function, written add. The input to the 
-addition function is an ordered pair of numbers, and the output is the sum of
-those numbers.
-The set of possible inputs to the function is called its domain. The outputs 
-of a function come from a set called its range. The notation for saying that f is
-a function with domain D and range R is
-
-f : D−→R.
-
-In the case of the function abs, if we are working with integers, the domain and 
-the range are Z, so we write abs : Z−→Z. In the case of the addition function 
-for integers, the domain is the set of pairs of integers Z×Zand the range is Z,
-so we write add : Z× Z−→ Z. Note that a function may not necessarily use all 
-the elements of the specified range. The function abs never takes on the value
-−1 even though −1 ∈Z. A function that does use all the elements of the range 
-is said to be onto the range
-
-Alternative common terminology for these types of functions is injective for
-one-to-one, surjective for onto, and bijective for one-to-one and onto.
-
-Injective ("1-1"): every member of S is mapped to some member of T 
-Surjective ("Onto"): every member of T has some member of S mapped to it
-Bijective : 1-1 AND onto; correspondence
-
-The union of A and B, written A ∪ B, is the set we get by combining all the elements in A and B into a single set.
-The intersection of A and B, written A ∩ B, is the set of elements that are in BOTH A and B.
-The complement of A, written Ā, is the set of all elements under consideration that are NOT in A.
-A - B means "everything in A that is NOT in B"
+    Union (A ∪ B): Combines all elements of A and B.
+    Intersection (A ∩ B): Elements common to both A and B.
+    Complement (Ā): Elements not in A.
+    Difference (A - B): Elements in A that are not in B.

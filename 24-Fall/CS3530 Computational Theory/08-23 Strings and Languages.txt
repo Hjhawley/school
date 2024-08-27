@@ -1,37 +1,24 @@
-Alphabets are a finite but non-empty set of symbols, usually denoted by ∑
-Strings are a finite numver of symbols joined together in a sequence
-Empty string denoted by ε
-∑* is the set of ALL strings over alphabet ∑
-    For ex: {a,b}* = {ε,a,b,aa,ab,ba,bb,aaa...}
-The length of a string x is written as |x|
-    |abba| = 4 
-    |ab| = 2
-    |ε| = 0
+Alphabets and Strings:
 
-Concantenation of strings
-    written as x • y or just xy
-    x = aa, y = b → xy = aab
-Reversal of a string is a superscripted R
-    x = abc → x^R = cba
+    Alphabet (∑): A finite, non-empty set of symbols.
+    String: A finite sequence of symbols from an alphabet.
+    Empty String (ε): A string with no symbols, denoted by ε.
+    Set of All Strings (∑*): The set of all possible strings over an alphabet ∑, including the empty string.
 
-A language L over some alphabet ∑ is a set of strings over ∑
-    L ⊆ ∑*
-    A language can be finite or infinite and does not require a discernible pattern.
-    Any YES/NO problem can be cast as a language.
-    Ex: the set of strings x ∈ {a,b}* such that x has an even number of a's.
+String Operations:
 
-ε the empty STRING
-∅ the empty SET
+    Length of a String (|x|): The number of symbols in the string.
+    Concatenation: Joining two strings x and y to form a new string (e.g., if x = "aa" and y = "b", then xy = "aab").
+    Reversal: The reverse of a string x is denoted by x^R (e.g., if x = "abc", then x^R = "cba").
 
-The concatenation of the empty set ∅ with any other set is ∅ (it's like multiplying by zero)
+Languages:
 
-Kleene star *
-A set operation meaning all strings that can be produced by concatenating any number of symbols from the original language.
-    {aa}* = {ε,aa,aaaa,...}
+    Language (L): A set of strings over an alphabet, which can be finite or infinite. Languages do not require a discernible pattern.
+    Language as a Subset: A language L is a subset of ∑*.
+    Kleene Star (*): A set operation producing all possible strings by concatenating any number of symbols from the original set (e.g., {aa}* = {ε, aa, aaaa, ...}).
 
-Alphabet ∑: A finite set of symbols.
-String: A finite sequence of symbols from an alphabet.
-    Empty String ε
-Language L: A set of strings over an alphabet, which can be finite or infinite.
-Set: A collection of distinct elements, which in this context typically refers to strings or symbols.
-    Empty Set ∅ = {}
+Special Symbols:
+
+    ε: The empty string.
+    ∅: The empty set.
+    The concatenation of the empty set ∅ with any other set results in ∅.

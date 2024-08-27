@@ -1,34 +1,34 @@
-Proofs
+Proofs:
 
-A proof is a formal argument of the truth og some mathematical starement
-formal means that the successive statements are unambiguous, and the steps interlock in a logical vise grip
-formal also means that the argument could in principle be put in syntax that a machine could check
+    A proof is a formal argument demonstrating the truth of a mathematical statement.
+    Formal Argument:
+        Successive statements are clear and unambiguous.
+        The steps are logically interconnected.
+        The argument could, in theory, be checked by a machine.
 
-Why do we do proofs?
+Purpose of Proofs:
 
-To be absolutely sure that the statement is true
-for example it is commonly believed there is no fast correct algorithm for the TSP, but until someone PROVES it we wont know to stop looking
-To understand why iy is true, so we can tell whether it can be extended or restricted and still remain rtrue
-So we can solve a problem associated with the proposition. The proof steps themselves give us insight into the problem.
+    Certainty: To be absolutely certain that a statement is true. Example: Proving there is no fast correct algorithm for the Traveling Salesman Problem (TSP) would confirm that continued searching is futile.
+    Understanding: To understand why a statement is true, which helps in determining if it can be extended or restricted.
+    Problem Solving: The steps in the proof can provide insights into solving related problems.
 
-For example:
+Example Proof:
 
-Prove that the negation of (A ∪ B) is a subset of the negation of A ∩ the negation of B
-Let p be any member of ¬(A ∪ B)
-p ∈ ¬(A ∪ B)
-p ∉ (A ∪ B)
-p ∉ A and p ∉ B
-p ∈ ¬A and p ∈ ¬B
-Therefore, p ∈ ¬A ∩ ¬B
-Now we need to prove the other side.
-Let q be any member of ¬A ∩ ¬B
-q ∈ ¬A ∩ ¬B
-q ∈ ¬A and q ∈ ¬B
-q ∉ A and q ∉ B
-q ∉ (A ∪ B)
-Any member of ¬A ∩ ¬B is also a member of ¬(A ∪ B)
-Because ¬A ∩ ¬B ⊆ ¬(A ∪ B)
-and ¬(A ∪ B) ⊆ ¬A ∩ ¬B,
-¬A ∩ ¬B = ¬(A ∪ B)
-
-This is our complete proof.
+    Prove that the negation of (A ∪ B) is a subset of the negation of A ∩ the negation of B
+        Let p be a member of ¬(A ∪ B)
+        p ∈ ¬(A ∪ B)
+        p ∉ (A ∪ B)
+        p ∉ A and p ∉ B
+        p ∈ ¬A and p ∈ ¬B
+        Therefore, p ∈ ¬A ∩ ¬B
+        Now we need to prove the other side.
+        Let q be any member of ¬A ∩ ¬B
+        q ∈ ¬A ∩ ¬B
+        q ∈ ¬A and q ∈ ¬B
+        q ∉ A and q ∉ B
+        q ∉ (A ∪ B)
+        Any member of ¬A ∩ ¬B is also a member of ¬(A ∪ B)
+        Because ¬A ∩ ¬B ⊆ ¬(A ∪ B)
+        and ¬(A ∪ B) ⊆ ¬A ∩ ¬B,
+        ¬A ∩ ¬B = ¬(A ∪ B)
+    This is the complete proof.

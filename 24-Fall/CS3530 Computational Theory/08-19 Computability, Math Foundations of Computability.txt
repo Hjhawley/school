@@ -1,97 +1,52 @@
-Computational Theory
-
 Course Overview:
-    This course covers the theory of computation, focusing on finite-state automata, pushdown automata, Turing machines, and equivalent formalisms.
-    Complexity theory is also introduced.
 
-By the end of the course, students will be able to:
-    Compare the capabilities of various computational models and formulate new models for researching new classes of problems.
-    Analyze formal systems with mathematical rigor using appropriate formal notation.
-    Investigate computational problems and categorize their algorithmic complexity.
-    Appraise and justify the limits of computational models and the real-world systems that rely on them.
+    The course focuses on the theory of computation, including finite-state automata, pushdown automata, Turing machines, and complexity theory.
+    By the end of the course, students will be able to compare computational models, analyze formal systems, investigate computational problems, and justify the limits of computational models.
 
 Key Concepts:
-    Categories of Problems:
-        Easier to compute
-        Harder to compute
-    Goal:
-        Assess the computability of a given problem by comparing it to other problems.
-        This has practical implications for determining whether a problem is solvable.
-    Pseudocode:
-        This semester, pseudocode will be written on paper, not real code.
-        Consider how to modularize your code.
-    Set Theory:
-        Set theory will be heavily utilized throughout the course.
+
+    Categories of Problems: Differentiating between problems that are easier or harder to compute.
+    Goal: Assess the computability of a problem by comparing it to others, which has practical implications for solvability.
+    Pseudocode: Will be used in assignments, emphasizing modularization.
+    Set Theory: Will be heavily used throughout the course.
 
 Assignments and Exams:
-    Assignments and exams will be typeset using LaTeX. You will need to create a free account at Overleaf if you don’t already have one.
-    Homework due basically every day
 
-* * * * * * * * * * * * * * * * * * * *
-
-Ch 0.1,0.2
-
-Introduction to Formal Systems and Computation
+    Assignments and exams will be typeset using LaTeX on Overleaf, with homework due frequently.
 
 Fundamental Questions:
 
     What are the capabilities and limitations of computers?
-    What is a computation?
+    What constitutes a computation?
 
 Definition of Computation:
 
-    The processing of information based on an algorithm (a finite set of operations or rules).
-        Examples include arithmetic, Babbage wheels, ruler and compass geometry, digital computers, DNA processes, the internet, etc.
-    For our purposes, computation is defined as: "processing information by the unlimited application of a finite set of operations or rules."
+    The processing of information based on a finite set of operations or rules, applied without limit.
 
-Common Misconceptions (Not Proofs):
+Common Misconceptions:
 
-    "This must be hard because I can't do it."
-    "This method seems right because it's worked on every case I tried."
-    "It ran once" / "It didn’t run once."
+    Difficulty in solving a problem does not imply it's inherently hard.
+    A method's success on a few cases does not prove correctness.
+    A single run (success or failure) doesn't prove the correctness of a method.
 
 Proofs:
 
-    We use formal mathematical language and strive for precision in proving theorems.
-    Positive results indicate a problem can be computed; negative results indicate it cannot.
+    Formal mathematical language and precision are used in proofs, with positive results showing computability and negative results indicating non-computability.
 
 Generality in Computation:
 
-    Technology-independent.
-    Abstraction is used to ignore inessential details.
+    Computation is technology-independent, with abstraction focusing on essential details.
 
 Key Terms:
 
-    Alphabet:
-        A finite (but arbitrarily large) collection of symbols to work with, such as letters, digits, or made-up characters.
+    Alphabet: A finite set of symbols used in computations.
+    Strings: Ordered sequences of symbols from an alphabet, with ε denoting the empty string.
+    Inputs and Outputs: In discrete computations, both inputs and outputs are strings.
+    Computational Problem: Typically a yes/no question with infinite instances (e.g., parity problem, majority problem).
+    Language: A set of strings. Solving a computational problem is equivalent to determining if a string belongs to a language.
 
-    Strings:
-        A finite (but arbitrarily large) concatenation of alphabet symbols where order matters (e.g., 'qaz', 'abbab').
-        Epsilon (ε) indicates an empty string (length 0).
+Examples of Languages:
 
-    Inputs and Outputs:
-        In computations, inputs and outputs are strings, focusing on discrete computations.
-
-    Computational Problem (Task):
-        Typically a yes/no question with infinitely many instances.
-        Examples:
-            Parity Problem: Given a string x, does it have an even number of 'a's?
-            Majority Problem: Given a string x, does it have more 'a's than 'b's?
-        Problems are defined extensionally: a problem is the set of all instances of the question where the answer is positive
-        (i.e., the set of all question-answer pairs).
-
-    Question-Answer Pair:
-        Example: <'Does "aabaaba" have an even number of a's?', 'No'>
-        If we use the set {a, b}, the number of questions associated with the parity problem is infinite since more characters can always be added to the string.
-        However, the answer is always either 'Yes' or 'No' and can be solved programmatically.
-
-    Language:
-        A language is any set of strings.
-        "Solving a yes/no computational problem" is equivalent to "determining if a string is in a given language."
-        Example: In the parity problem, all strings with an even number of 'a's belong to the language of correct answers.
-        The language is an infinite set of strings that meet the condition (e.g., all strings with an even number of 'a's).
-
-    Examples of Languages:
-        All words in the American Heritage Dictionary.
-        All strings with an even number of 'a's.
-        All syntactically correct C programs (counting 'space' and 'newline' as characters).
+    All words in a dictionary.
+    All strings with an even number of 'a's.
+    All syntactically correct C programs.
