@@ -5,7 +5,7 @@ Not an Element of ∉
 Negation ¬
     Inverts the truth value of a statement.
 Cardinality |𝐴|
-    The number of elements in set 𝐴.
+    The size or count (the number of elements in set 𝐴).
 Union ∪
     The union of two sets includes all elements that are in either set or in both. Think of it as combining the sets together.
 Intersection ∩
@@ -19,23 +19,21 @@ Proper Subset ⊂
 Proper Superset ⊃
     A set 𝐵 is a proper superset of set 𝐴 if it contains all elements of 𝐴, and 𝐵 is strictly larger (not equal to 𝐴).
 Empty Set ∅
-    A set with no elements. It is like an empty box.
+    A set with no elements, like an empty box.
 Cartesian Product ×
     The Cartesian product of two sets 𝐴 and 𝐵 is the set of all ordered pairs where the first element is from 𝐴 and the second is from 𝐵.
 Power Set 𝒫(A)
-    The power set of a set 𝐴 is the set of all possible subsets of 𝐴, including the empty set and 𝐴 itself.
-Complement of a Set 𝐴ᶜ
-    The set of all elements not in 𝐴.
+    The power set of a set 𝐴 is the set of all possible subsets of 𝐴, including the empty set ∅ and 𝐴 itself.
+Complement of a Set Ā
+    The set of all elements not in 𝐴. Equivalent to ¬𝐴.
 Difference of Sets 𝐴 \ 𝐵
     The set of elements in 𝐴 that are not in 𝐵.
-Symmetric Difference ⊖
+Symmetric Difference ⊕ or ⊖
     The set of elements in either 𝐴 or 𝐵 but not in both.
 Universal Set 𝕌
     The set containing all possible elements under consideration, often used in the context of complements.
 Natural Numbers ℕ
     The set of all natural numbers, starting from 1.
-Whole Numbers ℤ₀⁺
-    The set of all non-negative integers, including 0.
 Integers ℤ
     The set of all integers, including positive, negative, and zero.
 Rational Numbers ℚ
