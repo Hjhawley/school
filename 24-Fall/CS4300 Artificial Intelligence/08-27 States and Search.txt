@@ -1,0 +1,60 @@
+State:
+
+    Represents a unique configuration.
+    Example: A Rubik’s cube has a single correct state, with 43 quintillion possible configurations.
+
+Action:
+
+    Legal moves that transition from one state to another.
+    Rubik’s cube example: 12 possible immediate neighbor states (6 faces, each can be rotated clockwise or counterclockwise).
+
+State Space:
+
+    Six-dimensional space representing all possible configurations.
+    Impossible to visualize due to its complexity.
+    Goal: Find the solution path to the single “goal” state.
+
+State & Actions for Rubik’s Cube:
+
+    State: 54 tile colors (9 tiles x 6 faces).
+    Action: 90° turns of any of the 6 faces.
+    Solution path: A sequence of states and corresponding actions.
+
+Problem Characteristics:
+
+    Observable, discrete, deterministic, single-agent, static, known, and sequential.
+    Search is easier in a static environment; a dynamic environment would require constant path recalculation.
+
+Search Algorithms
+
+Depth-First Search (DFS):
+
+    Explores by choosing one legal move and considering the resulting state, continuing until a goal is found.
+    Drawbacks for Rubik’s Cube:
+        Likely to take an eternity due to infinite loops and no maximum depth.
+        Better suited for problems with a defined maximum depth, like Sudoku.
+    Complexity:
+        Time: O(b^m), where m is the maximum depth.
+        Space: O(b•m), as it can discard explored branches.
+
+Breadth-First Search (BFS):
+
+    Explores all neighbor states at each level before moving deeper.
+    Drawbacks for Rubik’s Cube:
+        Expands rapidly due to the high branching factor (b^k).
+        Space-intensive, as it must store each node and its children.
+    Complexity:
+        Time: O(b^d), where d is the depth of the shallowest goal state.
+        Space: O(b^d), since it retains all generated nodes.
+
+Tree Search vs. Graph Search:
+
+    Tree Search: Explores all branches but can get stuck in infinite loops for problems like the Rubik’s cube.
+    Graph Search: Prunes duplicate states, avoiding redundant exploration. Allows eventual solution but remains inefficient.
+
+Optimizing the Search
+
+    Strategic Algorithm Use:
+        Instead of considering all legal moves, use complex algorithms as single actions to reduce complexity.
+        Example: Solve the Rubik’s cube one face at a time, which simplifies the state space and compresses the search tree.
+        This may increase the number of moves but is far more efficient in terms of space and time, making it feasible.

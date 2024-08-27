@@ -1,19 +1,37 @@
 Programming Languages
 
-SMoL - standard model of languages (Racket)
-Interpreters
+SMoL (Standard Model of Languages)
 
-Often when a new language is created it's to scratch a particular itch.
-It's important to understand what problems a language was intended to solve.
-For example:
+    SMoL refers to a conceptual framework or approach in the study and design of programming languages.
+    It typically outlines the fundamental concepts and components that most programming languages share, such as syntax, semantics, types, and execution models.
+    SMoL provides a standardized way to understand and compare different programming languages, focusing on the core principles that underpin language design and implementation.
 
-Rust cares a lot about SAFETY. Memory safety, etc.
-Prevention of buffer overflows (a common problem in C)
-"Dangling pointers", "garbage collection"
+Interpreters:
 
-But Python and most other modern languages also handle this. so what else does Rust do?
-Low-level control over performance combined with high-level convenience and safety guarantees.
-"Memory safety without heavy runtime" by preventing problems at compile time, not runtime
-It has to do this by generating proofs that your code won't cause issues
+    Responsible for executing code in a high-level language by converting it into machine code or an intermediate representation.
+
+Language Design Motivations
+
+    New languages are often created to address specific needs or "itches."
+    Understanding the problems a language was intended to solve is crucial.
+
+Example: Rust
+
+Primary Focus:
+
+    Safety: Rust emphasizes memory safety, aiming to prevent common issues like:
+        Buffer overflows (a typical problem in C).
+        Dangling pointers.
+        Reliance on garbage collection.
+
+Comparison to Other Modern Languages:
+
+    While languages like Python also prioritize safety, Rust offers:
+        Low-level control over performance while still providing high-level convenience and safety guarantees.
+        Memory safety without heavy runtime overhead: Rust ensures safety by preventing problems at compile time, not runtime.
+
+How Rust Achieves Safety:
+
+    Rust generates proofs that your code won't cause issues, ensuring that safety is built into the language from the ground up.
 
 https://learnxinyminutes.com/docs/rust/
