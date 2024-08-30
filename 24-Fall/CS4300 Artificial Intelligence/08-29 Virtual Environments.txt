@@ -1,0 +1,25 @@
+Gymnasium Framework - what is it, how it works, how to set it up
+
+Virtual environments - help deal with many issues involving pip (different projects needing different package versions, etc)
+Switching modes leads to different versions of packages
+
+1. create a virtual environment which creates a directory of all the used pip installs (can be in a hidden directory like .venv)
+2. activate it within a current logged-in shell
+3. do work in the environment; doing a pip install while the venv is active will save those libraries only to that environment rather than the global environment. keeps packages segregated
+4. deactivate the environment
+
+Get used to working this way! It should keep you more organized
+
+example:
+python3 -m venv .venv
+source .venv/bin/activate
+pip install gymnasium 
+    /* gymnasium and its dependencies are now located inside .venv */ 
+deactivate
+
+pip -r requirements.txt makes it easy to install all packages at once
+
+Would you ever want to quantify consistency? In some cases you might prefer a steady score of ~100 over a range between 50 and 150 even though they average the same. Would you want to quantify the consistency of results as its own reward OR does this mean you need to adjust the performance measure? How is this typically done?
+
+Why is "do nothing" an action rather than just toggling the actions on or off?
+A NOOP can be good to maintain consistency

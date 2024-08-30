@@ -1,0 +1,84 @@
+Deterministic Finite Automata (DFAs)
+Example: Home Stereo System
+
+    Buttons:
+        P: Power button (ON/OFF)
+        S: Source button (CD/Radio/TV)
+            Only works when the stereo is ON, but the selected source is remembered even when the stereo is OFF.
+
+    Initial State:
+        The stereo starts OFF and in CD mode.
+
+    Problem Statement:
+        Given a sequence of button presses w in {P, S}*, does the sequence leave the system with the radio on?
+
+Formal Definition of a DFA
+
+    A Deterministic Finite Automaton (DFA) is a 5-tuple M = (Q, Σ, δ, q0, F), where:
+        Q: Finite set of states.
+        Σ: Alphabet (set of input symbols).
+        δ: Transition function, δ: Q x Σ -> Q.
+        q0: Start state, where q0 ∈ Q.
+        F: Set of accept (or final) states, where F ⊆ Q.
+
+    Transition Function:
+        If δ(p, σ) = q, then:
+            If the DFA is in state p and reads symbol σ in Σ,
+            The DFA moves to state q while reading the next input symbol.
+
+    Home Stereo Example:
+        Define the DFA M = (Q, Σ, δ, q0, F) and then draw the state machine representation.
+
+Accepting Strings
+
+    A DFA M accepts a string X if:
+        Starting in the start state q0 with the head on the first symbol of X,
+        After reading all of X,
+        M ends in a final state.
+
+Formal Definition of Computation
+
+    Given a DFA M = (Q, Σ, δ, q0, F), it accepts a string w = w1 w2 ... wn in Σ* (where each wi ∈ Σ) if there exist states r0, r1, ..., rn in Q such that:
+        r0 = q0 (start state),
+        δ(ri, wi+1) = ri+1 for each i = 0, ..., n-1,
+        rn ∈ F (final state).
+
+    The language recognized (or accepted) by M, denoted L(M), is the set of all strings accepted by M.
+
+Definition of Regular Languages
+
+    A language is called a regular language if some finite automaton (DFA) recognizes it.
+
+Transition Function on an Entire String
+
+    A more formal definition of the transition function for an entire string:
+        Inductive Definition:
+            δ*: Q x Σ* -> Q is defined by:
+                δ*(q, ϵ) = q (for the empty string ϵ),
+                δ*(q, wσ) = δ(δ*(q, w), σ).
+        Intuitively, δ*(q, w) represents the state reached after starting in state q and reading the string w.
+        A DFA M accepts a string w if δ*(q0, w) ∈ F.
+
+Determinism in DFAs
+
+    For a given DFA M and input string w, the states are uniquely determined. There is precisely one state to which w drives M if it is started in a given state.
+
+Nondeterministic Finite Automata (NFAs)
+Formal Definition of an NFA
+
+    A Nondeterministic Finite Automaton (NFA) is a 5-tuple N = (Q, Σ, δ, q0, F), where:
+        Q, Σ, q0, and F are as defined for DFAs.
+        δ: Transition function, δ: Q x (Σ ∪ {ϵ}) -> P(Q).
+            When in state p and reading symbol σ, the NFA can move to any state q in the set δ(p, σ).
+            There may be more than one such state q, or there may be none (if δ(p, σ) = empty set).
+            The NFA can “jump” from p to any state in δ(p, ϵ) without moving the input head.
+
+Nondeterminism in NFAs
+
+    For a given NFA N and input string w, the states r0, r1, ..., rm are not necessarily determined. There can be multiple possible computational paths.
+
+Simulating NFAs
+
+    An NFA accepts a string w if there is at least one accepting computational path on input w.
+        However, the number of possible paths may grow exponentially with the length of w.
+        The question arises: Can this exponential search be avoided?
