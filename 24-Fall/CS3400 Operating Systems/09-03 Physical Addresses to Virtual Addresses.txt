@@ -1,0 +1,38 @@
+This diagram shows how the xv6 operating system maps virtual addresses (left side)
+to physical addresses (right side) on a RISC-V system.
+
+Physical Addresses (Right Column)
+
+    Physical Memory (RAM): The actual physical RAM in the computer, where the OS and applications store data and instructions. Virtual addresses map to specific locations in physical memory.
+
+    Unused Regions: Areas of physical memory not currently used but reserved for future use.
+
+    Device Mappings (VIRTIO, UART0, PLIC, CLINT): Fixed physical addresses for hardware devices, accessible via memory-mapped I/O.
+        VIRTIO Disk: Virtual storage device.
+        UART0: Serial communication port.
+        PLIC: Manages hardware interrupts.
+        CLINT: Handles timer interrupts.
+
+    Boot ROM: The memory location where the CPU begins executing code during system boot.
+
+Virtual Addresses (Left Column)
+
+    MAXVA: The highest possible virtual address.
+    Kernel Text (R-X): Contains the read-only and executable kernel code. This section is protected from modification.
+    Kernel Data (RW-): Contains kernel data structures like process tables, which are both readable and writable.
+    Free Memory (RW-): Unallocated memory available for OS use, writable as needed.
+    Kstack 0, Kstack 1, etc.: Separate stacks for different processes, ensuring isolation between them.
+    Guard Pages: Unused memory regions between stacks to prevent overflow and accidental data corruption.
+    Trampoline: A small code section used during context switches to manage transitions between user mode and kernel mode.
+    KERNBASE: Marks the start of the kernel's virtual address space.
+    PHYSTOP: Indicates the end of the physical memory that the kernel can map.
+
+Mapping Virtual to Physical Addresses
+
+    Virtual addresses are translated to physical addresses by the memory management unit (MMU) using page tables. This ensures correct and secure memory usage.
+
+Permissions (RWX)
+
+    R-X (Read-Execute): For sections like kernel text, allowing execution and reading, but preventing modifications.
+    RW- (Read-Write): For writable data sections like kernel data.
+    RWX (Read-Write-Execute): Generally avoided in the kernel to prevent security vulnerabilities.

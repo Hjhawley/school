@@ -1,0 +1,91 @@
+#1. Breadth-First Search (BFS)
+
+    Overview:
+    - BFS is an uninformed search strategy that explores the search tree level by level, starting at the root and expanding all children nodes before moving on to the next level.
+    - Optimality: BFS is optimal in search problems with uniform step costs, meaning it will always find the shallowest solution (the solution with the fewest steps) first.
+    However, it is not optimal for non-uniform cost problems.
+    - Completeness: BFS is complete, meaning it will find a solution if one exists.
+
+    Complexity:
+    - Time Complexity: O(b^d), where b is the branching factor (the average number of children per node) and d is the depth of the shallowest solution.
+        This assumes a uniform branching factor and depth.
+    - Space Complexity: O(b^d), because BFS needs to store all nodes at the current depth level, which can quickly become prohibitive in large or deep search spaces.
+
+    Pros:
+    - Guaranteed to find the shallowest (optimal) solution in uniform-cost scenarios.
+    - Complete, meaning it will always find a solution if one exists.
+
+    Cons:
+    - High memory requirements, making it impractical for very deep or large search spaces.
+    - Time complexity can be prohibitive for problems with high branching factors and deep solutions.
+
+#2. Depth-First Search (DFS)
+
+    Overview:
+    - DFS explores as far along a branch as possible before backtracking, which makes it more memory-efficient than BFS.
+    - Optimality: DFS is not guaranteed to find the shallowest solution; it may find a suboptimal solution or, in some cases, not find a solution at all.
+    - Completeness: DFS is not complete in infinite search spaces, as it can get stuck exploring an infinitely deep path.
+
+    Complexity:
+    - Time Complexity: O(b^m), where m is the maximum depth of the search tree. DFS may explore the entire depth of the tree, leading to potentially very high time complexity.
+    - Space Complexity: O(b*m), since DFS only needs to store the nodes along the current path and additional information for backtracking.
+        This space complexity assumes the worst-case scenario where m is the maximum depth of the tree.
+
+    Pros:
+    - Much lower memory usage compared to BFS.
+    - Can be more efficient than BFS in problems with a large number of solutions spread across various depths.
+
+    Cons:
+    - Not guaranteed to find the shallowest (or optimal) solution.
+    - Can get stuck in deep or infinite branches, especially in infinite search spaces.
+    - May take a long time to find a solution if the search space is very deep.
+
+#3. Depth-Limited Search (DLS)
+
+    Overview:
+    - DLS is a variation of DFS that introduces a maximum depth limit, l, to avoid getting lost in infinite branches.
+    - Optimality: DLS is not guaranteed to find the shallowest solution, especially if the depth limit is set too low.
+    - Completeness: DLS is complete if the depth limit is set high enough to include at least one goal node, but it can miss solutions if the limit is too restrictive.
+
+    Complexity:
+    - Time Complexity: O(b^l), where l is the depth limit. The algorithm explores all nodes up to the depth l.
+    - Space Complexity: O(b*l), similar to DFS but with the added depth limit.
+
+    Pros:
+    - Allows control over the depth of the search, which can prevent the algorithm from getting stuck in infinite loops.
+    - More memory-efficient than BFS, similar to DFS.
+
+    Cons:
+    - Requires prior knowledge or estimation of an appropriate depth limit l. If the limit is too low, DLS may miss the solution; if too high, it can be inefficient.
+    - Not guaranteed to find the shallowest solution, as it may terminate before reaching it.
+
+#4. Iterative Deepening Search (IDS)
+
+    Overview:
+    - IDS combines the benefits of BFS and DFS by performing a series of depth-limited searches with increasing limits until the solution is found.
+    - Optimality: IDS is optimal for finding the shallowest solution in uniform-cost search spaces.
+    - Completeness: IDS is complete, meaning it will find a solution if one exists.
+
+    Complexity:
+    - Time Complexity: O(b^d), where d is the depth of the shallowest solution. While IDS repeatedly explores nodes at shallower depths, the overall time complexity is comparable to BFS.
+        In practice, the repeated exploration of nodes at shallower depths usually has minimal overhead.
+    - Space Complexity: O(b*d), similar to DFS, making it much more memory-efficient than BFS.
+
+    Pros:
+    - Combines the optimality and completeness of BFS with the space efficiency of DFS.
+    - Does not require prior knowledge of the depth of the solution.
+    - Handles very deep or infinite search spaces effectively.
+
+    Cons:
+    - Slightly higher time cost than BFS due to repeated exploration of nodes at shallower depths, but this overhead is generally minimal.
+    - Still has exponential time complexity, so it can be slow for very large or high-branching search spaces.
+
+The "frontier" (also known as the "open list" or "fringe") refers to the set of all nodes that have been generated but not yet expanded.
+These are the nodes that are on the "to-do" list for exploration; they represent the boundary between the explored and unexplored parts of the search space.
+Nodes in the frontier are waiting to be selected for expansion, where their children (successor nodes) will be generated and added to the frontier.
+
+- Queue in BFS (FIFO): Ensures that nodes are expanded in the order they are discovered, leading to level-by-level exploration.
+    This is why BFS is guaranteed to find the shallowest solution first.
+
+- Stack in DFS (LIFO): Prioritizes exploring the most recent path, diving deep into one branch of the tree before backtracking,
+    which can result in finding deeper solutions before shallower ones.
