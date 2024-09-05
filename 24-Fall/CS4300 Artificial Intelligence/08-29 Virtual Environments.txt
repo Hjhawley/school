@@ -12,12 +12,14 @@ Get used to working this way! It should keep you more organized
 
 example:
 python3 -m venv .venv
+    python -m venv .venv for Windows
 source .venv/bin/activate
+    .venv\Scripts\activate for Windows
 pip install gymnasium 
     /* gymnasium and its dependencies are now located inside .venv */ 
 deactivate
 
-pip -r requirements.txt makes it easy to install all packages at once
+pip install -r requirements.txt makes it easy to install all packages at once
 
 Would you ever want to quantify consistency? In some cases you might prefer a steady score of ~100 over a range between 50 and 150 even though they average the same. Would you want to quantify the consistency of results as its own reward OR does this mean you need to adjust the performance measure? How is this typically done?
 
