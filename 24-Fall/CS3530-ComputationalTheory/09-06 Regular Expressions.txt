@@ -1,0 +1,70 @@
+Regular Expressions
+
+**What is a Regular Expression?**
+- A regular expression (regex) is a formal method to describe a set of strings (or words) using specific symbols and rules. Essentially, it's a pattern that matches certain strings or sequences in text.
+- **Symbols Used**: Regular expressions use literal characters (`a`, `b`, etc.) and special symbols such as:
+  - `ε` (epsilon): Represents the empty string, meaning "no characters."
+  - `∅` (empty set): Represents no strings at all.
+  - **Operators**:
+    - **Union (∪)**: This means "or," allowing for either of two patterns. Example: `a ∪ b` matches either `a` or `b`.
+    - **Concatenation (◦)**: Combines two expressions into a sequence. Example: `ab` (often written without the `◦`) matches the string `ab`.
+    - **Kleene Star (∗)**: Repeats an expression zero or more times. Example: `a∗` matches the empty string, `a`, `aa`, `aaa`, and so on.
+
+**How to Build Regular Expressions**:
+- Regular expressions are built by combining symbols and operators. Basic expressions represent individual characters or simple sets of strings, and you can create complex patterns by applying operations like union, concatenation, and the Kleene star.
+
+---
+
+**What Do Regular Expressions Represent?**
+- **Languages Represented by Regular Expressions**: Every regular expression corresponds to a language, which is a set of strings. For example, the regular expression `a` corresponds to the language `{a}`—the set containing just the string "a".
+- **Basic Operations**:
+  - **Concatenation (◦)**: Combines two patterns by placing them next to each other. If `L(a)` is the language of `a` and `L(b)` is the language of `b`, then `L(a ◦ b)` is the language containing the string `ab`.
+  - **Union (∪)**: Represents a choice between two patterns. If `L(a)` is the language `{a}` and `L(b)` is the language `{b}`, then `L(a ∪ b)` is `{a, b}`—the set containing either `a` or `b`.
+  - **Kleene Star (∗)**: Allows a pattern to be repeated zero or more times. If `L(a)` is the language `{a}`, then `L(a∗)` is the set `{ε, a, aa, aaa, ...}`, meaning the string can be empty or contain any number of `a`'s.
+
+---
+
+**Simplifying Regular Expressions**:
+- Regular expressions can be simplified by eliminating unnecessary symbols like the concatenation operator (◦) or parentheses when the meaning is clear.
+- **Associative Property**: In concatenation and union, the grouping of operations doesn't affect the outcome. For example, both `(ab)c` and `a(bc)` represent the same language.
+- **Commutative Property**: While concatenation is **not** commutative (i.e., `ab` ≠ `ba`), union is. That is, `a ∪ b` is the same as `b ∪ a`.
+
+---
+
+**More Syntactic Sugar**:
+- **Precedence Rules**: Certain operators have higher precedence than others.
+  - The Kleene star (∗) has the highest precedence, followed by concatenation, and finally, union (∪).
+  - Example: In `a ∪ bc∗`, the Kleene star applies only to `c`, and concatenation happens before union, so the expression is read as `a ∪ (b ◦ (c∗))`.
+
+---
+
+**Examples of Regular Expressions**:
+- **Strings ending in "a"**: The regular expression `Σ∗a` describes strings that can have any characters (denoted by `Σ∗` meaning any sequence of alphabet symbols) and end with an `a`.
+- **Even-length strings**: The pattern `(aa ∪ ab ∪ ba ∪ bb)∗` describes strings of even length. The expression inside the parentheses represents any pair of characters, and the Kleene star means the pair can be repeated any number of times.
+- **Strings with an even number of "a"s**: A pattern such as `(b ∪ ab∗a)∗` captures strings where the number of `a`'s is even, interspersed with any number of `b`'s.
+
+---
+
+### Equivalence of Regular Expressions and Finite Automata (FA)
+- **Regular Expressions and Finite Automata are Equivalent**: Every regular expression has an equivalent finite automaton (FA) that recognizes the same language. Conversely, every language recognized by a finite automaton can be described by a regular expression.
+- **Constructing a Proof**: The equivalence can be proven using induction, showing that for every basic operation (union, concatenation, star), there is a corresponding FA, and for every FA, you can construct a regular expression.
+
+---
+
+**Converting Regular Expressions to Finite Automata**:
+- **Example Conversion**: To convert a regular expression like `(a ∪ ε)(aa ∪ bb)∗` into an FA, you construct states and transitions that recognize each part of the expression. For `(a ∪ ε)`, the FA would have two possible transitions—one for `a` and one for ε. The part `(aa ∪ bb)∗` would have loops for pairs of `a`s or `b`s repeated.
+
+A regex can be converted to a NFA which can in turn be converted into a DFA.
+
+---
+
+**The Other Way Around: Finite Automata to Regular Expressions**:
+- **Generalized NFA (GNFA)**: To convert a finite automaton (FA) back into a regular expression, a special type of automaton called a Generalized Non-deterministic Finite Automaton (GNFA) is used. A GNFA allows for transitions labeled with regular expressions instead of single symbols.
+- **Conversion Process**: You simplify the FA by systematically removing states and updating transitions between the remaining states with regular expressions, ultimately reducing the automaton to a single transition, which represents the entire language.
+
+---
+
+**Steps to Convert an FA to a Regular Expression**:
+1. **Add Start and Accept States**: Introduce a new start state and accept state, with ε-transitions to and from them, to simplify the FA.
+2. **Remove States Gradually**: Remove intermediate states one by one, merging transitions by combining them into regular expressions.
+3. **Repeat Until One Transition Remains**: Continue removing states until you have a single transition between the start and accept states. This transition is the regular expression equivalent of the FA.
