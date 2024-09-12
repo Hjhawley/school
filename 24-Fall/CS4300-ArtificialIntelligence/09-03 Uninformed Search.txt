@@ -1,3 +1,5 @@
+Uninformed Search Algorithms
+
 #1. Breadth-First Search (BFS)
 
     Overview:

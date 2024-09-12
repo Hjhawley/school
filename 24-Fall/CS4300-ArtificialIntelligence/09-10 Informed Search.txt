@@ -1,0 +1,128 @@
+Informed Search Algorithms
+
+Instead of just looking at nodes in a tree without context, these algorithms are intended to find faster and more efficient solutions.
+"Informed" means they utilize additional knowledge, such as heuristics, to guide the search, unlike "uninformed" algorithms like BFS or DFS.
+
+Not all actions are created equal. They have different costs and advantages.
+For example: traveling diagonally in a grid costs more than moving vertically or horizontally, but one diagonal move costs less than one move south and one move west, so it's worth it overall.
+	ACTIONS(s) -> [a1, a2, ...]
+	RESULT(s, a) -> s1
+	GOAL-TEST(s) -> T/F
+	STEP-COST(s0, a, s1) -> cost (as a number value)
+An optimal path is the path with the LOWEST COST.
+
+* * * * *
+
+Uniform Cost Search (Dijkstra's Algorithm)
+
+A node contains: current state, its parent, the action that got it there, the depth, and the total path cost.
+
+# (state, parent, action, depth, cost)
+nO = (s0, None, None, 0, 0.0)	# initial state
+n1 = (s1, n0, a1, 1, g1)	# child resulting in state 1 by taking action 1 with cost g1
+n2 = (s2, n0, a2, 1, g2)	# child resulting in state 2 by taking action 2 with cost g2
+Two children at the same depth, but their path costs are not necessarily the same.
+What if they both were goal states? We choose the path with the lowest path cost.
+
+We need to design an algorithm that will insure that the solution with the least cost is what gets returned.
+
+We will use a priority queue rather than a FIFO queue.
+The priority queue is implemented as a heap, and we sort the nodes by path cost and look at the one with the lowest cost.
+As soon as the least-cost path in our queue is a GOAL STATE, we know that we're done. We pop it and return the path.
+If the least-cost path in the queue is NOT a goal path, we pop it and look at all its children and continue the search.
+
+UCS expands the node with the smallest cumulative cost from the start (not just the depth),
+so the shortest path is found even in problems where step costs vary.
+
+For this to work, the step cost cannot be negative or we will run into problems.
+This is because UCS assumes that once a path is explored, no cheaper path to that node will be found, which breaks down with negative costs. 
+
+There are some weaknesses associated with UCS:
+
+Memory limitations are a common issue with UCS, as it needs to store all nodes generated.
+Also, with some problems, the frontier will grow absurdly big before we reach our goal state.
+This happens especially in dense graphs or graphs with uniform costs, where the algorithm may have to explore many paths before finding the goal.
+How can we address this?
+
+* * * * *
+
+Greedy Search
+
+The idea: when choosing to expand the frontier, you choose the node that is CLOSEST to the goal first.
+This is based on the heuristic value (h(n)) rather than the cumulative path cost (g(n)).
+This is essentially putting blinders on and walking closer to the goal.
+Saving time at the expense of a guarantee of optimality.
+
+In addition to the other parameters, a node must contain a heuristic: the estimated closeness to the goal state.
+# (state, parent, action, depth, cost, heuristic)
+nO = (s0, None, None, 0, 0.0, model.HEURISTIC(s0))
+n1 = (s1, n0, a1, 1, g1, model.HEURISTIC(s1))
+
+In some problems the heuristic is fairly obvious: if the goal is getting to a certain point on an xy plane, simply measure distance from the goal.
+
+But sometimes greedy search can fall apart.
+
+Greedy search can get stuck in local minima or fail to find a solution if there’s a misleading heuristic.
+And what if there is an impassable barrier between the start state and the goal state? It can get stuck at the wall.
+But in the absence of such barriers, it can do very well.
+Greedy search is faster than UCS in cases where the heuristic is accurate and there are no significant obstacles.
+
+* * * * *
+
+A* Search Algorithm (the "gold standard" for optimal solutions)
+
+In order to be optimal and efficient, we combine these features:
+Optimal - follow in the footsteps of UCS and expand low-cost paths
+Efficient - follow in the footsteps of greedy search
+
+When selecting a node, A* chooses based on current path cost PLUS
+the heuristic, rather than on or the other.
+
+In a case where greedy search works best, it will essentially act like greedy search.
+Otherwise it will act more like UCS.
+
+For example, if there's a barrier, it will find an optimal path like UCS, but much faster.
+It won't be as fast as greedy search BUT greedy search will give us a non-optimal path.
+
+Pseudocode:
+
+def astar_search(s0, model):
+	# (state, parent, action, depth, cost, heuristic)
+	n0 = (s0, None, None, 0, 0.0, model.HEURISTIC(s0))
+	closed_list = empty_store() # states we have already seen
+
+	Q = priority_queue() # min-heap on cost + heuristic
+	Q.push(n0)
+	closed_list.add(s0)
+
+	while(len(Q) > 0): # frontier not empty
+		n = Q.pop() # pop the node with the least cost + heuristic
+		(s, p, a, d, c, d, h) = n
+		if model.GOAL_TEST(s):
+			return sequence_to_reach(n)
+		for a in model.ACTIONS(s):
+			s1 = model.RESULT(s, a)
+			if s1 not in closed_list:
+				n1 = (s1, n, a, d+1, c+model.STEP_COST(s, a, s1), model.HEURISTIC(s1))
+				Q.push(n1)
+				closed_list.add(s1)
+		return False
+
+For most searches, graphs are the way to go rather than trees.
+Graphs guarantee that you don't return to duplicate states, at the expense of a bit more memory.
+
+Heuristic qualities:
+Admissible - NEVER overestimates. h(n) <= the sum of all the step costs in that path.
+	If the heuristic is bigger than the actual possible path cost, it is NOT admissible.
+	The actual path cost is an upper bound for the heuristic.
+	A good heuristic gets as close as possible to the optimal path without overshooting.
+	Start with a 0 heuristic (identical to a UCS) and then work up to better ones.
+	A non-admissible heuristic will not guarantee optimality BUT it can sometimes be faster & good enough.
+Consistent - all nodes obey the triangle inequality.
+	If I have some node n and the goal node g, and some third node n1,
+	imagine a triangle drawn between the three.
+	h(n) <= step_cost(n, n1) + h(n1)
+	If you sum two sides, it needs to be longer than the third side.
+
+To make a heuristic in the first place, you must have some inside information.
+That's what makes these INFORMED search algorithms.
