@@ -1,0 +1,53 @@
+A search *policy* is a strategy or decision-making function that an agent follows in a given environment.
+It defines the agent’s behavior by mapping states to actions.
+More formally, it is a function ππ that takes a state ss as input and returns an action aa.
+
+  You can think of a policy as a reflex table or lookup table, where for every possible state of
+  the environment, the policy deterministically tells the agent what action to take.
+  This table-based approach is common in environments where:
+      The number of states is manageable or finite.
+      The agent's task is discrete and has clear boundaries for states and actions.
+
+  In such cases, for each state, the policy can explicitly define which action is best
+  (or pre-determined) by storing them in a table or array.
+
+  Deterministic Policy:
+      In a deterministic policy, for every state ss, there is exactly one corresponding action aa.
+      Given the state, the agent always chooses the same action.
+      Example: π(s)=aπ(s)=a, where for a state ss, action aa is the only output.
+
+  Policy Representation:
+      Array-Based Representation: If the state space is discrete and small enough, the policy can
+      be stored as an array where each index corresponds to a state, and the value at that index
+      is the corresponding action to be taken.
+          Example:
+              Suppose the states are represented as integers from 0 to N−1N−1.
+              We can create an array, policy[], where each element stores the action to take
+              for that corresponding state.
+
+              python
+
+          policy = [a0, a1, a2, ..., aN-1]
+
+          Here, policy[s] would give the action aa for the state ss.
+
+General Approach to Building a Reflex Table (Policy Array):
+
+  Initialize an array with size equal to the total number of states.
+  For each state ss, store the appropriate action aa in the array.
+      The action can be determined through different methods such as heuristics, a learning process
+      (like Q-learning), or by pre-defining actions for each state.
+
+Advantages:
+
+  Simplicity: Policies represented as lookup tables are easy to understand and implement.
+  Efficiency: Once the table is built, action selection is instantaneous (constant time) since the
+  action for a given state is just a lookup operation.
+
+Limitations:
+
+  Scalability: This approach doesn’t scale well to environments with large or continuous state
+  spaces because the size of the array grows with the number of states.
+  Memory Usage: A policy table requires enough memory to store an action for every possible state.
+  For environments with a large number of states, this can become impractical.
+  Generalization: Reflex tables do not generalize well to unseen states since they only cover specific, pre-defined states.

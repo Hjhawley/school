@@ -1,0 +1,53 @@
+BFS, DFS, DLS, IDS, UCS - Uninformed search algorithms
+Greedy, A* - Informed search algorithms (use a heuristic)
+Local Search algorithms - a new separate category which examines neighbor states and then takes a step in the more desirable direction; doesn't explore the entire environment.
+
+Hill Climbing - a specific form of local search
+Can get stuck in a local maximum that ends up actually being a pretty poor result.
+So, we chuck a few agents at random spots to try and find a higher peak. ("Random Restart")
+The "utility" or "objective" is the goal we're measuring.
+
+Hill Climbing Variants  
+- Hill Climbing: Look at all neighboring states and pick the one with the highest utility.  
+- Stochastic Hill Climbing: Identify all uphill neighbors and randomly pick one.  
+- "Best-First" or "First-Choice" Hill Climbing: Randomly look at neighbors one at a time and choose the first uphill neighbor found. This differs slightly from stochastic hill climbing since it stops at the first improvement.
+
+All of these can be paired with the random restart method, where different starting points are randomly selected to avoid getting stuck in local optima.
+
+---
+
+N-Queens Problem as a Local Search Problem  
+- Problem: Place 4 queens on a 4x4 chessboard such that none of them are attacking each other.
+- Local Search Approach:
+  - This problem uses a complete state formulation. Unlike tree search, it starts with all queens on the board (even if they are not in a valid solution). 
+  - Randomly place the queens and search for a state with a higher utility (more queens in safe positions).
+  - Restrict queens to fixed columns to simplify the state space without limiting any solutions. This preserves expressiveness.
+  - Neighbor definition: An immediate neighbor is a state where one queen moves one space up or down within its column.
+  - In an NxN problem, each queen can move up or down within its designated column, resulting in at most 2N neighbors for any state (or at least N neighbors if queens are on the edge of the board).
+  - Utility can be measured either by the number of safe queens (peak utility is N) or by the number of conflicts (peak utility is zero).
+  
+If queens are allowed to move anywhere within their column instead of just up or down, this increases space complexity but reduces the number of steps needed to find a solution.
+
+---
+
+Valley Descent  
+- Similar to hill climbing but reversed, focusing on finding the global minimum instead of the maximum.
+
+Gradient Descent  
+- A continuous-space search method, often used in training neural networks. This operates similarly to hill climbing but in a continuous domain rather than a discrete one.
+
+Simulated Annealing  
+- When selecting neighbors, move to one with better utility, or randomly select a worse one with a certain probability, in hopes of finding a deeper valley (or better solution) on the other side.
+- Early steps should take large jumps to avoid local optima, while later steps should be smaller to refine the search.
+- To achieve this, gradually lower the "temperature" of the system over time, which corresponds to narrowing the search space (analogous to metallurgical processes).
+- The probability of accepting worse solutions decreases as the "temperature" decreases (this ties back to how larger jumps are taken early on).
+
+---
+
+Genetic Algorithm  
+- Each state is represented as a string. To combine two states (S0 and S1), choose an arbitrary cutoff point and swap parts of the strings, creating two new "children": S0a + S1b and S1a + S0b.
+- Then, apply survival of the fittest: keep the higher utility child and discard the lower utility one.
+- Randomly generate a large population, select the states with higher utility, pair them to create the next generation, and repeat.
+- Sometimes a mutation step is introduced. Mutation randomly alters a small portion of the string to maintain diversity in the population and avoid premature convergence to suboptimal solutions.
+
+Despite being more complex, genetic algorithms are still considered local search, as they explore the state space through iterative refinements of existing solutions.

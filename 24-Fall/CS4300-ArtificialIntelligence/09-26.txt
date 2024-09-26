@@ -1,0 +1,99 @@
+Adversarial Search
+An "adversary": an agent or element of the environment that actively opposes your agent.
+
+Zero-Sum Game
+    A type of game where one player’s gain is exactly equal to the other player’s loss. Total payoff remains constant (sum is zero).
+    Example: Rock-Paper-Scissors
+        If Player A wins:    +1, -1
+        If it's a tie:        0,  0
+        If Player B wins:    -1, +1
+
+Chess environment
+  Fully observable: Both players can see the entire game state at any time.
+  Multi-agent: Two players (agents) interact with the environment.
+  Static: The environment does not change unless a player makes a move (i.e., no random changes).
+  Deterministic: No randomness involved.
+  Discrete: A finite number of squares and legal moves.
+  Sequential: Players take turns in a sequence.
+  Known: Both players have full knowledge of the rules and possible outcomes (no uncertainty).
+
+Minimax Algorithm (for a Zero-Sum Game)
+
+    Build out a game tree:
+        Start with your current state at the root of the tree.
+        Each branch represents a possible action your agent can take.
+
+    Simulate the adversary’s choices:
+        After each of your actions, the adversary responds. These responses are the "children" nodes in the game tree.
+
+    Assign values to leaf nodes:
+        Each terminal state (end of the game or a resolved situation) gets a score depending on whether it is advantageous or disadvantageous. For a zero-sum game:
+            Positive values (e.g., +1) if it benefits you.
+            Negative values (e.g., -1) if it benefits the adversary.
+            Zero for neutral outcomes.
+
+    Backpropagate values using Minimax:
+        The adversary is assumed to act optimally against you, meaning they'll pick the minimum score available to them (minimizing your advantage).
+        Your agent will then select the move that maximizes your advantage, assuming the adversary will choose the worst-case scenario for you.
+
+So:
+    Evaluate all possible future moves.
+    Assume the adversary will always make the move that is worst for you (MIN).
+    Choose the move that gives you the best possible outcome (MAX) after accounting for the adversary's choices.
+
+We implement this as a recursive Depth-First Search (DFS)
+    Explore all possible moves until you reach a terminal state.
+
+Time and Space complexity
+  Time = O(b^m)
+  Space = O(b*m)
+
+  Not bad for something like Tic-Tac-Toe, IMPOSSIBLE for chess even with pruning
+  So we can't feasibly see until the end of the game; we have to use a depth-limited search
+
+  Time = O(b^L)
+  Space = O(b*L)
+
+We only explore the tree up to a certain depth L (instead of until the end of the game).
+
+Evaluation Function (Heuristic)
+Since we don’t reach terminal states in depth-limited search, we need to estimate the value of a position.
+
+    The evaluation function assigns a score to non-terminal states, acting as a heuristic for how advantageous a given state is.
+        Positive values indicate good states for the agent (e.g., +0.9 for a strong advantage).
+        Negative values indicate bad states for the agent (e.g., -0.75 for a disadvantageous state).
+        The exact numerical value is arbitrary, as long as the evaluation function ranks states relative to one another correctly.
+
+    Example:
+        In chess, an evaluation function might take into account factors like material count (number of pieces), piece position, and control of the board.
+        In a simple game like Tic-Tac-Toe, it might count the number of potential winning lines still open to each player.
+
+Pseudocode:
+
+def MINIMAX(initial_state, model):
+  best_value = -INFINITY
+  best_action = None
+  for action in model.ACTIONS(current_state):
+    next_state = model.RESULTS(current_state, action)
+
+def MAX(current_state, model, cutoff_depth):
+  if depth >= cutoff_depth or model.GAME_OVER(current_state):
+    return model.EVALUATE(current_state)
+  best_value = -INFINITY # some arbitrarily low negative value
+  for action in model.ACTIONS(current_state):
+    next_state = model.RESULTS(current_state, action)
+    value = MIN(next_state, model, depth+1, cutoff_depth)
+    if value > best_value:
+      best_value = value
+  return best_value
+
+def MIN(current_state, model, cutoff_depth):
+  if depth >= cutoff_depth or model.GAME_OVER(current_state):
+    return model.EVALUATE(current_state)
+  best_value = +INFINITY # some arbitrarily great positive value
+  for action in model.ACTIONS(current_state):
+    next_state = model.RESULTS(current_state, action)
+    value = MAX(next_state, model, depth+1, cutoff_depth)
+    if value < best_value:
+      best_value = value
+  return best_value
