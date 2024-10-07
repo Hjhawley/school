@@ -8,7 +8,8 @@ Proofs:
 
 Purpose of Proofs:
 
-    Certainty: To be absolutely certain that a statement is true. Example: Proving there is no fast correct algorithm for the Traveling Salesman Problem (TSP) would confirm that continued searching is futile.
+    Certainty: To be absolutely certain that a statement is true.
+    Example: Proving there is no fast correct algorithm for the Traveling Salesman Problem (TSP) would confirm that continued searching is futile.
     Understanding: To understand why a statement is true, which helps in determining if it can be extended or restricted.
     Problem Solving: The steps in the proof can provide insights into solving related problems.
 
@@ -21,7 +22,9 @@ Example Proof:
         p ∉ A and p ∉ B
         p ∈ ¬A and p ∈ ¬B
         Therefore, p ∈ ¬A ∩ ¬B
+        
         Now we need to prove the other side.
+        
         Let q be any member of ¬A ∩ ¬B
         q ∈ ¬A ∩ ¬B
         q ∈ ¬A and q ∈ ¬B

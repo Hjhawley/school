@@ -18,9 +18,9 @@ Computational Models:
 
 Set Theory:
 
-    Sets: Defined by their members. A=BA=B means every element in AA is also in BB and vice versa.
+    Sets: Defined by their members. A = B means every element in A is also in B, and vice versa.
     Cardinality: Sets can be finite or infinite. The empty set has a cardinality of zero.
-    Subsets: A⊆BA⊆B means every element in AA is also in BB.
+    Subsets: A ⊆ B means every element in A is also in B.
 
 Functions:
 

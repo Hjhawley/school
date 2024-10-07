@@ -1,0 +1,151 @@
+<html><head></head><body><h2>Maze solver</h2>
+
+<p>In this assignment you will implement a simple maze solver as well
+as code to print out mazes. We will start with <code>print_maze</code>.</p>
+
+<h3>Print</h3>
+
+<p>The maze is represented as a 2-dimensional array. The dimensions of
+the array (the X size and Y size) are defined in <code>solve.h</code> and are
+constants. <code>main</code> creates an array and reads a maze in from standard
+in, and the maze is reprsented using one <code>char</code> value per square.
+Here is a simple example maze:</p>
+
+<pre><code>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+....@.....@.@.@.@.....@.....@.@
+@@@.@.@@@@@.@.@.@@@.@@@.@@@@@.@
+@.@.@.........@.....@.....@...@
+@.@.@@@@@.@.@@@.@.@@@@@.@@@.@@@
+@.@.@.....@.....@.@.@.@...@...@
+@.@.@@@@@.@@@.@@@@@.@.@.@@@.@@@
+@.....@.@...@...@...........@.@
+@.@.@@@.@.@@@@@@@@@.@@@@@.@@@.@
+@.@.@.@.....@.@.@.......@.....@
+@.@@@.@.@@@@@.@.@.@@@@@@@.@@@.@
+@.....@.@...............@.@...@
+@.@.@.@.@.@.@.@.@.@.@@@.@@@.@@@
+@.@.@.....@.@.@.@.@...@.@......
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+</code></pre>
+
+<p>A <code>@</code> character represents a wall, and a <code>.</code> character represents a
+path. The maze always starts at the top left and ends at the bottom
+right.</p>
+
+<p>In this example maze the size is 31 across and 15 down, so it would
+be represented with the array:</p>
+
+<pre><code class="language-c">char field[15][31];
+</code></pre>
+
+<p>but you should always use the values <code>SIZE_Y</code> and <code>SIZE_X</code> as
+defined in <code>solve.h</code>:</p>
+
+<pre><code class="language-c">char field[SIZE_Y][SIZE_X];
+</code></pre>
+
+<p>The <code>print_maze</code> function is given the array as its only input, and
+it should print the characters out to the screen with a newline at
+the end of each row. You can use <code>printf</code> for this, or you can use
+<code>putchar</code>, which is a more specialized function that prints a single
+character (run <code>man putchar</code> for details).</p>
+
+<p>Once you have defined <code>print_maze</code> you can start testing. You will
+need to create a stub for <code>solve_maze</code>, which just means a function
+with the right type signature that does not do anything yet,
+something like:</p>
+
+<pre><code class="language-c">void solve_maze(char field[SIZE_Y][SIZE_X]) {
+    (void) field;
+}
+</code></pre>
+
+<p>The <code>(void) field;</code> line is just there to satisfy the compiler and
+let you test <code>print_maze</code>. Once you actually implement <code>solve_maze</code>
+you can delete that line. To test it you have a few options:</p>
+
+<ul>
+<li><p>Run <code>make</code>. It will read the first input, run your code to print
+it, and then try to solve it. The output of the solved maze will
+be incorrect, but that will not be detected until after the
+first call to <code>print_maze</code> so it will still let you test that
+function.</p></li>
+
+<li><p>Build your code using <code>make a.out</code> and run it without invoking
+tests. You can redirect one of the sample inputs to it like
+this:</p>
+
+<pre><code>./a.out &lt; inputs/1.input
+</code></pre>
+<p>This says to run <code>a.out</code> but instead of having it take input
+from the keyboard, give it input from the file <code>inputs/1.input</code>,
+which is one of the text mazes. Linux will feed it input from
+the file as though it was being typed from the keyboard.</p></li>
+
+<li><p>Build your code as before, but generate a fresh new maze to feed
+to it. I have included a Python program that generates a fresh
+maze each time it is called. It uses a terrible maze algorithm,
+but it works:</p>
+
+<pre><code>python3 makemaze.py | ./a.out
+</code></pre>
+<p>This tells the Linux shell to run the <code>makemaze.py</code> program and
+to connect its output to the input of <code>a.out</code>.</p></li>
+</ul>
+
+<h3>Solve</h3>
+
+<p>To solve the maze we will use a technique from <em>cellular logic</em>. The
+approach is to look at each position on the field and decide whether
+or not to change it based only on the positions immediately
+surrounding it.</p>
+
+<p>Here is the big idea of this solver: we will define a simple dead
+end as a path that is surrounded on three sides (up, down, left,
+right) by walls. A simple dead end can never be part of the solution
+to the maze, so we turn it into a wall instead. This may create a
+new simple dead end, so we repeat the process until there are no
+simple dead ends left on the maze. What is left is a field of all
+walls except for the solution path, which remains intact.</p>
+
+<p>A few important details:</p>
+
+<ol>
+<li><p>Scan the entire field looking for simple dead ends. Use a pair
+of nested loops to scan every position on the board.</p></li>
+
+<li><p>Do not scan the top, bottom, left, or right walls, i.e., confine
+your loops to starting at 1 and ending at one less than the
+size, i.e., <code>y &lt; SIZE_Y-1</code> or something similar. This will allow
+you to safely look up, down, left, and right without having to
+worry about checking invalid positions (like <code>field[-1][2]</code>).</p></li>
+
+<li><p>At each position, check if:</p>
+
+<p>a)  The position is a path character
+b)  There are exactly three neighbors that are walls</p>
+
+<p>If so, replace the path with a wall.</p></li>
+
+<li><p>After completing a sweep over the entire field (except the very
+edges as noted above), start over if you made any changes.</p></li>
+
+<li><p>Return when you have made a complete pass over the field and not
+made any changes.</p></li>
+</ol>
+
+<p>With each pass over the field, the dead ends will get shorter and
+shorter until eventually there are none left.</p>
+
+<p>To test, you might find it helpful to call <code>print_maze</code> at various
+times to see if the effect is working. For example, make only a
+single pass over the field and then call <code>print_maze</code>. Look at the
+results and see if the dead ends are getting shorter. Be sure to
+remove debugging code before you finish.</p>
+
+<p>You will probably want to test this by calling it directly as
+described earlier so you can see the complete output even when it is
+incorrect. Once you are confident everything is working, run <code>make</code>
+to get the full test results, and then move on to <code>grind grade</code> to
+submit your code for grading.</p>
+</body></html>

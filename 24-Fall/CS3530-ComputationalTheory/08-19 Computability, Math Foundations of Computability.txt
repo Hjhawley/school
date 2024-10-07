@@ -1,7 +1,8 @@
 Course Overview:
 
     The course focuses on the theory of computation, including finite-state automata, pushdown automata, Turing machines, and complexity theory.
-    By the end of the course, students will be able to compare computational models, analyze formal systems, investigate computational problems, and justify the limits of computational models.
+    By the end of the course, students will be able to compare computational models, analyze formal systems, investigate computational problems,
+    and justify the limits of computational models.
 
 Key Concepts:
 

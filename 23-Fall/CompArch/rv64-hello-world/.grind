@@ -1,0 +1,9 @@
+{
+    "assignmentID": 1089,
+    "problems": {
+        "rv64-hello-world": {
+            "id": 380,
+            "step": 1
+        }
+    }
+}

@@ -1,0 +1,26 @@
+Testing strings "" and ""
+Expected result was 0, actual result was 0
+
+Testing strings "A" and "A"
+Expected result was 0, actual result was 0
+
+Testing strings "G" and "T"
+Expected result was 1, actual result was 1
+
+Testing strings "GGACTGAAATCTG" and "GGACTGAAATCTG"
+Expected result was 0, actual result was 0
+
+Testing strings "GGACGGATTCTG" and "AGGACGGATTCT"
+Expected result was 9, actual result was 9
+
+Testing strings "AATG" and "AAA"
+Expected result was -1, actual result was -1
+
+Testing strings "ATA" and "AGTG"
+Expected result was -1, actual result was -1
+
+Testing strings "" and "G"
+Expected result was -1, actual result was -1
+
+Testing strings "G" and ""
+Expected result was -1, actual result was -1

@@ -1,0 +1,18 @@
+Turing Machine: like a DFA with an infinite tape
+
+Configuration: a way to see the current processing state
+
+What do we mean by 'accept'?
+if there is a sequence of configurations that follow the transition funcs such that we enter the accept state 
+
+What do we mean by 'halt'?
+A machine that accepts or rejects a string eventually, doesn't loop infinitely
+
+Turing-recognizable
+Turing-decidable
+
+Implementation-level descriptions
+The "assembly language" of Turing machines so to speak
+
+High-level descriptions
+A more abstract, less tedious description that still doesn't obscure important details

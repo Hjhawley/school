@@ -1,0 +1,26 @@
+Testing square_of_sum with input 1
+Expected result was 1, actual result was 1
+
+Testing square_of_sum with input 5
+Expected result was 225, actual result was 225
+
+Testing square_of_sum with input 100
+Expected result was 25502500, actual result was 25502500
+
+Testing sum_of_squares with input 1
+Expected result was 1, actual result was 1
+
+Testing sum_of_squares with input 5
+Expected result was 55, actual result was 55
+
+Testing sum_of_squares with input 100
+Expected result was 338350, actual result was 338350
+
+Testing difference_of_squares with input 1
+Expected result was 0, actual result was 0
+
+Testing difference_of_squares with input 5
+Expected result was 170, actual result was 170
+
+Testing difference_of_squares with input 100
+Expected result was 25164150, actual result was 25164150

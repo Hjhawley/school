@@ -70,30 +70,35 @@ Since we don’t reach terminal states in depth-limited search, we need to estim
 
 Pseudocode:
 
-def MINIMAX(initial_state, model):
-  best_value = -INFINITY
+def MINIMAX(initial_state, model, cutoff_depth):
+  best_value = -float('inf')
   best_action = None
-  for action in model.ACTIONS(current_state):
-    next_state = model.RESULTS(current_state, action)
+  for action in model.ACTIONS(initial_state):
+    next_state = model.RESULTS(initial_state, action)
+    value = MIN(next_state, model, 1, cutoff_depth)  # Start with depth 1
+    if value > best_value:
+      best_value = value
+      best_action = action
+  return best_action
 
-def MAX(current_state, model, cutoff_depth):
+def MAX(current_state, model, depth, cutoff_depth):
   if depth >= cutoff_depth or model.GAME_OVER(current_state):
     return model.EVALUATE(current_state)
-  best_value = -INFINITY # some arbitrarily low negative value
+  best_value = -float('inf')
   for action in model.ACTIONS(current_state):
     next_state = model.RESULTS(current_state, action)
-    value = MIN(next_state, model, depth+1, cutoff_depth)
+    value = MIN(next_state, model, depth + 1, cutoff_depth)
     if value > best_value:
       best_value = value
   return best_value
 
-def MIN(current_state, model, cutoff_depth):
+def MIN(current_state, model, depth, cutoff_depth):
   if depth >= cutoff_depth or model.GAME_OVER(current_state):
     return model.EVALUATE(current_state)
-  best_value = +INFINITY # some arbitrarily great positive value
+  best_value = float('inf')
   for action in model.ACTIONS(current_state):
     next_state = model.RESULTS(current_state, action)
-    value = MAX(next_state, model, depth+1, cutoff_depth)
+    value = MAX(next_state, model, depth + 1, cutoff_depth)
     if value < best_value:
       best_value = value
   return best_value

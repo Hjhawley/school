@@ -1,0 +1,54 @@
+Quiescence
+
+Quiescence refers to the state in game tree evaluation where a position is "quiet," meaning that no drastic or dramatic changes
+(like a capture in chess or a big shift in control) are likely to occur in the near future. The state is relatively stable.
+The idea is that some positions are unstable or "noisy," and evaluating them prematurely could lead to incorrect assessments.
+
+In games like chess, for example, you might encounter a position where several captures are about to happen.
+Evaluating the position immediately, without allowing these tactical exchanges to settle, can lead to a misleading score.
+Quiescence search extends the game tree deeper for these unstable positions until things "calm down"
+(i.e., no immediate dramatic moves are left), providing a more accurate evaluation of the game state.
+
+In-depth searches often have a depth limit to prevent excessive computation, but quiescence search helps avoid situations
+where noisy, unstable positions at the boundary of the search depth lead to poor decisions.
+
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+Alpha-Beta Pruning
+
+Alpha-Beta Pruning is a technique used to optimize the Minimax Algorithm by pruning away branches of the
+game tree that don't need to be evaluated, because they won't affect the final decision. It drastically improves
+the efficiency of Minimax, allowing it to search deeper in the game tree.
+
+Here’s how it works:
+
+1. Alpha: This is the best (highest) value that the maximizing player can guarantee at that level or above.
+When you're looking at a maximizing node, you keep track of the maximum value found so far (this is alpha).
+
+2. Beta: This is the best (lowest) value that the minimizing player can guarantee at that level or above.
+When you're looking at a minimizing node, you keep track of the minimum value found so far (this is beta).
+
+3. Pruning: The key insight is that if you find a branch where one player (let’s say the maximizing player) has a
+guaranteed better option already available earlier in the tree, you don’t need to evaluate the rest of that branch. You can prune it.
+
+#Max and Min Node Example (with pruning):
+
+Imagine a max node (your turn, where you're trying to maximize your score) that is aware of a min node higher up the tree
+(the opponent's turn, where they're minimizing your score).
+
+- At the max node, you look at possible moves and their resulting values.
+- As soon as one of those moves leads to a value that is worse than what the min-node ancestor has already found for
+itself (a value that the opponent would reject because they have a better option), you can stop exploring further moves from this node.
+This is because the opponent won’t let you get to this point — they have already found a move that minimizes your score better.
+
+This is alpha-beta pruning in action. It cuts down on unnecessary exploration and speeds up the Minimax search.
+
+Why it matters:
+Without pruning, the time complexity of the Minimax algorithm is O(b^d), where b is the branching factor (possible moves)
+and d is the depth of the tree. With alpha-beta pruning, you can reduce the effective branching factor, allowing the
+algorithm to search deeper in the same amount of time.
+
+Recap:
+- Alpha tracks the best guaranteed option for the maximizing player.
+- Beta tracks the best guaranteed option for the minimizing player.
+- If a branch can’t improve the situation for one player, it gets pruned, saving time.
