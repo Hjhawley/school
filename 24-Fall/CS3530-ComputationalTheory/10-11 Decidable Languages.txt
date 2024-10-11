@@ -1,0 +1,68 @@
+Turing Machines and Decidable Languages
+
+A Turing machine (TM) is a theoretical computing model that consists of:
+  - A finite set of states Q, including a start state and at least one halting state (accept and reject).
+  - An infinite tape divided into cells, each cell holding a symbol from the tape alphabet Γ.
+  - A tape head that reads and writes symbols on the tape and moves left, right, or stays in place.
+  - A transition function δ: Q × Γ → Q × Γ × {L,R,S} that dictates the machine's actions.
+
+Can a TM's Head Stay in the Same Location in Two Successive Steps?
+- Yes, a Turing machine's head can remain on the same tape cell across successive steps.
+  - The transition function δ includes the option to Stay (S).
+  - When δ specifies S, the head does not move after reading and writing; it stays on the current cell.
+  - This allows the TM to perform multiple operations on the same cell before moving on.
+
+Can a TM Contain Just a Single State?
+- No, a Turing machine cannot function properly with only one state.
+  - At minimum, a TM requires:
+    - A start state to begin computation.
+    - At least one halting state (accept or reject) to conclude computation.
+  - With only one state:
+    - The machine would either halt immediately without processing
+        (if the sole state is a halting state).
+    - Or it would loop indefinitely without reaching a halting state
+        (if the sole state is not a halting state).
+
+- A language L is "decidable" if there exists a Turing machine that:
+  - Accepts all strings in L.
+  - Rejects all strings not in L.
+  - Halts on every input string.
+
+Closure Under Star Operation (L*)
+- Statement: The set of decidable languages is closed under the star operation.
+- Proof Outline:
+  1. Given: A decidable language L with a Turing Machine M that decides it.
+  2. Objective: Construct a TM M* that decides L*, the set of all finite concatenations of strings from L.
+  3. Construction:
+     - M* takes an input string w.
+     - It attempts to partition w into substrings w = w₁ w₂ ... w_k, where each w_i ∈ L or w is empty.
+     - For each possible partition, M* simulates M on each w_i.
+     - If a partition is found where all w_i are accepted by M, M* accepts w.
+     - If no such partition exists, M* rejects w.
+  4. Conclusion: Since M halts on all inputs and there are finitely many partitions to consider,
+        M* halts on all inputs. Therefore, L* is decidable.
+
+Closure Under Complementation
+- Statement: The set of decidable languages is closed under complementation.
+- Proof Outline:
+  1. Given: A decidable language L with a TM M that decides it.
+  2. Objective: Construct a TM M' that decides the complement ‾L.
+  3. Construction:
+     - M' simulates M on input w.
+     - If M accepts w, then M' rejects w.
+     - If M rejects w, then M' accepts w.
+  4. Conclusion: Since M halts on all inputs, M' also halts on all inputs. Therefore,
+        L is decidable.
+
+Closure Under Intersection
+- Statement: The set of decidable languages is closed under intersection.
+- Proof Outline:
+  1. Given: Two decidable languages L₁ and L₂ with TMs M₁ and M₂ that decide them.
+  2. Objective: Construct a TM M that decides L₁ ∩ L₂.
+  3. Construction:
+     - M takes an input string w.
+     - It simulates M₁ on w.
+     - It simulates M₂ on w.
+     - If both M₁ and M₂ accept w, then M accepts w.
+     - If either M₁ or M₂ rejects w, then M rejects w.
+  4. Conclusion: Since both M₁ and M₂ halt on all inputs, M halts on all inputs. Therefore, L₁ ∩ L₂ is decidable.
