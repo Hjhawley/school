@@ -1,0 +1,61 @@
+How to prove a particular language is undecidable
+
+Language A_TM ​= {⟨M,w⟩ ∣ M accepts w}
+In other words "Does a Turing machine M accept a particular string w?"
+
+We have nothing that says M is a decider (we don't know if it halts or not)
+
+Theorem: A_TM is Recognizable (it either halts or loops)
+    A language is recognizable (also called semi-decidable) if there is a TM that
+    halts on members of the language (accepts or rejects) but may loop indefinitely on non-members.
+    If M accepts the input w, the machine halts (accepts).
+    If M rejects the input w, the machine halts (rejects).
+    If M neither accepts nor rejects (loops forever), the behavior is undefined.
+
+    Constructing a recognizer machine U for A_TM:
+    Machine U simulates M on input w:
+        Run M on input w.
+        If M accepts w, accept. If M rejects w, reject.
+    However, since we don't know whether M halts on all inputs, we don’t know if U will halt or loop.
+
+Theorem 4.11 (the anchor for all future proofs; remember this one)
+A_TM is undecidable.
+"The Halting Problem" - There is no general algorithm (TM)
+that can determine whether an arbitrary machine will halt on a given input.
+Proof by contradiction: assume A_TM is decidable, then show the contradiction.
+
+Let H be a decider for A_TM.
+    H(⟨M,w⟩)=
+        Accept, if M accepts w.
+        Reject, if M does not accept w.
+
+Construct a new TM D:
+    Input to D is a single TM description ⟨M⟩ (instead of a pair ⟨M,w⟩).
+    Behavior of D:
+        Run H on input ⟨M,⟨M⟩⟩ ("Does machine M accept its own description as input?").
+        If H accepts:
+            Reject.
+        If H rejects:
+            Accept.
+
+D behaves in the opposite way of the machine it’s analyzing.
+    If M accepts its own description, D rejects.
+    If M rejects or fails to accept its own description, D accepts.
+
+What happens when we run D on its own string description ⟨D⟩?
+    D(⟨D⟩):
+        Accept, if D does not accept ⟨D⟩.
+        Reject, if D accepts ⟨D⟩.
+
+This creates a contradiction:
+    If D(⟨D⟩) accepts, it means D must reject ⟨D⟩.
+    If D(⟨D⟩) rejects, it means D must accept ⟨D⟩.
+
+This is a logical paradox!
+The assumption that A_TM is decidable leads to a contradiction.
+Therefore, our assumption must be false: A_TM is undecidable.
+There is no general way to determine whether an arbitrary Turing machine will halt on a given input.
+
+While we can create deciders for some specific languages,
+we cannot construct a decider that works for all possible languages.
+We can only build deciders on a case-by-case basis for the languages that are known to be decidable.
