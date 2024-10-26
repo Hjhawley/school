@@ -1,0 +1,19 @@
+PEAS Assessment: 2048
+
+2048 is a pretty popular iOS sliding-tile puzzle game. The player moves numbered tiles around a 4x4 grid. The grid is mostly empty at first. When the player swipes in any of the four directions, all of the tiles slide in that direction and don't stop unless they hit a wall or another tile. When two tiles of the same value collide, they merge into a single tile with double the value (merging a 2 and a 2 will create a 4). After each move, a new tile, either a 2 or a 4, randomly appears in an empty cell on the grid. The objective is to keep combining tiles until we create a 2048 tile, before running out of space on the grid.
+
+Performance Measure: The agent wants to maximize its score, which increases every time a tile is merged. 2048 is the default end goal but the game can continue beyond that, so my agent will just shoot for the highest score possible.
+
+Environment: A 4x4 grid-based board where numbered tiles (powers of 2) slide in four directions (up, down, left, right). After each move, a new tile (2 or 4) appears randomly in an empty cell.
+    Observability: Fully Observable - the agent can see the whole grid at all times.
+    Determinism: Stochastic - the placement and the value of new tiles after each move are random.
+    Episodic vs. Sequential: Sequential - each move affects future states.
+    Static vs. Dynamic: Static - the environment changes only when the agent makes a move.
+    Discrete vs. Continuous: Discrete - the game is on a finite 4x4 grid.
+    Single vs. Multi-Agent: Single-Agent - only the agent interacts with the environment.
+    Known vs. Unknown: Known - the agent knows exactly what will happen if it performs an action (though it doesn't know where the next tile will show up)
+
+Actions: Up, down, left, or right.
+Percepts: The current state of the grid, meaning the position of all tiles as well as their values.
+
+Search Strategy Plan: The project will use A* search to navigate the state space. The heuristic will combine factors such as the number of empty cells, sameness of tiles, and the highest tile value to guide the agent towards optimal moves.

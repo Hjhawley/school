@@ -1,4 +1,4 @@
-Turing Machines and Decidable Languages
+Decidable Languages
 
 A Turing machine (TM) is a theoretical computing model that consists of:
   - A finite set of states Q, including a start state and at least one halting state (accept and reject).

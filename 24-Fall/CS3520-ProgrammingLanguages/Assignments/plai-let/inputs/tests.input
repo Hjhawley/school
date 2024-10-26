@@ -1,0 +1,16 @@
+1
+0
+-4
+true
+false
+67 + 32
+3 + 4 + 9 + 12
+1 + -2 + 3 + -4 + 5
+if true { 1 + (2 + 3) } else { 1 + 2 + 3 }
+if false { 1 + (2 + 3) } else { false }
+let x = 89 { x }
+let x = 15 { 73 }
+let y = 3 { if true { y } else { y + 9 }
+let z = 123 { let z = 4 { z + 2 } + z }
+let z = 123 { z + let z = 4 { z + 2 } }
+let a = 123 { let a = 9 { a + -2 } + let a = 4 { a + 2 } } + -13

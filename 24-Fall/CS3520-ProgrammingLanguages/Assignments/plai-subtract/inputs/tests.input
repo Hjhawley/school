@@ -1,0 +1,13 @@
+1
+0
+-4
+true
+false
+67 + 32
+3 + 4 + 9 + 12
+1 - 2 - 3 - 4 - 5
+1 - -2 - 3 - -4 - 5
+if true { 1 - 2 - 3 } else { 1 + 2 + 3 }
+if true { (1 - 2) - 3 } else { (1 + 2) + 3 }
+if true { 1 - (2 - 3) } else { 1 + (2 + 3) }
+if false { 1 - (2 - 3) } else { false }

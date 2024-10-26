@@ -1,0 +1,708 @@
+
+Please enter an expression:
+tokens: [Number(1.0)]
+ast: Num(
+    1.0,
+)
+1
+
+Please enter an expression:
+tokens: [Number(0.0)]
+ast: Num(
+    0.0,
+)
+0
+
+Please enter an expression:
+tokens: [Number(-4.0)]
+ast: Num(
+    -4.0,
+)
+-4
+
+Please enter an expression:
+tokens: [Bool(true)]
+ast: Bool(
+    true,
+)
+true
+
+Please enter an expression:
+tokens: [Bool(false)]
+ast: Bool(
+    false,
+)
+false
+
+Please enter an expression:
+tokens: [Number(67.0), Plus, Number(32.0)]
+ast: Plus {
+    left: Num(
+        67.0,
+    ),
+    right: Num(
+        32.0,
+    ),
+}
+99
+
+Please enter an expression:
+tokens: [Number(3.0), Plus, Number(4.0), Plus, Number(9.0), Plus, Number(12.0)]
+ast: Plus {
+    left: Plus {
+        left: Plus {
+            left: Num(
+                3.0,
+            ),
+            right: Num(
+                4.0,
+            ),
+        },
+        right: Num(
+            9.0,
+        ),
+    },
+    right: Num(
+        12.0,
+    ),
+}
+28
+
+Please enter an expression:
+tokens: [Number(1.0), Plus, Number(-2.0), Plus, Number(3.0), Plus, Number(-4.0), Plus, Number(5.0)]
+ast: Plus {
+    left: Plus {
+        left: Plus {
+            left: Plus {
+                left: Num(
+                    1.0,
+                ),
+                right: Num(
+                    -2.0,
+                ),
+            },
+            right: Num(
+                3.0,
+            ),
+        },
+        right: Num(
+            -4.0,
+        ),
+    },
+    right: Num(
+        5.0,
+    ),
+}
+3
+
+Please enter an expression:
+tokens: [If, Bool(true), LeftBrace, Number(1.0), Plus, LeftParen, Number(2.0), Plus, Number(3.0), RightParen, RightBrace, Else, LeftBrace, Number(1.0), Plus, Number(2.0), Plus, Number(3.0), RightBrace]
+ast: Cnd {
+    tst: Bool(
+        true,
+    ),
+    thn: Plus {
+        left: Num(
+            1.0,
+        ),
+        right: Plus {
+            left: Num(
+                2.0,
+            ),
+            right: Num(
+                3.0,
+            ),
+        },
+    },
+    els: Plus {
+        left: Plus {
+            left: Num(
+                1.0,
+            ),
+            right: Num(
+                2.0,
+            ),
+        },
+        right: Num(
+            3.0,
+        ),
+    },
+}
+6
+
+Please enter an expression:
+tokens: [If, Bool(false), LeftBrace, Number(1.0), Plus, LeftParen, Number(2.0), Plus, Number(3.0), RightParen, RightBrace, Else, LeftBrace, Bool(false), RightBrace]
+ast: Cnd {
+    tst: Bool(
+        false,
+    ),
+    thn: Plus {
+        left: Num(
+            1.0,
+        ),
+        right: Plus {
+            left: Num(
+                2.0,
+            ),
+            right: Num(
+                3.0,
+            ),
+        },
+    },
+    els: Bool(
+        false,
+    ),
+}
+false
+
+Please enter an expression:
+tokens: [Let, Symbol("x"), Equal, Number(89.0), LeftBrace, Symbol("x"), RightBrace]
+ast: Let1 {
+    var: "x",
+    value: Num(
+        89.0,
+    ),
+    body: Var(
+        "x",
+    ),
+}
+89
+
+Please enter an expression:
+tokens: [Let, Symbol("x"), Equal, Number(15.0), LeftBrace, Number(73.0), RightBrace]
+ast: Let1 {
+    var: "x",
+    value: Num(
+        15.0,
+    ),
+    body: Num(
+        73.0,
+    ),
+}
+73
+
+Please enter an expression:
+tokens: [Let, Symbol("y"), Equal, Number(3.0), LeftBrace, If, Bool(true), LeftBrace, Symbol("y"), RightBrace, Else, LeftBrace, Symbol("y"), Plus, Number(9.0), RightBrace, RightBrace]
+ast: Let1 {
+    var: "y",
+    value: Num(
+        3.0,
+    ),
+    body: Cnd {
+        tst: Bool(
+            true,
+        ),
+        thn: Var(
+            "y",
+        ),
+        els: Plus {
+            left: Var(
+                "y",
+            ),
+            right: Num(
+                9.0,
+            ),
+        },
+    },
+}
+3
+
+Please enter an expression:
+tokens: [Let, Symbol("z"), Equal, Number(123.0), LeftBrace, Let, Symbol("z"), Equal, Number(4.0), LeftBrace, Symbol("z"), Plus, Number(2.0), RightBrace, Plus, Symbol("z"), RightBrace]
+ast: Let1 {
+    var: "z",
+    value: Num(
+        123.0,
+    ),
+    body: Plus {
+        left: Let1 {
+            var: "z",
+            value: Num(
+                4.0,
+            ),
+            body: Plus {
+                left: Var(
+                    "z",
+                ),
+                right: Num(
+                    2.0,
+                ),
+            },
+        },
+        right: Var(
+            "z",
+        ),
+    },
+}
+129
+
+Please enter an expression:
+tokens: [Let, Symbol("z"), Equal, Number(123.0), LeftBrace, Symbol("z"), Plus, Let, Symbol("z"), Equal, Number(4.0), LeftBrace, Symbol("z"), Plus, Number(2.0), RightBrace, RightBrace]
+ast: Let1 {
+    var: "z",
+    value: Num(
+        123.0,
+    ),
+    body: Plus {
+        left: Var(
+            "z",
+        ),
+        right: Let1 {
+            var: "z",
+            value: Num(
+                4.0,
+            ),
+            body: Plus {
+                left: Var(
+                    "z",
+                ),
+                right: Num(
+                    2.0,
+                ),
+            },
+        },
+    },
+}
+129
+
+Please enter an expression:
+tokens: [Let, Symbol("a"), Equal, Number(123.0), LeftBrace, Let, Symbol("a"), Equal, Number(9.0), LeftBrace, Symbol("a"), Plus, Number(-2.0), RightBrace, Plus, Let, Symbol("a"), Equal, Number(4.0), LeftBrace, Symbol("a"), Plus, Number(2.0), RightBrace, RightBrace, Plus, Number(-13.0)]
+ast: Plus {
+    left: Let1 {
+        var: "a",
+        value: Num(
+            123.0,
+        ),
+        body: Plus {
+            left: Let1 {
+                var: "a",
+                value: Num(
+                    9.0,
+                ),
+                body: Plus {
+                    left: Var(
+                        "a",
+                    ),
+                    right: Num(
+                        -2.0,
+                    ),
+                },
+            },
+            right: Let1 {
+                var: "a",
+                value: Num(
+                    4.0,
+                ),
+                body: Plus {
+                    left: Var(
+                        "a",
+                    ),
+                    right: Num(
+                        2.0,
+                    ),
+                },
+            },
+        },
+    },
+    right: Num(
+        -13.0,
+    ),
+}
+0
+
+Please enter an expression:
+tokens: [LeftParen, Fn, LeftParen, Symbol("a"), RightParen, LeftBrace, Symbol("a"), Plus, Symbol("a"), RightBrace, RightParen, LeftParen, Number(13.0), RightParen]
+ast: App {
+    fun: Lam {
+        var: "a",
+        body: Plus {
+            left: Var(
+                "a",
+            ),
+            right: Var(
+                "a",
+            ),
+        },
+    },
+    arg: Num(
+        13.0,
+    ),
+}
+26
+
+Please enter an expression:
+tokens: [Fn, LeftParen, Symbol("a"), RightParen, LeftBrace, Symbol("a"), Plus, Symbol("a"), RightBrace, LeftParen, Number(13.0), RightParen]
+ast: App {
+    fun: Lam {
+        var: "a",
+        body: Plus {
+            left: Var(
+                "a",
+            ),
+            right: Var(
+                "a",
+            ),
+        },
+    },
+    arg: Num(
+        13.0,
+    ),
+}
+26
+
+Please enter an expression:
+tokens: [Let, Symbol("f"), Equal, Fn, LeftParen, Symbol("x"), RightParen, LeftBrace, Symbol("x"), Plus, Number(-1.0), RightBrace, LeftBrace, Symbol("f"), LeftParen, Number(10.0), RightParen, RightBrace]
+ast: Let1 {
+    var: "f",
+    value: Lam {
+        var: "x",
+        body: Plus {
+            left: Var(
+                "x",
+            ),
+            right: Num(
+                -1.0,
+            ),
+        },
+    },
+    body: App {
+        fun: Var(
+            "f",
+        ),
+        arg: Num(
+            10.0,
+        ),
+    },
+}
+9
+
+Please enter an expression:
+tokens: [Fn, LeftParen, Symbol("y"), RightParen, LeftBrace, Number(1.0), RightBrace, LeftParen, Number(10.0), RightParen]
+ast: App {
+    fun: Lam {
+        var: "y",
+        body: Num(
+            1.0,
+        ),
+    },
+    arg: Num(
+        10.0,
+    ),
+}
+1
+
+Please enter an expression:
+tokens: [Let, Symbol("x"), Equal, Number(2.0), LeftBrace, Fn, LeftParen, Symbol("y"), RightParen, LeftBrace, Number(1.0), RightBrace, LeftParen, Number(10.0), RightParen, RightBrace]
+ast: Let1 {
+    var: "x",
+    value: Num(
+        2.0,
+    ),
+    body: App {
+        fun: Lam {
+            var: "y",
+            body: Num(
+                1.0,
+            ),
+        },
+        arg: Num(
+            10.0,
+        ),
+    },
+}
+1
+
+Please enter an expression:
+tokens: [Let, Symbol("f"), Equal, Fn, LeftParen, Symbol("y"), RightParen, LeftBrace, Symbol("x"), RightBrace, LeftBrace, Let, Symbol("x"), Equal, Number(1.0), LeftBrace, Symbol("f"), LeftParen, Number(10.0), RightParen, RightBrace, RightBrace]
+ast: Let1 {
+    var: "f",
+    value: Lam {
+        var: "y",
+        body: Var(
+            "x",
+        ),
+    },
+    body: Let1 {
+        var: "x",
+        value: Num(
+            1.0,
+        ),
+        body: App {
+            fun: Var(
+                "f",
+            ),
+            arg: Num(
+                10.0,
+            ),
+        },
+    },
+}
+Runtime error: x not bound
+
+Please enter an expression:
+tokens: [Let, Symbol("x"), Equal, Number(1.0), LeftBrace, Let, Symbol("f"), Equal, Fn, LeftParen, Symbol("y"), RightParen, LeftBrace, Symbol("x"), RightBrace, LeftBrace, Let, Symbol("x"), Equal, Number(2.0), LeftBrace, Symbol("f"), LeftParen, Number(10.0), RightParen, RightBrace, RightBrace, RightBrace]
+ast: Let1 {
+    var: "x",
+    value: Num(
+        1.0,
+    ),
+    body: Let1 {
+        var: "f",
+        value: Lam {
+            var: "y",
+            body: Var(
+                "x",
+            ),
+        },
+        body: Let1 {
+            var: "x",
+            value: Num(
+                2.0,
+            ),
+            body: App {
+                fun: Var(
+                    "f",
+                ),
+                arg: Num(
+                    10.0,
+                ),
+            },
+        },
+    },
+}
+1
+
+Please enter an expression:
+tokens: [Let, Symbol("x"), Equal, Number(3.0), LeftBrace, Fn, LeftParen, Symbol("y"), RightParen, LeftBrace, Symbol("x"), Plus, Symbol("y"), RightBrace, RightBrace, LeftParen, Number(4.0), RightParen]
+ast: App {
+    fun: Let1 {
+        var: "x",
+        value: Num(
+            3.0,
+        ),
+        body: Lam {
+            var: "y",
+            body: Plus {
+                left: Var(
+                    "x",
+                ),
+                right: Var(
+                    "y",
+                ),
+            },
+        },
+    },
+    arg: Num(
+        4.0,
+    ),
+}
+7
+
+Please enter an expression:
+tokens: [Let, Symbol("y"), Equal, Number(3.0), LeftBrace, Fn, LeftParen, Symbol("y"), RightParen, LeftBrace, Symbol("y"), Plus, Number(1.0), RightBrace, RightBrace, LeftParen, Number(5.0), RightParen]
+ast: App {
+    fun: Let1 {
+        var: "y",
+        value: Num(
+            3.0,
+        ),
+        body: Lam {
+            var: "y",
+            body: Plus {
+                left: Var(
+                    "y",
+                ),
+                right: Num(
+                    1.0,
+                ),
+            },
+        },
+    },
+    arg: Num(
+        5.0,
+    ),
+}
+6
+
+Please enter an expression:
+Parse error: Unexpected character: '*'
+
+Please enter an expression:
+tokens: [Let, Symbol("add5"), Equal, Fn, LeftParen, Symbol("x"), RightParen, LeftBrace, Symbol("x"), Plus, Number(5.0), RightBrace, LeftBrace, Symbol("add5"), LeftParen, Number(3.0), RightParen, Plus, Number(12.0), Plus, Symbol("add5"), LeftParen, Number(9.0), RightParen, RightBrace]
+ast: Let1 {
+    var: "add5",
+    value: Lam {
+        var: "x",
+        body: Plus {
+            left: Var(
+                "x",
+            ),
+            right: Num(
+                5.0,
+            ),
+        },
+    },
+    body: Plus {
+        left: Plus {
+            left: App {
+                fun: Var(
+                    "add5",
+                ),
+                arg: Num(
+                    3.0,
+                ),
+            },
+            right: Num(
+                12.0,
+            ),
+        },
+        right: App {
+            fun: Var(
+                "add5",
+            ),
+            arg: Num(
+                9.0,
+            ),
+        },
+    },
+}
+34
+
+Please enter an expression:
+tokens: [Let, Symbol("adder"), Equal, Fn, LeftParen, Symbol("x"), RightParen, LeftBrace, Fn, LeftParen, Symbol("y"), RightParen, LeftBrace, Symbol("x"), Plus, Symbol("y"), RightBrace, RightBrace, LeftBrace, Symbol("adder"), LeftParen, Number(2.0), RightParen, LeftParen, Number(3.0), RightParen, Plus, Symbol("adder"), LeftParen, Number(9.0), RightParen, LeftParen, Number(8.0), RightParen, Plus, Number(1.0), Plus, Fn, LeftParen, Symbol("g"), RightParen, LeftBrace, Number(-4.0), Plus, Symbol("g"), RightBrace, LeftParen, Symbol("adder"), LeftParen, Number(2.0), RightParen, LeftParen, Number(3.0), RightParen, RightParen, RightBrace]
+ast: Let1 {
+    var: "adder",
+    value: Lam {
+        var: "x",
+        body: Lam {
+            var: "y",
+            body: Plus {
+                left: Var(
+                    "x",
+                ),
+                right: Var(
+                    "y",
+                ),
+            },
+        },
+    },
+    body: Plus {
+        left: Plus {
+            left: Plus {
+                left: App {
+                    fun: App {
+                        fun: Var(
+                            "adder",
+                        ),
+                        arg: Num(
+                            2.0,
+                        ),
+                    },
+                    arg: Num(
+                        3.0,
+                    ),
+                },
+                right: App {
+                    fun: App {
+                        fun: Var(
+                            "adder",
+                        ),
+                        arg: Num(
+                            9.0,
+                        ),
+                    },
+                    arg: Num(
+                        8.0,
+                    ),
+                },
+            },
+            right: Num(
+                1.0,
+            ),
+        },
+        right: App {
+            fun: Lam {
+                var: "g",
+                body: Plus {
+                    left: Num(
+                        -4.0,
+                    ),
+                    right: Var(
+                        "g",
+                    ),
+                },
+            },
+            arg: App {
+                fun: App {
+                    fun: Var(
+                        "adder",
+                    ),
+                    arg: Num(
+                        2.0,
+                    ),
+                },
+                arg: Num(
+                    3.0,
+                ),
+            },
+        },
+    },
+}
+24
+
+Please enter an expression:
+tokens: [Let, Symbol("adder"), Equal, Fn, LeftParen, Symbol("x"), RightParen, LeftBrace, Fn, LeftParen, Symbol("y"), RightParen, LeftBrace, Symbol("x"), Plus, Symbol("y"), RightBrace, RightBrace, LeftBrace, Let, Symbol("add8"), Equal, Symbol("adder"), LeftParen, Number(8.0), RightParen, LeftBrace, Symbol("add8"), LeftParen, Number(2.0), RightParen, Plus, Symbol("adder"), LeftParen, Number(4.0), RightParen, LeftParen, Number(6.0), RightParen, RightBrace, RightBrace]
+ast: Let1 {
+    var: "adder",
+    value: Lam {
+        var: "x",
+        body: Lam {
+            var: "y",
+            body: Plus {
+                left: Var(
+                    "x",
+                ),
+                right: Var(
+                    "y",
+                ),
+            },
+        },
+    },
+    body: Let1 {
+        var: "add8",
+        value: App {
+            fun: Var(
+                "adder",
+            ),
+            arg: Num(
+                8.0,
+            ),
+        },
+        body: Plus {
+            left: App {
+                fun: Var(
+                    "add8",
+                ),
+                arg: Num(
+                    2.0,
+                ),
+            },
+            right: App {
+                fun: App {
+                    fun: Var(
+                        "adder",
+                    ),
+                    arg: Num(
+                        4.0,
+                    ),
+                },
+                arg: Num(
+                    6.0,
+                ),
+            },
+        },
+    },
+}
+20
+
+Please enter an expression:

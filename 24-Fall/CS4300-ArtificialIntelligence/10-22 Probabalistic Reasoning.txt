@@ -1,0 +1,10 @@
+Probabilistic Reasoning
+
+Making rational decisions when the environment is:
+	Partially observable
+	Stochastic (non-deterministic)
+
+Utility: the quantifiable effectiveness of an agent's actions.
+As long as our actions are deterministic and fully observable, the utility of our actions can just be computed.
+But in an unclear environment, we have to shoot for a Maximum Expected Utility (MEU)
+

@@ -1,0 +1,7 @@
+Oct 24 PEAS assessment - description of environment and performance measure
+Oct 31 Model / Env / working random agent - required to plug into gymnasium OR petting zoo
+Nov 7 Running agent
+Nov 14 initial results
+Nov 21 fine tuned results
+Dec 5 presentations - 5 minutes, ~10 slides. Don't say what you were GONNA do or what didn't work; say what you DID
+Dec 10 Report

@@ -1,0 +1,255 @@
+
+Please enter an expression:
+tokens: [Number(1.0)]
+ast: Num(
+    1.0,
+)
+1
+
+Please enter an expression:
+tokens: [Number(0.0)]
+ast: Num(
+    0.0,
+)
+0
+
+Please enter an expression:
+tokens: [Minus, Number(4.0)]
+ast: Num(
+    -4.0,
+)
+-4
+
+Please enter an expression:
+tokens: [Bool(true)]
+ast: Bool(
+    true,
+)
+true
+
+Please enter an expression:
+tokens: [Bool(false)]
+ast: Bool(
+    false,
+)
+false
+
+Please enter an expression:
+tokens: [Number(67.0), Plus, Number(32.0)]
+ast: Plus {
+    left: Num(
+        67.0,
+    ),
+    right: Num(
+        32.0,
+    ),
+}
+99
+
+Please enter an expression:
+tokens: [Number(3.0), Plus, Number(4.0), Plus, Number(9.0), Plus, Number(12.0)]
+ast: Plus {
+    left: Plus {
+        left: Plus {
+            left: Num(
+                3.0,
+            ),
+            right: Num(
+                4.0,
+            ),
+        },
+        right: Num(
+            9.0,
+        ),
+    },
+    right: Num(
+        12.0,
+    ),
+}
+28
+
+Please enter an expression:
+tokens: [Number(1.0), Minus, Number(2.0), Minus, Number(3.0), Minus, Number(4.0), Minus, Number(5.0)]
+ast: Minus {
+    left: Minus {
+        left: Minus {
+            left: Minus {
+                left: Num(
+                    1.0,
+                ),
+                right: Num(
+                    2.0,
+                ),
+            },
+            right: Num(
+                3.0,
+            ),
+        },
+        right: Num(
+            4.0,
+        ),
+    },
+    right: Num(
+        5.0,
+    ),
+}
+-13
+
+Please enter an expression:
+tokens: [Number(1.0), Minus, Minus, Number(2.0), Minus, Number(3.0), Minus, Minus, Number(4.0), Minus, Number(5.0)]
+ast: Minus {
+    left: Minus {
+        left: Minus {
+            left: Minus {
+                left: Num(
+                    1.0,
+                ),
+                right: Num(
+                    -2.0,
+                ),
+            },
+            right: Num(
+                3.0,
+            ),
+        },
+        right: Num(
+            -4.0,
+        ),
+    },
+    right: Num(
+        5.0,
+    ),
+}
+-1
+
+Please enter an expression:
+tokens: [If, Bool(true), LeftBrace, Number(1.0), Minus, Number(2.0), Minus, Number(3.0), RightBrace, Else, LeftBrace, Number(1.0), Plus, Number(2.0), Plus, Number(3.0), RightBrace]
+ast: Cnd {
+    tst: Bool(
+        true,
+    ),
+    thn: Minus {
+        left: Minus {
+            left: Num(
+                1.0,
+            ),
+            right: Num(
+                2.0,
+            ),
+        },
+        right: Num(
+            3.0,
+        ),
+    },
+    els: Plus {
+        left: Plus {
+            left: Num(
+                1.0,
+            ),
+            right: Num(
+                2.0,
+            ),
+        },
+        right: Num(
+            3.0,
+        ),
+    },
+}
+-4
+
+Please enter an expression:
+tokens: [If, Bool(true), LeftBrace, LeftParen, Number(1.0), Minus, Number(2.0), RightParen, Minus, Number(3.0), RightBrace, Else, LeftBrace, LeftParen, Number(1.0), Plus, Number(2.0), RightParen, Plus, Number(3.0), RightBrace]
+ast: Cnd {
+    tst: Bool(
+        true,
+    ),
+    thn: Minus {
+        left: Minus {
+            left: Num(
+                1.0,
+            ),
+            right: Num(
+                2.0,
+            ),
+        },
+        right: Num(
+            3.0,
+        ),
+    },
+    els: Plus {
+        left: Plus {
+            left: Num(
+                1.0,
+            ),
+            right: Num(
+                2.0,
+            ),
+        },
+        right: Num(
+            3.0,
+        ),
+    },
+}
+-4
+
+Please enter an expression:
+tokens: [If, Bool(true), LeftBrace, Number(1.0), Minus, LeftParen, Number(2.0), Minus, Number(3.0), RightParen, RightBrace, Else, LeftBrace, Number(1.0), Plus, LeftParen, Number(2.0), Plus, Number(3.0), RightParen, RightBrace]
+ast: Cnd {
+    tst: Bool(
+        true,
+    ),
+    thn: Minus {
+        left: Num(
+            1.0,
+        ),
+        right: Minus {
+            left: Num(
+                2.0,
+            ),
+            right: Num(
+                3.0,
+            ),
+        },
+    },
+    els: Plus {
+        left: Num(
+            1.0,
+        ),
+        right: Plus {
+            left: Num(
+                2.0,
+            ),
+            right: Num(
+                3.0,
+            ),
+        },
+    },
+}
+2
+
+Please enter an expression:
+tokens: [If, Bool(false), LeftBrace, Number(1.0), Minus, LeftParen, Number(2.0), Minus, Number(3.0), RightParen, RightBrace, Else, LeftBrace, Bool(false), RightBrace]
+ast: Cnd {
+    tst: Bool(
+        false,
+    ),
+    thn: Minus {
+        left: Num(
+            1.0,
+        ),
+        right: Minus {
+            left: Num(
+                2.0,
+            ),
+            right: Num(
+                3.0,
+            ),
+        },
+    },
+    els: Bool(
+        false,
+    ),
+}
+false
+
+Please enter an expression:

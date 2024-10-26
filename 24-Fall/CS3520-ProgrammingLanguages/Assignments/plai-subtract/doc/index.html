@@ -1,0 +1,76 @@
+<html><head></head><body><h1>Adding subtraction to the interpreter</h1>
+
+<p>The starter code for this assignment is the interpreter after adding
+booleans (with a few other tweaks). Your job is to add subtraction
+to the language.</p>
+
+<h2>Changing how minus signs are tokenized</h2>
+
+<p>The first step is to change how minus signs are tokenized and
+parsed. Consider this simple expression:</p>
+
+<pre><code>1 -5
+</code></pre>
+
+<p>The tokenizer will currently tokenize this into:</p>
+
+<pre><code>[Number(1.0), Number(-5.0)]
+</code></pre>
+
+<p>but it should be equivalent to the expression:</p>
+
+<pre><code>1 - 5
+</code></pre>
+
+<p>and tokenized as:</p>
+
+<pre><code>[Number(1.0), Minus, Number(5.0)]
+</code></pre>
+
+<p>Run <code>make</code> and you should see how <code>-4</code> is currently tokenized and
+how it is expected to be tokenized going forward. Note that
+<code>main.rs</code> now prints out the token list and the parsed AST before
+evaluating each expression.</p>
+
+<p>Start by adding a new <code>Token</code> variant called <code>Minus</code> in <code>parse.rs</code>.
+Then modify the tokenizer to recognize a <code>-</code> character as a <code>Minus</code>
+token (this will be very similar to how <code>+</code> is recognized as <code>Plus</code>)
+and change the number tokenizer so it no longer recognized the <code>-</code>
+character.</p>
+
+<p>Run <code>make</code> to see that it is now tokenized correctly but still
+cannot parse it.</p>
+
+<h2>Changing how minus signs are parsed</h2>
+
+<p>Now update the parser. The grammar for terms is given in a comment
+in <code>parse.rs</code>:</p>
+
+<pre><code>// term             -&gt; ( expression ) | conditional | number | bool
+</code></pre>
+
+<p>Change it to be:</p>
+
+<pre><code>// term             -&gt; ( expression ) | conditional | - number | number | bool
+</code></pre>
+
+<p>and then update how <code>parse_term</code> is implemented to match the change
+in the grammar: add a case for the <code>Minus</code> token that parses a
+number <code>n</code> and returns <code>-n</code>. This essentially makes <code>-</code> a unary
+prefix operator (to negate a number), but we handle the negation
+directly in the parser.</p>
+
+<p>Run <code>make</code> and it should succeed until <code>-</code> is used to mean
+subtraction.</p>
+
+<h2>Adding a Minus expression type</h2>
+
+<p>Add a <code>Minus</code> expression variant in <code>main.rs</code> that mimics the
+structure of <code>Plus</code>. Update the rest of the parser (including the
+grammar definition in the comments) and the evaluator to support the
+new expression type.</p>
+
+<p>Note: subtraction should be left associative and have the same
+precedence as addition, which will also be the most straightforward
+way to implement it.</p>
+</body></html>

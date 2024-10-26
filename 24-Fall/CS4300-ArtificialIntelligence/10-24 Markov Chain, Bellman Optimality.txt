@@ -1,0 +1,60 @@
+Stochastic Environments
+
+Markov Chain
+	Each state is assigned edges with different probabilities.
+	For example: s0 has a 70% chance of leading to itself, 20% chance of leading to s1, 10% chance of leading to s3.
+	Each state has similar edges. Here is an example of where we might end up in 3 steps:
+	s0 -> s0 -> s1 -> s2
+	 (.7) * (.2) * (.9)  =  .126
+	So we have a 12.6% chance of taking path s0, s1, s2 from s0.
+
+	Markov Assumption: The probability of transitioning to the next state depends only on the current state, not on the sequence of events that led to it. The process is "memoryless"
+
+	A Markov Chain on its own doesn't really involve much decision-making, it's all probability
+	So how do we put this Markov chain into a system where an agent gets to make a decision?
+
+Markov Decision Process (MDP)
+	Agent at state s0 has three available actions: a0, a1, a2.
+	Each action has probabilities assigned to its possible outcomes.
+	Ex: in state s0, action a2 has a .8 chance of leading to s1 and a .2 chance of staying at s0.
+	Each action has different probabilities & consequences depending on the current state.
+	We also consider step cost and rewards.
+	Ex: R(s0,a0,s0) -> +10
+	In other words; the reward for being in state 0, taking action 0, and ending up in state 0 again gives a reward of 10.
+	π(s) -> a
+
+Bellman Optimality Equation
+	v(s) ≡ value of being in state s
+	Ex: v(2,2) = 0.8v(3,2) + 0.1v(2,2) + step cost + 0.1v(2,1) + step cost
+	The agent wants to get to 3,2 (terminal state) and it has an 80% chance of going where it wants to,
+	and a 10% chance of stumbling on either side in a perpendicular direction.
+	The value of being at position (2,2) is the summation of the value of each of its potential next states, given it takes the optimal action (plus step costs).
+	Notice how this becomes a recursive problem.
+	v*(s) = max Σ T(s,a,s') [R(s,a,s') + γ v*(s')]
+		 a  s'
+	The value of the "discount factor" gamma (γ) is somewhere between zero and one; allows us to balance between immediate rewards and future rewards.
+A γ close to 1 places more emphasis on future rewards, promoting long-term strategies, while a γ close to 0 makes the agent short-sighted, focusing on immediate rewards.
+
+Value Iteration Algorithm
+	v0(*) = 0
+	vk+1(s) = max Σ T(s,a,s') [R(s,a,s') + γ vk(s')]
+		   a  s'
+
+	Given: v*(s) for all s, s1
+	Find: a such that action a in s1 is optimal
+	v*(s) = max Σ T(s,a,s') [R(s,a,s') + γ v*(s')]
+		 a  s'
+	π*(s) = argmax Σ T(s,a,s') [R(s,a,s') + γ v*(s')]
+		    a  s'
+
+Quality-Values: Q-Values
+	Q*(s,a)
+	Q0(s,a) = 0
+	Qk+1(s,a) = Σ T(s,a,s') [R(s,a,s') + γ max Qk(s',a')]
+		    s'                          a'
+	π*(s) = argmax Q*(s,a)
+		   a
+
+π = policy function
+* = optimal
+Therefore, π* = "the optimal policy"
