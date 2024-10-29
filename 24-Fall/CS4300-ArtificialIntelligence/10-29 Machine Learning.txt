@@ -1,0 +1,80 @@
+Brief Intro to Machine Learning
+
+Pipeline:
+	Data Gathering (usually the most expensive step. Scraping and storing lots of good data takes time and resources.)
+	Data Wrangling (clean it up so it's usable)
+	Model Training (take data and extract the pattern from that data so the machine can tune the model)
+	Model Validating (make sure the discovered patterns actually match up with reality)
+	Deploy (if it doesn't suck!)
+
+This process is called "supervised learning".
+
+An example of data wrangling: say you have gathered some data on heart surgery patients.
+But for some patients you have no info on their blood pressure.
+Do you throw it out? Do you substitute an average value, or a placeholder value?
+
+Validating the model involves setting aside some of the gathered & cleaned data before training.
+This validating data is not seen in the training process, and can then be used to check if the model correctly follows the right patterns.
+If the validation goes poorly, sometimes the assumption is, we need to train the model again until it fits the testing data.
+The problem with that is, you'll just end up with a model made to fit the testing data and not reality (overfitting).
+
+We need a supervisor to judge whether predictions made by the model are good or bad.
+
+Tabular Data
+Data that can be arranged in a spreadsheet
+Ex: Each column has a meaning and each row is an individual patient 
+Column data includes heart rate, blood pressure high, blood pressure low, etc... and then a rigorously defined survival rate
+A well-trained model should be able to take the "predictors" (most of the column data) and produce a "label" (survival rate prediction)
+The predictors are a vector (a linear collection of data) x→ and the label is y
+So, y = f(x→). f is the model, which takes a vector of data and produces a label (prediction).
+
+Model Training
+	Training the model is about finding meaningful and helpful patterns.
+
+	We feed it the input vector for one patient, say patient j.
+	y^_j = f(x→_j)
+	y^ or "y hat" means it's the PREDICTION, not the actual data y_j
+
+	So, the difference between y_j and y^_j is our "loss" or error. We want to get that close to zero for ALL patients.
+	In other words, we want the summation of the (absolute value) loss of ALL predictions to approach zero. This is called L1 Loss.
+	Another common technique is to square the loss, which proportionately penalizes greater losses and also eliminates 
+	the problem of negative + positive values canceling out, like absolute value. This is called L2 Loss.
+
+	So the algorithm looks like some sort of loop.
+	While :
+		try function f(x→_j)
+		if it's better (lower loss), keep it and then try a neighbor (hill climbing, or in this case valley descent)
+
+	How do we actually find neighbors, though?
+	A straightforward way is to plug vector data into a first-order polynomial function, and then tweak the coefficients to find more accurate results.
+	This is called a Linear Regression Model (because each coefficient is order 1).
+
+	For example:
+	f = ϴ_1 * x_1 + ϴ_2 * x_2 + ϴ_3 * x_3 etc...
+	or, in dot product notation, ϴ→ * x→
+
+	The neighbors are found by dialing the different knobs (theta values) and finding ones that produce better results.
+	How do we find a minimum of a function? Take the derivative with respect to x and set it to zero. This will find a maximum OR minimum.
+	With few enough samples and variables, this can even be done by hand on paper. With sufficiently complex problems it becomes impossible even for computers.
+	But we can at least find a minimum. This is called "gradient descent" (gradient is a slope in multiple dimensions.)
+	We can take partial derivatives (derivatives from the perspective of x, perspective of y, etc) to find multiple slopes in different dimensions.
+	In other words, what is the slope in the x dimension? the y dimension? etc etc
+	So we're not just exploring neighbors and picking the best one; we're CALCULATING the neighbor and tweaking all coefficients simultaneously.
+
+	"Hyperparameters" are parameters that don't show up in the final function but are used in training. Examples include the step size.
+
+	There exist software libraries that do "auto grad" which automatically figure out the gradient values.
+
+Artificial Neural Network
+	Can be thought of as a black box function that can be given some vector of variables and returns some vector of outputs.
+	Gradient descent can tune these parameters, just like in Linear Regression Models.
+	Neural Networks can learn MUCH more complicated functions than LRM.
+	It can fit most any problem as long as you have enough data and compute power.
+
+* * * * * * * * * *
+
+Other types of machine learning include "unsupervised learning".
+An example of this is Netflix's old movie grouping algorithm, which seeks to find groups of movies that belong together
+(without knowing the correct "answer", which is what sets it apart from supervised learning)
+
+There's also reinforcement learning, which is closer to supervised learning in that we have a method of feedback to see how we're doing.
