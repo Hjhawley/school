@@ -1,0 +1,9 @@
+Natural Language Processing (NLP)
+
+N-grams:
+    In a sequence of N-1 words, predict the Nth word using a probability table
+
+Markov-Babbler:
+    Build a corpus of text into your N-gram table
+
+Crypto Quotes

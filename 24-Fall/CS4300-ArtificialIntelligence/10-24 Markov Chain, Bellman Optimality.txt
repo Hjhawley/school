@@ -8,7 +8,8 @@ Markov Chain
 	 (.7) * (.2) * (.9)  =  .126
 	So we have a 12.6% chance of taking path s0, s1, s2 from s0.
 
-	Markov Assumption: The probability of transitioning to the next state depends only on the current state, not on the sequence of events that led to it. The process is "memoryless"
+	Markov Assumption: The probability of transitioning to the next state depends only on the current state,
+	not on the sequence of events that led to it. The process is "memoryless"
 
 	A Markov Chain on its own doesn't really involve much decision-making, it's all probability
 	So how do we put this Markov chain into a system where an agent gets to make a decision?
