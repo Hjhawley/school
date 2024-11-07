@@ -1,4 +1,8 @@
 use super::*;
+use std::rc::Rc;
+use std::cell::RefCell;
+
+type Env = HashMap<String, Rc<RefCell<Option<Value>>>>; // need to allow variables to refer to themselves during their own definition
 
 pub fn tc(e: &Exp, tnv: &TEnv) -> Result<Type, String> {
     match e {
@@ -14,7 +18,7 @@ pub fn tc(e: &Exp, tnv: &TEnv) -> Result<Type, String> {
             } else {
                 Err("not both integers".to_string())
             }
-        },        
+        },
         Exp::LessThan { left, right } => {
             let left_type = tc(left, tnv)?;
             let right_type = tc(right, tnv)?;
@@ -51,6 +55,23 @@ pub fn tc(e: &Exp, tnv: &TEnv) -> Result<Type, String> {
             let mut new_tnv = tnv.clone();
             new_tnv.insert(var.clone(), val_type);
             tc(body, &new_tnv)
+        },
+        Exp::Rec { var, var_type, value, body } => {
+            // Insert the variable with its declared type into the type environment
+            let mut new_tnv = tnv.clone();
+            new_tnv.insert(var.clone(), var_type.clone());
+            // Type check the value in the new environment
+            let val_type = tc(value, &new_tnv)?;
+            // make sure the declared type matches the type of the value
+            if val_type != var_type.clone() {
+                Err(format!(
+                    "Type mismatch in recursive definition of {}: expected {}, got {}",
+                    var, var_type, val_type
+                ))
+            } else {
+                // Type check the body in the new environment
+                tc(body, &new_tnv)
+            }
         },
         Exp::Lam { var, var_type, body } => {
             let mut new_tnv = tnv.clone();
@@ -89,8 +110,6 @@ fn lookup_type(var: &str, tnv: &TEnv) -> Result<Type, String> {
     }
 }
 
-type TEnv = HashMap<String, Type>;
-
 pub fn interp(e: &Exp, nv: &Env) -> Result<Value, String> {
     match e {
 
@@ -125,7 +144,21 @@ pub fn interp(e: &Exp, nv: &Env) -> Result<Value, String> {
         Exp::Let1 { var, value, body } => {
             let val = interp(value, nv)?;
             let mut new_env = nv.clone();
-            new_env.insert(var.clone(), val);
+            // insert the value wrapped in Rc<RefCell<Option<Value>>>
+            new_env.insert(var.clone(), Rc::new(RefCell::new(Some(val))));
+            interp(body, &new_env)
+        },
+        Exp::Rec { var, value, body, .. } => {
+            // initialize a cell with None value
+            let cell = Rc::new(RefCell::new(None));
+            let mut new_env = nv.clone();
+            // insert the variable into the environment before evaluation
+            new_env.insert(var.clone(), cell.clone());
+            // evaluate the value in the new environment
+            let val = interp(value, &new_env)?;
+            // update the cell with the evaluated value
+            *cell.borrow_mut() = Some(val);
+            // evaluate the body in the new environment
             interp(body, &new_env)
         },
         Exp::Lam { var, var_type, body } => {
@@ -142,7 +175,8 @@ pub fn interp(e: &Exp, nv: &Env) -> Result<Value, String> {
             match fv {
                 Value::Fun { var, body, nv: fun_nv, .. } => {
                     let mut new_env = fun_nv.clone();
-                    new_env.insert(var.clone(), av);
+                    // insert the argument value into the function's environment
+                    new_env.insert(var.clone(), Rc::new(RefCell::new(Some(av))));
                     interp(&body, &new_env)
                 },
                 _ => Err("Expected a function".to_string()),
@@ -152,8 +186,12 @@ pub fn interp(e: &Exp, nv: &Env) -> Result<Value, String> {
 }
 
 fn lookup(s: &str, env: &Env) -> Result<Value, String> {
-    if let Some(val) = env.get(s) {
-        Ok(val.clone())
+    if let Some(cell) = env.get(s) {
+        if let Some(val) = &*cell.borrow() {
+            Ok(val.clone())
+        } else {
+            Err(format!("Variable {} is not yet initialized", s))
+        }
     } else {
         Err(format!("{} not bound", s))
     }
