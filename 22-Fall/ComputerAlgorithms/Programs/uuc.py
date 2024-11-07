@@ -17,7 +17,8 @@ class UUC:
         if self.exists(item):
             return False
         else:
-            self.mFirst = Node(item, self.mFirst)
+            newNode = Node(item, self.mFirst)
+            self.mFirst = newNode
             return True
 
     def traverse(self, callback):

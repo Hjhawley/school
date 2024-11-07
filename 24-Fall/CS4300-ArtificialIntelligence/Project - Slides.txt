@@ -1,0 +1,63 @@
+Project - Slides
+
+2048
+
+## Introduction
+
+The game 2048 is a popular sliding-tile puzzle that challenges players to combine numbered tiles on a 4x4 grid to create a tile with the number 2048. This project models the 2048 game environment, implements various agent strategies to play the game, and analyzes their performance using AI search algorithms. The primary goal is to explore how different search strategies and heuristics can affect the agent's ability to achieve higher scores in the game.
+
+## PEAS Assessment
+
+**Performance Measure:** The agent aims to maximize its score, which increases whenever tiles are merged. While creating a 2048 tile is a milestone, the agent continues to play to achieve the highest possible score.
+
+**Environment:**
+
+- **Type:** A 4x4 grid-based board.
+- **Dynamics:** After each move, all tiles slide in the chosen direction, and a new tile (2 or 4) randomly appears in an empty cell.
+- **Observability:** Fully observable; the agent has complete knowledge of the grid state at all times.
+- **Determinism:** Stochastic; while the agent's moves are deterministic, the placement and value of new tiles are random.
+- **Episodic vs. Sequential:** Sequential; each action affects future states.
+- **Static vs. Dynamic:** Static; the environment changes only in response to the agent's actions.
+- **Discrete vs. Continuous:** Discrete; finite number of grid cells and actions.
+- **Single-Agent vs. Multi-Agent:** Single-agent; no other agents are present.
+- **Known vs. Unknown:** Known; the rules are fully known, but future states are partially unpredictable due to randomness.
+
+**Actuators (Actions):** The agent can move tiles in four directions: up, down, left, or right.
+
+**Sensors (Percepts):** The agent perceives the current state of the grid, including the positions and values of all tiles.
+
+## First Search Agent
+
+Performance:
+
+# Random Agent
+Run 1: Final score = 932
+Run 2: Final score = 728
+Run 3: Final score = 564
+Run 4: Final score = 316
+Run 5: Final score = 1044
+Run 6: Final score = 1348
+Run 7: Final score = 632
+Run 8: Final score = 864
+Run 9: Final score = 2228
+Run 10: Final score = 720
+Agent: random_agent
+Number of runs: 10
+Average final score: 937.60
+Standard deviation: 533.43
+
+# Search Agent v1
+Run 1: Final score = 5052
+Run 2: Final score = 3056
+Run 3: Final score = 4200
+Run 4: Final score = 2776
+Run 5: Final score = 2208
+Run 6: Final score = 520
+Run 7: Final score = 3072
+Run 8: Final score = 5256
+Run 9: Final score = 3920
+Run 10: Final score = 4252
+Agent: search_agent
+Number of runs: 10
+Average final score: 3431.20
+Standard deviation: 1419.35
