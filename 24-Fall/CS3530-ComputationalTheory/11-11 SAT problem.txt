@@ -1,0 +1,20 @@
+Theorem 7.31
+If A ≤P B and B ∈ P, then A ∈ P.
+
+Proof: Let M be the polynomial time decider for B and f be the
+polynomial time reduction from A to B.
+Let N = “On input w:
+    1. Compute f (w).
+    2. Run M on input f (w) and output whatever M outputs.”
+Is w ∈ A ⇔ f (w) ∈ B?
+Is N polynomial time?
+
+A ≤P B
+    Describe a generic instance of A.
+    Describe a generic instance of B.
+    Provide the polynomial time reduction function.
+    Prove the function is polynomial time computable.
+    Prove that any instance of A can be reduced to some instance of B.
+    Prove that any non-instance of A can be reduced to some non-instance of B.
+    (Alternatively: Prove that any reachable instance of B can be only be reduced from some instance of A.)
+    Conclude that the conditions of polynomial time mapping reduction have been met.

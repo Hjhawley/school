@@ -1,0 +1,63 @@
+Problems in NP
+
+    Hamiltonian Paths
+        A Hamiltonian Path is a directed path in a graph that visits each node exactly once.
+        HAMPATH = {⟨G, s, t⟩|G is a directed graph that has a Hamiltonian path from node s to node t}
+
+        We don’t know if HAMPATH is in P. We can prove a weaker property of HAMPATH:
+        Given a path c, described as an ordered list of nodes, in G, we can verify if it is a
+        Hamiltonian path in polynomial time. We provide a verifier that completes in
+        polynomial time.
+
+        Let VHAMPATH = “On input ⟨⟨G, s, t⟩, c⟩:
+            1. Mark all nodes v in G as unvisited.
+            2. Let u be the first node in c.
+            3. If u ̸= s, then reject.
+            4. Mark u as visited.
+            5. For each v in c, starting with the second node:
+            6. If (u, v) ̸∈ E, then reject.
+            7. If v is visited, then reject.
+            8. Mark v as visited.
+            9. u = v.
+            10. If u ̸= t, then reject.
+            11. If any node is not visited, then reject.
+            12. accept.
+
+    Subset-Sum 
+        Given: A set S of k numbers x_1, ..., x_k and a number t.
+        Find: A subset y_1, ..., y_m of S such that Σ_i y_i = t.
+        Let C be some set of integers to be used as a certificate.
+
+        Example:
+        S = {1,2,3}, t = 4
+        One certificate would be c = {1,3}
+
+        How do we prove that something is in NP?
+        Provide a polynomial-time verifier for it.
+
+        Here is a verifier:
+        1. add numbers in the certificate (can be done in polynomial time)
+        2. check if it's equal to c (can be done in polynomial time)
+        3. check that c ⊆ S (can be done in polynomial time)
+
+        Here's a more formal proof:
+        SUBSET-SUM ∈ NP
+        Proof Idea: A certificate for SUBSET-SUM is a set of numbers.
+        Proof:
+        Let V = “On input ⟨⟨S, t⟩, c⟩:
+            1. Test whether the numbers in c add up to t.
+            2. Test whether all numbers in c are in S.
+            3. If all tests pass, accept; otherwise reject.”
+        V runs in time polynomial in the size of S, and decides if c is a subset of S that sums to t.
+
+Are these languages in NP?
+¬HAMPATH
+¬CLIQUE
+¬SUBSET-SUM
+
+No; it's easy to show one example of the sum of c equaling t.
+It's hard to show that ALL possible subsets of s do not add up to t.
+The problem grows exponentially, not polynomially.
+
+These problems are in class coNP;
+languages which have a COMPLEMENT in NP but are not in NP themselves.
