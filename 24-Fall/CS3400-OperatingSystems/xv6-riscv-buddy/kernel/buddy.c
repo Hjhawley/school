@@ -1,20 +1,17 @@
 #include "types.h"
+#include "riscv.h"
 #include "defs.h"
 #include "spinlock.h"
 #include "param.h"
 #include "memlayout.h"
-#include "riscv.h"
 #include "proc.h"
 
-struct spinlock buddy_lock;
+#define MIN_ORDER 5    // 2^5 = 32 bytes
+#define MAX_ORDER 12   // 2^12 = 4096 bytes
+#define NUM_ORDERS (MAX_ORDER - MIN_ORDER + 1)
 
-void buddyinit(void) {
-    initlock(&buddy_lock, "buddy_lock");
-    // Initialize free_lists to NULL
-    for (int i = 0; i < NUM_ORDERS; i++) {
-        free_lists[i] = NULL;
-    }
-}
+#define MAGIC_ALLOCATED 0xBADDCAFEDEADBEEF
+#define MAGIC_FREE      0xDEADBEEFCAFEBADD
 
 struct buddy_header {
     uint64 magic;       // Magic number to identify allocated/free blocks
@@ -22,23 +19,28 @@ struct buddy_header {
     struct buddy_header *next;  // Pointer to next free block (only for free blocks)
 };
 
-#define MIN_ORDER 5    // 2^5 = 32 bytes
-#define MAX_ORDER 12   // 2^12 = 4096 bytes
-#define NUM_ORDERS (MAX_ORDER - MIN_ORDER + 1)
-
 struct buddy_header *free_lists[NUM_ORDERS];
 
-#define MAGIC_ALLOCATED 0xBADDCAFEDEADBEEF
-#define MAGIC_FREE      0xDEADBEEFCAFEBADD
+struct spinlock buddy_lock;
+
+void buddyinit(void) {
+    initlock(&buddy_lock, "buddy_lock");
+    // Initialize free_lists to 0
+    for (int i = 0; i < NUM_ORDERS; i++) {
+        free_lists[i] = 0;
+    }
+}
 
 int size_to_order(uint64 size) {
     int order = 0;
     uint64 sz = size;
-    while (sz >>= 1) {
+    while (sz > 1) {
+        sz >>= 1;
         order++;
     }
     return order;
 }
+
 
 uint64 order_to_size(int order) {
     return 1UL << order;
@@ -164,7 +166,7 @@ void* buddy_alloc(uint64 length) {
     acquire(&buddy_lock);
 
     int current_order = order;
-    struct buddy_header* block = NULL;
+    struct buddy_header* block = 0;
 
     // Step 1: Search for a free block in the appropriate free list or higher
     while (current_order <= MAX_ORDER) {
@@ -173,7 +175,7 @@ void* buddy_alloc(uint64 length) {
             block = free_lists[current_order - MIN_ORDER];
             // Remove it from the free list
             free_lists[current_order - MIN_ORDER] = block->next;
-            block->next = NULL; // Clear next pointer for allocated block
+            block->next = 0; // Clear next pointer for allocated block
             break;
         }
         current_order++;
@@ -191,7 +193,7 @@ void* buddy_alloc(uint64 length) {
         block = (struct buddy_header*)new_block;
         block->magic = MAGIC_FREE;
         block->size = 1UL << MAX_ORDER;
-        block->next = NULL;
+        block->next = 0;
 
         // Do not add the new block to the free list
         current_order = MAX_ORDER;
@@ -258,7 +260,7 @@ void buddy_free(void *ptr) {
 
         // Check if buddy is free and has the same size
         struct buddy_header** list = &free_lists[order - MIN_ORDER];
-        struct buddy_header* prev = NULL;
+        struct buddy_header* prev = 0;
         struct buddy_header* curr = *list;
         int buddy_found = 0;
 
@@ -299,7 +301,7 @@ void buddy_free(void *ptr) {
         // Add the block to the appropriate free list
         // Keep the list in memory order
         struct buddy_header** list = &free_lists[order - MIN_ORDER];
-        struct buddy_header* prev = NULL;
+        struct buddy_header* prev = 0;
         struct buddy_header* curr = *list;
 
         while (curr && (uint64)curr < (uint64)block) {

@@ -1,4 +1,10 @@
+#ifndef DEFS_H
+#define DEFS_H
+
 #include "types.h"
+#include "param.h"
+#include "memlayout.h"
+#include "spinlock.h"
 
 struct buf;
 struct context;
@@ -196,3 +202,5 @@ void* buddy_alloc(uint64 length);
 void buddy_free(void *);
 void buddy_print(void *);
 void buddy_test(void);
+
+#endif // DEFS_H
