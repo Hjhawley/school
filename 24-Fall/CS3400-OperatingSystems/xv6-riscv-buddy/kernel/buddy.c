@@ -354,3 +354,48 @@ buddy_print(void *ptr)
     printf("Buddy Allocator Block Structure:\n");
     print_block(block_start, MAX_BLOCK_SIZE, 0);
 }
+
+void
+buddy_test(void)
+{
+    printf("Starting buddy test\n");
+
+    printf("\nallocating 1024-byte block\n");
+    void *e = buddy_alloc(1000);
+    buddy_print(e);
+
+    printf("\nallocating 128-byte block\n");
+    void *c = buddy_alloc(112);
+    buddy_print(c);
+
+    printf("\nallocating 32-byte block\n");
+    void *a = buddy_alloc(16);
+    buddy_print(a);
+
+    printf("\nfreeing 1024-byte block\n");
+    buddy_free(e);
+    buddy_print(a);
+
+    printf("\nallocating 128-byte block\n");
+    void *b = buddy_alloc(112);
+    buddy_print(b);
+
+    printf("\nfreeing 32-byte block\n");
+    buddy_free(a);
+    buddy_print(b);
+
+    printf("\nfreeing first 128-byte block\n");
+    buddy_free(c);
+    buddy_print(b);
+
+    printf("\nallocating 2048-byte block\n");
+    void *d = buddy_alloc(2000);
+    buddy_print(d);
+
+    printf("\nfreeing other 128-byte block\n");
+    buddy_free(b);
+    buddy_print(d);
+
+    printf("\nfreeing 2048-byte block\n");
+    buddy_free(d);
+}
