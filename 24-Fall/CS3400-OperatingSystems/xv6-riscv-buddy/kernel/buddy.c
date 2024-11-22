@@ -53,9 +53,19 @@ struct buddy_header* find_buddy(struct buddy_header* block) {
     return (struct buddy_header*)buddy_addr;
 }
 
-void buddy_print_helper(uint64 base_addr, int order, int depth) {
+void buddy_print_helper(uint64 base_addr, int order, int depth, int is_left) {
+    // Indentation
     for (int i = 0; i < depth; i++) {
         printf("       ");
+    }
+
+    // Draw the line
+    if (depth == 0) {
+        printf("───");
+    } else if (is_left) {
+        printf("┌──── ");
+    } else {
+        printf("└──── ");
     }
 
     uint64 size = 1UL << order;
@@ -63,7 +73,7 @@ void buddy_print_helper(uint64 base_addr, int order, int depth) {
 
     // Check if the block is allocated
     if (block->magic == MAGIC_ALLOCATED) {
-        printf("└──── used (%lu)\n", size);
+        printf("used (%lu)\n", size);
         return;
     }
 
@@ -79,17 +89,17 @@ void buddy_print_helper(uint64 base_addr, int order, int depth) {
     }
 
     if (is_free) {
-        printf("└──── free (%lu)\n", size);
+        printf("free (%lu)\n", size);
         return;
     }
 
     // If neither allocated nor free, it must be split
-    printf("└──── split (%lu)\n", size);
+    printf("┤\n");
 
-    // Recursively print the two halves
     if (order > MIN_ORDER) {
-        buddy_print_helper(base_addr, order - 1, depth + 1);
-        buddy_print_helper(base_addr + (1UL << (order - 1)), order - 1, depth + 1);
+        // Higher addresses go first
+        buddy_print_helper(base_addr + (1UL << (order - 1)), order - 1, depth + 1, 1);
+        buddy_print_helper(base_addr, order - 1, depth + 1, 0);
     }
 }
 
@@ -99,50 +109,7 @@ void buddy_print(void *ptr) {
     uint64 base_addr = addr & ~((1UL << MAX_ORDER) - 1);
 
     printf("\n");
-    buddy_print_helper(base_addr, MAX_ORDER, 0);
-}
-
-void buddy_test(void) {
-    printf("Starting buddy test\n");
-
-    printf("\nallocating 1024-byte block\n");
-    void *e = buddy_alloc(1000);
-    buddy_print(e);
-
-    printf("\nallocating 128-byte block\n");
-    void *c = buddy_alloc(112);
-    buddy_print(c);
-
-    printf("\nallocating 32-byte block\n");
-    void *a = buddy_alloc(16);
-    buddy_print(a);
-
-    printf("\nfreeing 1024-byte block\n");
-    buddy_free(e);
-    buddy_print(a);
-
-    printf("\nallocating 128-byte block\n");
-    void *b = buddy_alloc(112);
-    buddy_print(b);
-
-    printf("\nfreeing 32-byte block\n");
-    buddy_free(a);
-    buddy_print(b);
-
-    printf("\nfreeing first 128-byte block\n");
-    buddy_free(c);
-    buddy_print(b);
-
-    printf("\nallocating 2048-byte block\n");
-    void *d = buddy_alloc(2000);
-    buddy_print(d);
-
-    printf("\nfreeing other 128-byte block\n");
-    buddy_free(b);
-    buddy_print(d);
-
-    printf("\nfreeing 2048-byte block\n");
-    buddy_free(d);
+    buddy_print_helper(base_addr, MAX_ORDER, 0, 0);
 }
 
 void* buddy_alloc(uint64 length) {
@@ -318,4 +285,47 @@ void buddy_free(void *ptr) {
     }
 
     release(&buddy_lock);
+}
+
+void buddy_test(void) {
+    printf("Starting buddy test\n");
+
+    printf("\nallocating 1024-byte block\n");
+    void *e = buddy_alloc(1000);
+    buddy_print(e);
+
+    printf("\nallocating 128-byte block\n");
+    void *c = buddy_alloc(112);
+    buddy_print(c);
+
+    printf("\nallocating 32-byte block\n");
+    void *a = buddy_alloc(16);
+    buddy_print(a);
+
+    printf("\nfreeing 1024-byte block\n");
+    buddy_free(e);
+    buddy_print(a);
+
+    printf("\nallocating 128-byte block\n");
+    void *b = buddy_alloc(112);
+    buddy_print(b);
+
+    printf("\nfreeing 32-byte block\n");
+    buddy_free(a);
+    buddy_print(b);
+
+    printf("\nfreeing first 128-byte block\n");
+    buddy_free(c);
+    buddy_print(b);
+
+    printf("\nallocating 2048-byte block\n");
+    void *d = buddy_alloc(2000);
+    buddy_print(d);
+
+    printf("\nfreeing other 128-byte block\n");
+    buddy_free(b);
+    buddy_print(d);
+
+    printf("\nfreeing 2048-byte block\n");
+    buddy_free(d);
 }
