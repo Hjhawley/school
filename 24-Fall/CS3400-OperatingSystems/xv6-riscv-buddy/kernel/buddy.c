@@ -223,7 +223,7 @@ buddy_free(void *ptr)
 
     uint64 current_size = size;
     header_t *current_block = hdr;
-    uint64 block_index = block_addr;
+    // uint64 block_index = block_addr;
 
     // Coalescing loop
     while (current_size < MAX_BLOCK_SIZE) {
@@ -330,12 +330,12 @@ print_block(void *block_addr, uint64 size, int indent)
 
     // Print block information
     if (is_free) {
-        printf("└──── free (%d)\n", size);
+        printf("└──── free (%lu)\n", size);
     } else if (is_used) {
-        printf("└──── used (%d)\n", size);
+        printf("└──── used (%lu)\n", size);
     } else {
         // Block is split further, print the two halves
-        printf("┌──── split (%d)\n", size);
+        printf("┌──── split (%lu)\n", size);
         // First half (lower address)
         print_block(block_addr, size / 2, indent + 1);
         // Second half (higher address)
