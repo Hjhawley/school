@@ -1,4 +1,5 @@
 #include "types.h"
+#include "riscv.h"
 #include "spinlock.h"
 #include "defs.h"
 #include "memlayout.h"
@@ -10,6 +11,8 @@
 
 #define ALLOC_MAGIC 0xabcdefabcdefabcdULL
 #define FREE_MAGIC  0x1234567890abcdefULL
+
+extern char end[];
 
 struct {
     struct spinlock lock;
@@ -305,20 +308,20 @@ buddy_free(void *ptr)
 void
 print_block(void *block_addr, uint64 size, int indent)
 {
-    // Check if the block is free
-    int is_free = 0;
-    int is_used = 0;
-    header_t *hdr = (header_t *)block_addr;
+    if (size < MIN_BLOCK_SIZE) {
+        return;
+    }
 
     acquire(&buddy.lock);
 
-    // Check if the block is free by looking in the free list
-    if (is_block_free(block_addr, size)) {
-        is_free = 1;
-    }
+    // Check if the block is free
+    int is_free = is_block_free(block_addr, size);
+
     // Check if the block is allocated
-    else if (hdr->magic == ALLOC_MAGIC && hdr->size == size) {
-        is_used = 1;
+    header_t *hdr = (header_t *)block_addr;
+    int is_allocated = 0;
+    if (hdr->magic == ALLOC_MAGIC && hdr->size == size) {
+        is_allocated = 1;
     }
 
     release(&buddy.lock);
@@ -331,14 +334,14 @@ print_block(void *block_addr, uint64 size, int indent)
     // Print block information
     if (is_free) {
         printf("└──── free (%lu)\n", size);
-    } else if (is_used) {
+    } else if (is_allocated) {
         printf("└──── used (%lu)\n", size);
     } else {
-        // Block is split further, print the two halves
-        printf("┌──── split (%lu)\n", size);
-        // First half (lower address)
+        // Block is split further
+        printf("└──── split (%lu)\n", size);
+
+        // Recursively print the two halves
         print_block(block_addr, size / 2, indent + 1);
-        // Second half (higher address)
         print_block((void *)((char *)block_addr + size / 2), size / 2, indent + 1);
     }
 }
