@@ -22,7 +22,7 @@ typedef struct {
     uint64 size;   // Total size of the block including the header
 } header_t;
 
-// Initialize the buddy allocator (already implemented in buddyinit)
+// Initialize the buddy allocator
 void
 buddyinit(void)
 {
@@ -161,4 +161,126 @@ buddy_alloc(uint64 length)
 
     // Return a pointer to the usable space
     return (void *)((char *)block + sizeof(header_t));
+}
+
+// Helper function to check if a number is a power of two
+int
+is_power_of_two(uint64 x)
+{
+    return (x != 0) && ((x & (x - 1)) == 0);
+}
+
+// Free a previously allocated block
+void
+buddy_free(void *ptr)
+{
+    if (ptr == 0) {
+        // Null pointer, do nothing
+        return;
+    }
+
+    acquire(&buddy.lock);
+
+    // Get the header of the block
+    header_t *hdr = (header_t *)((char *)ptr - sizeof(header_t));
+
+    // Validate the magic number
+    if (hdr->magic != ALLOC_MAGIC) {
+        panic("buddy_free: invalid magic number");
+    }
+
+    uint64 size = hdr->size;
+
+    // Validate the size (must be power of two and within valid range)
+    if (!is_power_of_two(size) || size < MIN_BLOCK_SIZE || size > MAX_BLOCK_SIZE) {
+        panic("buddy_free: invalid block size");
+    }
+
+    // Validate alignment
+    uint64 block_addr = (uint64)hdr;
+    if (block_addr % size != 0) {
+        panic("buddy_free: block not properly aligned");
+    }
+
+    // Mark the block as free
+    hdr->magic = FREE_MAGIC;
+
+    uint64 current_size = size;
+    header_t *current_block = hdr;
+    uint64 block_index = block_addr;
+
+    // Coalescing loop
+    while (current_size < MAX_BLOCK_SIZE) {
+        // Calculate the buddy's address
+        uint64 buddy_addr = block_addr ^ current_size;
+        header_t *buddy_hdr = (header_t *)buddy_addr;
+
+        // Check if buddy is valid and free
+        if ((uint64)buddy_hdr < (uint64)end || (uint64)buddy_hdr >= PHYSTOP) {
+            // Buddy address is invalid
+            break;
+        }
+
+        if (buddy_hdr->magic != FREE_MAGIC || buddy_hdr->size != current_size) {
+            // Buddy is not free or not the same size
+            break;
+        }
+
+        // Remove buddy from the free list
+        int index = size_to_index(current_size);
+        void **prev = &buddy.freelist[index];
+        void *cur = *prev;
+        int found = 0;
+
+        while (cur) {
+            if (cur == (void *)buddy_hdr) {
+                // Remove buddy from the free list
+                *prev = *(void **)((char *)cur + sizeof(header_t));
+                found = 1;
+                break;
+            }
+            prev = (void **)((char *)cur + sizeof(header_t));
+            cur = *prev;
+        }
+
+        if (!found) {
+            // Buddy not found in free list, cannot coalesce
+            break;
+        }
+
+        // Determine the new block address (lower of the two)
+        if (block_addr > buddy_addr) {
+            block_addr = buddy_addr;
+            current_block = buddy_hdr;
+        }
+
+        // Update the size
+        current_size <<= 1;
+        current_block->size = current_size;
+
+        // Continue to try to coalesce at the next level
+    }
+
+    if (current_size == MAX_BLOCK_SIZE) {
+        // Return the block to kfree
+        release(&buddy.lock);
+        kfree((void *)current_block);
+        return;
+    }
+
+    // Insert the block into the free list, keeping it in memory order
+    int index = size_to_index(current_size);
+    void **prev = &buddy.freelist[index];
+    void *cur = *prev;
+
+    while (cur && cur < (void *)current_block) {
+        prev = (void **)((char *)cur + sizeof(header_t));
+        cur = *prev;
+    }
+
+    // Insert the block into the list
+    *(void **)((char *)current_block + sizeof(header_t)) = cur;
+    *prev = current_block;
+
+    release(&buddy.lock);
 }
