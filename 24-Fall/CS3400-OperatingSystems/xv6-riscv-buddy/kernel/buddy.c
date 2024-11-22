@@ -135,9 +135,10 @@ buddy_alloc(uint64 length)
     }
 
     // Split larger blocks until we get a block of the desired size
+    void *block_to_split;
     while (i > index) {
         // Remove block from the current free list
-        void *block_to_split = buddy.freelist[i];
+        block_to_split = buddy.freelist[i];
         void **next_ptr = (void **)((char *)block_to_split + sizeof(header_t));
         buddy.freelist[i] = *next_ptr;
 
@@ -163,18 +164,25 @@ buddy_alloc(uint64 length)
         buddy.freelist[split_index] = second_half;
 
         // Prepare to split the first half in the next iteration
-        block = first_half;
+        buddy.freelist[split_index] = first_half;  // Add first half to free list
         i--;
     }
 
-    // Allocate the block
-    header_t *hdr = (header_t *)block;
-    hdr->magic = ALLOC_MAGIC;
-    hdr->size = size;
+    // Now allocate the block from the free list
+    block = buddy.freelist[index];
+    if (block == 0) {
+        release(&buddy.lock);
+        return 0;  // Should not happen
+    }
 
     // Remove block from the free list
     void **next_ptr = (void **)((char *)block + sizeof(header_t));
     buddy.freelist[index] = *next_ptr;
+
+    // Set up the allocated block header
+    header_t *hdr = (header_t *)block;
+    hdr->magic = ALLOC_MAGIC;
+    hdr->size = size;
 
     release(&buddy.lock);
 
@@ -205,6 +213,7 @@ buddy_free(void *ptr)
 
     // Validate the magic number
     if (hdr->magic != ALLOC_MAGIC) {
+        release(&buddy.lock);  // Release lock before panic
         panic("buddy_free: invalid magic number");
     }
 
@@ -212,12 +221,14 @@ buddy_free(void *ptr)
 
     // Validate the size (must be power of two and within valid range)
     if (!is_power_of_two(size) || size < MIN_BLOCK_SIZE || size > MAX_BLOCK_SIZE) {
+        release(&buddy.lock);  // Release lock before panic
         panic("buddy_free: invalid block size");
     }
 
     // Validate alignment
     uint64 block_addr = (uint64)hdr;
     if (block_addr % size != 0) {
+        release(&buddy.lock);  // Release lock before panic
         panic("buddy_free: block not properly aligned");
     }
 
@@ -226,7 +237,6 @@ buddy_free(void *ptr)
 
     uint64 current_size = size;
     header_t *current_block = hdr;
-    // uint64 block_index = block_addr;
 
     // Coalescing loop
     while (current_size < MAX_BLOCK_SIZE) {
@@ -277,7 +287,8 @@ buddy_free(void *ptr)
         current_size <<= 1;
         current_block->size = current_size;
 
-        // Continue to try to coalesce at the next level
+        // Update the header
+        current_block->magic = FREE_MAGIC;
     }
 
     if (current_size == MAX_BLOCK_SIZE) {
@@ -312,6 +323,11 @@ print_block(void *block_addr, uint64 size, int indent)
         return;
     }
 
+    // Prepare indentation
+    for (int i = 0; i < indent; i++) {
+        printf("    ");
+    }
+
     acquire(&buddy.lock);
 
     // Check if the block is free
@@ -324,25 +340,44 @@ print_block(void *block_addr, uint64 size, int indent)
         is_allocated = 1;
     }
 
-    release(&buddy.lock);
+    // Now, check if the block has been split
+    int is_split = 0;
+    if (!is_free && !is_allocated && size > MIN_BLOCK_SIZE) {
+        // Check if either of the two sub-blocks are allocated or free
+        void *first_half = block_addr;
+        void *second_half = (char *)block_addr + size / 2;
 
-    // Prepare indentation
-    for (int i = 0; i < indent; i++) {
-        printf("    ");
+        int first_free = is_block_free(first_half, size / 2);
+        int second_free = is_block_free(second_half, size / 2);
+
+        header_t *first_hdr = (header_t *)first_half;
+        header_t *second_hdr = (header_t *)second_half;
+
+        int first_allocated = (first_hdr->magic == ALLOC_MAGIC && first_hdr->size == size / 2);
+        int second_allocated = (second_hdr->magic == ALLOC_MAGIC && second_hdr->size == size / 2);
+
+        if (first_free || second_free || first_allocated || second_allocated) {
+            is_split = 1;
+        }
     }
+
+    release(&buddy.lock);
 
     // Print block information
     if (is_free) {
         printf("└──── free (%lu)\n", size);
     } else if (is_allocated) {
         printf("└──── used (%lu)\n", size);
-    } else {
+    } else if (is_split) {
         // Block is split further
         printf("└──── split (%lu)\n", size);
 
         // Recursively print the two halves
         print_block(block_addr, size / 2, indent + 1);
         print_block((void *)((char *)block_addr + size / 2), size / 2, indent + 1);
+    } else {
+        // Block is neither free, allocated, nor known to be split
+        printf("└──── unused (%lu)\n", size);
     }
 }
 
