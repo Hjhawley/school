@@ -7,7 +7,7 @@
 
 #define MIN_BLOCK_SIZE 32
 #define MAX_BLOCK_SIZE 4096
-#define NUM_FREE_LISTS 7
+#define NUM_FREE_LISTS 8 //7?
 
 #define ALLOC_MAGIC 0xabcdefabcdefabcdULL
 #define FREE_MAGIC  0x1234567890abcdefULL
@@ -53,6 +53,9 @@ int
 is_block_free(void *block_addr, uint64 size)
 {
     int index = size_to_index(size);
+    if (index >= NUM_FREE_LISTS) {
+        return 0;
+    }
     void *cur = buddy.freelist[index];
     while (cur) {
         if (cur == block_addr) {
@@ -68,7 +71,7 @@ is_block_free(void *block_addr, uint64 size)
 void*
 buddy_alloc(uint64 length)
 {
-    if (length == 0 || length > 4080) {
+    if (length == 0 || length > (MAX_BLOCK_SIZE - sizeof(header_t))) {
         return 0;  // Return zero for invalid requests
     }
 
@@ -261,6 +264,10 @@ buddy_free(void *ptr)
 
         // Remove buddy from the free list
         int index = size_to_index(current_size);
+        if (index >= NUM_FREE_LISTS) {
+            // Invalid index
+            break;
+        }
         void **prev = &buddy.freelist[index];
         void *cur = *prev;
         int found = 0;
@@ -304,6 +311,11 @@ buddy_free(void *ptr)
 
     // Insert the block into the free list, keeping it in memory order
     int index = size_to_index(current_size);
+    if (index >= NUM_FREE_LISTS) {
+        // Invalid index, cannot insert
+        release(&buddy.lock);
+        panic("buddy_free: invalid block size during insertion");
+    }
     void **prev = &buddy.freelist[index];
     void *cur = *prev;
 
@@ -397,6 +409,7 @@ buddy_print(void *ptr)
     print_block(block_start, MAX_BLOCK_SIZE, 0);
 }
 
+// Function to test the buddy allocator
 void
 buddy_test(void)
 {
