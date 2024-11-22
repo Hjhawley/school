@@ -7,7 +7,7 @@
 
 #define MIN_BLOCK_SIZE 32
 #define MAX_BLOCK_SIZE 4096
-#define NUM_FREE_LISTS 8 //7?
+#define NUM_FREE_LISTS 8 // 7?
 
 #define ALLOC_MAGIC 0xabcdefabcdefabcdULL
 #define FREE_MAGIC  0x1234567890abcdefULL
@@ -21,11 +21,10 @@ struct {
 
 // Header structure for both allocated and free blocks
 typedef struct header_t {
-    uint64 magic;  // Magic number to mark used or free block
-    uint64 size;   // Total size of the block including the header
+    uint64 magic;
+    uint64 size;
 } header_t;
 
-// Initialize the buddy allocator
 void
 buddyinit(void)
 {
@@ -35,7 +34,7 @@ buddyinit(void)
     }
 }
 
-// Helper function to find the index in freelist for a given size
+// find the index in freelist for a given size
 int
 size_to_index(uint64 size)
 {
@@ -48,7 +47,7 @@ size_to_index(uint64 size)
     return index;
 }
 
-// Helper function to check if a block is in the free list
+// check if a block is in the free list
 int
 is_block_free(void *block_addr, uint64 size)
 {
@@ -147,13 +146,11 @@ buddy_alloc(uint64 length)
         // Split the block into two halves
         uint64 split_size = ((header_t *)block_to_split)->size / 2;
 
-        // First half
         void *first_half = block_to_split;
         header_t *first_hdr = (header_t *)first_half;
         first_hdr->magic = FREE_MAGIC;
         first_hdr->size = split_size;
 
-        // Second half
         void *second_half = (char *)block_to_split + split_size;
         header_t *second_hdr = (header_t *)second_half;
         second_hdr->magic = FREE_MAGIC;
@@ -162,12 +159,10 @@ buddy_alloc(uint64 length)
         // Add both halves to the free list of the smaller size
         int split_index = i - 1;
 
-        // Add first half to the free list
         void **first_next_ptr = (void **)((char *)first_half + sizeof(header_t));
         *first_next_ptr = buddy.freelist[split_index];
         buddy.freelist[split_index] = first_half;
 
-        // Add second half to the free list
         void **second_next_ptr = (void **)((char *)second_half + sizeof(header_t));
         *second_next_ptr = buddy.freelist[split_index];
         buddy.freelist[split_index] = second_half;
@@ -179,7 +174,7 @@ buddy_alloc(uint64 length)
     block = buddy.freelist[index];
     if (block == 0) {
         release(&buddy.lock);
-        return 0;  // Should not happen
+        return 0;  // Shouldn't happen?
     }
 
     // Remove block from the free list
@@ -197,7 +192,7 @@ buddy_alloc(uint64 length)
     return (void *)((char *)block + sizeof(header_t));
 }
 
-// Helper function to check if a number is a power of two
+// check if a number is a power of two
 int
 is_power_of_two(uint64 x)
 {
@@ -209,7 +204,6 @@ void
 buddy_free(void *ptr)
 {
     if (ptr == 0) {
-        // Null pointer, do nothing
         return;
     }
 
@@ -220,7 +214,7 @@ buddy_free(void *ptr)
 
     // Validate the magic number
     if (hdr->magic != ALLOC_MAGIC) {
-        release(&buddy.lock);  // Release lock before panic
+        release(&buddy.lock);  
         panic("buddy_free: invalid magic number");
     }
 
@@ -228,14 +222,14 @@ buddy_free(void *ptr)
 
     // Validate the size (must be power of two and within valid range)
     if (!is_power_of_two(size) || size < MIN_BLOCK_SIZE || size > MAX_BLOCK_SIZE) {
-        release(&buddy.lock);  // Release lock before panic
+        release(&buddy.lock);  
         panic("buddy_free: invalid block size");
     }
 
     // Validate alignment
     uint64 block_addr = (uint64)hdr;
     if (block_addr % size != 0) {
-        release(&buddy.lock);  // Release lock before panic
+        release(&buddy.lock);  
         panic("buddy_free: block not properly aligned");
     }
 
@@ -245,8 +239,9 @@ buddy_free(void *ptr)
     uint64 current_size = size;
     header_t *current_block = hdr;
 
-    // Coalescing loop
+    // Coalesce (what a good word)
     while (current_size < MAX_BLOCK_SIZE) {
+        
         // Calculate the buddy's address
         uint64 buddy_addr = block_addr ^ current_size;
         header_t *buddy_hdr = (header_t *)buddy_addr;
@@ -379,21 +374,15 @@ print_block(void *block_addr, uint64 size, int indent)
 
     release(&buddy.lock);
 
-    // Print block information
-    if (is_free) {
-        printf("└──── free (%lu)\n", size);
-    } else if (is_allocated) {
+    if (is_allocated) {
         printf("└──── used (%lu)\n", size);
     } else if (is_split) {
-        // Block is split further
-        printf("└──── split (%lu)\n", size);
-
+        printf("└──── \n");
         // Recursively print the two halves
         print_block(block_addr, size / 2, indent + 1);
         print_block((void *)((char *)block_addr + size / 2), size / 2, indent + 1);
     } else {
-        // Block is neither free, allocated, nor known to be split
-        printf("└──── unused (%lu)\n", size);
+        printf("└──── free (%lu)\n", size);
     }
 }
 
@@ -404,8 +393,6 @@ buddy_print(void *ptr)
     // Find the start address of the 4096-byte block containing ptr
     uint64 block_start_addr = (uint64)ptr & ~(MAX_BLOCK_SIZE - 1);
     void *block_start = (void *)block_start_addr;
-
-    printf("Buddy Allocator Block Structure:\n");
     print_block(block_start, MAX_BLOCK_SIZE, 0);
 }
 
