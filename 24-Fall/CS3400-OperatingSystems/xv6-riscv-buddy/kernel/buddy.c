@@ -195,7 +195,6 @@ void* buddy_alloc(uint64 length) {
         block->size = 1UL << MAX_ORDER;
         block->next = 0;
 
-        // Do not add the new block to the free list
         current_order = MAX_ORDER;
     }
 
@@ -215,6 +214,7 @@ void* buddy_alloc(uint64 length) {
 
         // Adjust the original block
         block->size = split_size;
+        block->magic = MAGIC_FREE; // Set the first half as free during splitting
     }
 
     // Step 4: Mark the block as allocated
