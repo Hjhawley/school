@@ -17,7 +17,7 @@ struct {
 } buddy;
 
 // Header structure for both allocated and free blocks
-typedef struct {
+typedef struct header_t {
     uint64 magic;  // Magic number to mark used or free block
     uint64 size;   // Total size of the block including the header
 } header_t;
@@ -38,11 +38,27 @@ size_to_index(uint64 size)
 {
     int index = 0;
     uint64 s = MIN_BLOCK_SIZE;
-    while (s < size && index < NUM_FREE_LISTS) {
+    while (s < size && index < NUM_FREE_LISTS - 1) {
         s <<= 1;
         index++;
     }
     return index;
+}
+
+// Helper function to check if a block is in the free list
+int
+is_block_free(void *block_addr, uint64 size)
+{
+    int index = size_to_index(size);
+    void *cur = buddy.freelist[index];
+    while (cur) {
+        if (cur == block_addr) {
+            return 1;  // Block is free
+        }
+        // Move to the next block in the free list
+        cur = *(void **)((char *)cur + sizeof(header_t));
+    }
+    return 0;  // Block is not free
 }
 
 // Allocate a single block of memory at least as big as the requested size
@@ -283,4 +299,58 @@ buddy_free(void *ptr)
     *prev = current_block;
 
     release(&buddy.lock);
+}
+
+// Recursive function to print the block structure
+void
+print_block(void *block_addr, uint64 size, int indent)
+{
+    // Check if the block is free
+    int is_free = 0;
+    int is_used = 0;
+    header_t *hdr = (header_t *)block_addr;
+
+    acquire(&buddy.lock);
+
+    // Check if the block is free by looking in the free list
+    if (is_block_free(block_addr, size)) {
+        is_free = 1;
+    }
+    // Check if the block is allocated
+    else if (hdr->magic == ALLOC_MAGIC && hdr->size == size) {
+        is_used = 1;
+    }
+
+    release(&buddy.lock);
+
+    // Prepare indentation
+    for (int i = 0; i < indent; i++) {
+        printf("    ");
+    }
+
+    // Print block information
+    if (is_free) {
+        printf("└──── free (%d)\n", size);
+    } else if (is_used) {
+        printf("└──── used (%d)\n", size);
+    } else {
+        // Block is split further, print the two halves
+        printf("┌──── split (%d)\n", size);
+        // First half (lower address)
+        print_block(block_addr, size / 2, indent + 1);
+        // Second half (higher address)
+        print_block((void *)((char *)block_addr + size / 2), size / 2, indent + 1);
+    }
+}
+
+// Function to print the structure of a 4096-byte block
+void
+buddy_print(void *ptr)
+{
+    // Find the start address of the 4096-byte block containing ptr
+    uint64 block_start_addr = (uint64)ptr & ~(MAX_BLOCK_SIZE - 1);
+    void *block_start = (void *)block_start_addr;
+
+    printf("Buddy Allocator Block Structure:\n");
+    print_block(block_start, MAX_BLOCK_SIZE, 0);
 }
