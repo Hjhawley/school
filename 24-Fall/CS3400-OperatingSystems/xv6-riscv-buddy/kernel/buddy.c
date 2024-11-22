@@ -7,7 +7,7 @@
 
 #define MIN_BLOCK_SIZE 32
 #define MAX_BLOCK_SIZE 4096
-#define NUM_FREE_LISTS 8
+#define NUM_FREE_LISTS 7
 
 #define ALLOC_MAGIC 0xabcdefabcdefabcdULL
 #define FREE_MAGIC  0x1234567890abcdefULL
@@ -135,10 +135,9 @@ buddy_alloc(uint64 length)
     }
 
     // Split larger blocks until we get a block of the desired size
-    void *block_to_split;
     while (i > index) {
         // Remove block from the current free list
-        block_to_split = buddy.freelist[i];
+        void *block_to_split = buddy.freelist[i];
         void **next_ptr = (void **)((char *)block_to_split + sizeof(header_t));
         buddy.freelist[i] = *next_ptr;
 
@@ -157,14 +156,19 @@ buddy_alloc(uint64 length)
         second_hdr->magic = FREE_MAGIC;
         second_hdr->size = split_size;
 
-        // Add the second half to the free list of the smaller size
+        // Add both halves to the free list of the smaller size
         int split_index = i - 1;
+
+        // Add first half to the free list
+        void **first_next_ptr = (void **)((char *)first_half + sizeof(header_t));
+        *first_next_ptr = buddy.freelist[split_index];
+        buddy.freelist[split_index] = first_half;
+
+        // Add second half to the free list
         void **second_next_ptr = (void **)((char *)second_half + sizeof(header_t));
         *second_next_ptr = buddy.freelist[split_index];
         buddy.freelist[split_index] = second_half;
 
-        // Prepare to split the first half in the next iteration
-        buddy.freelist[split_index] = first_half;  // Add first half to free list
         i--;
     }
 
