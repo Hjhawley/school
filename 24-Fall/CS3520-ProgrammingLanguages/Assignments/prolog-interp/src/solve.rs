@@ -5,24 +5,28 @@ struct Sub {
     output_term: Term,
 }
 
-fn apply_subs(subs: &Vec<Sub>, mut term: Term) -> Term {
-    for Sub { input_variable, output_term } in subs {
-        term = match term {
-            Term::Var(name) if name == *input_variable => {
-                output_term.clone()
-            }
-            Term::Compound { head_atom: atom_name, termlist: input_list } => {
-                let head_atom = atom_name.clone();
-                let mut termlist = Vec::new();
-                for elt in input_list {
-                    termlist.push(apply_subs(subs, elt));
+fn apply_subs(subs: &Vec<Sub>, term: Term) -> Term {
+    match term {
+        Term::Var(name) => {
+            for Sub { input_variable, output_term } in subs {
+                if &name == input_variable {
+                    return apply_subs(subs, output_term.clone());
                 }
-                Term::Compound { head_atom, termlist }
             }
-            _ => term.clone()
-        };
+            Term::Var(name) // No substitution found
+        }
+        Term::Compound { head_atom, termlist } => {
+            // Recursively apply substitutions to the termlist
+            Term::Compound {
+                head_atom,
+                termlist: termlist
+                    .into_iter()
+                    .map(|t| apply_subs(subs, t))
+                    .collect(),
+            }
+        }
+        _ => term, // Atoms remain unchanged
     }
-    term
 }
 
 fn mgu(a: &Term, b: &Term) -> Result<Vec<Sub>, ()> {
@@ -78,15 +82,11 @@ fn resolution(subs: &Vec<Sub>, clause: &Clause, goals: &Vec<Term>, query: &Term)
     let mut new_goals = Vec::new();
     match clause {
         Clause::Fact(_) => {
-            // If it's a fact, just use the tail of the goals
-            new_goals.extend(goals.iter().skip(1).cloned());
+            new_goals.extend(goals.iter().skip(1).map(|g| apply_subs(subs, g.clone())));
         }
         Clause::Rule(_, body) => {
-            // If it's a rule, append the body of the clause
-            for term in body {
-                new_goals.push(apply_subs(subs, term.clone()));
-            }
-            new_goals.extend(goals.iter().skip(1).map(|term| apply_subs(subs, term.clone())));
+            new_goals.extend(body.iter().map(|b| apply_subs(subs, b.clone())));
+            new_goals.extend(goals.iter().skip(1).map(|g| apply_subs(subs, g.clone())));
         }
     }
 
@@ -94,7 +94,6 @@ fn resolution(subs: &Vec<Sub>, clause: &Clause, goals: &Vec<Term>, query: &Term)
 
     (new_goals, updated_query)
 }
-
 
 pub fn solve(program: &Vec<Clause>, goals: &Vec<Term>, query: &Term) {
     if goals.is_empty() {
