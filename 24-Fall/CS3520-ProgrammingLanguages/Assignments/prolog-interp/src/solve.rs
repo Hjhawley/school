@@ -7,25 +7,6 @@ struct Sub {
     output_term: Term,
 }
 
-// display for term
-impl fmt::Display for Term {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Term::Var(name) => write!(f, "{}", name),
-            Term::Atom(atom) => write!(f, "{}", atom),
-            Term::Compound { head_atom, termlist } => {
-                write!(f, "{}(", head_atom)?;
-                let terms = termlist
-                    .iter()
-                    .map(|t| format!("{}", t))
-                    .collect::<Vec<_>>()
-                    .join(",");
-                write!(f, "{})", terms)
-            }
-        }
-    }
-}
-
 fn apply_subs(subs: &Vec<Sub>, term: Term) -> Term {
     match term {
         Term::Var(name) => {
