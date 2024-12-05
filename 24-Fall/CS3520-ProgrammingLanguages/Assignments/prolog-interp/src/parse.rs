@@ -164,12 +164,12 @@ impl<'a> Parser<'a> {
                 self.position
             ))
         }
-    }    
+    }
 
     fn parse_termlist(&mut self) -> Result<Vec<Term>, String> {
         let mut terms = Vec::new();
         terms.push(self.parse_term()?);
-    
+
         while let Some(token) = self.current_token() {
             if token == &Token::Comma {
                 self.advance(); // Consume ','
@@ -178,9 +178,9 @@ impl<'a> Parser<'a> {
                 break;
             }
         }
-    
+
         Ok(terms)
-    }    
+    }
 
     fn parse_fact(&mut self) -> Result<Clause, String> {
         let term = self.parse_term()?;
@@ -197,7 +197,6 @@ impl<'a> Parser<'a> {
     }
 
     fn parse_clause(&mut self) -> Result<Clause, String> {
-        // Safeguard against out-of-bounds access
         if self.position + 1 < self.tokens.len()
             && matches!(self.tokens[self.position + 1], Token::ColonHyphen)
         {
