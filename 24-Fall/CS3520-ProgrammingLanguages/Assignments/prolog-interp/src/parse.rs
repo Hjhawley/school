@@ -132,44 +132,55 @@ impl<'a> Parser<'a> {
     }
 
     fn parse_term(&mut self) -> Result<Term, String> {
-        match self.current_token() {
-            Some(Token::Var(v)) => {
-                self.advance();
-                Ok(Term::Var(v.clone()))
-            }
-            Some(Token::Atom(a)) => {
-                self.advance();
-                if let Some(Token::LeftParen) = self.current_token() {
-                    self.advance(); // Consume '('
-                    let termlist = self.parse_termlist()?;
-                    self.expect_token(&Token::RightParen)?; // Consume ')'
-                    Ok(Term::Compound {
-                        head_atom: a.clone(),
-                        termlist,
-                    })
-                } else {
-                    Ok(Term::Atom(a.clone()))
+        if let Some(token) = self.current_token().cloned() {
+            match token {
+                Token::Var(v) => {
+                    self.advance();
+                    Ok(Term::Var(v))
                 }
+                Token::Atom(a) => {
+                    self.advance();
+                    if let Some(Token::LeftParen) = self.current_token() {
+                        self.advance(); // Consume '('
+                        let termlist = self.parse_termlist()?;
+                        self.expect_token(&Token::RightParen)?; // Consume ')'
+                        Ok(Term::Compound {
+                            head_atom: a,
+                            termlist,
+                        })
+                    } else {
+                        Ok(Term::Atom(a))
+                    }
+                }
+                _ => Err(format!(
+                    "Expected a term (variable, atom, or compound term), but found {:?} at position {}",
+                    self.current_token(),
+                    self.position
+                )),
             }
-            _ => Err(format!(
-                "Expected a term (variable, atom, or compound term), but found {:?} at position {}",
-                self.current_token(),
+        } else {
+            Err(format!(
+                "Expected a term, but found end of input at position {}",
                 self.position
-            )),
+            ))
         }
-    }
+    }    
 
     fn parse_termlist(&mut self) -> Result<Vec<Term>, String> {
         let mut terms = Vec::new();
         terms.push(self.parse_term()?);
-
-        while let Some(Token::Comma) = self.current_token() {
-            self.advance(); // Consume ','
-            terms.push(self.parse_term()?);
+    
+        while let Some(token) = self.current_token() {
+            if token == &Token::Comma {
+                self.advance(); // Consume ','
+                terms.push(self.parse_term()?);
+            } else {
+                break;
+            }
         }
-
+    
         Ok(terms)
-    }
+    }    
 
     fn parse_fact(&mut self) -> Result<Clause, String> {
         let term = self.parse_term()?;
