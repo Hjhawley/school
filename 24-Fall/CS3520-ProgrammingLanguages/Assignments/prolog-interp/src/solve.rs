@@ -1,5 +1,4 @@
 use super::*;
-use std::fmt;
 
 #[derive(Debug)]
 struct Sub {
@@ -77,7 +76,7 @@ fn mgu(a: &Term, b: &Term) -> Result<Vec<Sub>, ()> {
 }
 
 fn succeed(term: &Term) {
-    println!("SUCCESS: {}", term); // Use Display trait
+    println!("SUCCESS: {}", term);
 }
 
 fn resolution(subs: &Vec<Sub>, clause: &Clause, goals: &Vec<Term>, query: &Term) -> (Vec<Term>, Term) {
@@ -96,19 +95,34 @@ fn resolution(subs: &Vec<Sub>, clause: &Clause, goals: &Vec<Term>, query: &Term)
 }
 
 pub fn solve(program: &Vec<Clause>, goals: &Vec<Term>, query: &Term) {
-    if goals.is_empty() {
-        succeed(query);
-        return;
-    }
-    let current_goal = &goals[0];
-    for clause in program {
-        let clause_head = match clause {
-            Clause::Fact(head) => head,
-            Clause::Rule(head, _) => head,
-        };
-        if let Ok(subs) = mgu(clause_head, current_goal) {
-            let (new_goals, new_query) = resolution(&subs, clause, goals, query);
-            solve(program, &new_goals, &new_query);
+    fn solve_internal(
+        program: &Vec<Clause>,
+        goals: &Vec<Term>,
+        query: &Term,
+        visited: &mut Vec<Term>,
+    ) {
+        if goals.is_empty() {
+            succeed(query);
+            return;
         }
+        let current_goal = &goals[0];
+        // Prevent revisiting the same goal
+        if visited.contains(current_goal) {
+            return;
+        }
+        visited.push(current_goal.clone());
+        for clause in program {
+            let clause_head = match clause {
+                Clause::Fact(head) => head,
+                Clause::Rule(head, _) => head,
+            };
+            if let Ok(subs) = mgu(clause_head, current_goal) {
+                let (new_goals, new_query) = resolution(&subs, clause, goals, query);
+                solve_internal(program, &new_goals, &new_query, visited);
+            }
+        }
+        visited.pop(); // Backtracking
     }
+    let mut visited = Vec::new(); // Initialize the visited list
+    solve_internal(program, goals, query, &mut visited);
 }
