@@ -58,10 +58,13 @@ fn mgu(a: &Term, b: &Term) -> Result<Vec<Sub>, ()> {
             (Term::Atom(a), Term::Atom(b)) => {
                 // atoms must match
                 if a != b {
-                    return Err(())
+                    return Err(());
                 }
             }
-            (Term::Compound{head_atom: head_a, termlist: lst_a}, Term::Compound{head_atom: head_b, termlist: lst_b}) => {
+            (
+                Term::Compound { head_atom: head_a, termlist: lst_a },
+                Term::Compound { head_atom: head_b, termlist: lst_b },
+            ) => {
                 if head_a != head_b || lst_a.len() != lst_b.len() {
                     return Err(());
                 }
@@ -89,26 +92,38 @@ fn resolution(subs: &Vec<Sub>, clause: &Clause, goals: &Vec<Term>, query: &Term)
             new_goals.extend(goals.iter().skip(1).map(|g| apply_subs(subs, g.clone())));
         }
     }
-
     let updated_query = apply_subs(subs, query.clone());
-
     (new_goals, updated_query)
 }
 
 pub fn solve(program: &Vec<Clause>, goals: &Vec<Term>, query: &Term) {
+    solve_with_depth(program, goals, query, 0);
+}
+
+fn solve_with_depth(program: &Vec<Clause>, goals: &Vec<Term>, query: &Term, depth: usize) {
+    let indent = "  ".repeat(depth);
+    println!("{}Solving goals: {:?} with query: {:?}", indent, goals, query);
+
     if goals.is_empty() {
-        succeed(query);
+        println!("{}SUCCESS: {:?}", indent, query);
         return;
     }
+
     let current_goal = &goals[0];
     for clause in program {
         let clause_head = match clause {
             Clause::Fact(head) => head,
             Clause::Rule(head, _) => head,
         };
+
         if let Ok(subs) = mgu(clause_head, current_goal) {
+            println!(
+                "{}Unifying {:?} with {:?} -> substitutions: {:?}",
+                indent, current_goal, clause_head, subs
+            );
+
             let (new_goals, new_query) = resolution(&subs, clause, goals, query);
-            solve(program, &new_goals, &new_query);
+            solve_with_depth(program, &new_goals, &new_query, depth + 1);
         }
     }
 }
