@@ -122,12 +122,15 @@ impl<'a> Parser<'a> {
             self.advance();
             Ok(())
         } else {
-            Err(format!("Expected token: {:?}, but found {:?}", expected, self.current_token()))
+            Err(format!(
+                "Expected token: {:?}, but found {:?} at position {}",
+                expected,
+                self.current_token(),
+                self.position
+            ))
         }
     }
-}
 
-impl<'a> Parser<'a> {
     fn parse_term(&mut self) -> Result<Term, String> {
         match self.current_token() {
             Some(Token::Var(v)) => {
@@ -137,7 +140,6 @@ impl<'a> Parser<'a> {
             Some(Token::Atom(a)) => {
                 self.advance();
                 if let Some(Token::LeftParen) = self.current_token() {
-                    // Parse compound term
                     self.advance(); // Consume '('
                     let termlist = self.parse_termlist()?;
                     self.expect_token(&Token::RightParen)?; // Consume ')'
@@ -146,16 +148,17 @@ impl<'a> Parser<'a> {
                         termlist,
                     })
                 } else {
-                    // Simple atom
                     Ok(Term::Atom(a.clone()))
                 }
             }
-            _ => Err("Expected a term (variable, atom, or compound term)".to_string()),
+            _ => Err(format!(
+                "Expected a term (variable, atom, or compound term), but found {:?} at position {}",
+                self.current_token(),
+                self.position
+            )),
         }
     }
-}
 
-impl<'a> Parser<'a> {
     fn parse_termlist(&mut self) -> Result<Vec<Term>, String> {
         let mut terms = Vec::new();
         terms.push(self.parse_term()?);
@@ -167,17 +170,13 @@ impl<'a> Parser<'a> {
 
         Ok(terms)
     }
-}
 
-impl<'a> Parser<'a> {
     fn parse_fact(&mut self) -> Result<Clause, String> {
         let term = self.parse_term()?;
         self.expect_token(&Token::Period)?; // Consume '.'
         Ok(Clause::Fact(term))
     }
-}
 
-impl<'a> Parser<'a> {
     fn parse_rule(&mut self) -> Result<Clause, String> {
         let head = self.parse_term()?;
         self.expect_token(&Token::ColonHyphen)?; // Consume ':-'
@@ -185,19 +184,18 @@ impl<'a> Parser<'a> {
         self.expect_token(&Token::Period)?; // Consume '.'
         Ok(Clause::Rule(head, termlist))
     }
-}
 
-impl<'a> Parser<'a> {
     fn parse_clause(&mut self) -> Result<Clause, String> {
-        if let Some(Token::ColonHyphen) = self.tokens.get(self.position + 1) {
+        // Safeguard against out-of-bounds access
+        if self.position + 1 < self.tokens.len()
+            && matches!(self.tokens[self.position + 1], Token::ColonHyphen)
+        {
             self.parse_rule()
         } else {
             self.parse_fact()
         }
     }
-}
 
-impl<'a> Parser<'a> {
     fn parse_query(&mut self) -> Result<Term, String> {
         let term = self.parse_term()?;
         self.expect_token(&Token::Period)?; // Consume '.'
