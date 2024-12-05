@@ -133,7 +133,7 @@ impl<'a> Parser<'a> {
 
     fn parse_term(&mut self) -> Result<Term, String> {
         if let Some(token) = self.current_token() {
-            println!("Parsing term: {:?}", token); // Debug statement
+            //println!("Parsing term: {:?}", token); // Debug statement
             match token {
                 Token::Var(v) => {
                     let v = v.clone();
@@ -200,12 +200,20 @@ impl<'a> Parser<'a> {
     }
 
     fn parse_clause(&mut self) -> Result<Clause, String> {
-        if matches!(self.tokens.get(self.position + 1), Some(Token::ColonHyphen)) {
-            self.parse_rule()
+        // first parse the head term
+        let head = self.parse_term()?;
+        // check if this is a rule
+        if let Some(Token::ColonHyphen) = self.current_token() {
+            self.advance(); // Consume ':-'
+            let termlist = self.parse_termlist()?;
+            self.expect_token(&Token::Period)?; // Consume '.'
+            Ok(Clause::Rule(head, termlist))
         } else {
-            self.parse_fact()
+            // else, it's a fact
+            self.expect_token(&Token::Period)?; // Consume '.'
+            Ok(Clause::Fact(head))
         }
-    }    
+    }
 
     fn parse_query(&mut self) -> Result<Term, String> {
         let term = self.parse_term()?;
