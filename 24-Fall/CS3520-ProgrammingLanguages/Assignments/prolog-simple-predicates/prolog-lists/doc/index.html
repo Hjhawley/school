@@ -1,0 +1,36 @@
+<html><head></head><body><h1>Prolog Lists</h1>
+
+<p>Write your solutions to these problems in the file <code>lists.pl</code>.</p>
+
+<p>For these problems, you should not use any other predicates. Each
+problems should be a standalone implementation, i.e., no <code>nth0</code>,
+<code>select</code>, or other predicates. You should also avoid any arithmetic
+operations.</p>
+
+<p>Try to avoid thinking about the procedure necessary to solve the
+problem, and focus on describing the requirements in a declarative
+way by relying on unification.</p>
+
+<ol>
+<li><p>Define a <code>third</code> predicate so that <code>third(X,Y)</code> says that <code>Y</code> is
+the third element of the list <code>X</code>. (The predicate should fail if
+<code>X</code> has fewer than three elements.) <em>Hint:</em> This can be
+expressed as a fact.</p></li>
+
+<li><p>Define a <code>del3</code> predicate so that <code>del3(X,Y)</code> says that the list
+<code>Y</code> is the same as the list <code>X</code> but with the third element
+deleted. (The predicate should fail if <code>X</code> has fewer than three
+elements.) <em>Hint:</em> This can be expressed as a fact.</p></li>
+
+<li><p>Define a predicate <code>isDuped</code> so that <code>isDuped(Y)</code> succeeds if
+and only if <code>Y</code> is a list of even length where each element in
+the list appears twice in a row. That is, the predicate should
+succeed if and only if the first and second elements are equal,
+and the third and fourth elements are equal, and so on to the
+end of the list. It should fail for all odd-length list.</p></li>
+
+<li><p>Define the <code>evenSize</code> predicate so that <code>evenSize(X)</code> says that
+<code>X</code> is a list whose length is an even number. <em>Hint:</em> You do not
+need to compute the actual length, or do any integer arithmetic.</p></li>
+</ol>
+</body></html>

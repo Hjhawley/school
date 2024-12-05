@@ -1,0 +1,25 @@
+firstCousin(ben,jaina), !.
+firstCousin(jaina,ben), !.
+firstCousin(ben,jacen), !.
+firstCousin(jacen,ben), !.
+firstCousin(ben,anakin), !.
+firstCousin(anakin,ben), !.
+firstCousin(shmi,_).
+firstCousin(ruweee,_).
+firstCousin(jobal,_).
+firstCousin(vader,_).
+firstCousin(padme,_).
+firstCousin(mara,_).
+firstCousin(luke,_).
+firstCousin(leia,_).
+firstCousin(han,_).
+firstCousin(ben,ben).
+firstCousin(ben,luke).
+firstCousin(ben,mara).
+firstCousin(ben,leia).
+firstCousin(ben,han).
+firstCousin(ben,vader).
+firstCousin(ben,padme).
+firstCousin(ben,padme).
+firstCousin(ben,shmi).
+firstCousin(ben,ruweee).

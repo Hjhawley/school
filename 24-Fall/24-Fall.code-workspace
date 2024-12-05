@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../TFL-Scheduler"
+		},
+		{
+			"path": "CS4300-ArtificialIntelligence/cs4300-2040-40-projects-Hjhawley"
+		},
+		{
+			"path": "../../itunes-to-spotify"
+		},
+		{
+			"path": "../../NeuroDev-Tech-Class"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "NeuroDev-Tech-Class"
+	}
+}

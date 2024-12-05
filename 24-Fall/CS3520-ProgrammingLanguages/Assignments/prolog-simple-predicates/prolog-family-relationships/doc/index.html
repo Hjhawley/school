@@ -1,0 +1,47 @@
+<html><head></head><body><h1>Prolog: family relationships</h1>
+
+<p><strong>Do not use any library predicates other than those defined and/or
+described in lectures or in the textbook. If you need help
+understanding how these problems work, talk to me. Looking up
+solutions to these problems on the web is cheating, even if you do
+not copy the code that you found.</strong></p>
+
+<h2>Family relationships</h2>
+
+<p>You are provided with a list of <code>parent(X,Y)</code> facts. Add <code>male(X)</code>
+and <code>female(X)</code> facts:</p>
+
+<ul>
+<li>Males: ruweee, vader, luke, han, ben, jacen, anakin</li>
+<li>Females: shmi, jobal, padme, mara, leia, jaina</li>
+</ul>
+
+<p>Define your answers to the following problems in terms of the base
+relations <code>parent(X,Y)</code>, <code>female(X)</code>, and <code>male(X)</code>. Your code will
+be tested against the specific set of parent facts you are given
+(along with the male female facts you add), but your solutions
+should be general enough to work with any data set.</p>
+
+<ol>
+<li><p>Define a <code>mother</code> predicate so that <code>mother(X,Y)</code> says that <code>X</code>
+is the mother of <code>Y</code>.</p></li>
+
+<li><p>Define a <code>father</code> predicate so that <code>father(X,Y)</code> says that <code>X</code>
+is the father of <code>Y</code>.</p></li>
+
+<li><p>Define a <code>sister</code> predicate so that <code>sister(X,Y)</code> says that <code>X</code>
+is a sister of <code>Y</code>. Be careful, a person cannot be her own
+sister.</p></li>
+
+<li><p>Define a <code>grandson</code> predicate so that <code>grandson(X,Y)</code> says that
+<code>X</code> is a grandson of <code>Y</code>.</p></li>
+
+<li><p>Define the <code>firstCousin</code> predicate so that <code>firstCousin(X,Y)</code>
+says that <code>X</code> is a first cousin of <code>Y</code>. Be careful, a person
+cannot be his or her own cousin, nor can a brother or sister
+also be a cousin.</p></li>
+
+<li><p>Define a <code>descendent</code> predicate so that <code>descendent(X,Y)</code> says
+that <code>X</code> is a descendent of <code>Y</code>.</p></li>
+</ol>
+</body></html>

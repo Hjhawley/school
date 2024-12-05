@@ -1,0 +1,15 @@
+sister(leia,luke), !.
+sister(jaina,jacen), !.
+sister(jaina,anakin), !.
+sister(leia,leia), !.
+sister(jaina,jaina), !.
+sister(padme,padme), !.
+sister(shmi,_).
+sister(ruweee,_).
+sister(jobal,_).
+sister(anakin,_).
+sister(padme,_).
+sister(luke,_).
+sister(han,_).
+sister(jacen,_).
+sister(ben,_).

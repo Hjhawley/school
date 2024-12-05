@@ -1,0 +1,17 @@
+evenSize([]).
+evenSize([1,1]).
+evenSize([a,a]).
+evenSize([a,b]).
+evenSize([1,2]).
+evenSize([a,b,c,d]).
+evenSize([1,2,3,4]).
+evenSize([a,a,a,a,a,a]).
+evenSize([b,a,d,c,a,b,q,r]).
+evenSize([9,8,7,6,5,4,3,2,1,a]).
+evenSize([1]).
+evenSize([_]).
+evenSize([a,b,c]).
+evenSize([a,b,c,d,e]).
+evenSize([a,b,c,d,e,f,g]).
+evenSize([a|b]).
+evenSize(notalist).

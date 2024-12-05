@@ -1,0 +1,29 @@
+descendent(vader,shmi), !.
+descendent(luke,shmi), !.
+descendent(leia,shmi), !.
+descendent(ben,shmi), !.
+descendent(jaina,shmi), !.
+descendent(jacen,shmi), !.
+descendent(anakin,shmi), !.
+descendent(luke,vader), !.
+descendent(leia,vader), !.
+descendent(ben,vader), !.
+descendent(jaina,vader), !.
+descendent(jacen,vader), !.
+descendent(anakin,vader), !.
+descendent(leia,vader), !.
+descendent(leia,padme), !.
+descendent(leia,ruweee), !.
+descendent(leia,jobal), !.
+descendent(shmi,_).
+descendent(padme,shmi).
+descendent(leia,han).
+descendent(luke,mara).
+descendent(luke,luke).
+descendent(luke,ben).
+descendent(ruweee,_).
+descendent(jobal,_).
+descendent(_,ben).
+descendent(_,jaina).
+descendent(_,jacen).
+descendent(_,anakin).

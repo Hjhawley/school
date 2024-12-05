@@ -7,7 +7,7 @@
 
 #define MIN_BLOCK_SIZE 32
 #define MAX_BLOCK_SIZE 4096
-#define NUM_FREE_LISTS 8 // 7?
+#define NUM_FREE_LISTS 8 // not 7?
 
 #define ALLOC_MAGIC 0xabcdefabcdefabcdULL
 #define FREE_MAGIC  0x1234567890abcdefULL
@@ -386,7 +386,6 @@ print_block(void *block_addr, uint64 size, int indent)
     }
 }
 
-// Function to print the structure of a 4096-byte block
 void
 buddy_print(void *ptr)
 {

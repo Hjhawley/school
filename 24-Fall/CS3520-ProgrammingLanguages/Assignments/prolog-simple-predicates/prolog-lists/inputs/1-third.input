@@ -1,0 +1,11 @@
+third([1,2,3,4,5],3).
+third([2,3,4,5],4).
+third([a,b,c,d],c).
+third([a,b,c],c).
+third([a,b,c|d],c).
+third([1,2,3,4],2).
+third([1,2,3,4],4).
+third([a,b,c,d],b).
+third([a,b,c,d],d).
+third([a,b],a).
+third(notalist,a).

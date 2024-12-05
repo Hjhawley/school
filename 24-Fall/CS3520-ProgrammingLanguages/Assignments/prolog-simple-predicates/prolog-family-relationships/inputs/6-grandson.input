@@ -1,0 +1,25 @@
+grandson(luke,shmi), !.
+grandson(luke,ruweee), !.
+grandson(luke,jobal), !.
+grandson(ben,vader), !.
+grandson(ben,padme), !.
+grandson(jacen,vader), !.
+grandson(jacen,padme), !.
+grandson(anakin,vader), !.
+grandson(anakin,padme), !.
+grandson(mara,_).
+grandson(jaina,_).
+grandson(leia,_).
+grandson(han,_).
+grandson(padme,_).
+grandson(vader,_).
+grandson(shmi,_).
+grandson(ruweee,_).
+grandson(jobal,_).
+grandson(luke,ben).
+grandson(luke,padme).
+grandson(luke,vader).
+grandson(luke,han).
+grandson(luke,leia).
+grandson(luke,luke).
+grandson(luke,mara).

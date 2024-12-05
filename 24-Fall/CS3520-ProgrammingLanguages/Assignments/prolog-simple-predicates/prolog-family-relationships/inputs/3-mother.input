@@ -1,0 +1,22 @@
+mother(jobal,padme), !.
+mother(padme,luke), !.
+mother(padme,leia), !.
+mother(mara,ben), !.
+mother(shmi,vader), !.
+mother(leia,jaina), !.
+mother(leia,jacen), !.
+mother(leia,anakin), !.
+mother(ruweee,_).
+mother(vader,_).
+mother(luke,_).
+mother(han,_).
+mother(ben,_).
+mother(jacen,_).
+mother(anakin,_).
+mother(jaina,_).
+mother(padme,jobal).
+mother(leia,padme).
+mother(jaina,leia).
+mother(shmi,padme).
+mother(shmi,luke).
+mother(shmi,han).

@@ -1,0 +1,22 @@
+father(ruweee,padme), !.
+father(vader,luke), !.
+father(vader,leia), !.
+father(luke,ben), !.
+father(han,jaina), !.
+father(han,jacen), !.
+father(han,anakin), !.
+father(shmi,_).
+father(jobal,_).
+father(padme,_).
+father(mara,_).
+father(leia,_).
+father(jaina,_).
+father(anakin,_).
+father(jacen,_).
+father(ben,_).
+father(han,ben).
+father(han,leia).
+father(han,luke).
+father(luke,anakin).
+father(luke,vader).
+father(luke,shmi).

@@ -1,0 +1,16 @@
+isDuped([]).
+isDuped([1,1]).
+isDuped([1,_]).
+isDuped([_,_]).
+isDuped([a,a]).
+isDuped([a,a,b,b]).
+isDuped([a,a,b,b,c,c]).
+isDuped([a,a,b,b,c,c,1,1]).
+isDuped([1]).
+isDuped([1,2]).
+isDuped([a]).
+isDuped([_]).
+isDuped([a,b]).
+isDuped([a|a]).
+isDuped([a,a,b,b,c,c,d]).
+isDuped([a,a,b,b,c,c,d,e]).
