@@ -167,23 +167,23 @@ impl<'a> Parser<'a> {
                 self.position
             ))
         }
-    }    
+    }
 
     fn parse_termlist(&mut self) -> Result<Vec<Term>, String> {
         let mut terms = Vec::new();
         terms.push(self.parse_term()?);
-    
+
         while let Some(Token::Comma) = self.current_token() {
             self.advance(); // Consume ','
             terms.push(self.parse_term()?);
         }
-    
+
         if terms.is_empty() {
             Err("Expected at least one term in the termlist.".to_string())
         } else {
             Ok(terms)
         }
-    }    
+    }
 
     fn parse_clause(&mut self) -> Result<Clause, String> {
         // first parse the head term

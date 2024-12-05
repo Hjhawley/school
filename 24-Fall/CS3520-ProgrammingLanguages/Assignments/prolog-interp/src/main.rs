@@ -1,5 +1,7 @@
 mod parse;
+mod solve;
 
+use solve::solve;
 use parse::parse_clause;
 use parse::parse_query;
 use parse::tokenize;
@@ -41,6 +43,30 @@ enum Term {
 impl fmt::Display for Term {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Term::Compound { head_atom: cons, termlist } if cons == "cons" && termlist.len() == 2 => {
+                // pretty print lists
+                write!(f, "[")?;
+                let mut head = self;
+                let mut sep = "";
+                loop {
+                    match head {
+                        Term::Compound { head_atom: cons, termlist } if cons == "cons" && termlist.len() == 2 => {
+                            write!(f, "{sep}{}", termlist[0])?;
+                            sep = ",";
+                            head = &termlist[1];
+                        }
+                        Term::Atom(nil) if nil == "nil" => {
+                            break;
+                        }
+                        _ => {
+                            write!(f, "|{head}")?;
+                            break;
+                        }
+                    }
+                }
+                write!(f, "]")
+            }
+
             Term::Var(v) => write!(f, "{v}"),
             Term::Atom(a) => write!(f, "{a}"),
             Term::Compound { head_atom, termlist } => {
@@ -195,5 +221,9 @@ fn main() {
             }
         };
         println!("query: {query}.");
+
+        // solve
+        solve(&program, &vec![query.clone()], &query);
+        println!();
     }
 }
