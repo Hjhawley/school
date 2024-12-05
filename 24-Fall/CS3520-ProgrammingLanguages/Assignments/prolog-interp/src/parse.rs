@@ -185,20 +185,6 @@ impl<'a> Parser<'a> {
         }
     }    
 
-    fn parse_fact(&mut self) -> Result<Clause, String> {
-        let term = self.parse_term()?;
-        self.expect_token(&Token::Period)?; // Consume '.'
-        Ok(Clause::Fact(term))
-    }
-
-    fn parse_rule(&mut self) -> Result<Clause, String> {
-        let head = self.parse_term()?;
-        self.expect_token(&Token::ColonHyphen)?; // Consume ':-'
-        let termlist = self.parse_termlist()?;
-        self.expect_token(&Token::Period)?; // Consume '.'
-        Ok(Clause::Rule(head, termlist))
-    }
-
     fn parse_clause(&mut self) -> Result<Clause, String> {
         // first parse the head term
         let head = self.parse_term()?;
@@ -213,11 +199,5 @@ impl<'a> Parser<'a> {
             self.expect_token(&Token::Period)?; // Consume '.'
             Ok(Clause::Fact(head))
         }
-    }
-
-    fn parse_query(&mut self) -> Result<Term, String> {
-        let term = self.parse_term()?;
-        self.expect_token(&Token::Period)?; // Consume '.'
-        Ok(term)
     }
 }
