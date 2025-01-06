@@ -1,0 +1,40 @@
+Introduction to Algorithms
+
+objectives:
+	develop a toolkit of ways to find efficient algorithms to solve problems
+	prove that algorithms are correct
+	analyze their efficiency properties
+	communicate these algorithms and their properties to others
+
+unstable pairs
+(x, .) and (., y): applicant x and hospital y are unstable if:
+	x prefers y to their assigned hospital
+	y prefers x to one of its admitted residents
+stable assignment: an assignment with NO UNSTABLE PAIRS (everyone is happy)
+natural and desirable condition
+
+stable matching problem:
+given two groups of n people, find a "suitable" partner for each.
+participants rank members of the opposite group from best to worst.
+perfect matching: everyone is matched precisely to one person from the other group
+stability: self-reinforcing, i.e. no incentive to undermine assignment by joint action.
+	for a matching M, an unmatched pair p-r from different groups is unstable if p and r prefer each other over their assigned partners.
+	unstable pair p-r could each improve by ignoring their assignment and pairing with each other.
+stable matching: a perfect matching with no unstable pairs.
+the problem: given a group of people n, create a stable matching for each pair.
+
+Q: which defines a perfect matching?
+A: B, each person is matched to exactly one person from the other group.
+
+Q: T/F? a pair p-r is considered unstable if p and r prefer each other over their current partners.
+A: T
+
+Q: what is the stable matching problem and what is its goal?
+A: B, a problem of assigning partners from two groups such that each person is matched and there are no unstable pairs.
+
+Stable matching problem 1: the matching is NOT stable because (X,B) is a preferable matching for both.
+
+Stable matching problem 2: even though Z prefers A and B over C, A and B prefer their partners over Z so it's not an unstable pair.
+
+Q: do stable matchings ALWAYS exist?
+NO; the stable roommate problem example proves this. every valid matching is an unstable pair in some way.
