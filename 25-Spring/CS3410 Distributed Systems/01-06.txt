@@ -1,0 +1,70 @@
+What is a Distributed System?
+
+A distributed system is one in which multiple computers work together to appear as a single system to the user. It became a standard part of software development in the late 90s, now commonly seen in:
+- Mobile, web, and desktop apps
+- Servers
+- 3-tier apps, peer-to-peer, client-server, and clusters
+
+Quote by Leslie Lamport: "A distributed system is one in which the failure of a computer you didn’t even know existed can render your own computer unusable."
+
+Key Goal of Distributed Systems:
+- Ensure one component can fail without disrupting the entire system.
+- Example: Netflix's "Chaos Monkey" tests system resilience by randomly causing server failures to ensure continuous service availability.
+
+---
+
+The Two Generals' Problem:
+A classic thought experiment demonstrating the challenges of coordination over unreliable communication channels.
+
+- Two generals plan an attack on a city from opposite sides.
+- They must communicate by sending messengers, but the messages may be intercepted or delayed.
+- The goal is for both generals to attack simultaneously.
+
+Why It's Impossible:
+- Any final confirmation message could be intercepted.
+- If losing the final message doesn't matter, then neither do earlier messages.
+- Therefore, no protocol can guarantee simultaneous coordination with unreliable communication.
+
+---
+
+Remote Procedure Calls (RPC):
+A standard method for communication between nodes in a distributed system, simulating local function calls across a network.
+
+Steps:
+1. Client calls a function: `result = getAccount(node, user)`.
+2. Client stub serializes the call (converts data into binary form).
+3. The serialized data is sent to the server node over the network.
+4. Server stub receives and deserializes the data, then calls the requested function.
+5. The result is serialized and returned to the client.
+
+---
+
+Key Differences Between Distributed and Single-Node Systems:
+
+1. Latency:
+   - Local vs. remote procedure calls have vastly different latencies.
+   - Considerations:
+     - Data centers vs. worldwide calls
+     - Impact on performance (e.g., SQLite vs. client-server databases)
+   - Easier to plan for but still significant.
+
+2. Memory Access:
+   - Local pointers become meaningless in a distributed context.
+   - Reasons we use pointers locally:
+     - Efficiency (avoiding unnecessary copying)
+     - Shared data structures
+     - Recursive structures like trees and graphs
+   - Challenges in distributed systems:
+     - Concurrency issues
+     - Handling file handles and locks
+   - Requires rethinking data flow and synchronization strategies.
+
+3. Partial Failure:
+   - The hardest challenge in distributed systems.
+   - Failure is often ambiguous:
+     - Is a node actually down, or just slow?
+     - It's impossible to know definitively due to the Two Generals' Problem.
+   - Partial failure forces distributed design considerations from the outset:
+     - Fault tolerance and availability
+     - Difficult to test and easy to overlook
+     - Often requires rethinking the entire architecture
