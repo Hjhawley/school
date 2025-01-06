@@ -1,40 +1,50 @@
 Introduction to Algorithms
 
-objectives:
-	develop a toolkit of ways to find efficient algorithms to solve problems
-	prove that algorithms are correct
-	analyze their efficiency properties
-	communicate these algorithms and their properties to others
+Objectives:
+- Develop a toolkit of ways to find efficient algorithms to solve problems
+- Prove that algorithms are correct
+- Analyze their efficiency properties
+- Communicate these algorithms and their properties to others
 
-unstable pairs
-(x, .) and (., y): applicant x and hospital y are unstable if:
-	x prefers y to their assigned hospital
-	y prefers x to one of its admitted residents
-stable assignment: an assignment with NO UNSTABLE PAIRS (everyone is happy)
-natural and desirable condition
+Unstable Pairs:
+A pair (x, .) and (., y) is unstable if:
+- Applicant x prefers hospital y to their assigned hospital
+- Hospital y prefers applicant x over one of its admitted residents
 
-stable matching problem:
-given two groups of n people, find a "suitable" partner for each.
-participants rank members of the opposite group from best to worst.
-perfect matching: everyone is matched precisely to one person from the other group
-stability: self-reinforcing, i.e. no incentive to undermine assignment by joint action.
-	for a matching M, an unmatched pair p-r from different groups is unstable if p and r prefer each other over their assigned partners.
-	unstable pair p-r could each improve by ignoring their assignment and pairing with each other.
-stable matching: a perfect matching with no unstable pairs.
-the problem: given a group of people n, create a stable matching for each pair.
+Stable Assignment:
+- An assignment with no unstable pairs, meaning everyone is satisfied with their match
+- This condition is both natural and desirable
 
-Q: which defines a perfect matching?
-A: B, each person is matched to exactly one person from the other group.
+Stable Matching Problem:
+- Given two groups of n people, find a "suitable" partner for each
+- Participants rank members of the opposite group from best to worst
 
-Q: T/F? a pair p-r is considered unstable if p and r prefer each other over their current partners.
-A: T
+Key Definitions:
+- Perfect Matching: Everyone is matched to exactly one person from the other group
+- Stability: Self-reinforcing condition where no incentive exists to undermine the assignment by joint action
 
-Q: what is the stable matching problem and what is its goal?
-A: B, a problem of assigning partners from two groups such that each person is matched and there are no unstable pairs.
+Unstable Pair Definition:
+For a matching M, a pair (p, r) from different groups is unstable if:
+- p and r prefer each other over their assigned partners
+- An unstable pair could improve by ignoring their assignment and pairing with each other
 
-Stable matching problem 1: the matching is NOT stable because (X,B) is a preferable matching for both.
+Stable Matching:
+- A perfect matching with no unstable pairs
 
-Stable matching problem 2: even though Z prefers A and B over C, A and B prefer their partners over Z so it's not an unstable pair.
+Problem Statement:
+- Given a group of size n, create a stable matching for each pair
 
-Q: do stable matchings ALWAYS exist?
-NO; the stable roommate problem example proves this. every valid matching is an unstable pair in some way.
+Quiz Questions:
+1. Which defines a perfect matching?
+   - B: Each person is matched to exactly one person from the other group
+2. True/False: A pair (p, r) is considered unstable if p and r prefer each other over their current partners.
+   - True
+3. What is the stable matching problem and its goal?
+   - B: Assign partners from two groups such that each person is matched and there are no unstable pairs
+
+Stable Matching Examples:
+- Problem 1: The matching is not stable because (X, B) is a preferable match for both parties.
+- Problem 2: Even though Z prefers A and B over C, A and B prefer their current partners over Z, so no instability exists.
+
+Do Stable Matchings Always Exist?
+- No. The stable roommate problem provides a counterexample where every valid matching has some instability.
