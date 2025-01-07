@@ -1,6 +1,6 @@
 Below is a revised and expanded version of your notes, with some additional insights and clarifications to help you (and your classmates) better understand Decision Trees and Random Forests.
 
----
+
 
 Decision Trees & Random Forests
 
@@ -14,7 +14,7 @@ A Practical Example: The Restaurant Dilemma
 3. Goal: Predict whether someone will stay or go, based on these variables.  
 
 We can use a Decision Tree to model these decisions. For example:
-```
+
                  Are you starving?
                  /         \
                 Yes        No
@@ -24,10 +24,10 @@ We can use a Decision Tree to model these decisions. For example:
                             Yes         No
                             ...         Is wait > 30 min?
                                         ...
-```
+
 Each branch is a decision (Yes/No or some condition). We keep branching until we reach a prediction (e.g., "they leave" or "they wait").
 
----
+
 
 The “Secret Sauce”: Information Gain
 
@@ -65,7 +65,7 @@ Building a Decision Tree
 
 It’s like playing “Twenty Questions” and always picking the most revealing question first.
 
----
+
 
 Overfitting
 
@@ -75,7 +75,7 @@ Overfitting
   - Small changes in the data can drastically change the tree.
 - Why it happens: If you keep making splits until you perfectly classify all training examples, you may capture noise and outliers rather than true signal.
 
----
+
 
 Random Forests
 
