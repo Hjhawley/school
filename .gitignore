@@ -1,1 +1,9 @@
-**/.vs/
+.vs/
+
+__pycache__/
+*.py[cod]
+venv/
+
+*.o
+*.obj
+*.exe
