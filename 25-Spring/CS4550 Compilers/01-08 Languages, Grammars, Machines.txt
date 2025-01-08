@@ -1,3 +1,5 @@
+(this is mostly comp theory review)
+
 Languages
 A language is defined over an alphabet, which is a finite set of characters or symbols. Examples of alphabets include the set of digits '{0-9}', uppercase letters '{A-Z}', or a mix of letters, digits, and symbols. Characters from an alphabet can be combined into strings, which are finite sequences of characters (e.g., '"342"', '"00"').
 A language over an alphabet Σ is any set of strings formed from Σ. In other words, a language specifies the subset of all possible strings (sometimes called legal strings) that belong to it.
@@ -95,3 +97,34 @@ How Finite Automata Work
 2. It reads each character of the input string sequentially, following a valid transition (if one exists) to another state.
 3. If at any point, no valid transition exists for the current character, the string is rejected.
 4. If all characters are read and the machine ends in an end state, the string is accepted.
+
+Finite Automata can test regular languages. 
+Regular languages can be described using regular expressions and are recognized by 
+deterministic finite automata (DFA) or nondeterministic finite automata (NFA) 
+which are equally expressive.
+
+Example of a language FA can test:
+The language of strings containing only an even number of 0s over the alphabet {0, 1}.
+Regular expression: (1*01*0)*1*
+Finite automata work because you only need to keep track of whether the count of 0s is even or odd - a finite amount of memory.
+
+Pushdown Automata
+PDAs can test context-free languages (CFLs), which include regular languages but also more complex patterns involving nested structures. 
+PDAs have an infinite stack, enabling them to handle some forms of recursion and matching.
+
+Example of a language a PDA can test that a FA cannot:
+    The language of balanced parentheses:
+    L={w∣w contains correctly nested parentheses, e.g., (),(()),(()()),...}
+    Why a FA fails: FAs lack memory to track the nested structure and can't "remember" how many open parentheses need closing.
+    Why a PDA works: The stack can push each "(" and pop it when a ")" is encountered.
+
+Turing Machines
+TMs can test recursively enumerable languages (RE languages), which include 
+context-free languages but also languages requiring unlimited memory and arbitrary computation.
+
+Example of a language a TM can test that a PDA cannot:
+    The language of palindromes over the alphabet {a, b}:
+    L={w∣w=w^R} where w^R is the reverse of w.
+    Example strings: abba, racecar, aabaa.
+    Why a PDA fails: A PDA can't compare arbitrary parts of the input string since it can only access the top of the stack.
+    Why a TM works: A Turing Machine can move back and forth along the tape, compare characters, and use infinite memory if needed.
