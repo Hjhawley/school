@@ -1,91 +1,97 @@
 Languages
-A language is built from an alphabet, a finite set of characters or symbols. Examples include the set of digits `{0-9}`, uppercase letters `{A-Z}`, or a mix of letters, digits, and symbols. Characters from an alphabet can be sequenced into strings, which are finite sequences of characters. For example, `"342"` and `"00"` are strings over the digit alphabet. 
-A language over an alphabet is a set of strings formed from that alphabet, often called the set of legal strings.
+A language is defined over an alphabet, which is a finite set of characters or symbols. Examples of alphabets include the set of digits '{0-9}', uppercase letters '{A-Z}', or a mix of letters, digits, and symbols. Characters from an alphabet can be combined into strings, which are finite sequences of characters (e.g., '"342"', '"00"').
+A language over an alphabet Σ is any set of strings formed from Σ. In other words, a language specifies the subset of all possible strings (sometimes called legal strings) that belong to it.
 
 Formal Languages
-Languages used by compilers are called formal languages. Unlike natural languages (like English or Chinese) where grammatical correctness can be vague, formal languages have strictly defined rules, making them ideal for precise mathematical reasoning and automated processing.
+Languages used by compilers or other formal systems are called formal languages. Unlike natural languages (e.g., English, Chinese)—where grammatical correctness can be somewhat fluid—formal languages have strictly defined rules. This makes them ideal for precise mathematical reasoning and automated processing.
 
 Defining Formal Languages
-Formal languages can be defined by specifying legal strings using:
+Formal languages can be described using:
 
-- Explicit Listing: Useful for small sets, e.g., `{a, b, ab, ba}`.
-- Descriptive Rules: E.g., "a non-zero digit followed by zero or more digits."
-- Regular Expressions (Regex): Patterns built from symbols and operators that define sets of strings.
+1. Explicit Listing
+ - Sufficient when the set is small.
+ - Example: {a, b, ab, ba}.
 
-Regular Expressions (Regex)
-Regular expressions define patterns using operators:
-- `*` – zero or more repetitions
-- `+` – one or more repetitions
-- `|` – OR (choice between patterns)
-- `()` – grouping for precedence
+2. Descriptive Rules
+ - Example: “a non-zero digit followed by zero or more digits.”
 
-Example: The regex `(ab)2d+(e|fg)` defines strings starting with `"ab"` exactly twice, followed by one or more `"d"` characters, and ending with `"e"` or `"fg"`. This matches `"ababdddfg"` but not `"adeg"`.
+3. Regular Expressions (Regex)
+ - Patterns built from symbols and operators (e.g., '*', '+', '|', '()') to define sets of strings.
 
-Regular expressions can define regular languages, a subset of formal languages. More complex languages may require tools like context-free grammars (CFGs).
+Example: Regular Expressions
+A regular expression can define valid strings through operators such as:
+- '*' : zero or more repetitions
+- '+' : one or more repetitions
+- '|' : OR (choice between patterns)
+- '()' : grouping for precedence
 
+For instance, the regex '(ab){2}d+(e|fg)' defines strings that:
+1. Start with “ab” exactly twice,
+2. Follow with one or more “d” characters,
+3. End with either “e” or “fg”.
 
-* * * * * * * * * * * * * * * * * * * *
+This would match '"ababdddfg"' but not '"adeg"'.
 
+Regular expressions define regular languages, which are one category of formal languages. More complex languages may require additional tools, such as context-free grammars (CFGs).
 
 Grammars
-A grammar is a tool for generating the legal strings of a language. Each grammar defines a specific language, with a one-to-one relationship between the two.
+A grammar is a tool for generating the legal strings of a language. Each grammar defines exactly one language; however, many different grammars can describe that same language.
 
 Components of a Grammar
-A grammar consists of four parts:
-1. Terminals: The basic symbols or alphabet used in the language.
-2. Nonterminals: Variables representing patterns that can be replaced by terminals or other nonterminals.
-3. Start Symbol: A special nonterminal from which the derivation begins.
-4. Production Rules: Rules that describe how nonterminals can be expanded into terminals or other nonterminals.
+A grammar G consists of four parts:
+
+1. Terminals: The basic symbols (alphabet) used in the language.
+2. Nonterminals: Variables representing patterns that can be expanded into terminals or other nonterminals.
+3. Start Symbol: A special nonterminal from which every derivation begins.
+4. Production Rules: Rules describing how nonterminals can be expanded.
 
 Example Grammar: Counting Numbers
-To define the language of all counting numbers (positive integers):
-
-- Terminals: `{0, 1, ..., 9}`
-- Nonterminals: `S, P, N, D`
-- Start Symbol: `S`
+Consider a grammar defining positive integers (i.e., counting numbers):
+- Terminals: {0, 1, 2, ..., 9}
+- Nonterminals: S, P, N, D
+- Start Symbol: S
 - Production Rules:
-   ```
-   S → P | PN
-   P → 1 | 2 | ... | 9
-   N → ND | D
-   D → 0 | 1 | ... | 9
-   ```
-This grammar generates counting numbers by expanding `S` using the production rules until only terminals remain.
+```
+S ⇒ P | PN
+P ⇒ 1 | 2 | ... | 9
+N ⇒ ND | D
+D ⇒ 0 | 1 | ... | 9
+```
+
+In this grammar:
+- P captures a non-zero digit ('1' through '9').
+- N captures one or more digits.
+- S either consists of a single non-zero digit ('P') or a non-zero digit followed by more digits ('PN').
 
 Example Derivation
-A derivation is the full sequence of production steps used to transform the start symbol into a valid string of terminals.
-To derive the string `"7234"`:
-- Start with `S`
-- `S → PN → 7N → 7ND → 7NDD → 7DDD → 7234`
+A derivation shows the sequence of production steps from the start symbol to a string of only terminals. For the string '"7234"':
 
-Each step replaces a nonterminal until a string of only terminals is reached, verifying `"7234"` as a valid counting number.
+1. S ⇒ PN
+2. P ⇒ 7, so PN ⇒ 7N
+3. N ⇒ ND ⇒ NDD ⇒ DDD, and then
+4. D ⇒ 2, D ⇒ 3, D ⇒ 4
+
+Ultimately, we get "7234". This confirms that "7234" is a valid string in the language.
 
 Testing a Grammar
-A grammar is correct if:
-- Completeness: It generates all legal strings of the language.
-- Exclusivity: It rejects all illegal strings.
+A grammar is correct for a language if:
+- Completeness: It generates every legal string of the language.
+- Exclusivity: It rejects every string that is not legal in the language.
 
-For example, `"255"` can be derived as:
-`S → PN → PND → PDD → 2DD → 25D → 255`
-
-However, no valid derivation exists for invalid strings like `"073"`.
-
-
-* * * * * * * * * * * * * * * * * * * *
-
+For example, '"255"' can be derived from S via 'PN ⇒ PND ⇒ PDD ⇒ 2DD ⇒ 25D ⇒ 255'. However, there is no valid derivation for an illegal string like '"073"'.
 
 Machines
-A machine is a tool for testing whether a given string belongs to a language. While grammars are effective for generating strings, they can be inefficient for verifying legality. Machines, in contrast, are designed for string validation.
+A machine is a device (conceptual or actual) used to test whether a given string is in a language. While grammars effectively generate legal strings, they can be inefficient for checking whether a string is legal. Machines are optimized for precisely this verification task.
 
 Finite Automata
 The simplest type of machine is a finite automaton. It consists of:
 - States: Nodes representing different conditions of the machine.
 - Start State: The state where processing begins.
-- End State(s): One or more states indicating acceptance of a string.
-- Transition Rules: Directed edges labeled with characters that dictate how the machine moves between states.
+- End State(s): One or more states where a string can be accepted.
+- Transition Rules: Directed edges (labeled with characters) indicating how the machine moves between states.
 
 How Finite Automata Work
-1. The machine starts in the start state.
-2. It reads each character of the input string, moving to the next state if a valid transition exists.
-3. If no valid transition exists for the current character, the string is rejected.
-4. If all characters are processed and the machine ends in an end state, the string is accepted.
+1. The machine begins in the start state.
+2. It reads each character of the input string sequentially, following a valid transition (if one exists) to another state.
+3. If at any point, no valid transition exists for the current character, the string is rejected.
+4. If all characters are read and the machine ends in an end state, the string is accepted.
