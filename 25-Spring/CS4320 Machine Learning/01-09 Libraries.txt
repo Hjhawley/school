@@ -1,0 +1,44 @@
+Virtual Environments
+
+why? to keep packages separate between projects
+(in case one uses a particular version of a package, for example)
+makes project prerequisites repeatable
+
+use a .venv directory, and add it to gitignore
+python3 -m venv .venv             // create a location to store the config
+source .venv/bin/activate         // activate the environment
+store list of packages in requirements.txt
+pip install -r requirements.txt   // install packages in the venv
+deactivate                        // deactivate the environment
+
+
+* * * * * * * * * * * * * * * * * * * *
+
+
+pandas
+https://pandas.pydata.org/docs/
+
+Spreadsheet-like data structure
+.csv file format
+
+
+* * * * * * * * * * * * * * * * * * * *
+
+
+matplotlib
+https://matplotlib.org/stable/index.html
+
+used to generate plots and other visual representations of data
+can generate them as images, PDF, etc
+
+
+* * * * * * * * * * * * * * * * * * * *
+
+
+scikit-learn
+https://scikit-learn.org/stable/
+
+prebuilt algorithms/classes
+uniform API
+Classification, regression, clustering, dimensionality reduction
+NOT for neural networks

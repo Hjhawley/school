@@ -17,7 +17,7 @@ data_2d = [[1, 2, 3],
 npdata_2d = np.array(data_2d)
 ```
 
-- Unlike Python lists, NumPy arrays are typically homogeneous, meaning all elements are usually of the same data type (e.g., float, int).
+Unlike Python lists, NumPy arrays are typically homogeneous, meaning all elements are usually of the same data type (e.g., float, int).
 
 
 
@@ -30,7 +30,7 @@ print(data_2d[1][0])  # 4
 # NumPy array indexing (2D)
 print(npdata_2d[1, 0])  # 4
 ```
-- With NumPy arrays, you can directly separate the indices by commas instead of chaining brackets, which is more convenient and readable.
+With NumPy arrays, you can directly separate the indices by commas instead of chaining brackets, which is more convenient and readable.
 
 ```
 # Slicing the Python list
@@ -39,8 +39,8 @@ print(data_2d[1])  # [4, 5, 6]
 # Slicing the NumPy array (2D)
 print(npdata_2d[1, :])  # [4 5 6]
 ```
-- In NumPy, `npdata_2d[1, :]` gives the entire second row (index 1).
-- You can also slice columns, e.g. `npdata_2d[:, 0]` would give the first column of all rows.
+In NumPy, `npdata_2d[1, :]` gives the entire second row (index 1).
+You can also slice columns, e.g. `npdata_2d[:, 0]` would give the first column of all rows.
 
 
 
@@ -48,32 +48,32 @@ Shape (dimensions) of a NumPy array:
 ```
 print(npdata_2d.shape)  # e.g., (2, 3)
 ```
-- Returns a tuple indicating the size of each dimension. Here, `(2, 3)` means 2 rows and 3 columns.
+Returns a tuple indicating the size of each dimension. Here, `(2, 3)` means 2 rows and 3 columns.
 
 Other useful properties and methods:
-- `npdata_2d.ndim` : Returns the number of dimensions of the array (e.g., `2`).
-- `npdata_2d.size` : Returns the total number of elements in the array (e.g., `6`).
-- `npdata_2d.dtype`: Shows the data type of the array’s elements (e.g., `int64` or `float64`).
+`npdata_2d.ndim` : Returns the number of dimensions of the array (e.g., `2`).
+`npdata_2d.size` : Returns the total number of elements in the array (e.g., `6`).
+`npdata_2d.dtype`: Shows the data type of the array’s elements (e.g., `int64` or `float64`).
 
 
 
 Why NumPy?
 
-- Performance: NumPy arrays are stored more efficiently than Python lists in memory, and NumPy operations are often implemented in C, making them fast.
-- Vectorized Operations: You can perform element-wise operations without explicitly looping in Python. For example:
+Performance: NumPy arrays are stored more efficiently than Python lists in memory, and NumPy operations are often implemented in C, making them fast.
+Vectorized Operations: You can perform element-wise operations without explicitly looping in Python. For example:
   ```
   arr = np.array([1, 2, 3])
   print(arr * 3)  # [3, 6, 9]
   ```
   This is much faster and cleaner than doing a for-loop in pure Python.
 
-- Broad Ecosystem: NumPy arrays are the foundation for many scientific computing and machine learning libraries (e.g., pandas, SciPy, TensorFlow, PyTorch).
+Broad Ecosystem: NumPy arrays are the foundation for many scientific computing and machine learning libraries (e.g., pandas, SciPy, TensorFlow, PyTorch).
 
 
 
 Additional Ways to Create NumPy Arrays
 
-- Using built-in functions:
+Using built-in functions:
   ```
   np.zeros((2, 3))     # 2x3 array of zeros
   np.ones((2, 3))      # 2x3 array of ones
@@ -81,7 +81,7 @@ Additional Ways to Create NumPy Arrays
   np.arange(10)        # array of 0..9
   np.linspace(0, 1, 5) # array of 5 evenly spaced points between 0 and 1
   ```
-- Random Arrays (often used in data science or testing):
+Random Arrays (often used in data science or testing):
   ```
   np.random.rand(2, 3) # 2x3 array of random floats in [0, 1)
   np.random.randn(2, 3) # 2x3 array of random floats from a standard normal distribution
@@ -95,6 +95,6 @@ Read through NumPy Quickstart:
    The NumPy Quickstart Tutorial (https://numpy.org/doc/stable/user/quickstart.html) is an excellent place to solidify your understanding of array creation, reshaping, indexing, slicing, and various operations.
 
 Practice Creating and Manipulating Arrays:  
-   - Create arrays of different shapes with `np.zeros`, `np.ones`, `np.arange`, etc.
-   - Perform basic arithmetic (addition, subtraction, multiplication) on NumPy arrays.
-   - Use slicing to extract subarrays and practice reshaping with `reshape()`.
+   Create arrays of different shapes with `np.zeros`, `np.ones`, `np.arange`, etc.
+   Perform basic arithmetic (addition, subtraction, multiplication) on NumPy arrays.
+   Use slicing to extract subarrays and practice reshaping with `reshape()`.
