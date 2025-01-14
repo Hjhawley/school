@@ -10,7 +10,7 @@ Linear Regression:
 - Predicted value: ŷ (y-hat)
 
 Error Measurement:
-- To measure accuracy, compare predicted and actual values:
+- To measure accuracy, compare predicted and actual values. Two methods:
   - Mean Square Error (MSE): Average of squared differences: (y - ŷ)^2
   - Absolute Error: Average of absolute differences: |y - ŷ|
 
