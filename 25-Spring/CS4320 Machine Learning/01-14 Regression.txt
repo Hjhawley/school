@@ -1,0 +1,25 @@
+Regression
+
+the idea: we have some value y that we're trying to predict.
+we're assuming it is some function of some parameters called theta and some input features called x.
+y = f(theta, x)
+
+when a model is trying to "learn", it is trying to ascertain the form of the function f.
+
+Linear Regression
+assume the form of the function is something like this: theta_0 + theta_1 * x_1
+our task in machine learning is to take data points and guess what theta_0 and theta_1 our.
+we are reverse-engineering the function.
+
+y hat = the predicted value
+
+how do we measure the effectiveness of the function we found when we guess theta_0 and theta_1?
+we find the difference and square it: (y - y hat)^2
+a large number means we are far off from our desired result
+we find the average of these errors for each prediction. this is the Mean Square Error (MSE)
+another option is absolute error, where we use absolute value rather than squaring the error
+
+there is a closed form for this problem; we can actually compute the exact values for theta_0 and theta_1 given enough time.
+however, it is usually impractical with large data sets and so we use machine learning to approximate good enough guesses.
+
+Grid search: brute force guess and check for combinations of theta_0 and theta_1 in a loop from a specified range and with specified increments 
