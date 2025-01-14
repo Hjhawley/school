@@ -128,3 +128,17 @@ Example of a language a TM can test that a PDA cannot:
     Example strings: abba, racecar, aabaa.
     Why a PDA fails: A PDA can't compare arbitrary parts of the input string since it can only access the top of the stack.
     Why a TM works: A Turing Machine can move back and forth along the tape, compare characters, and use infinite memory if needed.
+
+To recap:
+
+    Finite automata are the simplest machines, capable of recognizing regular languages.
+    Push-down automata are more powerful, able to recognize context-free languages.
+    Turing machines are the most powerful and can recognize all languages that are recognizable.
+
+A problem that cannot be solved by a FA requires at least a PDA, and if a PDA is 
+insufficient, a TM is necessary. There are no intermediate machines between these categories.
+
+(Language)      (Grammar)       (Machine)
+Unrestricted    Unrestricted    Turing Machine
+Context Free    Context Free    Push Down Automata
+Regular         Regular         Finite Automata
