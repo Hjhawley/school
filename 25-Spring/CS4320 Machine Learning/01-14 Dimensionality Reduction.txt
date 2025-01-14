@@ -1,12 +1,30 @@
-Dimensionality Reduction
+Dimensionality Reduction Summary
 
-Deep Learning is a subset of Machine Learning is a subset of AI 
+Three Essential Areas of Machine Learning:
+- Mathematical Concepts: Linear algebra forms the core.
+- Coding Concepts: Use of packages like PyTorch and TensorFlow.
+- Application: Efficient model design within resource limits.
 
-how do we categorize algorithms? how do we decide which one is best?
+Purpose of Dimensionality Reduction:
+- Reducing unhelpful features in large datasets to improve efficiency.
+- Example: MNIST data where column 0 being all black provides no value.
+- Reducing dimensionality improves model performance, memory usage, and reduces noise/artifacts.
 
+Types of Dimensionality Reduction:
+- Linear Algorithms (Projection-Based):
+   - Factor Analysis
+   - Principal Component Analysis (PCA)
+   - Independent Component Analysis (ICA)
+- Non-Linear Algorithms (Manifold Learning):
+   - ISOMAP
+   - t-SNE
 
+Non-linear methods can either simplify or complicate the problem depending on the dataset.
+Data visualization can help in choosing the right approach.
 
-
-
-
-Principal Component Analysis (PCA)
+Principal Component Analysis (PCA) Steps:
+1. Standardize the Data: Normalize the data so each feature has a mean of 0 and standard deviation of 1.
+2. Compute the Covariance Matrix: Measure how features vary together.
+3. Calculate Eigenvalues and Eigenvectors: Identify principal components based on variance directions.
+4. Select Principal Components: Choose the most significant components for analysis.
+5. Transform the Data: Project the data onto the selected components for dimensionality reduction.
