@@ -1,0 +1,12 @@
+Dimensionality Reduction
+
+Deep Learning is a subset of Machine Learning is a subset of AI 
+
+how do we categorize algorithms? how do we decide which one is best?
+
+
+
+
+
+
+Principal Component Analysis (PCA)
