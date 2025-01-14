@@ -1,25 +1,22 @@
-Regression
+Regression Summary
 
-the idea: we have some value y that we're trying to predict.
-we're assuming it is some function of some parameters called θ and some input features called x.
-y = f(θ, x)
+- Regression predicts some value y as a function of parameters θ and input features x:  
+  y = f(θ, x)
+- The goal is to learn the form of the function f from data.
 
-when a model is trying to "learn", it is trying to ascertain the form of the function f.
+Linear Regression:
+- Assumes the form: y = θ_0 + θ_1 * x_1
+- The task is to estimate θ_0 and θ_1 by reverse-engineering the function using data points.
+- Predicted value: ŷ (y-hat)
 
-Linear Regression
-assume the form of the function is something like this: θ_0 + θ_1 * x_1
-our task in machine learning is to take data points and guess what θ_0 and θ_1 our.
-we are reverse-engineering the function.
+Error Measurement:
+- To measure accuracy, compare predicted and actual values:
+  - Mean Square Error (MSE): Average of squared differences: (y - ŷ)^2
+  - Absolute Error: Average of absolute differences: |y - ŷ|
 
-y hat = the predicted value
+Closed Form Solution:
+- Exact values for θ_0 and θ_1 can be computed mathematically but are often impractical for large datasets.
+- Machine learning approximates good guesses instead.
 
-how do we measure the effectiveness of the function we found when we guess θ_0 and θ_1?
-we find the difference and square it: (y - y hat)^2
-a large number means we are far off from our desired result
-we find the average of these errors for each prediction. this is the Mean Square Error (MSE)
-another option is absolute error, where we use absolute value rather than squaring the error
-
-there is a closed form for this problem; we can actually compute the exact values for θ_0 and θ_1 given enough time.
-however, it is usually impractical with large data sets and so we use machine learning to approximate good enough guesses.
-
-Grid search: brute force guess and check for combinations of θ_0 and θ_1 in a loop from a specified range and with specified increments 
+Grid Search:
+- A brute-force method that tests combinations of θ_0 and θ_1 over a specified range and increment to find the best fit.
