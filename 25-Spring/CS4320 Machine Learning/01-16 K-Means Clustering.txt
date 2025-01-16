@@ -57,4 +57,4 @@ Drawbacks
 - Struggles with outliers or irregularly shaped clusters.
 
 
-* Orange: A user-friendly ML tool to experiment with clustering and visualization.
+* check out Orange: A user-friendly ML tool to experiment with clustering and visualization.
