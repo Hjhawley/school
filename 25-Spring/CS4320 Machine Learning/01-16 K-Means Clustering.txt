@@ -1,86 +1,60 @@
 K-Means Clustering
+An unsupervised machine learning algorithm used to group data points into clusters 
+based on similarity.
+Commonly applied in scenarios such as:
+- Market segmentation
+- Anomaly detection (ex: fraud detection)
+- Image segmentation
+- Social network analysis
+Focuses on distinct groups by dividing data points into non-overlapping clusters.
+Uses a similarity score (e.g., cosine similarity, Euclidean distance).
+Minimizes intra-cluster distances (points within a cluster) and 
+maximizes inter-cluster distances (points between clusters).
 
-clustering is an unsupervised ML algorithm which is grouping data points that are somehow similar
-for example: taking a customer table with emails, their size, and number of recipients and forming distinct groups
 
-applications:
-    market segmentation
-    anomaly detection (ex: fraud detection)
-    image segmentation
-    social network analysis
+K-Means Clustering Steps
+1. Initialize k:
+   - k = number of clusters.
+   - Randomly pick k initial centroid points.
+2. Distance Calculation:
+   - Compute the Euclidean distance of each data point from all centroid points.
+3. Assign Data Points:
+   - Assign each data point to the nearest centroid, forming initial clusters.
+4. Recompute Centroids:
+   - Calculate the average position of all points in a cluster to update the centroid.
+5. Iterate Until Convergence:
+   - Repeat steps 2-4 until centroids stop moving (convergence).
 
-centroid-based
-density-based
-distribution-based
 
-k-means clustering: a type of centroid-based clustering
-good at finding disinct groups 
-k-means divides data points into non-overlapping subsets (clusters) based on similar characteristics
-we use a similarity score betwen different data points (such as cosine similarity)
-k-means algorithm tries to group data points based on their distance within their space
-intra-cluster distances want to be minimized, inter-cluster distances want to be maximized
+Choosing the Right k
+1. Elbow Method:
+   - Uses Within-Cluster Sum of Squares (WCSS), which measures the variance within clusters.
+   - Plot k vs. WCSS:
+     - Look for the "elbow" where WCSS drops dramatically, indicating the optimal k.
+2. Silhouette Method:
+   - Measures how well data points are clustered using Silhouette Coefficient (SC):
+     SC = (b_i - a_i) / max(a_i, b_i)
+     - a_i: Average distance to points within the same cluster (intra-cluster).
+     - b_i: Average distance to points in the nearest different cluster (inter-cluster).
+   - Score ranges:
+     - 1: Perfectly clustered; dense clusters far apart.
+     - 0: Clusters are indifferent or overlapping.
+     - -1: Poor clustering; points are misclassified.
+   - Calculate the average SC for different k values; highest SC indicates optimal k.
 
-consider a 1-dimensional space with two objects: customers 1 and 2
-we want to see how distant these two objects are from each other
-take the euclidean distance of their various data points (ex: age, income, etc)
-problem: with data points with relatively high magnitudes, they are disproportionately impactful (income vs age)
-so we need to NORMALIZE the values (ex by min and max formulae)
-this way euclidean values range from 0 to 1 regardless of the parameter
 
-k-means clustering steps
-1. initialize k
-    k = number of clusters
-    each cluster is represented by its centroid points
-    common way to pick points is to start with random points
-    for example, k=3 so we pick 3 random points in the space
-2. distance calculation
-    we have our k centroid points, now we compute euclidean distance 
-    for each data point from EACH centroid point
-3. assign each data point to a centroid point
-    use distance matrix to assign each data point to its closest centroid point
-    because we chose random points for the centroid points, 
-    our initial clusters are probably quite bad
-4. re-compute our centroid points
-    take the average euclidean distance of all points in a cluster
-    use the averaged value as the new location of the centroid point 
-    the average value of all points in a cluster is now the centroid point
-5. repeat steps 2-4 until the algorithm converges
-    i.e., the centroids can no longer move
-    BUT this does not guarantee high-quality clusters!
-    the algorithm will converge but it won't always ensure high quality clusters
-    the intitialized random points will determine the quality 
+Normalize data (Min-Max scaling) to ensure features with large magnitudes 
+(e.g., income vs. age) do not dominate the distance calculation.
 
-how do we choose the right k?
-elbow method:
-    based on within clusters sum of squares (WCSS) of euclidean distances 
-    between data points and their assigned cluster centroid
-    a low WCSS is better, so we try different values of k until we find a sweet spot
-    graph k values on x axis and WCSS distances on y axis
-    find the "elbow"; at what point the WCSS drops dramatically
-silhouette method:
-    useful for identifying outliers in your data points 
-    is a data point well-centered or is it wrongly placed in a cluster?
-    we want clusters to be dense when possible
-    this method helps determine a good number of K
-    calculate intra-cluster and inter-cluster distances 
-    remember, intra-cluster distances want to be minimized and inter-cluster distances want to be maximized
-    silhoutte coefficient (SC) = (b_i - a_i) / max(a_i, b_i)
-    1: point is well centered; clusters are well apart, clearly distinguished
-    0: unclear; clusters are indifferent or closer together
-    -1: point is an outlier; clusters are poor, perhaps we need an additional cluster
-    calculate SC for each point
-    we want an OVERALL SC for a specific number of k 
-    so we take the average SC for k = n
-    remember, close to 1 is good, close to -1 is bad
-    look for the maximum average SC for various values of k
 
-advantages
-    simple to understand and apply
-    guarantees convergence
-    efficient even with large datasets
-drawbacks   
-    requires selecting an optimal k value
-    dependent on initial values 
-    produces screwed clusters if dataset contains outliers
+Advantages
+- Simple to understand and apply.
+- Guarantees convergence.
+- Efficient for large datasets.
+Drawbacks
+- Requires specifying k upfront.
+- Sensitive to initial centroids (may converge to suboptimal solutions).
+- Struggles with outliers or irregularly shaped clusters.
 
-* orange - cool ML tool to play with, check out
+
+* Orange: A user-friendly ML tool to experiment with clustering and visualization.
