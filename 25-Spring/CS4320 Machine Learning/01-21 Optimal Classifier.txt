@@ -45,10 +45,14 @@ Support Vector Classifier (SVC)
 
 Finding the Maximal Margin mathematically
 w is a vector that represents the weights (or coefficients) of the hyperplane.
-Each element of w corresponds to the importance of a feature in the classification decision.
-Example: If you're classifying mice by mass and height, w might look like [w_mass, w_height].
+ - Each element of w corresponds to the importance of a feature in the classification decision.
+ - Example: If you're classifying mice by mass and height, w might look like [w_mass, w_height].
+ x is a vector representing a data point in the feature space.
+ b is the "bias term".
+ - b makes sure the hyperplane is not constrained to pass through the origin.
+ - This allows for more flexibility in separating the data.
 
-Hyperplane:
+Hyperplane equation (the decision boundary):
  - H_0: {w} * {x} + b = 0 
 Parallel Gutters:
  - H_1: {w} * {x} + b = k 
