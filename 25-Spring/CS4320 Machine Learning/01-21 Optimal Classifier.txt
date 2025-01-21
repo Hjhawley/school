@@ -1,5 +1,4 @@
 Quest for the Optimal Classifier
-
 Objective: classify data into two or more groups based on certain features. 
 Mathematical tools help us achieve the best possible classification.
 
@@ -45,15 +44,14 @@ Support Vector Classifier (SVC)
  - Support Points (Support Vectors in high dimensions): Points closest to the hyperplane that determine the margin.
 
 Finding the Maximal Margin mathematically
-
 w is a vector that represents the weights (or coefficients) of the hyperplane.
 Each element of w corresponds to the importance of a feature in the classification decision.
 Example: If you're classifying mice by mass and height, w might look like [w_mass, w_height].
 
 Hyperplane:
-    H_0: {w} * {x} + b = 0 
+ - H_0: {w} * {x} + b = 0 
 Parallel Gutters:
-    H_1: {w} * {x} + b = k 
-    H_2: {w} * {x} + b = -k 
+ - H_1: {w} * {x} + b = k 
+ - H_2: {w} * {x} + b = -k 
 Key Formula:
-    {w} * {x} = ||{w}|| * (({||{x}|| * cos(θ)}) / C) = -b 
+ - {w} * {x} = ||{w}|| * (({||{x}|| * cos(θ)}) / C) = -b 
