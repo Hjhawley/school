@@ -58,4 +58,8 @@ Parallel Gutters:
  - H_1: {w} * {x} + b = k 
  - H_2: {w} * {x} + b = -k 
 Key Formula:
- - {w} * {x} = ||{w}|| * (({||{x}|| * cos(θ)}) / C) = -b 
+ - {w} * {x} = ||{w}|| * (({||{x}|| * cos(θ)}) / C) = -b
+ 
+ To calculate the maximal margin, we need to:
+ - Maximize the distance between the hyperplane and the support points (the closest points from each class).
+ - Make sure all data points are correctly classified while maintaining this maximum margin.
