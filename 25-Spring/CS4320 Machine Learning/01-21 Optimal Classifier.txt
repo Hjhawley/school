@@ -1,46 +1,79 @@
 Quest for the Optimal Classifier
-we often need to classift data into two or more groups based on certain features ("classify")
-there are mathematical tools to help us achieve the best possible classification
 
-ex: we want to determine whether or not a mouse is obese based on its mass 
-not obese: 11g, 12g, 14g
-obese: 18g, 19g, 21g 
-we plot these data points on a number line 
+Objective:  
+Classify data into two or more groups based on certain features. Mathematical tools help us achieve the best possible classification.
 
-what's an optimal threshold?
-    the midpoint of max(not_obese) and min(obese)?
-    the midpoint of mean(not_obese) and mean(obese)?
-    something else?
+---
 
-1D (one-dimensional) case - the MARGIN is the distance between the threshold and the nearest data point from each class.
-    we want to maximize the margin while maintaining the threshold between classes.
-    for example, a threshold at 16g gives a margin of 2g.
-    what if we have an outlier, say a not-obese mouse at 17g?
-    do we adjust the threshold to 17.5g?
-    no; sometimes we sacrifice outlier data points for the sake of maintaining better thresholds
-    not EVERY point matters
+Example: Classifying Mice as Obese or Not Obese  
+- Data Points:  
+  - Not Obese: 11g, 12g, 14g  
+  - Obese: 18g, 19g, 21g  
+- Visualization:  
+  Plot the data points on a number line.  
 
-2D case - classifying mice by mass AND height 
-    obese mice have large mass PROPORTIONAL to their height. 
-    in other words, massive mice may still not be obese because they are also tall.
-    similarly to 1D, we want to maximize the margin while maintaining a threshold between classes
-    we draw two parallel lines to find the "borders" of both classes, and draw the margin exactly between those two lines 
+What is an Optimal Threshold?  
+Potential candidates:  
+1. Midpoint of max(Not Obese) and min(Obese):  
+   Example: \((14g + 18g)/2 = 16g\)  
+2. Midpoint of mean(Not Obese) and mean(Obese):  
+   Example: \((12.33g + 19.33g)/2 \approx 15.83g\)  
+3. Other methods?  
 
-Defining the Margin and Hyperplane
-    Hyperplane: a straight line that separates two classes in a 2D plane in 3D space 
-    margin: the perpendicular distance from the hyperplane to the support points (the closest points from each class)
-    positive and negative gutters: lines praallel to the hyperplane that touch the support points
+---
 
-Let's propose a name for an optimal classification model based on some keywords:
-    maximal margin: what we're shooting for 
-    hyperplane: what the maximal margin will give us 
-    supporting points (supporting vectors if high-dimensional)
+Classification in One Dimension (1D)  
+- Margin: The distance between the threshold and the nearest data point from each class.  
+  - Goal: Maximize the margin while keeping the threshold between the classes.  
+  - Example: Threshold at \(16g\) gives a margin of \(2g\).  
 
-the formal name: support vector classifier (or maximal margin classifier)
-the key to this model is found in the supporting points 
+- Handling Outliers:  
+  - Example: A not-obese mouse at \(17g\).  
+  - Adjust the threshold? No.  
+    - Outliers may be sacrificed for a better overall threshold.  
+    - Not every data point is equally important.
 
-Finding the Maximal Margin mathematically:
-vector w * vector x = ||w|| * ((||x|| * cos(theta)) / C) = -b
-H_0: w * x + b = 0
-H_1: w * x + b = k
-H_2: w * x + b = -k
+---
+
+Classification in Two Dimensions (2D)  
+- Scenario: Classify mice by mass and height.  
+  - Obese mice have large mass proportional to their height.  
+  - Massive mice that are also tall may not be obese.  
+
+- Approach:  
+  - Maximize the margin while maintaining a threshold between classes.  
+  - Draw two parallel lines ("borders") representing the edges of each class.  
+  - The margin is centered between these lines.  
+
+---
+
+Margin and Hyperplane in High Dimensions  
+- Hyperplane:  
+  A straight line (in 2D) or a plane (in 3D) that separates two classes.  
+- Margin:  
+  The perpendicular distance from the hyperplane to the support points (closest points from each class).  
+- Positive and Negative Gutters:  
+  Lines parallel to the hyperplane that touch the support points.  
+
+---
+
+Support Vector Classifier (SVC)  
+- Key Components:  
+  - Maximal Margin: The largest possible margin between classes.  
+  - Hyperplane: The decision boundary defined by the maximal margin.  
+  - Support Points (Support Vectors in high dimensions): Points closest to the hyperplane that determine the margin.  
+
+- Formal Name:  
+  Support Vector Classifier (or Maximal Margin Classifier).  
+  - The support points are crucial to this model.
+
+---
+
+Finding the Maximal Margin Mathematically  
+1. Equation of the Hyperplane:  
+   \( H_0: \mathbf{w} \cdot \mathbf{x} + b = 0 \)  
+2. Parallel Borders:  
+   - \( H_1: \mathbf{w} \cdot \mathbf{x} + b = k \)  
+   - \( H_2: \mathbf{w} \cdot \mathbf{x} + b = -k \)  
+3. Key Formula:  
+   \( \mathbf{w} \cdot \mathbf{x} = ||\mathbf{w}|| \cdot \left( \frac{||\mathbf{x}|| \cdot \cos(\theta)}{C} \right) = -b \)  
