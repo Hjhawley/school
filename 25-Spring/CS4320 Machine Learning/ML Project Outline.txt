@@ -1,0 +1,17 @@
+ML Project Outline
+
+* look at the big picture
+* gather the data
+* explore and visualize to get insight
+* prepare data for ML algorithms
+    remove outliers (or look for potential errors related to outliers)
+    split into training & testing data 80/20
+    80% training data, 20% testing data is a common rule of thumb
+* select a model and train it
+    choose a linear regression model
+* fine tune the model
+    add/remove parameters
+    data column scaling 
+        scaled data = (data - mean)/std dev
+* present your solution
+* launch, monitor, and maintain your system
