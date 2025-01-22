@@ -1,0 +1,56 @@
+Scanners and Tokens
+A scanner reads raw text and breaks it into meaningful chunks called tokens. Each token has two parts:
+    1. Type (e.g., 'IDENTIFIER', 'INTEGER', 'VOID', 'LESS'), and
+    2. Lexeme (the actual string from the input).
+
+For example:
+
+    void main()
+    {
+        int sum;
+        sum = 35 + 400;
+        cout << sum;
+    }
+
+the scanner should produce tokens like:
+    'VOID' → "void"
+    'MAIN' → "main"
+    'LPAREN' → "("
+    'RPAREN' → ")"
+    'LCURLY' → "{"
+    'INT' → "int"
+    'IDENTIFIER' → "sum"
+    'SEMICOLON' → ";"
+    'ASSIGNMENT' → "="
+    'INTEGER' → "35"
+    … etc., ending with 'ENDFILE'.
+
+We're treating keywords like 'main' and 'cout' as reserved words for simplicity. 
+A more advanced compiler might treat them differently.
+
+Typical token types include:
+    Reserved words: 'VOID', 'MAIN', 'FOR', 'IF', 'WHILE', 'INT', 'COUT', etc.
+    Relational operators: 'LESS (<)', 'LESSEQUAL (<=)', 'GREATER (>)', 'GREATEREQUAL (>=)', 'EQUAL (==)', 'NOTEQUAL (!=)'
+    Other operators: 'INSERTION (<<)', 'ASSIGNMENT (=)', 'PLUS (+)', 'MINUS (-)', 'TIMES (*)', 'DIVIDE (/)'
+    Symbols: 'SEMICOLON (;)', 'LPAREN (()', 'RPAREN ())', 'LCURLY ({)', 'RCURLY (})'
+    Others: 'IDENTIFIER', 'INTEGER', 'ENDFILE'
+
+A Finite Automaton can recognize valid strings by moving through states on each character. In a scanner:
+    1. You read characters until the FA cannot handle the next character.
+    2. If you stop in an end state, everything read so far is a valid token.
+    3. The scanner then restarts from the initial FA state for the next token.
+    4. If the FA ever fails to reach an end state for a token, the input is invalid.
+
+Because input files can contain multiple tokens in sequence, we must carefully decide when one token ends and the next begins. 
+Whenever adding the next character would make the string invalid, we finalize the current token (if we are in an end state) 
+and treat the extra character as the start of the next token.
+
+Some tokens can be extended into larger valid tokens. For example:
+    '<' by itself is valid ('LESS'),
+    but it can also be extended to '<=' ('LESSEQUAL') or '<<' ('INSERTION').
+
+This is why the scanner keeps reading characters until it cannot form a valid longer token.
+
+Reserved words often share the same pattern as regular identifiers. One simple approach is:
+    1. Treat everything that looks like an identifier as 'IDENTIFIER'.
+    2. Then check its lexeme (e.g., “int”, “for”, “cout”) against a list of reserved words. If it matches, convert the token type accordingly.
