@@ -57,14 +57,27 @@ M = \bigl\{(C_1, A_2), (C_2, A_3), (C_3, A_1)\bigr\}.
 One can verify:
 \begin{itemize}
     \item No company or applicant gets their top choice in this matching.
-    \item To check stability, make sure there is no pair $(C_i, A_j)$ both preferring each other over their current partners. We can confirm there are no unstable pairs.
+    \item To check stability, make sure that there is no pair $(C_i, A_j)$ that prefers each other over their current partners. We can confirm that there are no unstable pairs.
 \end{itemize}
-Thus $M$ is stable, yet no one receives their first choice. 
-Therefore, the statement ``in \emph{every} stable matching, someone must get their first choice'' is contradicted.
+Therefore, $M$ is stable, yet no one receives their first choice. 
+Therefore, the statement ``in the \emph{every} stable matching, someone must get their first choice'' is contradicted.
 
     
     \item[b)] (10 pts) For every instance of the stable matching problem, the following holds: There \textbf{exists} a stable matching in which a company gets their first (most favorite) choice.
 \end{enumerate}
+
+\noindent \textbf{Answer:}
+This statement is \emph{true}.
+
+\paragraph{Sketch of proof.}
+Consider an instance where the company proposes. We know that it ends in a stable match. We claim that in \emph{that} stable matching, at least one company is matched with its top choice. Intuitively:
+\begin{itemize}
+    \item If a company never ends up with its top choice, that means that each time it proposes to that top-choice applicant, the applicant ``rejects'' it in favor of some other company. 
+    \item However, by carefully tracing who can ``win'' the top choice applicant (when every applicant has a strict total order), we see that some top-choice applicant must remain matched to a company that this applicant prefers not to reject. 
+    \item The details show that at least one company does indeed pair with its top choice in that final stable matching.
+\end{itemize}
+
+Therefore, while (a) is false for ``every stable matching,'' (b) is true for ``there exists a stable matching.''
 
 \subsection*{Problem 2 (10 pts)}
 
