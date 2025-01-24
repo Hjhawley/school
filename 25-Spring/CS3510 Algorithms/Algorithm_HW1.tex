@@ -28,6 +28,40 @@ Prove or disprove:
     \item[a)] (10 pts) For any instance of the stable matching problem, the following holds: In \textbf{every} stable matching, there is an \textbf{agent} (a company or an applicant) who gets their first (most favorite) choice. 
     
     \textit{Hint:} If correct, you need to give a proof (be sure to show the claim for every instance and for every stable matching!). If incorrect, give a counter-example, i.e., an instance and a stable matching (be sure to justify that the matching is stable!). In this case, only one counter-example is enough.
+
+    \noindent \textbf{Answer:} 
+This statement is \emph{false}.
+
+\paragraph{Counterexample.} 
+Consider a stable matching problem with three companies and three applicants, with the following preferences:
+
+\begin{itemize}
+    \item Companies (C) and their preferences over Applicants (A):
+    \[
+    C_1: A_1 > A_2 > A_3 \quad
+    C_2: A_2 > A_3 > A_1 \quad
+    C_3: A_3 > A_1 > A_2.
+    \]
+    \item Applicants (A) and their preferences over Companies (C):
+    \[
+    A_1: C_2 > C_3 > C_1 \quad
+    A_2: C_3 > C_1 > C_2 \quad
+    A_3: C_1 > C_2 > C_3.
+    \]
+\end{itemize}
+
+Consider the stable matching 
+\[
+M = \bigl\{(C_1, A_2), (C_2, A_3), (C_3, A_1)\bigr\}.
+\]
+One can verify:
+\begin{itemize}
+    \item No company or applicant gets their top choice in this matching.
+    \item To check stability, make sure there is no pair $(C_i, A_j)$ both preferring each other over their current partners. We can confirm there are no unstable pairs.
+\end{itemize}
+Thus $M$ is stable, yet no one receives their first choice. 
+Therefore, the statement ``in \emph{every} stable matching, someone must get their first choice'' is contradicted.
+
     
     \item[b)] (10 pts) For every instance of the stable matching problem, the following holds: There \textbf{exists} a stable matching in which a company gets their first (most favorite) choice.
 \end{enumerate}
