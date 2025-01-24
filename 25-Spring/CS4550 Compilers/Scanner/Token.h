@@ -1,3 +1,5 @@
+#include <string>
+
 enum TokenType {
 	// Reserved keywords:
 	VOID_TOKEN, MAIN_TOKEN, INT_TOKEN, COUT_TOKEN,
@@ -13,4 +15,15 @@ enum TokenType {
 	// Other token types:
 	IDENTIFIER_TOKEN, INTEGER_TOKEN,
 	BAD_TOKEN, ENDFILE_TOKEN
+};
+
+// IMPORTANT: The list above and the list below MUST be kept in sync.
+const std::string gTokenTypeNames[] = {
+"VOID", "MAIN", "INT", "COUT",
+"LESS", "LESSEQUAL", "GREATER", "GREATEREQUAL", "EQUAL",
+"NOTEQUAL",
+"INSERTION", "ASSIGNMENT", "PLUS", "MINUS", "TIMES", "DIVIDE",
+"SEMICOLON", "LPAREN", "RPAREN", "LCURLY", "RCURLY",
+"IDENTIFIER", "INTEGER",
+"BAD", "ENDFILE"
 };

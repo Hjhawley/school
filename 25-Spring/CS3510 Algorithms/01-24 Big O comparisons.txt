@@ -1,0 +1,29 @@
+Big-O comparison strategies
+   Exponentials: 2^n and 3^n are different, which means 2^n and 2^n/2 are different!
+   constant factors in exponents matter, unlike constant coefficients
+   exponentials vs polynomials: every exponential grows faster than every polynomial
+   log^a(n) is asymptotically less than n^b for any positive constants a,b 
+   rewriting functions as 2^(f(n)) or log(f(n)) will often make it easier to find the correct order of functions.
+
+log_a(b) = c
+a^c = b
+
+Functions in increasing order of Big O:
+
+1. log(log(n)) <------ logarithmic functions
+2/3. log(n)
+2/3. log(n^2) (same as 2 * log(n) which is the same Big O!)
+4. (log(n))^2 <------- polynomial functions
+5. sqrt(n)
+6. 2^log(n) <--------- exponential functions
+7. 2^sqrt(n)
+8. 3^sqrt(n)
+9. 2^nlog(n) (why is this larger than 3^sqrt(n)?)
+
+Undirected graphs:
+if a node a shares and edge with node b, node b also has an edge with node a 
+Directed graphs:
+edges may be one-way 
+
+DEGREE of a vertex: number of edges that touch that vertex
+a graph is connected if there exists a path between EVERY pair of vertices
