@@ -86,15 +86,25 @@ Prove that in every instance of the stable matching problem with $n$ companies a
 \textit{Hint:} Prove that in the Gale-Shapley algorithm (when companies propose), at most one company gets its last choice.
 
 \paragraph{Proof:}
-\begin{itemize}
-    \item Each company can propose to at most $n$ applicants (one for each position on its preference list).
-    \item Not all companies can ``run through'' all $n$ of their options. At most, only \emph{one} company can propose to all $n$ applicants.
-    \item Once a company has proposed (and been rejected by) its $(n-1)$-th applicant, that implies each other company must already be matched (even if only temporarily), which essentially forces the last proposal to stick.
-\end{itemize}
-Therefore, the total number of proposals is at most:
-\[
-(n-1) \cdot (n-1) + n = n(n-1) + 1.
-\]
+We claim that the total number of proposals in the Gale-Shapley algorithm (when companies propose) is at most \(n(n-1) + 1\). We break the argument into two parts:
+\begin{enumerate}
+    \item \textbf{No company can make more than \(n\) proposals.} \\
+    Each company ranks the \(n\) applicants in a strict total order and never proposes to the same applicant twice. So, each company has at most \(n\) distinct applicants to propose to.
+
+    \item \textbf{At most one company can use all \(n\) of its proposals.} \\
+    Suppose that two different companies, \(C\) and \(C'\), each end up proposing to all \(n\) applicants. By the time \(C\) is forced to propose to its \((n-1)\)-th and then \(n\)-th choice, it must have been repeatedly rejected on its top \((n-1)\) applicants. But each rejection of \(C\) means that the applicant in question is already ``holding'' a proposal from a \emph{more preferred} company. 
+
+    Every time \(C\) is rejected, there is a chain of companies more preferred by that rejecting applicant that are still engaged at that moment. If \(C'\) is also exhausting its preference list, it too would be repeatedly rejected by \((n-1)\) different applicants in favor of other companies (each time implying that those applicants are matched to strictly preferred partners). Eventually, one would reach a contradiction in the sense that two different companies are each being outbid for \emph{all} of their first \((n-1)\) choices, creating an impossible cycle.
+
+    Therefore, it is impossible for two or more companies to propose to all \(n\) applicants. At most only one company can run through its entire list.
+
+    \item \textbf{Conclusion:} \\
+    Combining these two pieces, every other company (besides at most one) makes at most \((n-1)\) proposals. Therefore, the total number of proposals is at most
+    \[
+    (n-1) \cdot (n-1) \;+\; n \;=\; n(n-1) \;+\; 1.
+    \]
+\end{enumerate}
+This proves that the company-proposing Gale-Shapley algorithm makes at most \(n(n-1) + 1\) proposals in total.
 
 \subsection*{Problem 3 (10 pts)}
 
