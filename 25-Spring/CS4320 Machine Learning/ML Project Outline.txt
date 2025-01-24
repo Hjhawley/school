@@ -12,6 +12,6 @@ ML Project Outline
 * fine tune the model
     add/remove parameters
     data column scaling 
-        scaled data = (data - mean)/std dev
+        scale data with x' = (x - mean) / stddev
 * present your solution
 * launch, monitor, and maintain your system
