@@ -27,7 +27,7 @@ Prove or disprove:
 \begin{enumerate}
     \item[a)] (10 pts) For any instance of the stable matching problem, the following holds: In \textbf{every} stable matching, there is an \textbf{agent} (a company or an applicant) who gets their first (most favorite) choice. 
     
-    \textit{Hint:} If correct, you need to give a proof (be sure to show the claim for every instance and for every stable matching!). If incorrect, give a counter-example, i.e., an instance and a stable matching (be sure to justify that the matching is stable!). In this case, only one counter-example is enough.
+    \textit{Hint:} If correct, you need to give a proof (be sure to show the claim for every instance and for every stable matching!). If incorrect, give a counter-example, i.e., an instance and a stable matching (be sure to justify that the matching is stable!). In this case, only one counterexample is enough.
 
     \noindent \textbf{Answer:} 
 This statement is \emph{false}.
@@ -85,6 +85,17 @@ Prove that in every instance of the stable matching problem with $n$ companies a
 
 \textit{Hint:} Prove that in the Gale-Shapley algorithm (when companies propose), at most one company gets its last choice.
 
+\paragraph{Proof:}
+\begin{itemize}
+    \item Each company can propose to at most $n$ applicants (one for each position on its preference list).
+    \item Not all companies can ``run through'' all $n$ of their options. At most, only \emph{one} company can propose to all $n$ applicants.
+    \item Once a company has proposed (and been rejected by) its $(n-1)$-th applicant, that implies each other company must already be matched (even if only temporarily), which essentially forces the last proposal to stick.
+\end{itemize}
+Therefore, the total number of proposals is at most:
+\[
+(n-1) \cdot (n-1) + n = n(n-1) + 1.
+\]
+
 \subsection*{Problem 3 (10 pts)}
 
 Use induction to solve this problem: Given $2^k$ real numbers $x_1, \ldots, x_{2^k}$ such that $\sum_{i=1}^{2^k} x_i = 1$, show that:
@@ -97,11 +108,60 @@ Use induction to solve this problem: Given $2^k$ real numbers $x_1, \ldots, x_{2
 (a+b)^2 \leq 2a^2 + 2b^2.
 \]
 
+\paragraph{Proof:}
+
+\subsubsection*{Base case: $k=1$}
+Then we have $2^1 = 2$ numbers $x_1, x_2$ such that $x_1 + x_2 = 1$. We need to show:
+\[
+x_1^2 + x_2^2 \;\ge\; \frac{1}{2}.
+\]
+Set $x_2 = 1 - x_1$. Then
+\[
+x_1^2 + (1 - x_1)^2 = x_1^2 + 1 - 2x_1 + x_1^2 = 2x_1^2 - 2x_1 + 1.
+\]
+This is a quadratic in $x_1$ with a minimum at $x_1 = \tfrac12$, yielding $x_1^2 + x_2^2 = \tfrac12$. Thus 
+\[
+x_1^2 + x_2^2 \;\ge\; \frac12.
+\]
+So the base case holds.
+
+\subsubsection*{Induction}
+Assume the statement is true for $2^k$ numbers. Now take $2^{k+1}$ numbers $x_1,\dots, x_{2^{k+1}}$ summing to 1. Pair them up in $(a_i,b_i)$ for $i=1,\ldots, 2^k$. Let $y_i = a_i + b_i$. Then $\sum_i y_i = 1$ and there are $2^k$ of the $y_i$'s.
+
+By the inductive hypothesis,
+\[
+\sum_{i=1}^{2^k} y_i^2 \;\;\ge\;\; \frac{1}{2^k}.
+\]
+Using the hint $(a+b)^2 \le 2(a^2 + b^2)$, we get
+\[
+y_i^2 = (a_i + b_i)^2 \;\le\; 2(a_i^2 + b_i^2).
+\]
+Thus,
+\[
+\sum_{i=1}^{2^k} y_i^2 \;\le\; 2 \sum_{i=1}^{2^k} (a_i^2 + b_i^2) \;=\; 2 \sum_{j=1}^{2^{k+1}} x_j^2.
+\]
+Therefore,
+\[
+\sum_{j=1}^{2^{k+1}} x_j^2 
+\;\;\ge\;\; \frac{1}{2} \sum_{i=1}^{2^k} y_i^2 
+\;\;\ge\;\; \frac{1}{2} \cdot \frac{1}{2^k}
+= \frac{1}{2^{k+1}}.
+\]
+
 \subsection*{Problem 4 (10 pts)}
 
 Let $I = (P, R)$ be an instance of the stable matching problem. Suppose that the preference lists of all $p \in P$ are identical, so without loss of generality, $p_i$ has the preference list $[r_1, r_2, \ldots, r_n]$. Prove that there is a unique solution to this instance. Describe what the solution looks like, and why it is the only stable solution.
 
 \textit{Note:} Showing that the solution is the one found by the Gale-Shapely algorithm is not sufficient, as there could be other solutions.
+
+\paragraph{Proof} 
+Let the preference list (common to all proposers) be $[\,r_1, r_2, \dots, r_n\,]$. We claim:
+\begin{enumerate}
+    \item In any stable matching, $r_1$ (the universally top receiver) must be matched to the proposer that $r_1$ prefers most, or else that proposer and $r_1$ would form a blocking pair.
+    \item Then remove $r_1$ and that chosen proposer from the instance, and repeat the same argument for $r_2$ among the \emph{remaining} proposers.
+    \item This process continues deterministically. There is essentially no freedom for any other pairing, because any ``deviation'' would create a blocking pair (the unmatched pair would always prefer each other over their current matches).
+\end{enumerate}
+Therefore the stable matching is forced and \emph{unique}. It specifically pairs $r_1$ with whomever $r_1$ ranks highest among all $p_i$, then $r_2$ with her top choice among the \emph{remaining} proposers, etc. Because all proposers rank $r_1$ highest, no one can ``safely'' deviate without creating a blocking pair. This one forced chain of matches is the only stable outcome.
 
 \subsection*{Problem 5 (15 bonus pts)}
 
