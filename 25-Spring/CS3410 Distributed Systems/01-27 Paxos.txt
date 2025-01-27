@@ -19,3 +19,36 @@ How It Works (at a high level):
 
 It's like a group of people deciding on a restaurant, where a majority must agree on the 
 choice, and they can only change their mind for a better or newer suggestion.
+
+Pseudocode:
+
+Paxos Proposer
+proposer(v):
+   while not decided:
+      choose n, unique and higher than any n seen so far
+      send prepare(n) to all servers including self
+      if prepare_ok(n, na, va) from majority:
+         v' = va with highest na; choose own v otherwise
+         send accept(n, v') to all
+         if accept_ok(n) from majority:
+            send decided(v') to all
+
+Paxos Acceptor
+acceptor state on each node (persistent):
+   np       --- highest prepare seen
+   na, va   --- highest accept seen
+
+acceptor's prepare(n) handler:
+   if n > np:
+      np = n
+      reply prepare_ok(n, na, va)
+   else:
+      reply prepare_reject
+
+acceptor's accept(n, v) handler:
+   if n >= np:
+      na = n
+      va = v
+      reply accept_ok(n)
+   else:
+      reply accept_reject
