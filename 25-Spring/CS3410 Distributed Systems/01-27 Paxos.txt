@@ -1,0 +1,21 @@
+The Paxos algorithm is a consensus algorithm used in distributed systems to ensure multiple 
+servers (or nodes) agree on a single value, even if some servers fail or messages are lost.
+
+The goal: all the nodes in a system agree on a single value, even if they don't trust 
+each other fully or if some fail.
+
+Three Roles:  
+   - Proposers: Suggest values.  
+   - Acceptors: Decide which value to accept.  
+   - Learners: Learn the agreed-upon value (once decided).
+
+How It Works (at a high level):
+   - A proposer sends a proposal with a unique number to the acceptors.
+   - The acceptors compare it with previous proposals. If the new proposal is higher 
+        (based on the number), they promise not to accept any lower-numbered proposals.
+   - If a majority of acceptors promise, the proposer sends the actual value to the acceptors.
+   - The acceptors then agree on the value, and the decision is finalized.
+   - Once a majority agrees, the value is sent to the learners, completing the process.
+
+It's like a group of people deciding on a restaurant, where a majority must agree on the 
+choice, and they can only change their mind for a better or newer suggestion.

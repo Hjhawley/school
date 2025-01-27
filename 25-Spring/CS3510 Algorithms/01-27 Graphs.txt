@@ -34,3 +34,13 @@ in other words: # of edges = 1/2 /sigma_vertex deg(v)
     if this graph does NOT have a vertex with degree <= 1, then each of those 2 neighbors has at least 2 neighbors.
     so either we must recursively branch off into infinity, OR the 2 neighbors are neighbors to each other which creates a cycle.
     the only way to create a graph with no cycles (a tree) is for there to be "leaf" nodes with 1 or fewer edges.
+
+* Prove that every tree with n vertices has n-1 edges.
+    Proof by induction:
+    Claim: Every tree with n vertices has n−1 edges.
+    Base Case (n=1): A tree with 1 vertex has no edges, so the claim holds.
+    Inductive Hypothesis: Assume every tree with n−1 vertices has n−2 edges.
+    Inductive Step (IS): Let T be a tree with n vertices. Remove a vertex v and its neighboring edge, resulting in a graph T′.
+        T′ has n−1 vertices. By the IH, T′ has (n−1)−1 = n−2 edges.
+        Adding v and its edge back to T′ restores T, giving n−2+1=n−1 edges.
+    Thus, by induction, every tree with n vertices has n−1 edges.
