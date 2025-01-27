@@ -33,3 +33,4 @@ in other words: # of edges = 1/2 /sigma_vertex deg(v)
     Proof: a vertex of degree 2 or more has 2 neighbors.
     if this graph does NOT have a vertex with degree <= 1, then each of those 2 neighbors has at least 2 neighbors.
     so either we must recursively branch off into infinity, OR the 2 neighbors are neighbors to each other which creates a cycle.
+    the only way to create a graph with no cycles (a tree) is for there to be "leaf" nodes with 1 or fewer edges.
