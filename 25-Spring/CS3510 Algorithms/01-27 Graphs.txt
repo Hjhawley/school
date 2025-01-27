@@ -12,11 +12,16 @@ Path: a sequence of distinct vertices such that each vertex is connected to the 
 Cycle: a path of length > 2 that begins and ends on the same vertex with no revisited nodes
 Tree: a connected graph with no cycles
 
-Prove that for any undirected graph G:
-the number of edges is equal to half the sum of the degree of each vertex. in other words:
-# of edges = 1/2 /sigma_vertex deg(v)
+* Prove that for any undirected graph G:
+the number of edges is equal to half the sum of the degree of each vertex. 
+in other words: # of edges = 1/2 /sigma_vertex deg(v)
+    Proof:
+    each vertex in an undirected graph has n edges, and those n vertices has an edge back to it.
+    /sigma_vertex deg(v) counts every edge of the graph EXACTLY twice; once from each end of the edge.
 
-Proof:
-each vertex in an undirected graph has n edges, and those n vertices has an edge back to it.
-/sigma_vertex deg(v) counts every edge of the graph EXACTLY twice; once from each end of the edge.
-
+* Prove that there is an EVEN number of vertices with ODD degrees.
+    Proof:
+    This must be true if our last proof holds true.
+    Suppose there were an odd number of vertices with odd degrees. 
+    we would have an odd number of edges, which is impossible.
+    # of edges = 1/2 /sigma_vertex deg(v) would result in a fractional number of edges.
