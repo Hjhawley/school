@@ -25,3 +25,5 @@ in other words: # of edges = 1/2 /sigma_vertex deg(v)
     Suppose there were an odd number of vertices with odd degrees. 
     we would have an odd number of edges, which is impossible.
     # of edges = 1/2 /sigma_vertex deg(v) would result in a fractional number of edges.
+    Another way to think of it: 2 * (# of edges) = /sigma_vertex deg(v), 
+    so /sigma_vertex deg(v) MUST be even.
