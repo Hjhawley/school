@@ -19,11 +19,3 @@ Functions in increasing order of Big O:
 7. 2^sqrt(n)
 8. 3^sqrt(n)
 9. 2^nlog(n) (why is this larger than 3^sqrt(n)?)
-
-Undirected graphs:
-if a node a shares and edge with node b, node b also has an edge with node a 
-Directed graphs:
-edges may be one-way 
-
-DEGREE of a vertex: number of edges that touch that vertex
-a graph is connected if there exists a path between EVERY pair of vertices

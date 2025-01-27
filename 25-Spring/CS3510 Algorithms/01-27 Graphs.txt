@@ -1,0 +1,22 @@
+Graphs 
+
+Undirected graphs:
+if a node a shares and edge with node b, node b also has an edge with node a 
+Directed graphs:
+edges may be one-way 
+
+DEGREE of a vertex: number of edges that touch that vertex
+a graph is CONNECTED if there exists a path between EVERY pair of vertices
+
+Path: a sequence of distinct vertices such that each vertex is connected to the next with an edge 
+Cycle: a path of length > 2 that begins and ends on the same vertex with no revisited nodes
+Tree: a connected graph with no cycles
+
+Prove that for any undirected graph G:
+the number of edges is equal to half the sum of the degree of each vertex. in other words:
+# of edges = 1/2 /sigma_vertex deg(v)
+
+Proof:
+each vertex in an undirected graph has n edges, and those n vertices has an edge back to it.
+/sigma_vertex deg(v) counts every edge of the graph EXACTLY twice; once from each end of the edge.
+
