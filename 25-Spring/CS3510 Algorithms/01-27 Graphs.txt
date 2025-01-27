@@ -27,3 +27,9 @@ in other words: # of edges = 1/2 /sigma_vertex deg(v)
     # of edges = 1/2 /sigma_vertex deg(v) would result in a fractional number of edges.
     Another way to think of it: 2 * (# of edges) = /sigma_vertex deg(v), 
     so /sigma_vertex deg(v) MUST be even.
+
+* Prove that if G has no cycles, it has a vertex with degree <= 1.
+(this can include an unconnected graph.)
+    Proof: a vertex of degree 2 or more has 2 neighbors.
+    if this graph does NOT have a vertex with degree <= 1, then each of those 2 neighbors has at least 2 neighbors.
+    so either we must recursively branch off into infinity, OR the 2 neighbors are neighbors to each other which creates a cycle.
