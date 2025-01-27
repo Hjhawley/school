@@ -1,46 +1,57 @@
-Graphs 
+Graphs
 
-Undirected graphs:
-if a node a shares and edge with node b, node b also has an edge with node a 
-Directed graphs:
-edges may be one-way 
+Undirected Graphs:
+    If a node a shares an edge with node b, then node b also shares an edge with node a.
+Directed Graphs:
+    Edges may be one-way, meaning a connection from a to be does not imply b to a.
 
-DEGREE of a vertex: number of edges that touch that vertex
-a graph is CONNECTED if there exists a path between EVERY pair of vertices
+Degree of a Vertex: The number of edges connected to a vertex.
+Connected Graph: A graph is connected if there exists a path between every pair of vertices.
+Path: A sequence of distinct vertices where each vertex is connected to the next by an edge.
+Cycle: A path of length > 2 that starts and ends at the same vertex, with no revisited nodes.
+Tree: A connected graph with no cycles.
 
-Path: a sequence of distinct vertices such that each vertex is connected to the next with an edge 
-Cycle: a path of length > 2 that begins and ends on the same vertex with no revisited nodes
-Tree: a connected graph with no cycles
+---
 
-* Prove that for any undirected graph G:
-the number of edges is equal to half the sum of the degree of each vertex. 
-in other words: # of edges = 1/2 /sigma_vertex deg(v)
-    Proof:
-    each vertex in an undirected graph has n edges, and those n vertices has an edge back to it.
-    /sigma_vertex deg(v) counts every edge of the graph EXACTLY twice; once from each end of the edge.
+1. The Degree Sum Formula:
+Claim: For any undirected graph G, the number of edges is half the sum of the degrees of all vertices.
+    # of edges = 1/2 ∑(​vertex v) deg(v)
+Proof:
+Each edge contributes to the degree of exactly two vertices, 
+so ∑(​vertex v) deg(v) counts every edge twice. 
+Dividing by 2 gives the total number of edges.
 
-* Prove that there is an EVEN number of vertices with ODD degrees.
-    Proof:
-    This must be true if our last proof holds true.
-    Suppose there were an odd number of vertices with odd degrees. 
-    we would have an odd number of edges, which is impossible.
-    # of edges = 1/2 /sigma_vertex deg(v) would result in a fractional number of edges.
-    Another way to think of it: 2 * (# of edges) = /sigma_vertex deg(v), 
-    so /sigma_vertex deg(v) MUST be even.
+---
 
-* Prove that if G has no cycles, it has a vertex with degree <= 1.
-(this can include an unconnected graph.)
-    Proof: a vertex of degree 2 or more has 2 neighbors.
-    if this graph does NOT have a vertex with degree <= 1, then each of those 2 neighbors has at least 2 neighbors.
-    so either we must recursively branch off into infinity, OR the 2 neighbors are neighbors to each other which creates a cycle.
-    the only way to create a graph with no cycles (a tree) is for there to be "leaf" nodes with 1 or fewer edges.
+2. Even Number of Odd-Degree Vertices:
+Claim: An undirected graph always has an even number of vertices with odd degrees.
+Proof:
+- From the degree sum formula:
+    2 * # of edges = ∑(​vertex v) deg(v)
+    Since 2 * # of edges is always even, ∑(​vertex v) deg(v) must also be even.
+- Vertices with odd degrees can only sum to an even number if there is an even count of them.
 
-* Prove that every tree with n vertices has n-1 edges.
-    Proof by induction:
-    Claim: Every tree with n vertices has n−1 edges.
-    Base Case (n=1): A tree with 1 vertex has no edges, so the claim holds.
-    Inductive Hypothesis: Assume every tree with n−1 vertices has n−2 edges.
-    Inductive Step (IS): Let T be a tree with n vertices. Remove a vertex v and its neighboring edge, resulting in a graph T′.
-        T′ has n−1 vertices. By the IH, T′ has (n−1)−1 = n−2 edges.
-        Adding v and its edge back to T′ restores T, giving n−2+1=n−1 edges.
-    Thus, by induction, every tree with n vertices has n−1 edges.
+---
+
+3. Graphs Without Cycles Have a Vertex with Degree ≤ 1:
+Claim: A graph with no cycles (even if unconnected) has at least one vertex with degree ≤ 1.
+Proof:
+- If all vertices had degree ≥ 2, each vertex would have at least two neighbors.
+- These neighbors would either connect back to form a cycle or create an infinite graph 
+    (impossible with finite vertices).
+- Thus, a graph with no cycles must have at least one "leaf" node with degree ≤ 1.
+
+---
+
+4. Trees Have n-1 Edges:
+Claim: A tree with n vertices has exactly n-1 edges.
+Proof (by induction):
+1. Base Case (n=1):
+    A tree with 1 vertex has no edges, so the claim holds.
+2. Inductive Hypothesis (IH):
+    Assume every tree with n-1 vertices has n-2 edges.
+3. Inductive Step:
+    Let T be a tree with n vertices.
+    - Remove a vertex v and its connecting edge, resulting in a smaller tree T' with n-1 vertices.
+    - By the IH, T' has n-2 edges. Adding back v and its edge gives n-1 edges.
+Thus, by induction, every tree with n vertices has n-1 edges.
