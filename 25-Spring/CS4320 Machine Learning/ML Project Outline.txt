@@ -1,25 +1,77 @@
 ML Project Outline
 
-* look at the big picture
-* gather the data
-* explore and visualize to get insight
-    histograms, scatter plots, etc to find patterns
-* prepare data for ML algorithms
-    remove outliers (or look for potential errors related to outliers)
-    what happens when we have gaps in our data (empty cells?)
-        1. throw out those data points entirely?
-        2. fill in missing data? (impute) how?
-            we could go back to our histogram and just randomly pick a value and fill it in for that row
-            we could also take the MEAN value rather than a random value (more representative of data as a whole)
-            we could also use a MEDIAN value, sometimes a better representation
-    split into training & testing data 80/20
-    80% training data, 20% testing data is a common rule of thumb
-* select a model and train it
-    choose a linear regression model
-* fine tune the model
-    add/remove parameters
-    data column scaling 
-        scale data with x' = (x - mean) / stddev
-* only at the VERY end, test against the testing data
-* present your solution
-* launch, monitor, and maintain your system
+1. Look at the Big Picture
+    Clearly define the problem you are trying to solve.
+    Identify the type of machine learning task: regression, classification, clustering, etc.
+    Understand your goals, success metrics (accuracy, RMSE), and any constraints (time, compute, budget).
+
+2. Gather the Data
+    Collect a dataset that is relevant, complete, and representative of the problem domain.
+    Document the data sources and make sure they are reliable.
+    If necessary, combine multiple data sources (data fusion) and check for consistency.
+
+3. Explore and Visualize to Gain Insight
+    Use summary statistics and visualizations (histograms, scatter plots, pair plots, heatmaps) to understand:
+        Data distributions
+        Correlations between variables
+        Potential patterns or trends
+        Outliers and anomalies
+    Ask exploratory questions: 
+        Which features are most relevant? 
+        Are there redundancies or unnecessary data?
+
+4. Prepare Data for ML Algorithms
+    Clean the Data:
+        Handle missing data:
+            Remove data points entirely: Use sparingly, as it may reduce dataset representativeness.
+            Impute missing data: Options include:
+                Randomly select a value (not recommended unless the missing data is random and minimal).
+                Use mean: Works for symmetric distributions.
+                Use median: More robust for skewed distributions.
+                Advanced techniques: Predict missing values using other features (k-Nearest Neighbors, regression).
+        Correct data errors or inconsistencies.
+        Remove or adjust outliers as needed (but understand their potential significance first).
+
+    Feature Engineering:
+        Add new features if useful.
+        Remove irrelevant or redundant features.
+
+    Scale and Normalize Data:
+        Normalize or standardize features to make sure consistent ranges and magnitudes:
+            x' = (x - mean) / standard deviation
+            Standardization (also called Z-score normalization) rescales the data so that it has:
+                A mean of 0
+                A standard deviation of 1
+
+    Split the Data:
+        Split into training (80%) and testing (20%) datasets.
+        Optionally, create a validation set (10%) from the training data for hyperparameter tuning.
+
+5. Select a Model and Train It
+    Choose an initial model based on the problem type (regression for continuous data, decision trees for categorical predictions).
+    Train the model on the training dataset.
+    Evaluate its performance using metrics suited to the task (MAE, MSE, accuracy, F1 score).
+
+6. Fine-Tune the Model
+    Optimize hyperparameters using techniques like grid search or random search.
+    Experiment with adding/removing features or adjusting model complexity.
+    Use cross-validation to make sure generalizability.
+    Perform feature scaling (if not done already) to improve optimization and model convergence.
+    Regularization (L1/L2) may be added to prevent overfitting.
+
+7. Test the Model
+    Evaluate the trained and tuned model on the testing dataset (data it has never seen before).
+    Compare performance on the testing set against your chosen metrics to assess how well the model generalizes.
+
+8. Present Your Solution
+    Clearly communicate the findings:
+        Include key insights from the data exploration phase.
+        Show model results using visualizations (confusion matrices, prediction plots, residuals).
+        Highlight trade-offs and limitations.
+    make sure the explanation is understandable to both technical and non-technical stakeholders.
+
+9. Launch, Monitor, and Maintain Your System
+    Deploy the model in production.
+    Set up monitoring systems to track performance (accuracy drift, model bias, system latency).
+    Update and retrain the model periodically with fresh data.
+    Monitor for concept drift (i.e., changes in data patterns over time).

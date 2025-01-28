@@ -1,13 +1,44 @@
-linear regression assignment:
-Use this Student Performance [https://www.kaggle.com/datasets/stealthtechnologies/predict-student-performance-dataset] dataset 
-and the principles discussed in class to build a model that predicts student performance based on the available features.
-Code submission will not be required for this assignment.
-Also submit a report here of your findings. The report should include descriptions of the features and the label, data exploration plots, 
-the process used, any insights found and used for fine-tuning, and the MSE and MAE loss for training data and testing data.
+Linear Regression Assignment
+Use the Student Performance Dataset https://www.kaggle.com/datasets/stealthtechnologies/predict-student-performance-dataset 
+and the principles discussed in class to build a regression model that predicts student performance based on the available features.
 
-for a better fit, go to scikit learn
-we are after REGRESSION - taking features and finding floating point numbers
-the sample algorithm in the code is ths stochastic gradient descent linear regressor
-there are many other kinds to be found on scikit learn
-search for regression and try different kinds, and it's easy to plug and play
-try different ones that might be better than SGD regressor! get comfortable with it 
+Submit a detailed report including:
+    Feature and Label Descriptions: Briefly explain the features and the target label in the dataset.
+    Data Exploration:
+        Include exploratory data analysis (EDA) plots such as histograms, scatter plots, correlation heatmaps, etc.
+        Highlight key trends and relationships in the data.
+    Process:
+        Describe the steps you followed to build and train your model.
+        Discuss any challenges or decisions made during the process (e.g., handling missing data, scaling, etc.).
+    Insights and Fine-Tuning:
+        Mention any insights gained during EDA that influenced how you fine-tuned your model.
+    Model Evaluation:
+        Include Mean Squared Error (MSE) and Mean Absolute Error (MAE) for both the training data and the testing data.
+
+Tips for Model Development
+Library: 
+    Use `scikit-learn` for its variety of regression algorithms and ease of use.
+Focus on Regression:
+    The goal is to predict floating-point numbers (e.g., student performance scores) from the features.
+Default Algorithm:
+    The sample algorithm discussed in class is the Stochastic Gradient Descent (SGD) Linear Regressor.
+Explore Other Algorithms:
+    Experiment with different regression algorithms in `scikit-learn` (e.g., `Ridge`, `Lasso`, `DecisionTreeRegressor`, etc.).
+    Search for regression algorithms within the library, and try a few to determine which performs best.
+    Scikit-learn's API is consistent, making it easy to plug and play different models.
+Model Comparison:
+    Evaluate the performance of each algorithm and choose the best fit based on metrics like MSE and MAE.
+
+Next Steps
+1. Understand the Dataset:
+    Identify which features are most relevant for predicting the target variable.
+2. EDA:
+    Visualize the data to uncover patterns and potential preprocessing needs.
+3. Preprocessing:
+    Handle missing data, scale numerical features, and encode categorical data as needed.
+4. Model Training:
+    Begin with the SGD Linear Regressor, then experiment with other regression models.
+5. Evaluation:
+    Calculate and compare MSE and MAE for training and testing datasets.
+6. Report Preparation:
+    Document your process, findings, and conclusions clearly.

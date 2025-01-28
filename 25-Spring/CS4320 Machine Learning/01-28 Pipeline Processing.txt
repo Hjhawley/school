@@ -1,37 +1,46 @@
-pipeline processing
-get data, prepare data, fit data -> we want to integrate into an easily repeatable process
+Pipeline Processing
+Get data, prepare data, fit data → we want to integrate this into an easily repeatable process.
 
-we have a scaler that we fit the data to; then transform the data; then send it to a model; then tell the model to fit the data.
-this is a pipeline process. a pipeline is a sequential element.
-whenever we need to predict new data, it needs to be transformed first.
-we want to bake this entire process into one step; abstract it away.
-this works because every element in this pipeline has a fit and a transform method.
+We have a scaler that we fit to the data; 
+then transform the data; then send it to a model; 
+and finally, tell the model to fit the data.
+This is a pipeline process.
 
-example pipeline:
-[PP1 -> PP2 -> Model]
-Calling .fit(x, y) on the pipeline automates the following process:
-    Pre-processing Element 1
+Whenever we need to predict new data, it must first be transformed.
+We want to bake this entire process into one step and abstract it away.
+This works because every element in the pipeline has both a .fit() and a .transform() method.
+
+Example pipeline: 
+    [PP1 → PP2 → Model]
+
+Calling .fit(x, y) on this pipeline automates the following processes:
+    1. Pre-processing Element 1:
         .fit(x)
-        .transform(x) -> x_1
-    Pre-processing Element 2
+        .transform(x) → Produces x_1
+    2. Pre-processing Element 2:
         .fit(x_1)
-        .transform(x_1) -> x_2
-    Model
-        .fit(x_2, y) -> model
-Then we can call .predict(z) which will result in y^.
-This will TRANSFORM (but not fit) the data at each PP step, 
-and then produce predicted labels.
+        .transform(x_1) → Produces x_2
+    3. Model:
+        .fit(x_2, y) → Trains the model.
 
-ok, but what about when the form of our function is not good enough?
-what if we're wasting time looking for coefficients in a single-order polynonmial
-when we actually have a quadratic function, for example?
-we need to ENRICH THE HYPOTHESIS SPACE (allow for more complex data structures.)
-we still say that y is some function of x but we expand it so that we don't only have linear features, but also squared, cubed, etc.
-for example, we have 3 features: x1, x2, x3.
-instead of our function looking like
+After this, we can call .predict(z), which:
+    Transforms the input z (but does not fit intermediate steps).
+    Produces predicted labels y^.
+
+* * * * * * * * * * * * * * * * * * * *
+
+But what if the form of our function is not good enough?
+For example, what if we're wasting time looking for coefficients in a single-order polynomial 
+when the actual relationship is quadratic?
+
+To address this, we need to ENRICH the hypothesis space by allowing for more complex data structures.
+We still say y is some function of x, but we expand the feature space to include squared, cubed, and interaction terms.
+
+Example:
+With three features x1 x2 x3, instead of the function:
     y = θ_0 + θx1 + θx2 + θx3
-it might look something like:
+We expand it to something like:
     y = θ_0 + θx1 + θx2 + θx3 + θx1^2 + θx2^2 + θx3^2 + θx1x2 + θx2x3 + θx1x3
-the coefficients are still linear, but the FEATURES are represented in a more complex space.
-this might show us which dependencies are important vs not important.
-this is called HPYERPARAMETER FITTING.
+
+The coefficients θ are still linear, but the features are represented in a more complex space.
+This process helps identify which dependencies are important and which are not.
