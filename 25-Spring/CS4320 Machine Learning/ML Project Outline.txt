@@ -3,8 +3,15 @@ ML Project Outline
 * look at the big picture
 * gather the data
 * explore and visualize to get insight
+    histograms, scatter plots, etc to find patterns
 * prepare data for ML algorithms
     remove outliers (or look for potential errors related to outliers)
+    what happens when we have gaps in our data (empty cells?)
+        1. throw out those data points entirely?
+        2. fill in missing data? (impute) how?
+            we could go back to our histogram and just randomly pick a value and fill it in for that row
+            we could also take the MEAN value rather than a random value (more representative of data as a whole)
+            we could also use a MEDIAN value, sometimes a better representation
     split into training & testing data 80/20
     80% training data, 20% testing data is a common rule of thumb
 * select a model and train it
@@ -13,5 +20,6 @@ ML Project Outline
     add/remove parameters
     data column scaling 
         scale data with x' = (x - mean) / stddev
+* only at the VERY end, test against the testing data
 * present your solution
 * launch, monitor, and maintain your system

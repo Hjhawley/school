@@ -1,0 +1,13 @@
+linear regression assignment:
+Use this Student Performance [https://www.kaggle.com/datasets/stealthtechnologies/predict-student-performance-dataset] dataset 
+and the principles discussed in class to build a model that predicts student performance based on the available features.
+Code submission will not be required for this assignment.
+Also submit a report here of your findings. The report should include descriptions of the features and the label, data exploration plots, 
+the process used, any insights found and used for fine-tuning, and the MSE and MAE loss for training data and testing data.
+
+for a better fit, go to scikit learn
+we are after REGRESSION - taking features and finding floating point numbers
+the sample algorithm in the code is ths stochastic gradient descent linear regressor
+there are many other kinds to be found on scikit learn
+search for regression and try different kinds, and it's easy to plug and play
+try different ones that might be better than SGD regressor! get comfortable with it 
