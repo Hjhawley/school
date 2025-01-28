@@ -9,19 +9,15 @@ this works because every element in this pipeline has a fit and a transform meth
 
 example pipeline:
 [PP1 -> PP2 -> Model]
-preprocessing element 1 -> preprocessing element 2 -> model
-
 Calling .fit(x, y) on the pipeline automates the following process:
-
-PP1
-    .fit(x)
-    .transform(x) -> x_1
-PP2
-    .fit(x_1)
-    .transform(x_1) -> x_2
-Model
-    .fit(x_2, y) -> model
-
+    Pre-processing Element 1
+        .fit(x)
+        .transform(x) -> x_1
+    Pre-processing Element 2
+        .fit(x_1)
+        .transform(x_1) -> x_2
+    Model
+        .fit(x_2, y) -> model
 Then we can call .predict(z) which will result in y^.
 This will TRANSFORM (but not fit) the data at each PP step, 
 and then produce predicted labels.
