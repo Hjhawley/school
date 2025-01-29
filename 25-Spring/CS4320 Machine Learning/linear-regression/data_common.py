@@ -7,16 +7,14 @@ import pandas as pd
 # Load data
 ###########################################################
 
-#
-# CP doesn't appear to be relevant when looking at
-# the scatter plots.
-# feature_names = ["CP", "Weight", "Height"]
-feature_names = ["Weight", "Height"]
+feature_names = ["Socioeconomic Score", "Study Hours", "Sleep Hours", "Attendance (%)"]
+label_name = "Grades"
 
-label_name = "Score"
-train_filename = "showcase-prepared-train.csv"
+train_filename = "data-prepared-train.csv"
+test_filename = "data-prepared-test.csv"
+
 data = pd.read_csv(train_filename, index_col=0)
 X_train = data[feature_names]
 y_train = data[label_name]
 
-model_filename = "showcase-linear-regressor.joblib"
+model_filename = "student-performance-regressor.joblib"
