@@ -4,7 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import math
 
-from data_common import feature_names, label_name
+feature_names = ["Socioeconomic Score", "Study Hours", "Sleep Hours", "Attendance (%)"]
+label_name = "Grades"
 
 column_count = len(feature_names) + 1
 filename = "data.csv"  # The raw dataset
