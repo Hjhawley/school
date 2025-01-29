@@ -1,28 +1,25 @@
 #include "StateMachine.h"
-#include <cctype> // For isalpha, isdigit, isspace
 #include <iostream>
-#include <cstdlib> // For exit
+#include <cctype>
+#include <cstdlib>
 
 StateMachineClass::StateMachineClass() {
-    // Initialize the current state
     mCurrentState = START_STATE;
-
-    // Initialize all transitions to CANTMOVE_STATE
+    // Initialize all transitions to CANTMOVE_STATE by default
     for (int i = 0; i < LAST_STATE; i++) {
         for (int j = 0; j < LAST_CHAR; j++) {
             mLegalMoves[i][j] = CANTMOVE_STATE;
         }
     }
-
     // Define legal moves based on the DFA
     mLegalMoves[START_STATE][WHITESPACE_CHAR] = START_STATE;
+    // Stay in ID state as long as we keep seeing valid chars
     mLegalMoves[START_STATE][LETTER_CHAR] = IDENTIFIER_STATE;
-        // Once we're in IDENTIFIER_STATE, we should remain there upon seeing more letters/digits/underscores.
     mLegalMoves[IDENTIFIER_STATE][LETTER_CHAR] = IDENTIFIER_STATE;
     mLegalMoves[IDENTIFIER_STATE][DIGIT_CHAR] = IDENTIFIER_STATE;
-        // If you allow underscores in identifiers, either treat them as LETTER_CHAR or make a separate rule.
+    // TODO: allow underscores as valid chars (but not as the first char)
     mLegalMoves[START_STATE][DIGIT_CHAR] = INTEGER_STATE;
-        // Once in INTEGER_STATE, remain there if we see another digit.
+    // Stay in integer state as long as we keep seeing valid digits
     mLegalMoves[INTEGER_STATE][DIGIT_CHAR] = INTEGER_STATE;
     mLegalMoves[START_STATE][PLUS_CHAR] = PLUS_STATE;
     mLegalMoves[START_STATE][MINUS_CHAR] = MINUS_STATE;
@@ -38,19 +35,17 @@ StateMachineClass::StateMachineClass() {
     mLegalMoves[START_STATE][GREATER_CHAR] = GREATER_STATE;
     mLegalMoves[START_STATE][NOT_CHAR] = NOTEQUAL_STATE;
     mLegalMoves[START_STATE][ENDFILE_CHAR] = ENDFILE_STATE;
-
-    // Add transitions for multi-character operators
+    // Multi-character operators
     mLegalMoves[LESS_STATE][EQUAL_CHAR] = LESSEQUAL_STATE;
     mLegalMoves[LESS_STATE][LESS_CHAR] = INSERTION_STATE;
     mLegalMoves[GREATER_STATE][EQUAL_CHAR] = GREATEREQUAL_STATE;
     mLegalMoves[NOTEQUAL_STATE][EQUAL_CHAR] = NOTEQUAL_STATE;
 
-    // Initialize corresponding token types to BAD_TOKEN
+    // Initialize token types to BAD_TOKEN by default
     for (int i = 0; i < LAST_STATE; i++) {
         mCorrespondingTokenTypes[i] = BAD_TOKEN;
     }
-
-    // Map final states to their token types
+    // Map final states to token types
     mCorrespondingTokenTypes[IDENTIFIER_STATE] = IDENTIFIER_TOKEN;
     mCorrespondingTokenTypes[INTEGER_STATE] = INTEGER_TOKEN;
     mCorrespondingTokenTypes[PLUS_STATE] = PLUS_TOKEN;
@@ -96,7 +91,7 @@ CharacterType StateMachineClass::GetCharacterType(char c) {
     }
 }
 
-// Update the state machine based on the current character
+// Update state machine based on the current character
 MachineState StateMachineClass::UpdateState(char currentCharacter, TokenType &previousTokenType) {
     CharacterType charType = GetCharacterType(currentCharacter);
 
