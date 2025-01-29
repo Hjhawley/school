@@ -7,8 +7,8 @@ import math
 feature_names = ["Socioeconomic Score", "Study Hours", "Sleep Hours", "Attendance (%)"]
 label_name = "Grades"
 
-column_count = len(feature_names) + 1
-filename = "data.csv"  # The raw dataset
+column_count = len(feature_names)+1
+filename = "data.csv" 
 data = pd.read_csv(filename)
 
 def pdf_figure(figure_number):
