@@ -15,8 +15,15 @@ StateMachineClass::StateMachineClass() {
     }
 
     // Define legal moves based on the DFA
+    mLegalMoves[START_STATE][WHITESPACE_CHAR] = START_STATE;
     mLegalMoves[START_STATE][LETTER_CHAR] = IDENTIFIER_STATE;
+        // Once we're in IDENTIFIER_STATE, we should remain there upon seeing more letters/digits/underscores.
+    mLegalMoves[IDENTIFIER_STATE][LETTER_CHAR] = IDENTIFIER_STATE;
+    mLegalMoves[IDENTIFIER_STATE][DIGIT_CHAR] = IDENTIFIER_STATE;
+        // If you allow underscores in identifiers, either treat them as LETTER_CHAR or make a separate rule.
     mLegalMoves[START_STATE][DIGIT_CHAR] = INTEGER_STATE;
+        // Once in INTEGER_STATE, remain there if we see another digit.
+    mLegalMoves[INTEGER_STATE][DIGIT_CHAR] = INTEGER_STATE;
     mLegalMoves[START_STATE][PLUS_CHAR] = PLUS_STATE;
     mLegalMoves[START_STATE][MINUS_CHAR] = MINUS_STATE;
     mLegalMoves[START_STATE][TIMES_CHAR] = TIMES_STATE;
