@@ -4,10 +4,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import math
 
-feature_names = ["Socioeconomic Score", "Study Hours", "Sleep Hours", "Attendance (%)"]
-label_name = "Grades"
+from data_common import feature_names, label_name
+
 column_count = len(feature_names) + 1
-filename = "data.csv"
+filename = "data.csv"  # The raw dataset
 data = pd.read_csv(filename)
 
 def pdf_figure(figure_number):
@@ -68,7 +68,6 @@ def histogram_all(data, feature_names, label_name):
     fig.savefig(figure_name)
     plt.close(fig)
     return
-
 
 def scatter_column(fig, feature_series, label_series, plot_count, plot_number):
     """
