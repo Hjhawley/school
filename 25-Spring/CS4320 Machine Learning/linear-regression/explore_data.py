@@ -4,10 +4,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import math
 
-feature_names = ["CP", "Weight", "Height"]
-label_name = "Score"
+feature_names = ["Socioeconomic Score", "Study Hours", "Sleep Hours", "Attendance (%)"]
+label_name = "Grades"
 column_count = len(feature_names) + 1
-filename = "showcase.csv"
+filename = "data.csv"
 data = pd.read_csv(filename)
 
 def pdf_figure(figure_number):
