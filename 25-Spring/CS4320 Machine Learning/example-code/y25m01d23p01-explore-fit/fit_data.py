@@ -11,8 +11,8 @@ from showcase_common import *
 print(data.head(5))
 
 # do the fit/training
-regressor = sklearn.linear_model.SGDRegressor(verbose=1)    # this CREATES a model to be trained. verbose = how much feedback you want during training
-regressor.fit(X_train, y_train)                             # this TRAINS the model
+regressor = sklearn.linear_model.SGDRegressor(verbose=1)
+regressor.fit(X_train, y_train)
 
 # save the trained model
 joblib.dump(regressor, model_filename)
