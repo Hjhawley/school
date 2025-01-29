@@ -1,4 +1,7 @@
+#pragma once
+
 #include <string>
+#include <iostream>
 
 enum TokenType {
 	// Reserved keywords:
@@ -27,3 +30,28 @@ const std::string gTokenTypeNames[] = {
 "IDENTIFIER", "INTEGER",
 "BAD", "ENDFILE"
 };
+
+class TokenClass {
+private:
+    TokenType mType;
+    std::string mLexeme;
+
+public:
+    // Constructor
+    TokenClass(TokenType type, const std::string &lexeme);
+
+    // Accessors
+    TokenType GetTokenType() const { return mType; }
+    const std::string& GetTokenTypeName() const {
+        return gTokenTypeNames[mType];
+    }
+    std::string GetLexeme() const { return mLexeme; }
+
+    // A static helper to get a name from any TokenType
+    static const std::string& GetTokenTypeName(TokenType type) {
+        return gTokenTypeNames[type];
+    }
+};
+
+// Insertion operator prototype
+std::ostream& operator<<(std::ostream &out, const TokenClass &tc);
