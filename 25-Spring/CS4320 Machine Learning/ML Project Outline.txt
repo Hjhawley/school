@@ -20,7 +20,7 @@ ML Project Outline
         Which features are most relevant? 
         Are there redundancies or unnecessary data?
 
-4. Prepare Data for ML Algorithms
+4. Prepare Data for ML Algorithms (Preprocessing)
     Clean the Data:
         Handle missing data:
             Remove data points entirely: Use sparingly, as it may reduce dataset representativeness.
@@ -45,7 +45,7 @@ ML Project Outline
 
     Split the Data:
         Split into training (80%) and testing (20%) datasets.
-        Optionally, create a validation set (10%) from the training data for hyperparameter tuning.
+        USE A KNOWN SEED for reproducable results
 
 5. Select a Model and Train It
     Choose an initial model based on the problem type (regression for continuous data, decision trees for categorical predictions).
@@ -62,6 +62,23 @@ ML Project Outline
 7. Test the Model
     Evaluate the trained and tuned model on the testing dataset (data it has never seen before).
     Compare performance on the testing set against your chosen metrics to assess how well the model generalizes.
+        Training loop: Train -> Model -> Test; Repeat. 
+        This is still INDIRECTLY training it with the testing data, 
+        so it doesn't actually tell us how well the model generalizes. "Overfitting"
+        Commonly accepted solution: 
+            take our dataset, 
+            do the 80/20 split, 
+            put testing data in a vault (leave it alone,)
+            take training data and re-split it; 
+                create the actual training set and the "validation" set or "dev" set
+                split training set into 3 different groups x1 x2 x3:
+                    use x1 as the validation set and x2+x3 as the training set 
+                    use x2 as the validation set and x1+x3 as the training set
+                    use x3 as the validation set and x1+x2 as the training set
+                    and take the average (and maybe std dev)
+                this is called "cross validation"
+            keep trying different models and different variations of models until we find a good fit
+            you will find plenty of ways "not to make a lightbulb" but might find something useful eventually!
 
 8. Present Your Solution
     Clearly communicate the findings:
