@@ -4,8 +4,8 @@ import sklearn
 import joblib
 
 # read data, define fields, etc.
-from showcase_common import *
-test_filename = "showcase-prepared-test.csv"
+from data_common import *
+test_filename = "data-test.csv"
 test_data = pd.read_csv(test_filename, index_col=0)
 X_test = test_data[feature_names]
 y_test = test_data[label_name]

@@ -3,7 +3,7 @@
 import joblib
 
 # read data, define fields, etc.
-from showcase_common import *
+from data_common import *
 
 regressor = joblib.load(model_filename)
 

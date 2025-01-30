@@ -4,7 +4,7 @@ import sklearn
 import joblib
 
 # read data, define fields, etc.
-from showcase_common import *
+from data_common import *
 
 # load model
 regressor = joblib.load(model_filename)
