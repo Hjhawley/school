@@ -1,0 +1,32 @@
+Cross-validation
+
+    Training loop: Train -> Model -> Test; Repeat. 
+    This is still INDIRECTLY training it with the testing data, 
+    so it doesn't actually tell us how well the model generalizes. "Overfitting"
+
+    Commonly accepted solution: 
+        take our dataset, 
+        do the 80/20 split, 
+        put testing data in a vault (leave it alone,)
+        take training data and re-split it; 
+            create the actual training set and the "validation" set or "dev" set
+            split training set into 3 different groups x1 x2 x3:
+                use x1 as the validation set and x2+x3 as the training set 
+                use x2 as the validation set and x1+x3 as the training set
+                use x3 as the validation set and x1+x2 as the training set
+                and take the average (and maybe std dev)
+            this is called "cross validation"
+        keep trying different models and different variations of models until we find a good fit
+        you will find plenty of ways "not to make a lightbulb" but might find something useful eventually!
+
+Regularization
+
+    Regularization is our tool to combat overfitting.
+    KISS "keep it simple, stupid" / Occam's Razor
+    Say a model has produced an unwieldy function with lots of polynomial features to fit the data.
+    what if we could find a much simpler function that works just as well if not better?
+    "regularizing" is reeling in the polynomial features until we get ideal results 
+    we search for the simplest model that is still complex enough to not underfit, but also not overfit 
+
+    in many regression models, we can try to force regularization and say 
+    "if this parameter is not meaningful, drive the coefficient towards zero"
