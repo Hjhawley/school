@@ -10,8 +10,8 @@ import pandas as pd
 feature_names = ["Socioeconomic Score", "Study Hours", "Sleep Hours", "Attendance (%)"]
 label_name = "Grades"
 
-train_filename = "data-prepared-train.csv"
-test_filename = "data-prepared-test.csv"
+train_filename = "data-train.csv"
+test_filename = "data-test.csv"
 
 data = pd.read_csv(train_filename, index_col=0)
 X_train = data[feature_names]
