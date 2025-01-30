@@ -7,7 +7,7 @@ import joblib
 from data_common import *
 
 # load model
-regressor = joblib.load(model_filename)
+regressor, scaler = joblib.load(model_filename)
 
 # ask model to score the data
 score_train = regressor.score(X_train, y_train)

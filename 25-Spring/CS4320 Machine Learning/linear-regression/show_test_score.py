@@ -11,7 +11,7 @@ X_test = test_data[feature_names]
 y_test = test_data[label_name]
 
 # load model
-regressor = joblib.load(model_filename)
+regressor, scaler = joblib.load(model_filename)
 
 # ask model to score the data
 score_test = regressor.score(X_test, y_test)

@@ -5,7 +5,7 @@ import joblib
 # read data, define fields, etc.
 from data_common import *
 
-regressor = joblib.load(model_filename)
+regressor, scaler = joblib.load(model_filename)
 
 def show_model(regressor):
     print("Model Information:")
