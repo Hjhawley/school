@@ -23,8 +23,8 @@ print("Scaled Features")
 print(feature_names)
 print(X_train[:5,:])
 
-# Train Ridge regression model with alpha=1.0 (default)
-regressor = sklearn.linear_model.Lasso(alpha=1.0)
+# train (try different models)
+regressor = sklearn.linear_model.ElasticNet(alpha=1.0, l1_ratio=0.5)
 regressor.fit(X_train, y_train)
 
 # save the trained model
