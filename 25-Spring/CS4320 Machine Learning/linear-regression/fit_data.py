@@ -24,7 +24,7 @@ print(feature_names)
 print(X_train[:5,:])
 
 # train (try different models)
-regressor = sklearn.linear_model.ElasticNet(alpha=1.0, l1_ratio=0.5)
+regressor = sklearn.linear_model.Ridge(alpha=1)
 regressor.fit(X_train, y_train)
 
 # save the trained model
