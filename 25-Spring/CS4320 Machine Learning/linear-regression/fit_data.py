@@ -24,7 +24,7 @@ print(feature_names)
 print(X_train[:5,:])
 
 # Train Ridge regression model with alpha=1.0 (default)
-regressor = sklearn.linear_model.Ridge(alpha=1.0)
+regressor = sklearn.linear_model.Lasso(alpha=1.0)
 regressor.fit(X_train, y_train)
 
 # save the trained model
