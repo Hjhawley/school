@@ -17,7 +17,7 @@ def show_model(scaler, regressor):
     print("Model Information:")
     print("coef_: {}".format(regressor.coef_))
     print("intercept_: {}".format(regressor.intercept_))
-    print("n_iter_: {}".format(regressor.n_iter_))
+    print("n_iter_: {}".format(getattr(regressor, "n_iter_", "N/A")))
     print("n_features_in_: {}".format(regressor.n_features_in_))
     return
 
@@ -33,7 +33,7 @@ def show_function(scaler, regressor):
     intercept_offset = 0.0
     for i in range(len(regressor.coef_)):
         intercept_offset += regressor.coef_[i] * offset[i]
-    s = "{:6.3f}".format(regressor.intercept_[0]-intercept_offset)
+    s = "{:6.3f}".format(regressor.intercept_ - intercept_offset)
 
     # term for each feature
     for i in range(0, len(regressor.coef_)):
