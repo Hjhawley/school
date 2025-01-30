@@ -3,9 +3,9 @@
 import pandas as pd
 import sklearn
 
-filename = "showcase-prepared.csv"
-train_filename = "showcase-prepared-train.csv"
-test_filename = "showcase-prepared-test.csv"
+filename = "data.csv"
+train_filename = "data-train.csv"
+test_filename = "data-test.csv"
 data = pd.read_csv(filename)
 seed = 42
 ratio = 0.2
