@@ -74,13 +74,18 @@ proving it is not bipartite.
 
 * * * * * * * * * * * * * * * * * * * *
 
-Strongly Connected Components of Directed Graphs
-Vertices u and v are strongly connected if and only if they are on a 
-directed cycle (there are paths from u to v and from v to u).
+Strongly Connected Components (SCCs) in Directed Graphs
+Two vertices u and v are "strongly connected" if they belong to a 
+directed cycle. This means there is a path from u to v and a path 
+from v to u.
 
-Can partition vertices of any directed graph into strongly connectedcomponents:
-    1. all pairs of vertices in the same component are strongly connected
-    2. can’t merge components and keep property 1
-• Strongly connected components can be stored efficiently just like connected
-components (e.g. the A[u] array)
-• Can be found by extending DFS algorithm in 0 (n +  m)  time using extra bookkeeping
+Any directed graph can be partitioned into SCCs such that:
+  1. All pairs of vertices within the same SCC are strongly connected.
+  2. No two SCCs can be merged while maintaining the strong connectivity property.
+
+SCCs can be efficiently stored, similar to connected components in 
+undirected graphs (e.g., using an array A[u] to track component membership).
+SCCs can be found using an extended DFS algorithm in O(n + m) time, where:
+    - n = number of vertices.
+    - m = number of edges.
+This efficiency is achieved using extra bookkeeping techniques.
