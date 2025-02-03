@@ -1,0 +1,66 @@
+BFS implementation
+Global initialization: mark all vertices "undiscovered"
+BFS(s)
+    mark s "discovered"
+    queue = { s }
+    while queue not empty
+        u = remove_first(queue)
+        for each edge {u,x}
+            if (x is undiscovered)
+                mark x discovered
+                append x on queue
+        mark u fully-explored
+
+BFS guarantees a shortest path.
+
+* * * * * * * * * * * * * * * * * * * *
+
+DFS implementation
+Global Initialization: mark all vertices undiscovered
+DFS(v)
+    mark v discovered and add v to stack
+    for each edge {v,x}
+        if (x is undiscovered)
+            DFS(x)
+    mark v full-discovered
+
+DFS does not guarantee a shortest path.
+
+* * * * * * * * * * * * * * * * * * * *
+
+Applications of Graph Traversal: Bipartiteness Testing
+An undirected graph G is "bipartite" if and only if we can color its
+vertices red and green so each edge has different color endpoints
+
+Input: Undirected graph G
+Goal: If G is bipartite, output a coloring; otherwise, output “False" (NOT Bipartite).
+Graph G contains an odd-length cycle → it is not bipartite.
+On a cycle the two colors must alternate, so
+    • green every 2nd vertex
+    • red every 2nd vertex
+Can’t have either if length is not divisible by 2.
+
+WLOG (“withoutloss of generality”): Can assume that G is connected
+• Otherwise run on each component
+Simple idea: start coloring nodes starting at a given node s
+• Color s red
+• Color all neighbors of s green
+• Color all their neighbors red, etc.
+• If you ever hit a node that was already colored
+• the same color as you want to color it, ignore it
+• the opposite color, output “NOT Bipartite” and halt
+
+BFS gives Bipartiteness
+Run BFS assigning all vertices from layer L_i the color i % 2
+• i.e., red if they are in an even layer, green if in an odd layer
+• if no edge joining two vertices of the same color
+    • then it is a good coloring
+• otherwise
+    • there is a bad edge; output “False”
+Why is that "False" (not bipartite) output correct?
+
+Why does BFS work for Bipartiteness?
+Recall: All edges join vertices on the same or adjacent BFS layers
+→ Any bad edge must join two vertices u and v in the same layer
+Say the layer with u and v is L_j
+u and v have common ancestor at some level L_i for i < j
