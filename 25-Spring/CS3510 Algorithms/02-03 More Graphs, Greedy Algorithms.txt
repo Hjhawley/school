@@ -1,66 +1,86 @@
-BFS implementation
-Global initialization: mark all vertices "undiscovered"
-BFS(s)
-    mark s "discovered"
-    queue = { s }
-    while queue not empty
-        u = remove_first(queue)
-        for each edge {u,x}
-            if (x is undiscovered)
-                mark x discovered
-                append x on queue
-        mark u fully-explored
+Breadth-First Search (BFS) Implementation
 
-BFS guarantees a shortest path.
+Global Initialization: Mark all vertices as 'undiscovered'.
+BFS(s):
+1. Mark s as 'discovered'.
+2. Initialize the queue: {s}.
+3. While the queue is not empty:
+    - Remove the first vertex u from the queue.
+    - For each edge {u, x}:
+        - If x is 'undiscovered':
+            - Mark x as 'discovered'.
+            - Append x to the queue.
+    - Mark u as 'fully explored'.
+
+BFS guarantees finding the shortest path in an unweighted graph.
 
 * * * * * * * * * * * * * * * * * * * *
 
-DFS implementation
-Global Initialization: mark all vertices undiscovered
-DFS(v)
-    mark v discovered and add v to stack
-    for each edge {v,x}
-        if (x is undiscovered)
-            DFS(x)
-    mark v full-discovered
+Depth-First Search (DFS) Implementation
 
-DFS does not guarantee a shortest path.
+Global Initialization: Mark all vertices as 'undiscovered'.
+DFS(v):
+1. Mark v as 'discovered'.
+2. Add v to the stack.
+3. For each edge {v, x}:
+    - If x is 'undiscovered':
+        - Recursively call DFS(x).
+4. Mark v as 'fully explored'.
+
+DFS does not guarantee finding the shortest path.
 
 * * * * * * * * * * * * * * * * * * * *
 
 Applications of Graph Traversal: Bipartiteness Testing
-An undirected graph G is "bipartite" if and only if we can color its
-vertices red and green so each edge has different color endpoints
+An undirected graph G is bipartite if and only if we can color its 
+vertices red and green, such that every edge connects vertices of 
+different colors.
 
-Input: Undirected graph G
-Goal: If G is bipartite, output a coloring; otherwise, output “False" (NOT Bipartite).
-Graph G contains an odd-length cycle → it is not bipartite.
-On a cycle the two colors must alternate, so
-    • green every 2nd vertex
-    • red every 2nd vertex
-Can’t have either if length is not divisible by 2.
+Determining Bipartiteness
+Input: Undirected graph G.  
+Goal: Output a valid 2-coloring if G is bipartite; otherwise, 
+output "False" (not bipartite).
 
-WLOG (“withoutloss of generality”): Can assume that G is connected
-• Otherwise run on each component
-Simple idea: start coloring nodes starting at a given node s
-• Color s red
-• Color all neighbors of s green
-• Color all their neighbors red, etc.
-• If you ever hit a node that was already colored
-• the same color as you want to color it, ignore it
-• the opposite color, output “NOT Bipartite” and halt
+A graph containing an odd-length cycle is not bipartite.
+On a cycle, colors must alternate:
+    - Assign green to every *2nd vertex*.
+    - Assign red to every *other vertex*.
+    - This alternation fails if the cycle length is odd.
 
-BFS gives Bipartiteness
-Run BFS assigning all vertices from layer L_i the color i % 2
-• i.e., red if they are in an even layer, green if in an odd layer
-• if no edge joining two vertices of the same color
-    • then it is a good coloring
-• otherwise
-    • there is a bad edge; output “False”
-Why is that "False" (not bipartite) output correct?
+Algorithm:
+1. Assume G is connected (otherwise, run the algorithm on each 
+component separately).
+2. Start coloring nodes from a given source node s:
+    - Color s red.
+    - Color all neighbors of s green.
+    - Color their neighbors red, and so on.
+3. If a node x is already colored:
+    - If it matches the intended color → ignore it.
+    - If it conflicts → output "False" (not bipartite) and halt.
 
-Why does BFS work for Bipartiteness?
-Recall: All edges join vertices on the same or adjacent BFS layers
-→ Any bad edge must join two vertices u and v in the same layer
-Say the layer with u and v is L_j
-u and v have common ancestor at some level L_i for i < j
+Using BFS for Bipartiteness Testing
+Run BFS, assigning all vertices in layer L_i the color i % 2:
+    - Red for even layers.
+    - Green for odd layers.
+If no edge connects two vertices of the same color → G is bipartite.
+Otherwise, if a bad edge is found → output "False" (not bipartite).
+
+Why is BFS Correct for Bipartiteness Testing?
+BFS layers partition the graph into levels.
+All edges connect vertices in adjacent or same-level layers.
+A bad edge would connect two vertices in the same layer.
+If such an edge exists, the graph must contain an odd-length cycle, 
+proving it is not bipartite.
+
+* * * * * * * * * * * * * * * * * * * *
+
+Strongly Connected Components of Directed Graphs
+Vertices u and v are strongly connected if and only if they are on a 
+directed cycle (there are paths from u to v and from v to u).
+
+Can partition vertices of any directed graph into strongly connectedcomponents:
+    1. all pairs of vertices in the same component are strongly connected
+    2. can’t merge components and keep property 1
+• Strongly connected components can be stored efficiently just like connected
+components (e.g. the A[u] array)
+• Can be found by extending DFS algorithm in 0 (n +  m)  time using extra bookkeeping
