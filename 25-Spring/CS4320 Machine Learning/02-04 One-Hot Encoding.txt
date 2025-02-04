@@ -1,0 +1,45 @@
+how to deal with missing data points?
+.dropna() to remove that entry?
+not feasible when EVERYTHING has at least one missing data point.
+
+instead we can selectively .dropna() on a per-feature basis.
+take the initial frame with everything, select just the columns you care about, and then dropna() for just those features.
+
+take a frame df
+to select a particular series in pandas, give the name of the series like this:
+df["x","y"] this gives a series
+df[["x","y"]] this returns a data frame using that series
+tmpdf = df[["x","y"]].dropna() this removes bad data from the new data frame
+
+We really only drop data for VIEWING purposes. we still want to train on all the data.
+
+* * * * *
+
+what do we do when our features aren't numbers, but categories?
+assigning numbers to categories arbitrarily is NOT the solution.
+say we have categories A, B, and C for a particular feature.
+for every feature, our model wants to find a coefficient to multiply by.
+we need relational patterns to be learned and understood.
+what we do is we take the feature and SPLIT IT into multiple columns.
+look at this example:
+    BldgType: Type of dwelling
+        1Fam	Single-family Detached	
+        2FmCon	Two-family Conversion; originally built as one-family dwelling
+        Duplx	Duplex
+        TwnhsE	Townhouse End Unit
+        TwnhsI	Townhouse Inside Unit
+Instead of assigning each of these categories a number, we split this one single feature into
+five separate columns and assign a 1 to the appropriate category and a 0 to the rest.
+each column gets its own separate coefficient.
+this is called "one-hot encoding".
+this is the standard way of converting categorical data into numerical data.
+obviously don't do this for numerical data! or else you'll create new columns for EVERY SINGLE NUMERICAL VALUE and on top of that, you won't even learn a meaningful relationship.
+
+a small issue that can arise is during validation, we might encounter outliers with categories we haven't seen before.
+handle_unknown = 'ignore' takes care of this.
+
+so, some data needs one-hot encoding and some doesn't. we need to incorporate this into our preprocessing.
+    numerical preprocessing
+    categorical preprocessing
+    merge these columns back together (union) and use these as input to our model
+sklearn.pipeline.FeatureUnion(transformer_list=items)
