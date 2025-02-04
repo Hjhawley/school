@@ -1,45 +1,71 @@
-how to deal with missing data points?
-.dropna() to remove that entry?
-not feasible when EVERYTHING has at least one missing data point.
+How do we handle missing data points?
+- Dropping rows with missing data (.dropna())  
+  - If every row has *some* missing value, dropping the row entirely is not practical.  
+  - Instead, you can selectively drop rows on a *per-feature* basis. For example:  
+    ```
+    # Select just the columns you want, then drop missing data in those columns
+    tmpdf = df[["x", "y"]].dropna()
+    ```
+  - Typically, you only drop rows for specific tasks like generating a plot or computing a metric for those columns. You still keep the full dataset for other uses (e.g., training).
 
-instead we can selectively .dropna() on a per-feature basis.
-take the initial frame with everything, select just the columns you care about, and then dropna() for just those features.
+What about categorical (not numerical) data?
+- Why we don’t just assign numbers to categories  
+  - Assigning arbitrary numeric codes (e.g., A=0, B=1, C=2) implies a numerical relationship (like “C > B”) which doesn’t make sense for nominal categories.  
+  - Our model tries to interpret coefficients in a linear (or numerical) space, so the model would see A < B < C. That’s often incorrect for purely categorical data.
 
-take a frame df
-to select a particular series in pandas, give the name of the series like this:
-df["x","y"] this gives a series
-df[["x","y"]] this returns a data frame using that series
-tmpdf = df[["x","y"]].dropna() this removes bad data from the new data frame
+- One-Hot Encoding  
+  - For a categorical feature with possible values \[A, B, C\], we create separate binary columns—one for each category.  
+  - Example:  
+    ```
+    BldgType: 
+      1Fam, 2FmCon, Duplx, TwnhsE, TwnhsI
+    ```
+    Instead of encoding as 1=1Fam, 2=2FmCon, etc., we split it into five columns:
+    ```
+    BldgType_1Fam   BldgType_2FmCon   BldgType_Duplx  BldgType_TwnhsE   BldgType_TwnhsI
+          1               0                 0               0                0
+          0               1                 0               0                0
+          ...
+    ```
+  - Each of those columns (e.g., BldgType_1Fam) can be 0 or 1, and the model then learns separate coefficients for each column.
 
-We really only drop data for VIEWING purposes. we still want to train on all the data.
+- Handling unknown categories  
+  - In validation or production, sometimes you’ll encounter categories that were never seen during training.  
+  - Many encoders (e.g., sklearn’s OneHotEncoder) allow a parameter like handle_unknown='ignore' to skip unseen categories without causing errors.
 
-* * * * *
+3. Combining Numerical and Categorical Features
 
-what do we do when our features aren't numbers, but categories?
-assigning numbers to categories arbitrarily is NOT the solution.
-say we have categories A, B, and C for a particular feature.
-for every feature, our model wants to find a coefficient to multiply by.
-we need relational patterns to be learned and understood.
-what we do is we take the feature and SPLIT IT into multiple columns.
-look at this example:
-    BldgType: Type of dwelling
-        1Fam	Single-family Detached	
-        2FmCon	Two-family Conversion; originally built as one-family dwelling
-        Duplx	Duplex
-        TwnhsE	Townhouse End Unit
-        TwnhsI	Townhouse Inside Unit
-Instead of assigning each of these categories a number, we split this one single feature into
-five separate columns and assign a 1 to the appropriate category and a 0 to the rest.
-each column gets its own separate coefficient.
-this is called "one-hot encoding".
-this is the standard way of converting categorical data into numerical data.
-obviously don't do this for numerical data! or else you'll create new columns for EVERY SINGLE NUMERICAL VALUE and on top of that, you won't even learn a meaningful relationship.
+- Typically, your preprocessing pipeline will have two parts:  
+  1. Numerical Preprocessing (e.g., scaling, imputation for missing numeric values)  
+  2. Categorical Preprocessing (e.g., one-hot encoding)  
+- You then merge or concatenate these transformed features (sometimes via FeatureUnion in scikit-learn) into a single feature set that you feed into the model.
 
-a small issue that can arise is during validation, we might encounter outliers with categories we haven't seen before.
-handle_unknown = 'ignore' takes care of this.
+Example using scikit-learn pipelines and feature unions might look like:
+```
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.impute import SimpleImputer
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
 
-so, some data needs one-hot encoding and some doesn't. we need to incorporate this into our preprocessing.
-    numerical preprocessing
-    categorical preprocessing
-    merge these columns back together (union) and use these as input to our model
-sklearn.pipeline.FeatureUnion(transformer_list=items)
+numeric_features = ["num_col1", "num_col2"]
+numeric_transformer = Pipeline(steps=[
+    ("imputer", SimpleImputer(strategy="mean")),
+    ("scaler", StandardScaler())
+])
+
+categorical_features = ["cat_col1", "cat_col2"]
+categorical_transformer = Pipeline(steps=[
+    ("imputer", SimpleImputer(strategy="most_frequent")),
+    ("onehot", OneHotEncoder(handle_unknown="ignore"))
+])
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        ("num", numeric_transformer, numeric_features),
+        ("cat", categorical_transformer, categorical_features)
+    ]
+)
+
+# Then integrate the preprocessor into a full pipeline
+# with your estimator (model) of choice
+```
