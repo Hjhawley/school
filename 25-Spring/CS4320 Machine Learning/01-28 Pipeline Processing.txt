@@ -34,7 +34,9 @@ For example, what if we're wasting time looking for coefficients in a single-ord
 when the actual relationship is quadratic?
 
 To address this, we need to ENRICH the hypothesis space by allowing for more complex data structures.
-We still say y is some function of x, but we expand the feature space to include squared, cubed, and interaction terms.
+We still say y is some function of x, but we expand the feature space to include additional terms.
+We can square or cube features, cross-product different features ("interaction terms"),
+take the log or exponent of features, apply trigonometric functions, and more.
 
 Example:
 With three features x1 x2 x3, instead of the function:

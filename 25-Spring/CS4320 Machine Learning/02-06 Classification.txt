@@ -1,0 +1,53 @@
+thus far we've been dealing with supervised learning and regression.
+"supervised" - we provide the label along with the data.
+"regression" - the model looks for the best-fit line or curve.
+it's predictive. we want to be able to provide new data and have the model PREDICT a numerical label.
+scikit-learn calls these models "estimators".
+
+but now we're moving onto CLASSIFICATION. 
+it's still supervised, but we are predicting discrete CATEGORIES rather than continuous values.
+instead of "given an x predict a y", we're asking "given an x and a y, what 'class' (group) does this belong to?"
+we'er sorting, not estimating.
+some algos return True or False, some return a probability value between 0 and 1
+
+Different types of classifiers:
+    Binary classifier
+        distinguishes between two different classes.
+    Multi-class
+        distinguishes between more than two different classes, requires different algorithms.
+    One vs All (OVA) or One vs Rest (OVR)
+        some algorithms are good at doing binary classification but not good at multi-class.
+        a trick: classify as either "A or not A", "B or not B", and "C or not C". This is now effectively a multi-class classifier!
+        in some circumstances this is better than building an algorithm that does multi-class classification natively.
+        N classifiers where N = number of classes
+    One vs One
+        Instead of N classifiers, OVO builds N(N-1)/2 classifiers, each trained on a pair of classes.
+        Can be computationally expensive for large class counts.
+
+some classification algorithms:
+    decision trees - recursively choosing features which give the best "split" and create a corresponding tree; leaf nodes provide probability
+    logistic regression - predict what side of the line we're on
+    nearest neighbors - compute the euclidean distance to the nearest samples in the training data and see how many belong to each class
+    SVC (support vector classification) - maximize the width of the "road" between both classes
+
+METRICS (how we measure something)
+what are the metrics of the quality of a trained model?
+raw percentage of correct predictions (technical term is "accuracy") - ignores the fact that maybe we got 95% overall accuracy but only 60% accuracy for group B
+what's a richer kind of metric?
+we can quantify whether we care more about getting positive cases correct vs negative (false positives are much less serious than false negatives in medical diagnoses)
+"confusion matrix":
+                    |predicted negative|    |predicted positive| 
+|actual positive|     true-negative           false-positive
+|actual positive|     false-negative          true-positive
+
+example:
+                    |predicted negative|    |predicted positive| 
+|actual positive|     53,892                  687
+|actual positive|     1,891                   3,530
+
+we obviously want to push false-positives and false-negatives to zero.
+but exactly how much we care proportionately is totally dependent on the problem.
+
+"precision" - (TP)/(TP+FP). driving false positives to zero pushes precision towards 100%.
+"recall" - (TP)/(TP+FN). driving false negatives to zero pushes recall towards 100%.
+if we care about both we use the F1 score (the average of precision of recall; the harmonic average)
