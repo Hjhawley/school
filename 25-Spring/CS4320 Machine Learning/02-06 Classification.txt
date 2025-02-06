@@ -1,53 +1,71 @@
-thus far we've been dealing with supervised learning and regression.
-"supervised" - we provide the label along with the data.
-"regression" - the model looks for the best-fit line or curve.
-it's predictive. we want to be able to provide new data and have the model PREDICT a numerical label.
-scikit-learn calls these models "estimators".
+Thus far, we've been dealing with supervised learning and regression.
+    Supervised Learning
+        The model is trained using labeled data (we provide both the input and the expected output).
+    Regression
+        The model predicts continuous numerical values.
+        It finds the best-fit line or curve.
+        Predictive: Given new data, the model estimates a numerical outcome.
+        In scikit-learn, these models are called "estimators".
 
-but now we're moving onto CLASSIFICATION. 
-it's still supervised, but we are predicting discrete CATEGORIES rather than continuous values.
-instead of "given an x predict a y", we're asking "given an x and a y, what 'class' (group) does this belong to?"
-we'er sorting, not estimating.
-some algos return True or False, some return a probability value between 0 and 1
+Now we're moving onto classification.
+It's still supervised, but we're predicting discrete categories rather than continuous values.
+Instead of "given an X, predict a Y," we're asking, "Given an X and a Y, what 'class' (group) does this belong to?"
+We're sorting, not estimating.
+Some algorithms return True or False, while others return a probability value between 0 and 1.
 
-Different types of classifiers:
-    Binary classifier
-        distinguishes between two different classes.
-    Multi-class
-        distinguishes between more than two different classes, requires different algorithms.
-    One vs All (OVA) or One vs Rest (OVR)
-        some algorithms are good at doing binary classification but not good at multi-class.
-        a trick: classify as either "A or not A", "B or not B", and "C or not C". This is now effectively a multi-class classifier!
-        in some circumstances this is better than building an algorithm that does multi-class classification natively.
-        N classifiers where N = number of classes
-    One vs One
-        Instead of N classifiers, OVO builds N(N-1)/2 classifiers, each trained on a pair of classes.
+Different Types of Classifiers
+    1. Binary Classifier
+        Distinguishes between two different classes.
+    2. Multi-Class Classifier
+        Distinguishes between more than two different classes.
+        Requires different algorithms.
+    3. One-vs-All (OvA) or One-vs-Rest (OvR)
+        Some algorithms work well for binary classification but not for multi-class.
+        A trick: Classify each class separately as "A or not A," "B or not B," and "C or not C." This effectively creates a multi-class classifier.
+        In some cases, this approach is better than building a native multi-class classification algorithm.
+        Uses N classifiers, where N = number of classes.
+    4. One-vs-One (OVO)
+        Instead of N classifiers, OVO builds N(N-1)/2 classifiers.
+        Each classifier is trained on a pair of classes.
         Can be computationally expensive for large class counts.
 
-some classification algorithms:
-    decision trees - recursively choosing features which give the best "split" and create a corresponding tree; leaf nodes provide probability
-    logistic regression - predict what side of the line we're on
-    nearest neighbors - compute the euclidean distance to the nearest samples in the training data and see how many belong to each class
-    SVC (support vector classification) - maximize the width of the "road" between both classes
+Some classification algorithms:
+    Decision Trees – Recursively choose features that provide the best "split" and create a corresponding tree; leaf nodes provide probabilities.
+    Logistic Regression – Predicts which side of the decision boundary an input belongs to.
+    Nearest Neighbors – Computes the Euclidean distance to the nearest samples in the training data and classifies based on the majority.
+    Support Vector Classification (SVC) – Maximizes the width of the "road" (margin) between classes.
 
-METRICS (how we measure something)
-what are the metrics of the quality of a trained model?
-raw percentage of correct predictions (technical term is "accuracy") - ignores the fact that maybe we got 95% overall accuracy but only 60% accuracy for group B
-what's a richer kind of metric?
-we can quantify whether we care more about getting positive cases correct vs negative (false positives are much less serious than false negatives in medical diagnoses)
-"confusion matrix":
-                    |predicted negative|    |predicted positive| 
-|actual positive|     true-negative           false-positive
-|actual positive|     false-negative          true-positive
+Metrics (how we measure the quality of a model)
+Accuracy
+    The raw percentage of correct predictions.
+    Limitation: It ignores class imbalances (e.g., 95% overall accuracy but only 60% accuracy for Group B).
 
-example:
-                    |predicted negative|    |predicted positive| 
-|actual positive|     53,892                  687
-|actual positive|     1,891                   3,530
+Confusion Matrix
+    A confusion matrix helps analyze prediction errors:
+                      | Predicted Negative  | Predicted Positive  |
+    |-----------------|---------------------|---------------------|
+    | Actual Negative | True Negative (TN)  | False Positive (FP) |
+    | Actual Positive | False Negative (FN) | True Positive (TP)  |
 
-we obviously want to push false-positives and false-negatives to zero.
-but exactly how much we care proportionately is totally dependent on the problem.
+    Example:
+                      | Predicted Negative  | Predicted Positive  |
+    |-----------------|---------------------|---------------------|
+    | Actual Negative | 53,892              | 687                 |
+    | Actual Positive | 1,891               | 3,530               |
 
-"precision" - (TP)/(TP+FP). driving false positives to zero pushes precision towards 100%.
-"recall" - (TP)/(TP+FN). driving false negatives to zero pushes recall towards 100%.
-if we care about both we use the F1 score (the average of precision of recall; the harmonic average)
+    We want to minimize false positives (FP) and false negatives (FN).
+    How much we care about FP vs. FN depends on the problem.
+    (false negatives in medical diagnoses are much worse than false positives)
+
+Precision, Recall, and F1 Score
+Precision = (TP)/(TP + FP)
+    Measures how many predicted positives are actually correct.
+    Higher precision means fewer false positives.
+
+Recall = (TP)/(TP + FN)
+    Measures how many actual positives were correctly identified.
+    Higher recall means fewer false negatives.
+
+F1 Score = 2 * [(Precision * Recall) / (Precision + Recall)]
+    Harmonic mean of precision and recall.
+    Useful when both false positives and false negatives matter.
