@@ -1,0 +1,9 @@
+initialize 3 nodes
+
+// node 3 starts a proposal
+at 1001 send prepare request from 3
+
+// deliver all three prepare requests, each triggering a response
+at 1002 deliver prepare request message to 2 from time 1001
+at 1003 deliver prepare request message to 3 from time 1001
+at 1004 deliver prepare request message to 1 from time 1001

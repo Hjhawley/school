@@ -1,0 +1,5 @@
+--> initialized 3 nodes
+--> sent prepare requests to all nodes from 3 with sequence 5003
+--> prepare request from 3 sequence 5003 accepted by 2 with no value
+--> prepare request from 3 sequence 5003 accepted by 3 with no value
+--> prepare request from 3 sequence 5003 accepted by 1 with no value
