@@ -306,9 +306,7 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 
 			// store that in the node’s state
 			proposer.CurrentValue = chosenVal
-
-			fmt.Printf("node %d now sending accept requests for proposal=%d value=%d\n",
-				target, propNum, chosenVal)
+			fmt.Printf("--> prepare round successful: %d proposing its own value %d\n", target, chosenVal)
 
 			// reset accept counters
 			proposer.AcceptOKs = 0
