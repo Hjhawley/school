@@ -286,30 +286,30 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 		proposer.PromisesReceived++
 		fmt.Printf("--> positive prepare response from %d sequence %d recorded by %d with no value\n",
 			fromNode, propNum, target)
-	
+
 		// if the acceptor had a previously accepted value with a high seq
 		if accSeq > proposer.AcceptSequence {
 			proposer.AcceptSequence = accSeq
 			proposer.AcceptValue = accVal
 		}
-	
+
 		// if we cross majority, check if we haven't already begun accept phase
 		if proposer.PromisesReceived >= s.majority() && !proposer.AlreadySentAccept {
 			proposer.AlreadySentAccept = true
-	
+
 			// The chosen value
 			chosenVal := proposer.CurrentValue
 			if proposer.AcceptSequence > 0 {
 				chosenVal = proposer.AcceptValue
 			}
-	
+
 			proposer.CurrentValue = chosenVal
 			fmt.Printf("--> prepare round successful: %d proposing its own value %d\n", target, chosenVal)
-	
+
 			// reset accept counters
 			proposer.AcceptOKs = 0
 			proposer.AcceptRejects = 0
-	
+
 			// broadcast accept requests
 			for t := 1; t <= len(s.Nodes); t++ {
 				k := Key{Type: MsgAcceptRequest, Time: deliverTime, Target: t}
