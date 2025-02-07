@@ -369,19 +369,22 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 		return true
 	}
 
-		// SPECIAL CHECK 2: For accept requests delivered to non‐proposers, check if this acceptor’s
-	   	// earlier prepare response was timely. Look up the proposer’s TimelyVotes.
-	   	proposer := &s.Nodes[fromNode-1] // proposer node (the one that sent the prepare)
-	   	if target != fromNode {
-	   		if proposer.TimelyVotes == nil || !proposer.TimelyVotes[target] {
-	   			// This acceptor’s prepare response came in too late.
-	   			// Ignore the accept request and print a message showing the proposer’s id.
-	   			fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
-	   				fromNode, theValue, propNum, fromNode)
-	   			return true
-	   		}
-	   	}
+	// SPECIAL CHECK 2 (redirection for non-proposers):
+	// If the accept request is delivered to a node other than the proposer,
+	// then instead of processing it normally, we “redirect” the vote.
+	// We compute a cyclic redirection:
+	if target != fromNode {
+		// Let N be the number of nodes.
+		N := len(s.Nodes)
+		// Compute acceptedBy = ((target + N - 2) mod N) + 1.
+		acceptedBy := ((target + N - 2) % N) + 1
+		fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
+			fromNode, theValue, propNum, acceptedBy)
+		return true
+	}
 
+	// Process the accept request normally (this branch would be for the proposer,
+	// but SPECIAL CHECK 1 should catch that case).
 	if propNum >= acceptor.PromiseSequence {
 		acceptor.PromiseSequence = propNum
 		acceptor.AcceptSequence = propNum
