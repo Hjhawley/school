@@ -20,7 +20,7 @@ type State struct {
 // simulation. If each node was actually running on its own machine, this
 // would be all of its state.
 type Node struct {
-	PromiseSequence int
+	PromiseSequence int // the highest proposal number this node has ever promised
 	AcceptSequence  int
 	AcceptValue     int
 
@@ -82,7 +82,7 @@ func main() {
 		switch {
 		case state.TryInitialize(line):
 		case state.TrySendPrepare(line):
-		//case state.TryDeliverPrepareRequest(line):
+		case state.TryDeliverPrepareRequest(line):
 		//case state.TryDeliverPrepareResponse(line):
 		//case state.TryDeliverAcceptRequest(line):
 		//case state.TryDeliverAcceptResponse(line):
@@ -112,7 +112,9 @@ func (s *State) TryInitialize(line string) bool {
 		return false
 	}
 
-	// rest of implementation for this input goes here...
+	s.Nodes = make([]Node, size)
+    fmt.Printf("initialized %d nodes\n", size)
+    return true
 }
 
 // TrySendPrepare handles message of the form:
@@ -128,7 +130,73 @@ func (s *State) TrySendPrepare(line string) bool {
 		return false
 	}
 
-	// rest of implementation for this input goes here...
+	// This node picks a new proposal number, old + 1
+    propNum := s.Nodes[me-1].PromiseSequence + 1
+    s.Nodes[me-1].PromiseSequence = propNum
+
+    for i := range s.Nodes {
+        targetID := i + 1
+        if targetID == me {
+            continue // do we want to send to ourselves? idk
+        }
+        k := Key{Type: MsgPrepareRequest, Time: ts, Target: targetID}
+        msg := fmt.Sprintf("proposal=%d from=%d", propNum, me)
+        s.Messages[k] = msg
+    }
+
+    fmt.Printf("node %d sending prepare request with proposal=%d at time=%d\n",
+        me, propNum, ts)
+    return true
 }
 
-// additional message handlers continue here...
+//
+//     at 1002 deliver prepare request message to 2 from time 1001
+//
+func (s *State) TryDeliverPrepareRequest(line string) bool {
+    var deliverTime, target, sendTime int
+    n, err := fmt.Sscanf(line, "at %d deliver prepare request message to %d from time %d\n",
+        &deliverTime, &target, &sendTime)
+    if err != nil || n != 3 {
+        return false
+    }
+
+    key := Key{Type: MsgPrepareRequest, Time: sendTime, Target: target}
+    msg, ok := s.Messages[key]
+    if !ok {
+        log.Fatalf("No matching prepare request message: %v", key)
+    }
+    delete(s.Messages, key)
+
+    var propNum, fromNode int
+    n, err = fmt.Sscanf(msg, "proposal=%d from=%d", &propNum, &fromNode)
+    if err != nil || n != 2 {
+        log.Fatalf("Malformed prepare request message: %q", msg)
+    }
+
+    // If this proposal number is larger than anything we've promised, update our promise sequence
+    node := &s.Nodes[target-1]
+    if propNum > node.PromiseSequence {
+        node.PromiseSequence = propNum
+
+        respKey := Key{Type: MsgPrepareResponse, Time: deliverTime, Target: fromNode}
+        respMsg := fmt.Sprintf("proposal=%d from=%d acceptedSeq=%d acceptedVal=%d",
+            propNum,
+            target,
+            node.AcceptSequence,
+            node.AcceptValue,
+        )
+        s.Messages[respKey] = respMsg
+
+        fmt.Printf("node %d received prepare request with proposal=%d from node %d; promised\n",
+            target, propNum, fromNode)
+        fmt.Printf("  (stored prepare response message at time=%d for node %d)\n",
+            deliverTime, fromNode)
+
+    } else {
+        // If we’ve already promised a higher proposal #, reject
+        fmt.Printf("node %d received prepare request with proposal=%d from node %d; rejected (already promised %d)\n",
+            target, propNum, fromNode, node.PromiseSequence)
+    }
+
+    return true
+}
