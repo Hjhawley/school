@@ -270,8 +270,12 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 	}
 
 	if proposer.PrepareResponses[propNum][fromNode] {
-		fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
-			fromNode, propNum, target)
+		if proposer.AlreadySentAccept {
+			fmt.Printf("--> note: consensus has been achieved\n")
+		} else {
+			fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
+				fromNode, propNum, target)
+		}
 		return true
 	}
 
