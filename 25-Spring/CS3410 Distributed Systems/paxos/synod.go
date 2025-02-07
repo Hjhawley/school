@@ -279,7 +279,6 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 
 	if isOk {
 		// Record the response.
-		// Use the old count (before incrementing) to decide if it was timely.
 		oldCount := proposer.PromisesReceived
 		proposer.PromisesReceived++
 		fmt.Printf("--> positive prepare response from %d sequence %d recorded by %d with no value\n",
@@ -290,12 +289,17 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 			proposer.AcceptValue = accVal
 		}
 
-		// Record as timely only if the response came in before reaching majority.
-		if !proposer.AlreadySentAccept && oldCount < s.majority() {
+		// For non‐proposer responses, only record them as timely if we haven’t yet
+		// recorded a non‐proposer vote. (For a three‐node system, majority is 2 so we want at most one.)
+		if fromNode != target && !proposer.AlreadySentAccept && oldCount < (s.majority()-1) {
+			proposer.TimelyVotes[fromNode] = true
+		}
+		// Always treat the proposer’s own vote as timely.
+		if fromNode == target {
 			proposer.TimelyVotes[fromNode] = true
 		}
 
-		// If we cross the majority threshold and have not yet begun the accept phase…
+		// Check if we have reached (or exceeded) the majority and trigger accept phase if not already done.
 		if !proposer.AlreadySentAccept && proposer.PromisesReceived >= s.majority() {
 			proposer.AlreadySentAccept = true
 
@@ -319,6 +323,7 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 			fmt.Printf("--> sent accept requests to all nodes from %d with value %d sequence %d\n",
 				target, chosenVal, propNum)
 		}
+
 	} else if isReject {
 		proposer.RejectionsReceived++
 		fmt.Printf("node %d got prepare_reject from node %d (proposal=%d, promised=%d)\n",
@@ -364,18 +369,18 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 		return true
 	}
 
-	// SPECIAL CHECK 2: For accept requests delivered to non‐proposers, check if this acceptor’s
-	// earlier prepare response was timely. Look up the proposer’s TimelyVotes.
-	proposer := &s.Nodes[fromNode-1] // proposer node (the one that sent the prepare)
-	if target != fromNode {
-		if proposer.TimelyVotes == nil || !proposer.TimelyVotes[target] {
-			// This acceptor’s prepare response came in too late.
-			// Ignore the accept request and print a message showing the proposer’s id.
-			fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
-				fromNode, theValue, propNum, fromNode)
-			return true
-		}
-	}
+		// SPECIAL CHECK 2: For accept requests delivered to non‐proposers, check if this acceptor’s
+	   	// earlier prepare response was timely. Look up the proposer’s TimelyVotes.
+	   	proposer := &s.Nodes[fromNode-1] // proposer node (the one that sent the prepare)
+	   	if target != fromNode {
+	   		if proposer.TimelyVotes == nil || !proposer.TimelyVotes[target] {
+	   			// This acceptor’s prepare response came in too late.
+	   			// Ignore the accept request and print a message showing the proposer’s id.
+	   			fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
+	   				fromNode, theValue, propNum, fromNode)
+	   			return true
+	   		}
+	   	}
 
 	if propNum >= acceptor.PromiseSequence {
 		acceptor.PromiseSequence = propNum
