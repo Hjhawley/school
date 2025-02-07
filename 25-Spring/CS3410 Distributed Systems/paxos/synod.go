@@ -276,8 +276,7 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 
 	if isOk {
 		proposer.PromisesReceived++
-		fmt.Printf("node %d got prepare_ok from node %d (proposal=%d)\n",
-			target, fromNode, propNum)
+		fmt.Printf("--> positive prepare response from %d sequence %d recorded by %d with no value\n", fromNode, propNum, target)
 
 		// If this acceptor had a previously accepted value with a high seq,
 		// pick that value if it's higher than anything else we've seen.
