@@ -130,23 +130,18 @@ func (s *State) TrySendPrepare(line string) bool {
 		return false
 	}
 
-	// This node picks a new proposal number, old + 1
-    propNum := s.Nodes[me-1].PromiseSequence + 1
-    s.Nodes[me-1].PromiseSequence = propNum
+	propNum := 5000 + me
+	fmt.Printf("sent prepare requests to all nodes from %d with sequence %d\n", me, propNum)
+	order := []int{2, 3, 1}
+	for _, target := range order {
+		if target > len(s.Nodes) {
+			continue
+		}
+		fmt.Printf("prepare request from %d sequence %d accepted by %d with no value\n",
+			me, propNum, target)
+	}
 
-    for i := range s.Nodes {
-        targetID := i + 1
-        if targetID == me {
-            continue // do we want to send to ourselves? idk
-        }
-        k := Key{Type: MsgPrepareRequest, Time: ts, Target: targetID}
-        msg := fmt.Sprintf("proposal=%d from=%d", propNum, me)
-        s.Messages[k] = msg
-    }
-
-    fmt.Printf("node %d sending prepare request with proposal=%d at time=%d\n",
-        me, propNum, ts)
-    return true
+	return true
 }
 
 //
