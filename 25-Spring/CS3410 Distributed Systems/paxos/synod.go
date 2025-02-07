@@ -32,6 +32,7 @@ type Node struct {
 	DecidedValue       int
 	HasDecided         bool
 	PrepareResponses   map[int]map[int]bool // track who has already responded to which proposal
+	AlreadySentAccept  bool
 }
 
 // The different message types that are transmitted across the network.
@@ -158,7 +159,7 @@ func (s *State) TrySendPrepare(line string) bool {
 	// Reset counters for a new prepare round
 	node.PromisesReceived = 0
 	node.RejectionsReceived = 0
-
+	node.AlreadySentAccept = false
 	node.CurrentValue = 11111 * me
 
 	for target := 1; target <= len(s.Nodes); target++ {
@@ -283,35 +284,33 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 
 	if isOk {
 		proposer.PromisesReceived++
-		fmt.Printf("--> positive prepare response from %d sequence %d recorded by %d with no value\n", fromNode, propNum, target)
-
-		// If this acceptor had a previously accepted value with a high seq,
-		// pick that value if it's higher than anything else we've seen.
-		// For a single decision, track the highest AcceptSequence returned so far:
-		// e.g. store them in some local field if you want. We'll do a quick inline:
+		fmt.Printf("--> positive prepare response from %d sequence %d recorded by %d with no value\n",
+			fromNode, propNum, target)
+	
+		// if the acceptor had a previously accepted value with a high seq
 		if accSeq > proposer.AcceptSequence {
 			proposer.AcceptSequence = accSeq
 			proposer.AcceptValue = accVal
 		}
-
-		// If we cross majority, we proceed to accept phase
-		if proposer.PromisesReceived >= s.majority() {
-			// The chosen value is either what we gleaned from the highest accepted, or our own if none
+	
+		// if we cross majority, check if we haven't already begun accept phase
+		if proposer.PromisesReceived >= s.majority() && !proposer.AlreadySentAccept {
+			proposer.AlreadySentAccept = true
+	
+			// The chosen value
 			chosenVal := proposer.CurrentValue
 			if proposer.AcceptSequence > 0 {
 				chosenVal = proposer.AcceptValue
-			} else {
-				chosenVal = 11111 * (target) // or keep proposer's default
 			}
-
-			// store that in the node’s state
+	
 			proposer.CurrentValue = chosenVal
-			fmt.Printf("--> prepare round successful: %d proposing its own value %d\n", target, chosenVal)
-
+			fmt.Printf("--> sent accept requests to all nodes from %d with value %d sequence %d\n",
+				target, chosenVal, propNum)
+	
 			// reset accept counters
 			proposer.AcceptOKs = 0
 			proposer.AcceptRejects = 0
-
+	
 			// broadcast accept requests
 			for t := 1; t <= len(s.Nodes); t++ {
 				k := Key{Type: MsgAcceptRequest, Time: deliverTime, Target: t}
@@ -320,7 +319,6 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 				s.Messages[k] = m
 			}
 		}
-
 	} else if isReject {
 		proposer.RejectionsReceived++
 		fmt.Printf("node %d got prepare_reject from node %d (proposal=%d, promised=%d)\n",
@@ -331,9 +329,6 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 			proposer.CurrentProposalNum += 10
 			fmt.Printf("node %d sees majority reject for proposal=%d; next proposal=%d\n",
 				target, propNum, proposer.CurrentProposalNum)
-			// Potentially, the proposer might automatically send a new prepare
-			// request here. Or we just wait for the script to do it.
-			// Up to you/your assignment spec.
 		}
 	}
 
