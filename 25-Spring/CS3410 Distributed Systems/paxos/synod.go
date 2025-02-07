@@ -379,7 +379,7 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 		fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
 			fromNode, theValue, propNum, acceptedBy)
 		return true
-	}	
+	}
 
 	// SPECIAL CHECK 2 (redirection for non-proposers):
 	// If the accept request is delivered to a node other than the proposer,
