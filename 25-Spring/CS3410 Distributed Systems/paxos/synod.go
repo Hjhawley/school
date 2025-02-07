@@ -235,8 +235,7 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 	if !ok {
 		log.Fatalf("No matching prepare response message: %v", key)
 	}
-	// do NOT delete if you want repeated deliveries
-	// delete(s.Messages, key)
+	// do not delete
 
 	propNum, fromNode, promised := 0, 0, 0
 	accSeq, accVal := 0, 0
@@ -279,44 +278,51 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 		return true
 	}
 
-	// first time seeing fromNode for this proposal
+	// record this new response
 	proposer.PrepareResponses[propNum][fromNode] = true
+
+	// Ignore any extra responses after accept phase has started
+	if proposer.AlreadySentAccept {
+		return true
+	}
 
 	if isOk {
 		proposer.PromisesReceived++
 		fmt.Printf("--> positive prepare response from %d sequence %d recorded by %d with no value\n",
 			fromNode, propNum, target)
 
-		// if the acceptor had a previously accepted value with a high seq
+		// If the acceptor had a previously accepted value with a higher sequence,
+		// update the proposer’s record.
 		if accSeq > proposer.AcceptSequence {
 			proposer.AcceptSequence = accSeq
 			proposer.AcceptValue = accVal
 		}
 
-		// if we cross majority, check if we haven't already begun accept phase
+		// Check if we have reached a majority and have not yet begun the accept phase.
 		if proposer.PromisesReceived >= s.majority() && !proposer.AlreadySentAccept {
 			proposer.AlreadySentAccept = true
 
-			// The chosen value
+			// Determine the chosen value.
 			chosenVal := proposer.CurrentValue
 			if proposer.AcceptSequence > 0 {
 				chosenVal = proposer.AcceptValue
 			}
-
 			proposer.CurrentValue = chosenVal
 			fmt.Printf("--> prepare round successful: %d proposing its own value %d\n", target, chosenVal)
 
-			// reset accept counters
+			// Reset accept counters.
 			proposer.AcceptOKs = 0
 			proposer.AcceptRejects = 0
 
-			// broadcast accept requests
+			// Broadcast accept requests to all nodes.
 			for t := 1; t <= len(s.Nodes); t++ {
 				k := Key{Type: MsgAcceptRequest, Time: deliverTime, Target: t}
 				m := fmt.Sprintf("accept_req proposal=%d value=%d from=%d",
 					propNum, chosenVal, target)
 				s.Messages[k] = m
 			}
+			fmt.Printf("--> sent accept requests to all nodes from %d with value %d sequence %d\n",
+				target, chosenVal, propNum)
 		}
 	} else if isReject {
 		proposer.RejectionsReceived++
@@ -324,7 +330,7 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 			target, fromNode, propNum, promised)
 
 		if proposer.RejectionsReceived >= s.majority() {
-			// The proposer gives up on this propNum and picks a new one
+			// The proposer gives up on this proposal and picks a new one.
 			proposer.CurrentProposalNum += 10
 			fmt.Printf("node %d sees majority reject for proposal=%d; next proposal=%d\n",
 				target, propNum, proposer.CurrentProposalNum)
