@@ -113,7 +113,7 @@ func (s *State) TryInitialize(line string) bool {
 	}
 
 	s.Nodes = make([]Node, size)
-    fmt.Printf("initialized %d nodes\n", size)
+    fmt.Printf("--> initialized %d nodes\n", size)
     return true
 }
 
@@ -131,7 +131,7 @@ func (s *State) TrySendPrepare(line string) bool {
     }
 
     propNum := 5000 + me
-	fmt.Printf("sent prepare requests to all nodes from %d with sequence %d\n", me, propNum)
+	fmt.Printf("--> sent prepare requests to all nodes from %d with sequence %d\n", me, propNum)
 
     // Store a prepare request message for each node, so we can deliver it
     // individually using "at X deliver prepare request message to Y from time X".
@@ -166,6 +166,6 @@ func (s *State) TryDeliverPrepareRequest(line string) bool {
         log.Fatalf("Malformed prepare request message: %q", msg)
     }
 
-    fmt.Printf("prepare request from %d sequence %d accepted by %d with no value\n", fromNode, propNum, target)
+    fmt.Printf("--> prepare request from %d sequence %d accepted by %d with no value\n", fromNode, propNum, target)
     return true
 }
