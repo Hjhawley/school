@@ -411,7 +411,7 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
 	}
 
 	propNum, fromNode, promised := 0, 0, 0
-	isOk, isReject := false, false
+	isOk := false
 
 	_, errOk := fmt.Sscanf(msg, "accept_ok proposal=%d fromNode=%d",
 		&propNum, &fromNode)
@@ -420,9 +420,7 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
 	} else {
 		_, errRej := fmt.Sscanf(msg, "accept_reject proposal=%d fromNode=%d promised=%d",
 			&propNum, &fromNode, &promised)
-		if errRej == nil {
-			isReject = true
-		} else {
+		if !(errRej == nil) {
 			log.Fatalf("Unrecognized accept response: %s", msg)
 		}
 	}
