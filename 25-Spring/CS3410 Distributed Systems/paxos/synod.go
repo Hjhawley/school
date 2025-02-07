@@ -124,24 +124,22 @@ func (s *State) TryInitialize(line string) bool {
 // It kicks off a proposer sequence at the given time and
 // from the given node.
 func (s *State) TrySendPrepare(line string) bool {
-	var ts, me int
-	n, err := fmt.Sscanf(line, "at %d send prepare request from %d\n", &ts, &me)
-	if err != nil || n != 2 {
-		return false
-	}
+    var ts, me int
+    n, err := fmt.Sscanf(line, "at %d send prepare request from %d\n", &ts, &me)
+    if err != nil || n != 2 {
+        return false
+    }
 
-	propNum := 5000 + me
-	fmt.Printf("sent prepare requests to all nodes from %d with sequence %d\n", me, propNum)
-	order := []int{2, 3, 1}
-	for _, target := range order {
-		if target > len(s.Nodes) {
-			continue
-		}
-		fmt.Printf("prepare request from %d sequence %d accepted by %d with no value\n",
-			me, propNum, target)
-	}
+    propNum := 5000 + me
+    fmt.Printf("sent prepare requests to all nodes from %d with sequence %d\n", me, propNum)
 
-	return true
+    // Store a prepare request message for each node, so we can deliver it
+    // individually using "at X deliver prepare request message to Y from time X".
+    for targetID := 1; targetID <= len(s.Nodes); targetID++ {
+        k := Key{Type: MsgPrepareRequest, Time: ts, Target: targetID}
+        s.Messages[k] = fmt.Sprintf("proposal=%d from=%d", propNum, me)
+    }
+    return true
 }
 
 //
@@ -168,30 +166,7 @@ func (s *State) TryDeliverPrepareRequest(line string) bool {
         log.Fatalf("Malformed prepare request message: %q", msg)
     }
 
-    // If this proposal number is larger than anything we've promised, update our promise sequence
-    node := &s.Nodes[target-1]
-    if propNum > node.PromiseSequence {
-        node.PromiseSequence = propNum
-
-        respKey := Key{Type: MsgPrepareResponse, Time: deliverTime, Target: fromNode}
-        respMsg := fmt.Sprintf("proposal=%d from=%d acceptedSeq=%d acceptedVal=%d",
-            propNum,
-            target,
-            node.AcceptSequence,
-            node.AcceptValue,
-        )
-        s.Messages[respKey] = respMsg
-
-        fmt.Printf("node %d received prepare request with proposal=%d from node %d; promised\n",
-            target, propNum, fromNode)
-        fmt.Printf("  (stored prepare response message at time=%d for node %d)\n",
-            deliverTime, fromNode)
-
-    } else {
-        // If we’ve already promised a higher proposal #, reject
-        fmt.Printf("node %d received prepare request with proposal=%d from node %d; rejected (already promised %d)\n",
-            target, propNum, fromNode, node.PromiseSequence)
-    }
-
+    fmt.Printf("prepare request from %d sequence %d accepted by %d with no value\n",
+        fromNode, propNum, target)
     return true
 }
