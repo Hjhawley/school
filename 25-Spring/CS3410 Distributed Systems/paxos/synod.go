@@ -378,8 +378,8 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 		respMsg := fmt.Sprintf("accept_ok proposal=%d fromNode=%d", propNum, target)
 		s.Messages[respKey] = respMsg
 
-		fmt.Printf("node %d accepted proposal=%d value=%d (from node %d)\n",
-			target, propNum, theValue, fromNode)
+		fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
+			fromNode, theValue, propNum, target)
 	} else {
 		// Reject the proposal.
 		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: fromNode}
