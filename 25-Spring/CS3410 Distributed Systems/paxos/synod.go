@@ -20,18 +20,18 @@ type State struct {
 // simulation. If each node was actually running on its own machine, this
 // would be all of its state.
 type Node struct {
-	PromiseSequence 	int // highest prepare # promised
-	AcceptSequence  	int // highest accept # accepted
-	AcceptValue     	int // value accepted for AcceptSequence
-	CurrentProposalNum 	int
-	CurrentValue       	int
-	PromisesReceived   	int
-	RejectionsReceived 	int
-	AcceptOKs     		int
-	AcceptRejects 		int
-	DecidedValue   		int
-	HasDecided     		bool
-	PrepareResponses 	map[int]map[int]bool // track who has already responded to which proposal
+	PromiseSequence    int // highest prepare # promised
+	AcceptSequence     int // highest accept # accepted
+	AcceptValue        int // value accepted for AcceptSequence
+	CurrentProposalNum int
+	CurrentValue       int
+	PromisesReceived   int
+	RejectionsReceived int
+	AcceptOKs          int
+	AcceptRejects      int
+	DecidedValue       int
+	HasDecided         bool
+	PrepareResponses   map[int]map[int]bool // track who has already responded to which proposal
 }
 
 // The different message types that are transmitted across the network.
@@ -113,7 +113,7 @@ func (s *State) majority() int {
 
 // TryInitialize handles messages of the form:
 //
-//     initialize 3 nodes
+//	initialize 3 nodes
 //
 // It initilizes the per-node state and is called exactly once
 // before any other message type.
@@ -125,13 +125,13 @@ func (s *State) TryInitialize(line string) bool {
 	}
 
 	s.Nodes = make([]Node, size)
-    fmt.Printf("--> initialized %d nodes\n", size)
-    return true
+	fmt.Printf("--> initialized %d nodes\n", size)
+	return true
 }
 
 // TrySendPrepare handles message of the form:
 //
-//     at 1001 send prepare request from 3
+//	at 1001 send prepare request from 3
 //
 // It kicks off a proposer sequence at the given time and
 // from the given node.
@@ -142,7 +142,7 @@ func (s *State) TrySendPrepare(line string) bool {
 		return false
 	}
 
-    node := &s.Nodes[me-1]
+	node := &s.Nodes[me-1]
 	if node.CurrentProposalNum < 5000+me {
 		node.CurrentProposalNum = 5000 + me
 	}
@@ -151,7 +151,7 @@ func (s *State) TrySendPrepare(line string) bool {
 	if node.PrepareResponses == nil {
 		node.PrepareResponses = make(map[int]map[int]bool)
 	}
-	node.PrepareResponses[pnum] = make(map[int]bool)
+	node.PrepareResponses[propNum] = make(map[int]bool)
 
 	fmt.Printf("--> sent prepare requests to all nodes from %d with sequence %d\n", me, propNum)
 
@@ -170,29 +170,27 @@ func (s *State) TrySendPrepare(line string) bool {
 	return true
 }
 
-//
-//     at 1002 deliver prepare request message to 2 from time 1001
-//
+// at 1002 deliver prepare request message to 2 from time 1001
 func (s *State) TryDeliverPrepareRequest(line string) bool {
-    var deliverTime, target, sendTime int
-    n, err := fmt.Sscanf(line, "at %d deliver prepare request message to %d from time %d\n",
-        &deliverTime, &target, &sendTime)
-    if err != nil || n != 3 {
-        return false
-    }
+	var deliverTime, target, sendTime int
+	n, err := fmt.Sscanf(line, "at %d deliver prepare request message to %d from time %d\n",
+		&deliverTime, &target, &sendTime)
+	if err != nil || n != 3 {
+		return false
+	}
 
-    key := Key{Type: MsgPrepareRequest, Time: sendTime, Target: target}
-    msg, ok := s.Messages[key]
-    if !ok {
-        log.Fatalf("No matching prepare request message: %v", key)
-    }
-    // delete(s.Messages, key) // we don't want to delete
+	key := Key{Type: MsgPrepareRequest, Time: sendTime, Target: target}
+	msg, ok := s.Messages[key]
+	if !ok {
+		log.Fatalf("No matching prepare request message: %v", key)
+	}
+	// delete(s.Messages, key) // we don't want to delete
 
-    var propNum, fromNode int
-    n, err = fmt.Sscanf(msg, "proposal=%d from=%d", &propNum, &fromNode)
-    if err != nil || n != 2 {
-        log.Fatalf("Malformed prepare request message: %q", msg)
-    }
+	var propNum, fromNode int
+	n, err = fmt.Sscanf(msg, "proposal=%d from=%d", &propNum, &fromNode)
+	if err != nil || n != 2 {
+		log.Fatalf("Malformed prepare request message: %q", msg)
+	}
 
 	// Node "target" is the acceptor receiving the prepare.
 	acceptor := &s.Nodes[target-1]
@@ -218,7 +216,7 @@ func (s *State) TryDeliverPrepareRequest(line string) bool {
 			target, propNum, fromNode, acceptor.PromiseSequence)
 	}
 
-return true
+	return true
 }
 
 func (s *State) TryDeliverPrepareResponse(line string) bool {
@@ -262,26 +260,26 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 	}
 
 	proposer := &s.Nodes[target-1]
-    if propNum != proposer.CurrentProposalNum {
-        // stale proposal, ignore
-        return true
-    }
+	if propNum != proposer.CurrentProposalNum {
+		// stale proposal, ignore
+		return true
+	}
 
-    // ensure the map is created
-    if proposer.PrepareResponses[propNum] == nil {
-        proposer.PrepareResponses[propNum] = make(map[int]bool)
-    }
+	// ensure the map is created
+	if proposer.PrepareResponses[propNum] == nil {
+		proposer.PrepareResponses[propNum] = make(map[int]bool)
+	}
 
-    // check if fromNode has already responded
-    if proposer.PrepareResponses[propNum][fromNode] {
-        // DUPLICATE!
-        fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
-            fromNode, propNum, target)
-        return true
-    }
+	// check if fromNode has already responded
+	if proposer.PrepareResponses[propNum][fromNode] {
+		// DUPLICATE!
+		fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
+			fromNode, propNum, target)
+		return true
+	}
 
-    // first time seeing fromNode for this proposal
-    proposer.PrepareResponses[propNum][fromNode] = true
+	// first time seeing fromNode for this proposal
+	proposer.PrepareResponses[propNum][fromNode] = true
 
 	if isOk {
 		proposer.PromisesReceived++
@@ -336,7 +334,7 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 			fmt.Printf("node %d sees majority reject for proposal=%d; next proposal=%d\n",
 				target, propNum, proposer.CurrentProposalNum)
 			// Potentially, the proposer might automatically send a new prepare
-			// request here. Or we just wait for the script to do it. 
+			// request here. Or we just wait for the script to do it.
 			// Up to you/your assignment spec.
 		}
 	}
@@ -344,9 +342,7 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 	return true
 }
 
-//
-//     at 1009 deliver accept request message to 1 from time 1006
-//
+// at 1009 deliver accept request message to 1 from time 1006
 func (s *State) TryDeliverAcceptRequest(line string) bool {
 	var deliverTime, target, sendTime int
 	n, err := fmt.Sscanf(line,
@@ -398,9 +394,7 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 	return true
 }
 
-//
-//     at 1011 deliver accept response message to 3 from time 1008
-//
+// at 1011 deliver accept response message to 3 from time 1008
 func (s *State) TryDeliverAcceptResponse(line string) bool {
 	var deliverTime, target, sendTime int
 	n, err := fmt.Sscanf(line,
@@ -475,9 +469,7 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
 	return true
 }
 
-//
-//     at 1014 deliver decide request message to 1 from time 1012
-//
+// at 1014 deliver decide request message to 1 from time 1012
 func (s *State) TryDeliverDecideRequest(line string) bool {
 	var deliverTime, target, sendTime int
 	n, err := fmt.Sscanf(line,
