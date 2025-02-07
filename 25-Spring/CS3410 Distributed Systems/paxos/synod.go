@@ -20,9 +20,13 @@ type State struct {
 // simulation. If each node was actually running on its own machine, this
 // would be all of its state.
 type Node struct {
-	PromiseSequence int // the highest proposal number this node has ever promised
-	AcceptSequence  int
-	AcceptValue     int
+	PromiseSequence 	int // the highest proposal number this node has ever promised
+	AcceptSequence  	int
+	AcceptValue     	int
+	CurrentProposalNum 	int
+	CurrentValue       	int
+	PromisesReceived   	int
+	RejectionsReceived 	int
 
 	// other per-node data should be added here
 }
@@ -83,8 +87,8 @@ func main() {
 		case state.TryInitialize(line):
 		case state.TrySendPrepare(line):
 		case state.TryDeliverPrepareRequest(line):
-		//case state.TryDeliverPrepareResponse(line):
-		//case state.TryDeliverAcceptRequest(line):
+		case state.TryDeliverPrepareResponse(line):
+		case state.TryDeliverAcceptRequest(line):
 		//case state.TryDeliverAcceptResponse(line):
 		//case state.TryDeliverDecideRequest(line):
 		default:
@@ -158,7 +162,7 @@ func (s *State) TryDeliverPrepareRequest(line string) bool {
     if !ok {
         log.Fatalf("No matching prepare request message: %v", key)
     }
-    delete(s.Messages, key)
+    // delete(s.Messages, key) // we don't want to delete
 
     var propNum, fromNode int
     n, err = fmt.Sscanf(msg, "proposal=%d from=%d", &propNum, &fromNode)
@@ -169,3 +173,34 @@ func (s *State) TryDeliverPrepareRequest(line string) bool {
     fmt.Printf("--> prepare request from %d sequence %d accepted by %d with no value\n", fromNode, propNum, target)
     return true
 }
+
+func (s *State) TryDeliverPrepareResponse(line string) bool {
+    // something like:
+    // at 1005 deliver prepare response message to 3 from time 1002
+    // parse:
+    var deliverTime, target, sendTime int
+    n, err := fmt.Sscanf(line, 
+        "at %d deliver prepare response message to %d from time %d\n",
+        &deliverTime, &target, &sendTime)
+    if err != nil || n != 3 {
+        return false
+    }
+
+    key := Key{Type: MsgPrepareResponse, Time: sendTime, Target: target}
+    msg, ok := s.Messages[key]
+    if !ok {
+        log.Fatalf("No matching prepare response message: %v", key)
+    }
+
+    // DO NOT delete if you want re-delivery to be possible
+    // parse the message to see if it's "ok" or "reject," etc.
+
+    // Then update the proposer's state:
+    // s.Nodes[target-1] is the “proposer” that receives this response
+    // e.g. record that we got a positive (prepare_ok) or negative (prepare_reject) vote
+    // if we just crossed a majority of positives => send accept requests
+    // if we just crossed a majority of negatives => increment proposal# by 10, start a new prepare, etc.
+
+    return true
+}
+
