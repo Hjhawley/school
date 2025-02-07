@@ -350,9 +350,7 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 	if !ok {
 		log.Fatalf("No matching accept request message: %v", key)
 	}
-	// don't delete if you want re-delivery
-	// delete(s.Messages, key)
-
+	// Parse the accept request message.
 	var propNum, fromNode, theValue int
 	_, err2 := fmt.Sscanf(msg, "accept_req proposal=%d value=%d from=%d",
 		&propNum, &theValue, &fromNode)
@@ -361,8 +359,17 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 	}
 
 	acceptor := &s.Nodes[target-1]
+
+	// If the node is the proposer (target equals fromNode) and its round is already resolved
+	// (indicated by AlreadySentAccept), then ignore the accept request.
+	if target == fromNode && acceptor.AlreadySentAccept {
+		fmt.Printf("--> valid prepare vote ignored by %d because round is already resolved\n", target)
+		return true
+	}
+
+	// Process the accept request normally for other nodes.
 	if propNum >= acceptor.PromiseSequence {
-		// accept
+		// Accept the proposal.
 		acceptor.PromiseSequence = propNum
 		acceptor.AcceptSequence = propNum
 		acceptor.AcceptValue = theValue
@@ -374,7 +381,7 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 		fmt.Printf("node %d accepted proposal=%d value=%d (from node %d)\n",
 			target, propNum, theValue, fromNode)
 	} else {
-		// reject
+		// Reject the proposal.
 		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: fromNode}
 		respMsg := fmt.Sprintf("accept_reject proposal=%d fromNode=%d promised=%d",
 			propNum, target, acceptor.PromiseSequence)
