@@ -208,8 +208,7 @@ func (s *State) TryDeliverPrepareRequest(line string) bool {
 		respMsg := fmt.Sprintf("prepare_ok proposal=%d fromNode=%d acceptedSeq=%d acceptedVal=%d",
 			propNum, target, acceptor.AcceptSequence, acceptor.AcceptValue)
 		s.Messages[respKey] = respMsg
-
-		fmt.Printf("node %d promised proposal=%d (from node %d)\n", target, propNum, fromNode)
+		fmt.Printf("--> prepare request from %d sequence %d accepted by %d with no value\n", fromNode, propNum, target)
 	} else {
 		// Reject
 		respKey := Key{Type: MsgPrepareResponse, Time: deliverTime, Target: fromNode}
