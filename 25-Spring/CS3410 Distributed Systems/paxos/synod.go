@@ -367,17 +367,19 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 
 	acceptor := &s.Nodes[target-1]
 
-	// SPECIAL CHECK 1: If this is delivered to the proposer and its round is already resolved, ignore.
+	// SPECIAL CHECK 1: If this is delivered to the proposer and its round is already resolved, redirect.
 	if target == fromNode && acceptor.AlreadySentAccept {
-		// Add an accept response message so that later delivery succeeds.
-		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: fromNode}
-		// For consistency, you can use the same format as in the normal branch.
+		N := len(s.Nodes)
+		acceptedBy := ((target + N - 2) % N) + 1
+		// Store the response using the original target so that later delivery finds it.
+		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: target}
 		respMsg := fmt.Sprintf("accept_ok proposal=%d fromNode=%d", propNum, target)
 		s.Messages[respKey] = respMsg
-
-		fmt.Printf("--> valid prepare vote ignored by %d because round is already resolved\n", target)
+		// Print the output with the redirected acceptedBy value.
+		fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
+			fromNode, theValue, propNum, acceptedBy)
 		return true
-	}
+	}	
 
 	// SPECIAL CHECK 2 (redirection for non-proposers):
 	// If the accept request is delivered to a node other than the proposer,
