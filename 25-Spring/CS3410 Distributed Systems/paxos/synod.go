@@ -20,26 +20,18 @@ type State struct {
 // simulation. If each node was actually running on its own machine, this
 // would be all of its state.
 type Node struct {
-	// Acceptor state:
-	PromiseSequence int // highest prepare # promised
-	AcceptSequence  int // highest accept # accepted
-	AcceptValue     int // value accepted for AcceptSequence
-
-	// Proposer state for a single-decision Paxos:
-	CurrentProposalNum int
-	CurrentValue       int
-
-	// We track how many OK or rejects we got from the prepare phase
-	PromisesReceived   int
-	RejectionsReceived int
-
-	// We track how many OK or rejects we got from the accept phase
-	AcceptOKs     int
-	AcceptRejects int
-
-	// Decision tracking
-	DecidedValue   int
-	HasDecided     bool
+	PromiseSequence 	int // highest prepare # promised
+	AcceptSequence  	int // highest accept # accepted
+	AcceptValue     	int // value accepted for AcceptSequence
+	CurrentProposalNum 	int
+	CurrentValue       	int
+	PromisesReceived   	int
+	RejectionsReceived 	int
+	AcceptOKs     		int
+	AcceptRejects 		int
+	DecidedValue   		int
+	HasDecided     		bool
+	PrepareResponses 	map[int]map[int]bool // track who has already responded to which proposal
 }
 
 // The different message types that are transmitted across the network.
@@ -155,6 +147,12 @@ func (s *State) TrySendPrepare(line string) bool {
 		node.CurrentProposalNum = 5000 + me
 	}
 	propNum := node.CurrentProposalNum
+
+	if node.PrepareResponses == nil {
+		node.PrepareResponses = make(map[int]map[int]bool)
+	}
+	node.PrepareResponses[pnum] = make(map[int]bool)
+
 	fmt.Printf("--> sent prepare requests to all nodes from %d with sequence %d\n", me, propNum)
 
 	// Reset counters for a new prepare round
@@ -264,15 +262,26 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 	}
 
 	proposer := &s.Nodes[target-1]
+    if propNum != proposer.CurrentProposalNum {
+        // stale proposal, ignore
+        return true
+    }
 
-	// If this response is for a stale proposal, ignore it:
-	if propNum != proposer.CurrentProposalNum {
-		fmt.Printf("node %d ignoring prepare response for old proposal %d\n", target, propNum)
-		return true
-	}
+    // ensure the map is created
+    if proposer.PrepareResponses[propNum] == nil {
+        proposer.PrepareResponses[propNum] = make(map[int]bool)
+    }
 
-	// If we've already concluded the prepare round, maybe ignore new responses:
-	// (But let's keep it simple for now.)
+    // check if fromNode has already responded
+    if proposer.PrepareResponses[propNum][fromNode] {
+        // DUPLICATE!
+        fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
+            fromNode, propNum, target)
+        return true
+    }
+
+    // first time seeing fromNode for this proposal
+    proposer.PrepareResponses[propNum][fromNode] = true
 
 	if isOk {
 		proposer.PromisesReceived++
@@ -334,7 +343,6 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 
 	return true
 }
-
 
 //
 //     at 1009 deliver accept request message to 1 from time 1006
