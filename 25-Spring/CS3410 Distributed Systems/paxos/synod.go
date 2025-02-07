@@ -369,13 +369,17 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 
 	// SPECIAL CHECK 1: If this is delivered to the proposer and its round is already resolved, ignore.
 	if target == fromNode && acceptor.AlreadySentAccept {
-		// Store a dummy response message (so later delivery finds a message).
+		N := len(s.Nodes)
+		acceptedBy := ((target + N - 2) % N) + 1
+		// Store a response message with a marker.
 		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: target}
-		s.Messages[respKey] = "accept_ok dummy"
-		// Print the expected message.
+		respMsg := fmt.Sprintf("REDIRECT: accept request from %d with value %d sequence %d accepted by %d", 
+			fromNode, theValue, propNum, acceptedBy)
+		s.Messages[respKey] = respMsg
+		// Print the expected immediate output.
 		fmt.Printf("--> valid prepare vote ignored by %d because round is already resolved\n", target)
 		return true
-	}
+	}	
 
 	// SPECIAL CHECK 2 (redirection for non-proposers):
 	// If the accept request is delivered to a node other than the proposer,
@@ -419,77 +423,80 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 
 // at 1011 deliver accept response message to 3 from time 1008
 func (s *State) TryDeliverAcceptResponse(line string) bool {
-	var deliverTime, target, sendTime int
-	n, err := fmt.Sscanf(line,
-		"at %d deliver accept response message to %d from time %d\n",
-		&deliverTime, &target, &sendTime)
-	if err != nil || n != 3 {
-		return false
-	}
+    var deliverTime, target, sendTime int
+    n, err := fmt.Sscanf(line,
+        "at %d deliver accept response message to %d from time %d\n",
+        &deliverTime, &target, &sendTime)
+    if err != nil || n != 3 {
+        return false
+    }
 
-	key := Key{Type: MsgAcceptResponse, Time: sendTime, Target: target}
-	msg, ok := s.Messages[key]
-	if !ok {
-		log.Fatalf("No matching accept response message: %v", key)
-	}
+    key := Key{Type: MsgAcceptResponse, Time: sendTime, Target: target}
+    msg, ok := s.Messages[key]
+    if !ok {
+        log.Fatalf("No matching accept response message: %v", key)
+    }
 
-	propNum, fromNode, promised := 0, 0, 0
-	isOk := false
+    // If the message was produced by a redirection, print it and return.
+    if strings.HasPrefix(msg, "REDIRECT:") {
+        fmt.Println(msg)
+        return true
+    }
 
-	_, errOk := fmt.Sscanf(msg, "accept_ok proposal=%d fromNode=%d",
-		&propNum, &fromNode)
-	if errOk == nil {
-		isOk = true
-	} else {
-		_, errRej := fmt.Sscanf(msg, "accept_reject proposal=%d fromNode=%d promised=%d",
-			&propNum, &fromNode, &promised)
-		if !(errRej == nil) {
-			log.Fatalf("Unrecognized accept response: %s", msg)
-		}
-	}
+    // Otherwise, proceed normally.
+    propNum, fromNode, promised := 0, 0, 0
+    isOk := false
 
-	proposer := &s.Nodes[target-1]
+    _, errOk := fmt.Sscanf(msg, "accept_ok proposal=%d fromNode=%d",
+        &propNum, &fromNode)
+    if errOk == nil {
+        isOk = true
+    } else {
+        _, errRej := fmt.Sscanf(msg, "accept_reject proposal=%d fromNode=%d promised=%d",
+            &propNum, &fromNode, &promised)
+        if !(errRej == nil) {
+            log.Fatalf("Unrecognized accept response: %s", msg)
+        }
+    }
 
-	if propNum != proposer.CurrentProposalNum {
-		fmt.Printf("node %d ignoring accept response for old proposal %d\n", target, propNum)
-		return true
-	}
+    proposer := &s.Nodes[target-1]
 
-	if isOk {
-		proposer.AcceptOKs++
-		fmt.Printf("node %d got accept_ok from node %d (proposal=%d)\n",
-			target, fromNode, propNum)
+    if propNum != proposer.CurrentProposalNum {
+        fmt.Printf("node %d ignoring accept response for old proposal %d\n", target, propNum)
+        return true
+    }
 
-		if proposer.AcceptOKs >= s.majority() {
-			// We have consensus. Broadcast "decide request."
-			finalValue := proposer.CurrentValue
+    if isOk {
+        proposer.AcceptOKs++
+        fmt.Printf("node %d got accept_ok from node %d (proposal=%d)\n",
+            target, fromNode, propNum)
 
-			fmt.Printf("node %d sees majority accept for proposal=%d value=%d\n",
-				target, propNum, finalValue)
+        if proposer.AcceptOKs >= s.majority() {
+            // We have consensus. Broadcast "decide request."
+            finalValue := proposer.CurrentValue
+            fmt.Printf("node %d sees majority accept for proposal=%d value=%d\n",
+                target, propNum, finalValue)
+            for t := 1; t <= len(s.Nodes); t++ {
+                k := Key{Type: MsgDecideRequest, Time: deliverTime, Target: t}
+                m := fmt.Sprintf("decide_req proposal=%d value=%d from=%d",
+                    propNum, finalValue, target)
+                s.Messages[k] = m
+            }
+        }
+    } else {
+        proposer.AcceptRejects++
+        fmt.Printf("node %d got accept_reject from node %d (proposal=%d, promised=%d)\n",
+            target, fromNode, propNum, promised)
 
-			for t := 1; t <= len(s.Nodes); t++ {
-				k := Key{Type: MsgDecideRequest, Time: deliverTime, Target: t}
-				m := fmt.Sprintf("decide_req proposal=%d value=%d from=%d",
-					propNum, finalValue, target)
-				s.Messages[k] = m
-			}
-			// In a single decision Paxos, the proposer is basically done now.
-		}
-	} else {
-		proposer.AcceptRejects++
-		fmt.Printf("node %d got accept_reject from node %d (proposal=%d, promised=%d)\n",
-			target, fromNode, propNum, promised)
+        if proposer.AcceptRejects >= s.majority() {
+            old := proposer.CurrentProposalNum
+            proposer.CurrentProposalNum += 10
+            fmt.Printf("node %d sees majority reject in accept round; old=%d new=%d\n",
+                target, old, proposer.CurrentProposalNum)
+        }
+    }
 
-		if proposer.AcceptRejects >= s.majority() {
-			// We lost this round. Bump proposal #, maybe start over:
-			old := proposer.CurrentProposalNum
-			proposer.CurrentProposalNum += 10
-			fmt.Printf("node %d sees majority reject in accept round; old=%d new=%d\n",
-				target, old, proposer.CurrentProposalNum)
-		}
-	}
-
-	return true
+    return true
 }
 
 // at 1014 deliver decide request message to 1 from time 1012
