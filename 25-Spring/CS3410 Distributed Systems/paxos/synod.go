@@ -439,9 +439,12 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
 
     // If the message was produced by a redirection, print it and return.
     if strings.HasPrefix(msg, "REDIRECT:") {
-        fmt.Println(msg)
-        return true
-    }
+		// Remove the "REDIRECT:" prefix and any leading/trailing whitespace.
+		newMsg := strings.TrimSpace(strings.TrimPrefix(msg, "REDIRECT:"))
+		// Print the message with the expected arrow.
+		fmt.Printf("--> %s\n", newMsg)
+		return true
+	}	
 
     // Otherwise, proceed normally.
     propNum, fromNode, promised := 0, 0, 0
