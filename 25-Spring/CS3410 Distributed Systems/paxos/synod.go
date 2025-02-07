@@ -33,6 +33,7 @@ type Node struct {
 	HasDecided         bool
 	PrepareResponses   map[int]map[int]bool // track who has already responded to which proposal
 	AlreadySentAccept  bool
+	TimelyVotes        map[int]bool // track which nodes' prepare responses were timely (contributed to majority)
 }
 
 // The different message types that are transmitted across the network.
@@ -153,6 +154,7 @@ func (s *State) TrySendPrepare(line string) bool {
 		node.PrepareResponses = make(map[int]map[int]bool)
 	}
 	node.PrepareResponses[propNum] = make(map[int]bool)
+	node.TimelyVotes = make(map[int]bool)
 
 	fmt.Printf("--> sent prepare requests to all nodes from %d with sequence %d\n", me, propNum)
 
@@ -241,14 +243,12 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 	accSeq, accVal := 0, 0
 	isOk, isReject := false, false
 
-	// Try to parse a "prepare_ok" response.
 	_, errOk := fmt.Sscanf(msg,
 		"prepare_ok proposal=%d fromNode=%d acceptedSeq=%d acceptedVal=%d",
 		&propNum, &fromNode, &accSeq, &accVal)
 	if errOk == nil {
 		isOk = true
 	} else {
-		// Try to parse a "prepare_reject" response.
 		_, errRej := fmt.Sscanf(msg,
 			"prepare_reject proposal=%d fromNode=%d promised=%d",
 			&propNum, &fromNode, &promised)
@@ -265,38 +265,40 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 		return true
 	}
 
-	// Ensure the map exists.
 	if proposer.PrepareResponses[propNum] == nil {
 		proposer.PrepareResponses[propNum] = make(map[int]bool)
 	}
 
-	// Check for duplicate responses.
 	if proposer.PrepareResponses[propNum][fromNode] {
 		fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
 			fromNode, propNum, target)
 		return true
 	}
 
-	// Record this new response.
 	proposer.PrepareResponses[propNum][fromNode] = true
 
-	// Process a positive response.
 	if isOk {
+		// Record the response.
+		// Use the old count (before incrementing) to decide if it was timely.
+		oldCount := proposer.PromisesReceived
 		proposer.PromisesReceived++
 		fmt.Printf("--> positive prepare response from %d sequence %d recorded by %d with no value\n",
 			fromNode, propNum, target)
 
-		// Update the proposer’s record if the acceptor had a previously accepted value.
 		if accSeq > proposer.AcceptSequence {
 			proposer.AcceptSequence = accSeq
 			proposer.AcceptValue = accVal
 		}
 
-		// Trigger accept phase only once.
+		// Record as timely only if the response came in before reaching majority.
+		if !proposer.AlreadySentAccept && oldCount < s.majority() {
+			proposer.TimelyVotes[fromNode] = true
+		}
+
+		// If we cross the majority threshold and have not yet begun the accept phase…
 		if !proposer.AlreadySentAccept && proposer.PromisesReceived >= s.majority() {
 			proposer.AlreadySentAccept = true
 
-			// Determine the chosen value.
 			chosenVal := proposer.CurrentValue
 			if proposer.AcceptSequence > 0 {
 				chosenVal = proposer.AcceptValue
@@ -305,11 +307,9 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 
 			fmt.Printf("--> prepare round successful: %d proposing its own value %d\n", target, chosenVal)
 
-			// Reset accept counters.
 			proposer.AcceptOKs = 0
 			proposer.AcceptRejects = 0
 
-			// Broadcast accept requests to all nodes.
 			for t := 1; t <= len(s.Nodes); t++ {
 				k := Key{Type: MsgAcceptRequest, Time: deliverTime, Target: t}
 				m := fmt.Sprintf("accept_req proposal=%d value=%d from=%d",
@@ -320,7 +320,6 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 				target, chosenVal, propNum)
 		}
 	} else if isReject {
-		// Process a rejection.
 		proposer.RejectionsReceived++
 		fmt.Printf("node %d got prepare_reject from node %d (proposal=%d, promised=%d)\n",
 			target, fromNode, propNum, promised)
@@ -350,7 +349,6 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 	if !ok {
 		log.Fatalf("No matching accept request message: %v", key)
 	}
-	// Parse the accept request message.
 	var propNum, fromNode, theValue int
 	_, err2 := fmt.Sscanf(msg, "accept_req proposal=%d value=%d from=%d",
 		&propNum, &theValue, &fromNode)
@@ -360,16 +358,26 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 
 	acceptor := &s.Nodes[target-1]
 
-	// If the node is the proposer (target equals fromNode) and its round is already resolved
-	// (indicated by AlreadySentAccept), then ignore the accept request.
+	// SPECIAL CHECK 1: If this is delivered to the proposer and its round is already resolved, ignore.
 	if target == fromNode && acceptor.AlreadySentAccept {
 		fmt.Printf("--> valid prepare vote ignored by %d because round is already resolved\n", target)
 		return true
 	}
 
-	// Process the accept request normally for other nodes.
+	// SPECIAL CHECK 2: For accept requests delivered to non‐proposers, check if this acceptor’s
+	// earlier prepare response was timely. Look up the proposer’s TimelyVotes.
+	proposer := &s.Nodes[fromNode-1] // proposer node (the one that sent the prepare)
+	if target != fromNode {
+		if proposer.TimelyVotes == nil || !proposer.TimelyVotes[target] {
+			// This acceptor’s prepare response came in too late.
+			// Ignore the accept request and print a message showing the proposer’s id.
+			fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
+				fromNode, theValue, propNum, fromNode)
+			return true
+		}
+	}
+
 	if propNum >= acceptor.PromiseSequence {
-		// Accept the proposal.
 		acceptor.PromiseSequence = propNum
 		acceptor.AcceptSequence = propNum
 		acceptor.AcceptValue = theValue
@@ -381,7 +389,6 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 		fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
 			fromNode, theValue, propNum, target)
 	} else {
-		// Reject the proposal.
 		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: fromNode}
 		respMsg := fmt.Sprintf("accept_reject proposal=%d fromNode=%d promised=%d",
 			propNum, target, acceptor.PromiseSequence)
