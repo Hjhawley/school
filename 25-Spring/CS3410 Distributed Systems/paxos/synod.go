@@ -235,20 +235,20 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 	if !ok {
 		log.Fatalf("No matching prepare response message: %v", key)
 	}
-	// do not delete
+	// do not delete the message
 
 	propNum, fromNode, promised := 0, 0, 0
 	accSeq, accVal := 0, 0
 	isOk, isReject := false, false
 
-	// Attempt to parse "prepare_ok proposal=XXX fromNode=YYY acceptedSeq=ACC acceptedVal=VAL"
+	// Try to parse a "prepare_ok" response.
 	_, errOk := fmt.Sscanf(msg,
 		"prepare_ok proposal=%d fromNode=%d acceptedSeq=%d acceptedVal=%d",
 		&propNum, &fromNode, &accSeq, &accVal)
 	if errOk == nil {
 		isOk = true
 	} else {
-		// Attempt to parse "prepare_reject proposal=XXX fromNode=YYY promised=ZZZ"
+		// Try to parse a "prepare_reject" response.
 		_, errRej := fmt.Sscanf(msg,
 			"prepare_reject proposal=%d fromNode=%d promised=%d",
 			&propNum, &fromNode, &promised)
@@ -265,41 +265,35 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 		return true
 	}
 
-	// ensure the map is created
+	// Ensure the map exists.
 	if proposer.PrepareResponses[propNum] == nil {
 		proposer.PrepareResponses[propNum] = make(map[int]bool)
 	}
 
-	// check if fromNode has already responded
+	// Check for duplicate responses.
 	if proposer.PrepareResponses[propNum][fromNode] {
-		// DUPLICATE!
 		fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
 			fromNode, propNum, target)
 		return true
 	}
 
-	// record this new response
+	// Record this new response.
 	proposer.PrepareResponses[propNum][fromNode] = true
 
-	// Ignore any extra responses after accept phase has started
-	if proposer.AlreadySentAccept {
-		return true
-	}
-
+	// Process a positive response.
 	if isOk {
 		proposer.PromisesReceived++
 		fmt.Printf("--> positive prepare response from %d sequence %d recorded by %d with no value\n",
 			fromNode, propNum, target)
 
-		// If the acceptor had a previously accepted value with a higher sequence,
-		// update the proposer’s record.
+		// Update the proposer’s record if the acceptor had a previously accepted value.
 		if accSeq > proposer.AcceptSequence {
 			proposer.AcceptSequence = accSeq
 			proposer.AcceptValue = accVal
 		}
 
-		// Check if we have reached a majority and have not yet begun the accept phase.
-		if proposer.PromisesReceived >= s.majority() && !proposer.AlreadySentAccept {
+		// Trigger accept phase only once.
+		if !proposer.AlreadySentAccept && proposer.PromisesReceived >= s.majority() {
 			proposer.AlreadySentAccept = true
 
 			// Determine the chosen value.
@@ -308,6 +302,7 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 				chosenVal = proposer.AcceptValue
 			}
 			proposer.CurrentValue = chosenVal
+
 			fmt.Printf("--> prepare round successful: %d proposing its own value %d\n", target, chosenVal)
 
 			// Reset accept counters.
@@ -325,12 +320,12 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 				target, chosenVal, propNum)
 		}
 	} else if isReject {
+		// Process a rejection.
 		proposer.RejectionsReceived++
 		fmt.Printf("node %d got prepare_reject from node %d (proposal=%d, promised=%d)\n",
 			target, fromNode, propNum, promised)
 
 		if proposer.RejectionsReceived >= s.majority() {
-			// The proposer gives up on this proposal and picks a new one.
 			proposer.CurrentProposalNum += 10
 			fmt.Printf("node %d sees majority reject for proposal=%d; next proposal=%d\n",
 				target, propNum, proposer.CurrentProposalNum)
