@@ -369,6 +369,12 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 
 	// SPECIAL CHECK 1: If this is delivered to the proposer and its round is already resolved, ignore.
 	if target == fromNode && acceptor.AlreadySentAccept {
+		// Add an accept response message so that later delivery succeeds.
+		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: fromNode}
+		// For consistency, you can use the same format as in the normal branch.
+		respMsg := fmt.Sprintf("accept_ok proposal=%d fromNode=%d", propNum, target)
+		s.Messages[respKey] = respMsg
+
 		fmt.Printf("--> valid prepare vote ignored by %d because round is already resolved\n", target)
 		return true
 	}
