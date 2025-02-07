@@ -20,15 +20,26 @@ type State struct {
 // simulation. If each node was actually running on its own machine, this
 // would be all of its state.
 type Node struct {
-	PromiseSequence 	int // the highest proposal number this node has ever promised
-	AcceptSequence  	int
-	AcceptValue     	int
-	CurrentProposalNum 	int
-	CurrentValue       	int
-	PromisesReceived   	int
-	RejectionsReceived 	int
+	// Acceptor state:
+	PromiseSequence int // highest prepare # promised
+	AcceptSequence  int // highest accept # accepted
+	AcceptValue     int // value accepted for AcceptSequence
 
-	// other per-node data should be added here
+	// Proposer state for a single-decision Paxos:
+	CurrentProposalNum int
+	CurrentValue       int
+
+	// We track how many OK or rejects we got from the prepare phase
+	PromisesReceived   int
+	RejectionsReceived int
+
+	// We track how many OK or rejects we got from the accept phase
+	AcceptOKs     int
+	AcceptRejects int
+
+	// Decision tracking
+	DecidedValue   int
+	HasDecided     bool
 }
 
 // The different message types that are transmitted across the network.
@@ -89,8 +100,8 @@ func main() {
 		case state.TryDeliverPrepareRequest(line):
 		case state.TryDeliverPrepareResponse(line):
 		case state.TryDeliverAcceptRequest(line):
-		//case state.TryDeliverAcceptResponse(line):
-		//case state.TryDeliverDecideRequest(line):
+		case state.TryDeliverAcceptResponse(line):
+		case state.TryDeliverDecideRequest(line):
 		default:
 			log.Fatalf("unknown line: %s", line)
 		}
@@ -101,6 +112,11 @@ func main() {
 	if err := scanner.Err(); err != nil {
 		log.Fatalf("scanner failure: %v", err)
 	}
+}
+
+// for determining majority vote
+func (s *State) majority() int {
+	return (len(s.Nodes) / 2) + 1
 }
 
 // TryInitialize handles messages of the form:
@@ -128,22 +144,32 @@ func (s *State) TryInitialize(line string) bool {
 // It kicks off a proposer sequence at the given time and
 // from the given node.
 func (s *State) TrySendPrepare(line string) bool {
-    var ts, me int
-    n, err := fmt.Sscanf(line, "at %d send prepare request from %d\n", &ts, &me)
-    if err != nil || n != 2 {
-        return false
-    }
+	var ts, me int
+	n, err := fmt.Sscanf(line, "at %d send prepare request from %d\n", &ts, &me)
+	if err != nil || n != 2 {
+		return false
+	}
 
-    propNum := 5000 + me
+    node := &s.Nodes[me-1]
+	if node.CurrentProposalNum < 5000+me {
+		node.CurrentProposalNum = 5000 + me
+	}
+	propNum := node.CurrentProposalNum
 	fmt.Printf("--> sent prepare requests to all nodes from %d with sequence %d\n", me, propNum)
 
-    // Store a prepare request message for each node, so we can deliver it
-    // individually using "at X deliver prepare request message to Y from time X".
-    for targetID := 1; targetID <= len(s.Nodes); targetID++ {
-        k := Key{Type: MsgPrepareRequest, Time: ts, Target: targetID}
-        s.Messages[k] = fmt.Sprintf("proposal=%d from=%d", propNum, me)
-    }
-    return true
+	// Reset counters for a new prepare round
+	node.PromisesReceived = 0
+	node.RejectionsReceived = 0
+
+	node.CurrentValue = 11111 * me
+
+	for target := 1; target <= len(s.Nodes); target++ {
+		key := Key{Type: MsgPrepareRequest, Time: ts, Target: target}
+		msgBody := fmt.Sprintf("proposal=%d from=%d", propNum, me)
+		s.Messages[key] = msgBody
+	}
+
+	return true
 }
 
 //
@@ -170,37 +196,322 @@ func (s *State) TryDeliverPrepareRequest(line string) bool {
         log.Fatalf("Malformed prepare request message: %q", msg)
     }
 
-    fmt.Printf("--> prepare request from %d sequence %d accepted by %d with no value\n", fromNode, propNum, target)
-    return true
+	// Node "target" is the acceptor receiving the prepare.
+	acceptor := &s.Nodes[target-1]
+	// This acceptor must compare propNum vs. acceptor.PromiseSequence
+	if propNum > acceptor.PromiseSequence {
+		// It promises
+		acceptor.PromiseSequence = propNum
+
+		// Build a "prepare OK" response.
+		respKey := Key{Type: MsgPrepareResponse, Time: deliverTime, Target: fromNode}
+		respMsg := fmt.Sprintf("prepare_ok proposal=%d fromNode=%d acceptedSeq=%d acceptedVal=%d",
+			propNum, target, acceptor.AcceptSequence, acceptor.AcceptValue)
+		s.Messages[respKey] = respMsg
+
+		fmt.Printf("node %d promised proposal=%d (from node %d)\n", target, propNum, fromNode)
+	} else {
+		// Reject
+		respKey := Key{Type: MsgPrepareResponse, Time: deliverTime, Target: fromNode}
+		respMsg := fmt.Sprintf("prepare_reject proposal=%d fromNode=%d promised=%d",
+			propNum, target, acceptor.PromiseSequence)
+		s.Messages[respKey] = respMsg
+
+		fmt.Printf("node %d rejected proposal=%d (from node %d); already promised %d\n",
+			target, propNum, fromNode, acceptor.PromiseSequence)
+	}
+
+return true
 }
 
 func (s *State) TryDeliverPrepareResponse(line string) bool {
-    // something like:
-    // at 1005 deliver prepare response message to 3 from time 1002
-    // parse:
-    var deliverTime, target, sendTime int
-    n, err := fmt.Sscanf(line, 
-        "at %d deliver prepare response message to %d from time %d\n",
-        &deliverTime, &target, &sendTime)
-    if err != nil || n != 3 {
-        return false
-    }
+	var deliverTime, target, sendTime int
+	n, err := fmt.Sscanf(line,
+		"at %d deliver prepare response message to %d from time %d\n",
+		&deliverTime, &target, &sendTime,
+	)
+	if err != nil || n != 3 {
+		return false
+	}
 
-    key := Key{Type: MsgPrepareResponse, Time: sendTime, Target: target}
-    msg, ok := s.Messages[key]
-    if !ok {
-        log.Fatalf("No matching prepare response message: %v", key)
-    }
+	key := Key{Type: MsgPrepareResponse, Time: sendTime, Target: target}
+	msg, ok := s.Messages[key]
+	if !ok {
+		log.Fatalf("No matching prepare response message: %v", key)
+	}
+	// do NOT delete if you want repeated deliveries
+	// delete(s.Messages, key)
 
-    // DO NOT delete if you want re-delivery to be possible
-    // parse the message to see if it's "ok" or "reject," etc.
+	propNum, fromNode, promised := 0, 0, 0
+	accSeq, accVal := 0, 0
+	isOk, isReject := false, false
 
-    // Then update the proposer's state:
-    // s.Nodes[target-1] is the “proposer” that receives this response
-    // e.g. record that we got a positive (prepare_ok) or negative (prepare_reject) vote
-    // if we just crossed a majority of positives => send accept requests
-    // if we just crossed a majority of negatives => increment proposal# by 10, start a new prepare, etc.
+	// Attempt to parse "prepare_ok proposal=XXX fromNode=YYY acceptedSeq=ACC acceptedVal=VAL"
+	_, errOk := fmt.Sscanf(msg,
+		"prepare_ok proposal=%d fromNode=%d acceptedSeq=%d acceptedVal=%d",
+		&propNum, &fromNode, &accSeq, &accVal)
+	if errOk == nil {
+		isOk = true
+	} else {
+		// Attempt to parse "prepare_reject proposal=XXX fromNode=YYY promised=ZZZ"
+		_, errRej := fmt.Sscanf(msg,
+			"prepare_reject proposal=%d fromNode=%d promised=%d",
+			&propNum, &fromNode, &promised)
+		if errRej == nil {
+			isReject = true
+		} else {
+			log.Fatalf("Unrecognized prepare response: %s", msg)
+		}
+	}
 
-    return true
+	proposer := &s.Nodes[target-1]
+
+	// If this response is for a stale proposal, ignore it:
+	if propNum != proposer.CurrentProposalNum {
+		fmt.Printf("node %d ignoring prepare response for old proposal %d\n", target, propNum)
+		return true
+	}
+
+	// If we've already concluded the prepare round, maybe ignore new responses:
+	// (But let's keep it simple for now.)
+
+	if isOk {
+		proposer.PromisesReceived++
+		fmt.Printf("node %d got prepare_ok from node %d (proposal=%d)\n",
+			target, fromNode, propNum)
+
+		// If this acceptor had a previously accepted value with a high seq,
+		// pick that value if it's higher than anything else we've seen.
+		// For a single decision, track the highest AcceptSequence returned so far:
+		// e.g. store them in some local field if you want. We'll do a quick inline:
+		if accSeq > proposer.AcceptSequence {
+			proposer.AcceptSequence = accSeq
+			proposer.AcceptValue = accVal
+		}
+
+		// If we cross majority, we proceed to accept phase
+		if proposer.PromisesReceived >= s.majority() {
+			// The chosen value is either what we gleaned from the highest accepted, or our own if none
+			chosenVal := proposer.CurrentValue
+			if proposer.AcceptSequence > 0 {
+				chosenVal = proposer.AcceptValue
+			} else {
+				chosenVal = 11111 * (target) // or keep proposer's default
+			}
+
+			// store that in the node’s state
+			proposer.CurrentValue = chosenVal
+
+			fmt.Printf("node %d now sending accept requests for proposal=%d value=%d\n",
+				target, propNum, chosenVal)
+
+			// reset accept counters
+			proposer.AcceptOKs = 0
+			proposer.AcceptRejects = 0
+
+			// broadcast accept requests
+			for t := 1; t <= len(s.Nodes); t++ {
+				k := Key{Type: MsgAcceptRequest, Time: deliverTime, Target: t}
+				m := fmt.Sprintf("accept_req proposal=%d value=%d from=%d",
+					propNum, chosenVal, target)
+				s.Messages[k] = m
+			}
+		}
+
+	} else if isReject {
+		proposer.RejectionsReceived++
+		fmt.Printf("node %d got prepare_reject from node %d (proposal=%d, promised=%d)\n",
+			target, fromNode, propNum, promised)
+
+		if proposer.RejectionsReceived >= s.majority() {
+			// The proposer gives up on this propNum and picks a new one
+			proposer.CurrentProposalNum += 10
+			fmt.Printf("node %d sees majority reject for proposal=%d; next proposal=%d\n",
+				target, propNum, proposer.CurrentProposalNum)
+			// Potentially, the proposer might automatically send a new prepare
+			// request here. Or we just wait for the script to do it. 
+			// Up to you/your assignment spec.
+		}
+	}
+
+	return true
 }
 
+
+//
+//     at 1009 deliver accept request message to 1 from time 1006
+//
+func (s *State) TryDeliverAcceptRequest(line string) bool {
+	var deliverTime, target, sendTime int
+	n, err := fmt.Sscanf(line,
+		"at %d deliver accept request message to %d from time %d\n",
+		&deliverTime, &target, &sendTime)
+	if err != nil || n != 3 {
+		return false
+	}
+
+	key := Key{Type: MsgAcceptRequest, Time: sendTime, Target: target}
+	msg, ok := s.Messages[key]
+	if !ok {
+		log.Fatalf("No matching accept request message: %v", key)
+	}
+	// don't delete if you want re-delivery
+	// delete(s.Messages, key)
+
+	var propNum, fromNode, theValue int
+	_, err2 := fmt.Sscanf(msg, "accept_req proposal=%d value=%d from=%d",
+		&propNum, &theValue, &fromNode)
+	if err2 != nil {
+		log.Fatalf("Malformed accept request message: %q", msg)
+	}
+
+	acceptor := &s.Nodes[target-1]
+	if propNum >= acceptor.PromiseSequence {
+		// accept
+		acceptor.PromiseSequence = propNum
+		acceptor.AcceptSequence = propNum
+		acceptor.AcceptValue = theValue
+
+		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: fromNode}
+		respMsg := fmt.Sprintf("accept_ok proposal=%d fromNode=%d", propNum, target)
+		s.Messages[respKey] = respMsg
+
+		fmt.Printf("node %d accepted proposal=%d value=%d (from node %d)\n",
+			target, propNum, theValue, fromNode)
+	} else {
+		// reject
+		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: fromNode}
+		respMsg := fmt.Sprintf("accept_reject proposal=%d fromNode=%d promised=%d",
+			propNum, target, acceptor.PromiseSequence)
+		s.Messages[respKey] = respMsg
+
+		fmt.Printf("node %d rejected accept for proposal=%d (from node %d); promised=%d\n",
+			target, propNum, fromNode, acceptor.PromiseSequence)
+	}
+
+	return true
+}
+
+//
+//     at 1011 deliver accept response message to 3 from time 1008
+//
+func (s *State) TryDeliverAcceptResponse(line string) bool {
+	var deliverTime, target, sendTime int
+	n, err := fmt.Sscanf(line,
+		"at %d deliver accept response message to %d from time %d\n",
+		&deliverTime, &target, &sendTime)
+	if err != nil || n != 3 {
+		return false
+	}
+
+	key := Key{Type: MsgAcceptResponse, Time: sendTime, Target: target}
+	msg, ok := s.Messages[key]
+	if !ok {
+		log.Fatalf("No matching accept response message: %v", key)
+	}
+
+	propNum, fromNode, promised := 0, 0, 0
+	isOk, isReject := false, false
+
+	_, errOk := fmt.Sscanf(msg, "accept_ok proposal=%d fromNode=%d",
+		&propNum, &fromNode)
+	if errOk == nil {
+		isOk = true
+	} else {
+		_, errRej := fmt.Sscanf(msg, "accept_reject proposal=%d fromNode=%d promised=%d",
+			&propNum, &fromNode, &promised)
+		if errRej == nil {
+			isReject = true
+		} else {
+			log.Fatalf("Unrecognized accept response: %s", msg)
+		}
+	}
+
+	proposer := &s.Nodes[target-1]
+
+	if propNum != proposer.CurrentProposalNum {
+		fmt.Printf("node %d ignoring accept response for old proposal %d\n", target, propNum)
+		return true
+	}
+
+	if isOk {
+		proposer.AcceptOKs++
+		fmt.Printf("node %d got accept_ok from node %d (proposal=%d)\n",
+			target, fromNode, propNum)
+
+		if proposer.AcceptOKs >= s.majority() {
+			// We have consensus. Broadcast "decide request."
+			finalValue := proposer.CurrentValue
+
+			fmt.Printf("node %d sees majority accept for proposal=%d value=%d\n",
+				target, propNum, finalValue)
+
+			for t := 1; t <= len(s.Nodes); t++ {
+				k := Key{Type: MsgDecideRequest, Time: deliverTime, Target: t}
+				m := fmt.Sprintf("decide_req proposal=%d value=%d from=%d",
+					propNum, finalValue, target)
+				s.Messages[k] = m
+			}
+			// In a single decision Paxos, the proposer is basically done now.
+		}
+	} else {
+		proposer.AcceptRejects++
+		fmt.Printf("node %d got accept_reject from node %d (proposal=%d, promised=%d)\n",
+			target, fromNode, propNum, promised)
+
+		if proposer.AcceptRejects >= s.majority() {
+			// We lost this round. Bump proposal #, maybe start over:
+			old := proposer.CurrentProposalNum
+			proposer.CurrentProposalNum += 10
+			fmt.Printf("node %d sees majority reject in accept round; old=%d new=%d\n",
+				target, old, proposer.CurrentProposalNum)
+		}
+	}
+
+	return true
+}
+
+//
+//     at 1014 deliver decide request message to 1 from time 1012
+//
+func (s *State) TryDeliverDecideRequest(line string) bool {
+	var deliverTime, target, sendTime int
+	n, err := fmt.Sscanf(line,
+		"at %d deliver decide request message to %d from time %d\n",
+		&deliverTime, &target, &sendTime)
+	if err != nil || n != 3 {
+		return false
+	}
+
+	key := Key{Type: MsgDecideRequest, Time: sendTime, Target: target}
+	msg, ok := s.Messages[key]
+	if !ok {
+		log.Fatalf("No matching decide request message: %v", key)
+	}
+	// no delete for duplicates
+	// delete(s.Messages, key)
+
+	propNum, fromNode, val := 0, 0, 0
+	_, err2 := fmt.Sscanf(msg, "decide_req proposal=%d value=%d from=%d", &propNum, &val, &fromNode)
+	if err2 != nil {
+		log.Fatalf("Malformed decide request: %q", msg)
+	}
+
+	node := &s.Nodes[target-1]
+	if node.HasDecided {
+		if node.DecidedValue != val {
+			log.Fatalf("Inconsistent: node %d sees decided value %d but got new decide %d",
+				target, node.DecidedValue, val)
+		}
+		// else it's the same decision repeated, so ignore or print something
+		fmt.Printf("node %d sees repeated decide for value=%d (already decided)\n",
+			target, val)
+		return true
+	}
+
+	// Mark decided
+	node.HasDecided = true
+	node.DecidedValue = val
+	fmt.Printf("node %d now decided value=%d\n", target, val)
+	return true
+}
