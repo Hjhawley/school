@@ -371,27 +371,23 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 
 	acceptor := &s.Nodes[target-1]
 
-	// SPECIAL CHECK 1: If this is delivered to the proposer and its round is already resolved, ignore.
+	// SPECIAL CHECK 1: (for the proposer)
 	if target == fromNode && acceptor.AlreadySentAccept {
 		N := len(s.Nodes)
 		acceptedBy := ((target + N - 2) % N) + 1
-		// Store the response message with target = fromNode (the proposer’s id)
+		// Store the response with Target = fromNode (proposer's id)
 		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: fromNode}
 		respMsg := fmt.Sprintf("REDIRECT: accept request from %d with value %d sequence %d accepted by %d", 
 			fromNode, theValue, propNum, acceptedBy)
 		s.Messages[respKey] = respMsg
 		fmt.Printf("--> valid prepare vote ignored by %d because round is already resolved\n", target)
 		return true
-	}	
-
-	// SPECIAL CHECK 2 (redirection for non-proposers):
-	// If the accept request is delivered to a node other than the proposer,
-	// then instead of processing it normally, we “redirect” the vote.
-	// We compute a cyclic redirection:
+	}
+	// SPECIAL CHECK 2: (for non-proposers)
 	if target != fromNode {
 		N := len(s.Nodes)
 		acceptedBy := ((target + N - 2) % N) + 1
-		// Store the response using the proposer’s id as target.
+		// Store the response with Target = fromNode (the proposer)
 		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: fromNode}
 		respMsg := fmt.Sprintf("REDIRECT: accept request from %d with value %d sequence %d accepted by %d",
 			fromNode, theValue, propNum, acceptedBy)
@@ -399,7 +395,7 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 		fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
 			fromNode, theValue, propNum, acceptedBy)
 		return true
-	}	
+	}
 
 	// Process the accept request normally (this branch would be for the proposer,
 	// but SPECIAL CHECK 1 should catch that case).
