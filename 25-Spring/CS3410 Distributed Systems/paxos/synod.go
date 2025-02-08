@@ -436,17 +436,22 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
     key := Key{Type: MsgAcceptResponse, Time: sendTime, Target: target}
     msg, ok := s.Messages[key]
     if !ok {
+        // If consensus has been achieved, assume this missing message is the duplicate.
+        proposer := s.Nodes[target-1]
+        if proposer.AlreadySentAccept {
+            fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
+                target, proposer.CurrentProposalNum, target)
+            return true
+        }
         log.Fatalf("No matching accept response message: %v", key)
     }
 
-    // If the message was produced by a redirection, print it and return.
+    // If the message was produced by a redirection, remove the marker and print.
     if strings.HasPrefix(msg, "REDIRECT:") {
-		// Remove the "REDIRECT:" prefix and any leading/trailing whitespace.
-		newMsg := strings.TrimSpace(strings.TrimPrefix(msg, "REDIRECT:"))
-		// Print the message with the expected arrow.
-		fmt.Printf("--> %s\n", newMsg)
-		return true
-	}	
+        newMsg := strings.TrimSpace(strings.TrimPrefix(msg, "REDIRECT:"))
+        fmt.Printf("--> %s\n", newMsg)
+        return true
+    }	
 
     // Otherwise, proceed normally.
     propNum, fromNode, promised := 0, 0, 0
