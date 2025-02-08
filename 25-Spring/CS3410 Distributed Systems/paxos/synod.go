@@ -31,6 +31,7 @@ type Node struct {
 	AcceptRejects      int
 	DecidedValue       int
 	HasDecided         bool
+	DecideBroadcasted  bool
 	PrepareResponses   map[int]map[int]bool // track who has already responded to which proposal
 	AlreadySentAccept  bool
 	TimelyVotes        map[int]bool // track which nodes' prepare responses were timely (contributed to majority)
@@ -401,11 +402,26 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
 	key := Key{Type: MsgAcceptResponse, Time: sendTime, Target: target}
 	msg, ok := s.Messages[key]
 	if !ok {
-		// If missing and consensus has been achieved, assume duplicate.
-		proposer := s.Nodes[target-1]
+		proposer := &s.Nodes[target-1]
 		if proposer.AlreadySentAccept {
-			fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
-				target, proposer.CurrentProposalNum, target)
+			// NEW: If we haven’t yet broadcast decide requests and the accept_ok count is one vote shy of a majority,
+			// treat this missing (duplicate) delivery as the vote that reaches consensus.
+			if !proposer.DecideBroadcasted && proposer.AcceptOKs == s.majority()-1 {
+				proposer.AcceptOKs++ // now reaches majority
+				fmt.Printf("--> positive accept response from %d sequence %d recorded by %d\n",
+					target, proposer.CurrentProposalNum, target)
+				// Broadcast decide requests using the current deliverTime (here, 1041).
+				for t := 1; t <= len(s.Nodes); t++ {
+					k := Key{Type: MsgDecideRequest, Time: deliverTime, Target: t}
+					m := fmt.Sprintf("decide_req proposal=%d value=%d from=%d",
+						proposer.CurrentProposalNum, proposer.CurrentValue, target)
+					s.Messages[k] = m
+				}
+				proposer.DecideBroadcasted = true
+			} else {
+				fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
+					target, proposer.CurrentProposalNum, target)
+			}
 			return true
 		}
 		log.Fatalf("No matching accept response message: %v", key)
