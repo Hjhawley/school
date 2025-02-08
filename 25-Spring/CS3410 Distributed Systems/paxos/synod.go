@@ -430,15 +430,17 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
 			// then decide whether to print as duplicate or as valid.
 			// In our simulation, at time 1040 we expect a valid message if acceptedBy != proposer.
 			if rAcceptedBy == target {
-				// Treat as duplicate.
+				// treat it as duplicate:
 				fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
 					rFrom, rSeq, target)
 				return true
 			} else {
-				// Otherwise, print the valid redirected message.
-				fmt.Printf("--> %s\n", newMsg)
+				// Instead of printing the newMsg,
+				// we print exactly the "positive accept response" line:
+				fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
+					rFrom, rVal, rSeq, rAcceptedBy)
 				return true
-			}
+			}			
 		}
 		// Fallback: print newMsg.
 		fmt.Printf("--> %s\n", newMsg)
