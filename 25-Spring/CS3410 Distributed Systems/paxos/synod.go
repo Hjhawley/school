@@ -446,12 +446,13 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
         log.Fatalf("No matching accept response message: %v", key)
     }
 
-    // If the message was produced by a redirection, remove the marker and print.
     if strings.HasPrefix(msg, "REDIRECT:") {
-        newMsg := strings.TrimSpace(strings.TrimPrefix(msg, "REDIRECT:"))
-        fmt.Printf("--> %s\n", newMsg)
-        return true
-    }	
+		// Instead of printing the redirect message, treat this as a duplicate.
+		proposer := s.Nodes[target-1]
+		fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
+			target, proposer.CurrentProposalNum, target)
+		return true
+	}	
 
     // Otherwise, proceed normally.
     propNum, fromNode, promised := 0, 0, 0
