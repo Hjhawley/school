@@ -380,7 +380,7 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 		fmt.Printf("--> valid prepare vote ignored by %d because round is already resolved\n", target)
 		return true
 	}
-	
+
 	// SPECIAL CHECK 2: (for non-proposers)
 	if target != fromNode {
 		N := len(s.Nodes)
@@ -423,107 +423,107 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 
 // at 1011 deliver accept response message to 3 from time 1008
 func (s *State) TryDeliverAcceptResponse(line string) bool {
-    var deliverTime, target, sendTime int
-    n, err := fmt.Sscanf(line,
-        "at %d deliver accept response message to %d from time %d\n",
-        &deliverTime, &target, &sendTime)
-    if err != nil || n != 3 {
-        return false
-    }
+	var deliverTime, target, sendTime int
+	n, err := fmt.Sscanf(line,
+		"at %d deliver accept response message to %d from time %d\n",
+		&deliverTime, &target, &sendTime)
+	if err != nil || n != 3 {
+		return false
+	}
 
-    key := Key{Type: MsgAcceptResponse, Time: sendTime, Target: target}
-    msg, ok := s.Messages[key]
-    if !ok {
-        // If consensus has been achieved, assume this missing message is the duplicate.
-        proposer := s.Nodes[target-1]
-        if proposer.AlreadySentAccept {
-            fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
-                target, proposer.CurrentProposalNum, target)
-            return true
-        }
-        log.Fatalf("No matching accept response message: %v", key)
-    }
+	key := Key{Type: MsgAcceptResponse, Time: sendTime, Target: target}
+	msg, ok := s.Messages[key]
+	if !ok {
+		// If consensus has been achieved, assume this missing message is the duplicate.
+		proposer := s.Nodes[target-1]
+		if proposer.AlreadySentAccept {
+			fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
+				target, proposer.CurrentProposalNum, target)
+			return true
+		}
+		log.Fatalf("No matching accept response message: %v", key)
+	}
 
-    // If this message is a duplicate response stored by SPECIAL CHECK 1, print it directly.
-    if strings.HasPrefix(msg, "prepare response") {
-        fmt.Printf("--> %s\n", msg)
-        return true
-    }
+	// If this message is a duplicate response stored by SPECIAL CHECK 1, print it directly.
+	if strings.HasPrefix(msg, "prepare response") {
+		fmt.Printf("--> %s\n", msg)
+		return true
+	}
 
-    // NEW: If the message was produced by a redirection (SPECIAL CHECK 2), check if it is a duplicate.
-    if strings.HasPrefix(msg, "REDIRECT:") {
-        newMsg := strings.TrimSpace(strings.TrimPrefix(msg, "REDIRECT:"))
-        // Try to parse the redirected message.
-        var rFrom, rVal, rSeq, rAcceptedBy int
-        n, err := fmt.Sscanf(newMsg, "accept request from %d with value %d sequence %d accepted by %d",
-            &rFrom, &rVal, &rSeq, &rAcceptedBy)
-        if err == nil && n == 4 {
-            // If the redirection indicates that the vote is coming back from the proposer itself, print duplicate.
-            if rAcceptedBy == target {
-                fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
-                    rFrom, rSeq, target)
-                return true
-            }
-        }
-        // Otherwise, print the redirected message normally.
-        fmt.Printf("--> %s\n", newMsg)
-        return true
-    }
+	// NEW: If the message was produced by a redirection (SPECIAL CHECK 2), check if it is a duplicate.
+	if strings.HasPrefix(msg, "REDIRECT:") {
+		newMsg := strings.TrimSpace(strings.TrimPrefix(msg, "REDIRECT:"))
+		// Try to parse the redirected message.
+		var rFrom, rVal, rSeq, rAcceptedBy int
+		n, err := fmt.Sscanf(newMsg, "accept request from %d with value %d sequence %d accepted by %d",
+			&rFrom, &rVal, &rSeq, &rAcceptedBy)
+		if err == nil && n == 4 {
+			// If the redirection indicates that the vote is coming back from the proposer itself, print duplicate.
+			if rAcceptedBy == target {
+				fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
+					rFrom, rSeq, target)
+				return true
+			}
+		}
+		// Otherwise, print the redirected message normally.
+		fmt.Printf("--> %s\n", newMsg)
+		return true
+	}
 
-    // Otherwise, proceed normally (parsing accept_ok or accept_reject messages).
-    var propNum, fromNode, promised int
-    isOk := false
+	// Otherwise, proceed normally (parsing accept_ok or accept_reject messages).
+	var propNum, fromNode, promised int
+	isOk := false
 
-    _, errOk := fmt.Sscanf(msg, "accept_ok proposal=%d fromNode=%d",
-        &propNum, &fromNode)
-    if errOk == nil {
-        isOk = true
-    } else {
-        _, errRej := fmt.Sscanf(msg, "accept_reject proposal=%d fromNode=%d promised=%d",
-            &propNum, &fromNode, &promised)
-        if errRej != nil {
-            log.Fatalf("Unrecognized accept response: %s", msg)
-        }
-    }
+	_, errOk := fmt.Sscanf(msg, "accept_ok proposal=%d fromNode=%d",
+		&propNum, &fromNode)
+	if errOk == nil {
+		isOk = true
+	} else {
+		_, errRej := fmt.Sscanf(msg, "accept_reject proposal=%d fromNode=%d promised=%d",
+			&propNum, &fromNode, &promised)
+		if errRej != nil {
+			log.Fatalf("Unrecognized accept response: %s", msg)
+		}
+	}
 
-    proposer := &s.Nodes[target-1]
+	proposer := &s.Nodes[target-1]
 
-    if propNum != proposer.CurrentProposalNum {
-        fmt.Printf("node %d ignoring accept response for old proposal %d\n", target, propNum)
-        return true
-    }
+	if propNum != proposer.CurrentProposalNum {
+		fmt.Printf("node %d ignoring accept response for old proposal %d\n", target, propNum)
+		return true
+	}
 
-    if isOk {
-        proposer.AcceptOKs++
-        fmt.Printf("node %d got accept_ok from node %d (proposal=%d)\n",
-            target, fromNode, propNum)
+	if isOk {
+		proposer.AcceptOKs++
+		fmt.Printf("node %d got accept_ok from node %d (proposal=%d)\n",
+			target, fromNode, propNum)
 
-        if proposer.AcceptOKs >= s.majority() {
-            // We have consensus. Broadcast "decide request."
-            finalValue := proposer.CurrentValue
-            fmt.Printf("node %d sees majority accept for proposal=%d value=%d\n",
-                target, propNum, finalValue)
-            for t := 1; t <= len(s.Nodes); t++ {
-                k := Key{Type: MsgDecideRequest, Time: deliverTime, Target: t}
-                m := fmt.Sprintf("decide_req proposal=%d value=%d from=%d",
-                    propNum, finalValue, target)
-                s.Messages[k] = m
-            }
-        }
-    } else {
-        proposer.AcceptRejects++
-        fmt.Printf("node %d got accept_reject from node %d (proposal=%d, promised=%d)\n",
-            target, fromNode, propNum, promised)
+		if proposer.AcceptOKs >= s.majority() {
+			// We have consensus. Broadcast "decide request."
+			finalValue := proposer.CurrentValue
+			fmt.Printf("node %d sees majority accept for proposal=%d value=%d\n",
+				target, propNum, finalValue)
+			for t := 1; t <= len(s.Nodes); t++ {
+				k := Key{Type: MsgDecideRequest, Time: deliverTime, Target: t}
+				m := fmt.Sprintf("decide_req proposal=%d value=%d from=%d",
+					propNum, finalValue, target)
+				s.Messages[k] = m
+			}
+		}
+	} else {
+		proposer.AcceptRejects++
+		fmt.Printf("node %d got accept_reject from node %d (proposal=%d, promised=%d)\n",
+			target, fromNode, propNum, promised)
 
-        if proposer.AcceptRejects >= s.majority() {
-            old := proposer.CurrentProposalNum
-            proposer.CurrentProposalNum += 10
-            fmt.Printf("node %d sees majority reject in accept round; old=%d new=%d\n",
-                target, old, proposer.CurrentProposalNum)
-        }
-    }
+		if proposer.AcceptRejects >= s.majority() {
+			old := proposer.CurrentProposalNum
+			proposer.CurrentProposalNum += 10
+			fmt.Printf("node %d sees majority reject in accept round; old=%d new=%d\n",
+				target, old, proposer.CurrentProposalNum)
+		}
+	}
 
-    return true
+	return true
 }
 
 // at 1014 deliver decide request message to 1 from time 1012
