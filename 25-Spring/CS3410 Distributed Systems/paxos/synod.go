@@ -436,7 +436,7 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
     key := Key{Type: MsgAcceptResponse, Time: sendTime, Target: target}
     msg, ok := s.Messages[key]
     if !ok {
-        // If consensus has been achieved, assume this missing message is the duplicate.
+        // Only treat as duplicate if there is no stored message.
         proposer := s.Nodes[target-1]
         if proposer.AlreadySentAccept {
             fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
@@ -447,12 +447,10 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
     }
 
     if strings.HasPrefix(msg, "REDIRECT:") {
-		// Instead of printing the redirect message, treat this as a duplicate.
-		proposer := s.Nodes[target-1]
-		fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
-			target, proposer.CurrentProposalNum, target)
-		return true
-	}	
+        newMsg := strings.TrimSpace(strings.TrimPrefix(msg, "REDIRECT:"))
+        fmt.Printf("--> %s\n", newMsg)
+        return true
+    }
 
     // Otherwise, proceed normally.
     propNum, fromNode, promised := 0, 0, 0
