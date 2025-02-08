@@ -169,8 +169,7 @@ func (s *State) TrySendPrepare(line string) bool {
 	return true
 }
 
-// TryDeliverPrepareRequest handles: 
-// "at 1002 deliver prepare request message to 2 from time 1001"
+// TryDeliverPrepareRequest handles: "at 1002 deliver prepare request message to 2 from time 1001"
 func (s *State) TryDeliverPrepareRequest(line string) bool {
 	var deliverTime, target, sendTime int
 	n, err := fmt.Sscanf(line, "at %d deliver prepare request message to %d from time %d\n",
