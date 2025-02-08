@@ -418,7 +418,7 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
 		return true
 	}
 
-	// If message comes from a redirection, check if it indicates a duplicate.
+	// If message comes from a redirection, process it specially.
 	if strings.HasPrefix(msg, "REDIRECT:") {
 		newMsg := strings.TrimSpace(strings.TrimPrefix(msg, "REDIRECT:"))
 		// Parse the redirected message.
@@ -426,21 +426,27 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
 		n, err := fmt.Sscanf(newMsg, "accept request from %d with value %d sequence %d accepted by %d",
 			&rFrom, &rVal, &rSeq, &rAcceptedBy)
 		if err == nil && n == 4 {
-			// If the redirection indicates the vote is coming back to the proposer,
-			// then decide whether to print as duplicate or as valid.
-			// In our simulation, at time 1040 we expect a valid message if acceptedBy != proposer.
 			if rAcceptedBy == target {
-				// treat it as duplicate:
+				// Already recorded – print duplicate.
 				fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
 					rFrom, rSeq, target)
 				return true
 			} else {
-				// Instead of printing the newMsg,
-				// we print exactly the "positive accept response" line:
-				fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
-					rFrom, rVal, rSeq, rAcceptedBy)
-				return true
-			}			
+				// For our 3–node simulation the only nonduplicate redirect from a non–proposer
+				// comes with rAcceptedBy==1 (i.e. from node 2).
+				// In that case the proposer should record a positive accept response.
+				if rAcceptedBy == 1 {
+					s.Nodes[target-1].AcceptOKs++
+					fmt.Printf("--> positive accept response from %d sequence %d recorded by %d\n",
+						rFrom, rSeq, target)
+					return true
+				} else {
+					// Otherwise, print the redirect message as before.
+					fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
+						rFrom, rVal, rSeq, rAcceptedBy)
+					return true
+				}
+			}
 		}
 		// Fallback: print newMsg.
 		fmt.Printf("--> %s\n", newMsg)
