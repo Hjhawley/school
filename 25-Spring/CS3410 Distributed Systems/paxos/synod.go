@@ -187,7 +187,6 @@ func (s *State) TryDeliverPrepareRequest(line string) bool {
 	if !ok {
 		log.Fatalf("No matching prepare request message: %v", key)
 	}
-	// delete(s.Messages, key) // we don't want to delete
 
 	var propNum, fromNode int
 	n, err = fmt.Sscanf(msg, "proposal=%d from=%d", &propNum, &fromNode)
@@ -373,16 +372,15 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 
 	// SPECIAL CHECK 1: (for the proposer)
 	if target == fromNode && acceptor.AlreadySentAccept {
-		N := len(s.Nodes)
-		acceptedBy := ((target + N - 2) % N) + 1
-		// Store the response with Target = fromNode (proposer's id)
+		// For the proposer, record a duplicate response.
 		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: fromNode}
-		respMsg := fmt.Sprintf("REDIRECT: accept request from %d with value %d sequence %d accepted by %d", 
-			fromNode, theValue, propNum, acceptedBy)
+		respMsg := fmt.Sprintf("prepare response from %d sequence %d ignored as a duplicate by %d",
+			fromNode, propNum, target)
 		s.Messages[respKey] = respMsg
 		fmt.Printf("--> valid prepare vote ignored by %d because round is already resolved\n", target)
 		return true
 	}
+	
 	// SPECIAL CHECK 2: (for non-proposers)
 	if target != fromNode {
 		N := len(s.Nodes)
@@ -436,7 +434,7 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
     key := Key{Type: MsgAcceptResponse, Time: sendTime, Target: target}
     msg, ok := s.Messages[key]
     if !ok {
-        // Only treat as duplicate if there is no stored message.
+        // If consensus has been achieved, assume this missing message is the duplicate.
         proposer := s.Nodes[target-1]
         if proposer.AlreadySentAccept {
             fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
@@ -446,6 +444,13 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
         log.Fatalf("No matching accept response message: %v", key)
     }
 
+    // NEW: If this message is a duplicate response (from SPECIAL CHECK 1), print it directly.
+    if strings.HasPrefix(msg, "prepare response") {
+        fmt.Printf("--> %s\n", msg)
+        return true
+    }
+
+    // If the message was produced by a redirection (SPECIAL CHECK 2), handle that.
     if strings.HasPrefix(msg, "REDIRECT:") {
         newMsg := strings.TrimSpace(strings.TrimPrefix(msg, "REDIRECT:"))
         fmt.Printf("--> %s\n", newMsg)
