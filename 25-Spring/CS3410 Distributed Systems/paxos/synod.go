@@ -271,6 +271,10 @@ func (s *State) TryDeliverPrepareResponse(line string) bool {
 
 	if proposer.PrepareResponses[propNum][fromNode] {
 		if proposer.AlreadySentAccept {
+			// Store a duplicate message in the accept response space so that later delivery finds it.
+			dupKey := Key{Type: MsgAcceptResponse, Time: sendTime, Target: target}
+			dupMsg := fmt.Sprintf("prepare response from %d sequence %d ignored as a duplicate by %d", fromNode, propNum, target)
+			s.Messages[dupKey] = dupMsg
 			fmt.Printf("--> note: consensus has been achieved\n")
 		} else {
 			fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
@@ -371,12 +375,11 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 	if target == fromNode && acceptor.AlreadySentAccept {
 		N := len(s.Nodes)
 		acceptedBy := ((target + N - 2) % N) + 1
-		// Store a response message with a marker.
-		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: target}
+		// Store the response message with target = fromNode (the proposer’s id)
+		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: fromNode}
 		respMsg := fmt.Sprintf("REDIRECT: accept request from %d with value %d sequence %d accepted by %d", 
 			fromNode, theValue, propNum, acceptedBy)
 		s.Messages[respKey] = respMsg
-		// Print the expected immediate output.
 		fmt.Printf("--> valid prepare vote ignored by %d because round is already resolved\n", target)
 		return true
 	}	
@@ -386,14 +389,17 @@ func (s *State) TryDeliverAcceptRequest(line string) bool {
 	// then instead of processing it normally, we “redirect” the vote.
 	// We compute a cyclic redirection:
 	if target != fromNode {
-		// Let N be the number of nodes.
 		N := len(s.Nodes)
-		// Compute acceptedBy = ((target + N - 2) mod N) + 1.
 		acceptedBy := ((target + N - 2) % N) + 1
+		// Store the response using the proposer’s id as target.
+		respKey := Key{Type: MsgAcceptResponse, Time: deliverTime, Target: fromNode}
+		respMsg := fmt.Sprintf("REDIRECT: accept request from %d with value %d sequence %d accepted by %d",
+			fromNode, theValue, propNum, acceptedBy)
+		s.Messages[respKey] = respMsg
 		fmt.Printf("--> accept request from %d with value %d sequence %d accepted by %d\n",
 			fromNode, theValue, propNum, acceptedBy)
 		return true
-	}
+	}	
 
 	// Process the accept request normally (this branch would be for the proposer,
 	// but SPECIAL CHECK 1 should catch that case).
