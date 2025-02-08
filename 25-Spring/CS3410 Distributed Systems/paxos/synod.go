@@ -444,34 +444,34 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
         log.Fatalf("No matching accept response message: %v", key)
     }
 
-    // NEW: If this message is a duplicate response (from SPECIAL CHECK 1), print it directly.
+    // If this message is a duplicate response stored by SPECIAL CHECK 1, print it directly.
     if strings.HasPrefix(msg, "prepare response") {
         fmt.Printf("--> %s\n", msg)
         return true
     }
 
-    // If the message was produced by a redirection (SPECIAL CHECK 2), handle that.
+    // NEW: If the message was produced by a redirection (SPECIAL CHECK 2), check if it is a duplicate.
     if strings.HasPrefix(msg, "REDIRECT:") {
-		newMsg := strings.TrimSpace(strings.TrimPrefix(msg, "REDIRECT:"))
-		// Try to parse the redirected message.
-		var rFrom, rVal, rSeq, rAcceptedBy int
-		n, err := fmt.Sscanf(newMsg, "accept request from %d with value %d sequence %d accepted by %d", 
-			&rFrom, &rVal, &rSeq, &rAcceptedBy)
-		if err == nil && n == 4 {
-			// If acceptedBy equals the target (i.e. the proposer), treat it as duplicate.
-			if rAcceptedBy == target {
-				fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
-					rFrom, rSeq, target)
-				return true
-			}
-		}
-		// Otherwise, print the redirected message normally.
-		fmt.Printf("--> %s\n", newMsg)
-		return true
-	}	
+        newMsg := strings.TrimSpace(strings.TrimPrefix(msg, "REDIRECT:"))
+        // Try to parse the redirected message.
+        var rFrom, rVal, rSeq, rAcceptedBy int
+        n, err := fmt.Sscanf(newMsg, "accept request from %d with value %d sequence %d accepted by %d",
+            &rFrom, &rVal, &rSeq, &rAcceptedBy)
+        if err == nil && n == 4 {
+            // If the redirection indicates that the vote is coming back from the proposer itself, print duplicate.
+            if rAcceptedBy == target {
+                fmt.Printf("--> prepare response from %d sequence %d ignored as a duplicate by %d\n",
+                    rFrom, rSeq, target)
+                return true
+            }
+        }
+        // Otherwise, print the redirected message normally.
+        fmt.Printf("--> %s\n", newMsg)
+        return true
+    }
 
-    // Otherwise, proceed normally.
-    propNum, fromNode, promised := 0, 0, 0
+    // Otherwise, proceed normally (parsing accept_ok or accept_reject messages).
+    var propNum, fromNode, promised int
     isOk := false
 
     _, errOk := fmt.Sscanf(msg, "accept_ok proposal=%d fromNode=%d",
@@ -481,7 +481,7 @@ func (s *State) TryDeliverAcceptResponse(line string) bool {
     } else {
         _, errRej := fmt.Sscanf(msg, "accept_reject proposal=%d fromNode=%d promised=%d",
             &propNum, &fromNode, &promised)
-        if !(errRej == nil) {
+        if errRej != nil {
             log.Fatalf("Unrecognized accept response: %s", msg)
         }
     }
