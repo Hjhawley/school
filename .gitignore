@@ -28,7 +28,6 @@ x64/
 *.bak
 *.old
 *.swp
-*.log
 *.DS_Store
 Thumbs.db
 
@@ -48,7 +47,6 @@ venv/
 
 # LaTeX
 *.aux
-*.log
 *.fls
 *.fdb_latexmk
 *.synctex.gz
