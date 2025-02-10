@@ -46,8 +46,9 @@ venv/
 *.d
 *.dSYM/
 
-*.aux
-*.log
-*.fls
-*.fdb_latexmk
-*.synctex.gz
+# LaTeX
+#*.aux
+#*.log
+#*.fls
+#*.fdb_latexmk
+#*.synctex.gz
