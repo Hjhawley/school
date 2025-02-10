@@ -1,0 +1,158 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{soul}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{framed} % For the box
+\sethlcolor{yellow}
+
+% Adjust margins
+\geometry{margin=1in}
+
+\title{\textbf{CSE421: Design and Analysis of Algorithms}}
+\author{Homework 1 \\ Shaqan Oveis Gharan}
+\date{March 27th, 2024 \\ Due: April 3rd, 2024 at 11:59 PM}
+
+
+\begin{document}
+
+\noindent CS-3510-(write here your section number) Algorithms, Spring 2025\hfill Homework 2\\
+FirstName LastName \hfill Collaborator(s):
+
+\hrulefill
+
+\subsection*{Problem 1 (10 pts)}
+Arrange the following in increasing order of the asymptotic growth rate. Explain your answer. All logs are in base 2.
+\begin{align*}
+    (a) \quad & f_1(n) = 2^{2\sqrt{\log n}} \\
+    (b) \quad & f_2(n) = 2^{\log(n^2)} \\
+    (c) \quad & f_3(n) = \frac{n (\log \log n)^{99}}{(\log n)^{99}} \\
+    (d) \quad & f_4(n) = (n!)^2\\
+    (e) \quad & f_5(n) = 4^{(2^{\log n})} \\
+    (f) \quad & f_6(n) = n^{n \log n} \\
+    (g) \quad & f_7(n) = \log(n!) \\
+    (h) \quad & f_8(n) = 2^{\frac{\log n}{\log \log n}} \\
+    (i) \quad & f_9(n) = 2^{\log n - \log \log n} \\
+    (j) \quad & f_{10}(n) = (4^2)^{\log n}
+\end{align*}
+
+\subsection*{Problem 2 (10 pts)}
+You have a collection of books and need to arrange them on shelves by color. Each shelf can hold only books of the same color, but you don't know the colors directly. Instead, you are given pairs of books known to be the same color. This relation follows an equivalent relation (reflexive, symmetric, and transitive). Your task is to write a code to determine the minimum number of shelves needed, ensuring that no two books of different colors share a shelf.
+
+\noindent \textbf{Submission:} Please submit your source code file to Canvas, along with a screenshot attached in this document showing the output from running the three examples. The hard-coded program will not be accepted.
+\vspace{1em}  % Adds one line of space
+
+\noindent \textbf{Example 1:}
+
+\noindent \textbf{Input:}
+\begin{verbatim}
+books = ['u', 'v', 'w', 'x']
+pairs = [('u', 'v'), ('v', 'w')]
+\end{verbatim}
+
+\noindent \textbf{Output:}
+\begin{verbatim}
+print(min_shelves(books, pairs))  # Output: 2
+\end{verbatim}
+
+\noindent \textbf{Explanation:} Books u, v, and w are all connected (same color). Book x is not connected to any other book and thus needs its own shelf.  
+Result: 2 shelves.
+\vspace{1em}  % Adds one line of space
+
+\noindent \textbf{Example 2:}
+
+\noindent \textbf{Input:}
+\begin{verbatim}
+books = ['a', 'b', 'c', 'd', 'e', 'f']
+pairs = [('a', 'b'), ('b', 'c'), ('d', 'e')]
+\end{verbatim}
+
+\noindent \textbf{Output:}
+\begin{verbatim}
+print(min_shelves(books, pairs))  # Output: 3
+\end{verbatim}
+
+\noindent \textbf{Explanation:} Books a, b, and c are of the same color. Books d and e are of the same color. Book f is alone and needs its own shelf.  
+Result: 3 shelves.
+
+\vspace{1em}
+
+\noindent \textbf{Example 3:}
+
+\noindent \textbf{Input:}
+\begin{verbatim}
+books = ['x', 'y', 'z']
+pairs = [('x', 'y')]
+\end{verbatim}
+
+\noindent \textbf{Output:}
+\begin{verbatim}
+print(min_shelves(books, pairs))  # Output: 2
+\end{verbatim}
+
+\noindent \textbf{Explanation:} Books x and y are connected (same color), but book z is not connected to any other book. Hence, we need two shelves. Result: 2 shelves.\\
+
+\noindent \textbf{Hint:} This problem can be abstracted as finding the connected components in a graph. Each book is a node, and each pair of books that are the same color represents an edge between two nodes. Your goal is to identify how many disconnected groups (connected components) of books there are. Each connected component will correspond to a shelf. You can use Depth-First Search (DFS) or Breadth-First Search (BFS) to find these connected components efficiently.
+
+\subsection*{Problem 3 (30 pts)}
+You have a 5-gallon jug and a 3-gallon jug, both initially empty. Your goal is to have exactly \textbf{4 gallons} of water in the 5-gallon jug, and \textbf{0 gallons} in the 3-gallon jug.
+\\
+
+You are allowed the following operations:
+
+\begin{enumerate}
+    \item \textbf{Fill} any of the jugs completely.
+    \item \textbf{Pour} water from one jug into the other until the first jug is empty or the second jug is full.
+    \item \textbf{Empty} the contents of a jug.
+\end{enumerate}
+
+\noindent \textbf{Objective:}  
+\begin{enumerate}
+    \item (5 pts) Describe a method to reach the goal state (4 gallons in the 5-gallon jug and 0 gallons in the 3-gallon jug). You can solve this puzzle step by step in any way that works, without needing to apply a general algorithm. Assume $(m,n)$ denote $m$ gallons in the 5-gallon jug and $n$ gallons in the 3-gallon jug.
+    
+\noindent \textbf{Example}
+\begin{enumerate}
+    \item Start with empty jugs: (0, 0)
+    \item Fill jug 3: (0, 3)
+    \item Pour from jug 3 to jug 5: (3, 0)
+    \item Fill jug 3: (3, 3)
+    \item ...
+    \item Pour from jug 3 to jug 5: (4, 0)  \textbf{(Goal reached)}
+\end{enumerate}
+
+
+    \item (25 pts)Now we generalize the problem to two jugs of any size, and we hope to find steps to reach a target volume in one jug, e.g. two jugs of 7 and 5 gallons for a target of 6 gallons. Write a program to automate the solution to this problem. The program should find the minimum number of steps and print each step taken to reach the goal state.
+
+\noindent \textbf{Function definition:}
+\begin{verbatim}
+reach_target_volumn(size_A, size_B, target_vol)
+\end{verbatim}
+
+\noindent \textbf{Output:}
+\begin{verbatim}
+Steps for size_A=7, size_B=5, target_vol=6: 
+(0, 0)
+(7, 0)
+(2, 5)
+...
+(6, 5)    
+\end{verbatim}
+
+\noindent If there is no solution, return: "unreachable"
+\end{enumerate}
+
+\noindent \textbf{Submission:}  
+Please submit your source code file to Canvas and attach a screenshot in this document showing the output when running your code with these two test cases.\\
+\begin{verbatim}
+    size_A=6, size_B=4, taget_vol=1;
+    size_A=11, size_B=5, taget_vol=8;    
+\end{verbatim}
+
+\noindent \textbf{Hint:} 
+Treat each state of the jugs as a vertex \((m, n)\), where \(m\) and \(n\) are the amounts of water in the jugs. Operations (filling, pouring, emptying) are edges between states. Use Breadth-First Search (BFS) to find the shortest path from the initial state \((0, 0)\) to the target state \((x, y)\) or return "unreachable".
+
+\end{document}
+
+
