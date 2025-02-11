@@ -9,7 +9,7 @@ def do_cross(my_args):
 
     cv_results = sklearn.model_selection.cross_validate(
         pipeline, X, y, 
-        cv=5,  # <-- do 5 folds
+        cv=5,  # 5 folds? see how many i can do
         n_jobs=-1, 
         verbose=3, 
         scoring=('r2', 'neg_mean_squared_error', 'neg_mean_absolute_error')
