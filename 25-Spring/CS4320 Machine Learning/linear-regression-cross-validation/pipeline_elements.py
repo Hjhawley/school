@@ -10,8 +10,34 @@ import pandas as pd
 class DataFrameSelector(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin):
     
     def __init__(self, do_predictors=True, do_numerical=True):
-        self.mCategoricalPredictors = ["RoofMatl"]
-        self.mNumericalPredictors = ["OverallQual", "GrLivArea", "1stFlrSF", "GarageCars", "YearRemodAdd"]
+        self.mCategoricalPredictors = ["MSSubClass", "MSZoning", "Street", "Alley",
+                                       "LotShape", "LandContour", "Utilities", 
+                                       "LotConfig", "LandSlope", "Neighborhood", 
+                                       "Condition1", "Condition2", "BldgType",
+                                       "HouseStyle", "RoofStyle", "RoofMatl",
+                                       "Exterior1st", "Exterior2nd", "MasVnrType",
+                                       "ExterQual", "ExterCond", "Foundation",
+                                       "BsmtQual", "BsmtCond", "BsmtExposure",
+                                       "BsmtFinType1", "BsmtFinType2", "Heating",
+                                       "HeatingQC", "CentralAir", "Electrical", 
+                                       "KitchenQual", "Functional", "FireplaceQu", 
+                                       "GarageType", "GarageFinish", "GarageQual", 
+                                       "GarageCond", "PavedDrive", "PoolQC", 
+                                       "Fence", "MiscFeature", "SaleType", 
+                                       "SaleCondition"]
+        self.mNumericalPredictors = ["LotFrontage", "LotArea", "OverallQual", 
+                                     "OverallCond", "YearBuilt", "YearRemodAdd", 
+                                     "GrLivArea", "1stFlrSF",
+                                     "MasVnrArea", "BsmtFinSF1", "BsmtFinSF2",
+                                     "BsmtUnfSF", "TotalBsmtSF", "1stFlrSF", 
+                                     "2ndFlrSF", "LowQualFinSF", "GrLivArea", 
+                                     "BsmtFullBath", "BsmtHalfBath", "FullBath",
+                                     "HalfBath", "BedroomAbvGr", "KitchenAbvGr", 
+                                     "TotRmsAbvGrd", "Fireplaces", "GarageYrBlt",
+                                     "GarageCars", "GarageArea", "WoodDeckSF", 
+                                     "OpenPorchSF", "EnclosedPorch", "3SsnPorch",
+                                     "ScreenPorch", "PoolArea", "MiscVal", 
+                                     "MoSold", "YrSold"]
         self.mLabels = ["SalePrice"]
         self.do_numerical = do_numerical
         self.do_predictors = do_predictors
