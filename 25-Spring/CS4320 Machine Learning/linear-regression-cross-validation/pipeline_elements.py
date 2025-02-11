@@ -2,6 +2,7 @@
 
 import sklearn.pipeline
 import sklearn.base
+from sklearn.preprocessing import OneHotEncoder
 
 import pandas as pd
 
@@ -49,6 +50,7 @@ print(data_transform)
 
 items = []
 items.append(("categorical-features-only", DataFrameSelector(do_predictors=True, do_numerical=False)))
+items.append(("onehot", OneHotEncoder(handle_unknown='ignore')))
 
 cat_pipeline = sklearn.pipeline.Pipeline(items)
 
