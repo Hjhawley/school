@@ -63,24 +63,23 @@ def get_data(filename, label_col=None):
     index_col=0 parameter.
     """
     data = pd.read_csv(filename, index_col=0)
-    data = data[data["SalePrice"] <= 500000] # try excluding homes over half a million
+    data = data[data["SalePrice"] <= 500000] # try excluding homes over 500k
     if label_col is not None and label_col in data.columns:
         data = data.dropna(subset=[label_col])
     return data
 
 def load_data(my_args, filename):
     data = pd.read_csv(filename, index_col=0)
-    data = data[data["SalePrice"] <= 500000] # try excluding homes over half a million
     
     # If we do have a label column, and we want to drop missing labels, do so
     if my_args.label in data.columns:
+        data = data[data[my_args.label] <= 500000]  # try excluding homes over 500k
         data = data.dropna(subset=[my_args.label])
         y = data[my_args.label]
     else:
         y = None
     
     feature_columns, label_column = get_feature_and_label_names(my_args, data)
-
     X = data[feature_columns]
     return X, y
 
@@ -133,9 +132,10 @@ def do_fit(my_args):
         raise Exception("training data file: {} does not exist.".format(train_file))
 
     X, y = load_data(my_args, train_file)
+    y_transformed = np.log1p(y)
     
     pipeline = make_Ridge_fit_pipeline(my_args)
-    pipeline.fit(X, y)
+    pipeline.fit(X, y_transformed)
 
     model_file = get_model_filename(my_args.model_file, train_file)
 
@@ -350,7 +350,9 @@ def do_predict(my_args):
     X_test, _ = load_data(my_args, test_file)
 
     pipeline = joblib.load(model_file)
-    y_test_predicted = pipeline.predict(X_test)
+    y_test_predicted_log = pipeline.predict(X_test)
+    # undo the log from fitting
+    y_test_predicted = np.expm1(y_test_predicted_log)
 
     test_df = pd.read_csv(test_file, index_col=0)
 
