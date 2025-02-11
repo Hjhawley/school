@@ -53,12 +53,12 @@ num_pipeline = make_numeric_pipeline(
     missing_strategy="median"
 )
 
-def make_categorical_pipeline():
-    items = ("categorical-features-only", DataFrameSelector(do_predictors=True, do_numerical=False))
-    items.append(("onehot", OneHotEncoder(handle_unknown='ignore')))
-    return sklearn.pipeline.Pipeline(items)
+items = []
+items.append(("categorical-features-only", DataFrameSelector(do_predictors=True, do_numerical=False)))
+items.append(("onehot", OneHotEncoder(handle_unknown='ignore')))
 
-cat_pipeline = make_categorical_pipeline()
+cat_pipeline = sklearn.pipeline.Pipeline(items)
+
 cat_pipeline.fit(data)
 data_transform = cat_pipeline.transform(data)
 print(data_transform)
