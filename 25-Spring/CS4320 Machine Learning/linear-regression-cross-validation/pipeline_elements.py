@@ -35,7 +35,7 @@ class DataFrameSelector(sklearn.base.BaseEstimator, sklearn.base.TransformerMixi
         return values
 
 
-filename = "data-train.csv"
+filename = "train.csv"
 data = pd.read_csv(filename, index_col=0)
 
 items = []

@@ -56,21 +56,22 @@ def get_model_filename(model_file, filename):
         model_file = "{}-model.joblib".format(basename)
     return model_file
 
-def get_data(filename):
+def get_data(filename, label_col=None):
     """
     Assumes column 0 is the instance index stored in the
     csv file.  If no such column exists, remove the
     index_col=0 parameter.
     """
     data = pd.read_csv(filename, index_col=0)
-    data = data.dropna(subset=['label'])
+    if label_col is not None and label_col in data.columns:
+        data = data.dropna(subset=[label_col])
     return data
 
 def load_data(my_args, filename):
-    data = get_data(filename)
+    data = get_data(filename, label_col=my_args.label)
     feature_columns, label_column = get_feature_and_label_names(my_args, data)
     X = data[feature_columns]
-    y = data[label_column]
+    y = data[label_column] if label_column in data.columns else None
     return X, y
 
 def get_feature_and_label_names(my_args, data):
@@ -327,10 +328,33 @@ def do_cross(my_args):
     print("MSE:", cv_results['test_neg_mean_squared_error'], cv_results['test_neg_mean_squared_error'].mean())
     print("MAE:", cv_results['test_neg_mean_absolute_error'], cv_results['test_neg_mean_absolute_error'].mean())
 
+def do_predict(my_args):
+    test_file = my_args.test_file
+    if not os.path.exists(test_file):
+        raise Exception("testing data file: {} does not exist.".format(test_file))
+    
+    model_file = get_model_filename(my_args.model_file, my_args.train_file)
+    if not os.path.exists(model_file):
+        raise Exception("Model file, '{}', does not exist.".format(model_file))
+
+    X_test, _ = load_data(my_args, test_file)
+
+    pipeline = joblib.load(model_file)
+    y_test_predicted = pipeline.predict(X_test)
+
+    test_df = pd.read_csv(test_file, index_col=0)
+
+    prediction = pd.DataFrame({
+        "Id": test_df.index,
+        "SalePrice": y_test_predicted
+    })
+    prediction.to_csv("predictions.csv", index=False)
+    print("Predictions saved to predictions.csv")
+
 def parse_args(argv):
     parser = argparse.ArgumentParser(prog=argv[0], description='Fit Data With Linear Regression Using Pipeline')
     parser.add_argument('action', default='SGD',
-                        choices=[ "SGD", "cross", "show-function", "score", "loss", "show-model" ], 
+                        choices=[ "SGD", "cross", "predict", "show-function", "score", "loss", "show-model" ], 
                         nargs='?', help="desired action")
     parser.add_argument('--train-file',    '-t', default="",    type=str,   help="name of file with training data")
     parser.add_argument('--test-file',     '-T', default="",    type=str,   help="name of file with test data (default is constructed from train file name)")
@@ -366,6 +390,8 @@ def main(argv):
         do_fit(my_args)
     elif my_args.action == 'cross':
         do_cross(my_args)
+    elif my_args.action == 'predict':
+        do_predict(my_args)
     elif my_args.action == "show-function":
         show_function(my_args)
     elif my_args.action == "score":
