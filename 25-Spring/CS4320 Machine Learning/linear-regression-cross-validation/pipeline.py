@@ -68,10 +68,18 @@ def get_data(filename, label_col=None):
     return data
 
 def load_data(my_args, filename):
-    data = get_data(filename, label_col=my_args.label)
+    data = pd.read_csv(filename, index_col=0)
+    
+    # If we do have a label column, and we want to drop missing labels, do so
+    if my_args.label in data.columns:
+        data = data.dropna(subset=[my_args.label])
+        y = data[my_args.label]
+    else:
+        y = None
+    
     feature_columns, label_column = get_feature_and_label_names(my_args, data)
+
     X = data[feature_columns]
-    y = data[label_column] if label_column in data.columns else None
     return X, y
 
 def get_feature_and_label_names(my_args, data):

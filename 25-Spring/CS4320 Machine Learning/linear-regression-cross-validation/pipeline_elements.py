@@ -9,7 +9,7 @@ class DataFrameSelector(sklearn.base.BaseEstimator, sklearn.base.TransformerMixi
     
     def __init__(self, do_predictors=True, do_numerical=True):
         self.mCategoricalPredictors = ["RoofMatl"]
-        self.mNumericalPredictors = ["BedroomAbvGr"]
+        self.mNumericalPredictors = ["OverallQual", "GrLivArea", "1stFlrSF", "GarageCars", "YearRemodAdd"]
         self.mLabels = ["SalePrice"]
         self.do_numerical = do_numerical
         self.do_predictors = do_predictors
