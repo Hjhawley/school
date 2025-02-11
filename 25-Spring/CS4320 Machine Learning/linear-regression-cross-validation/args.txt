@@ -1,0 +1,7 @@
+example of what to run
+
+python pipeline.py cross --train-file train.csv --label SalePrice --use-polynomial-features 2 --use-scaler 1 --numerical-missing-strategy median
+
+python pipeline.py Ridge --train-file train.csv --label SalePrice --use-polynomial-features 2 --use-scaler 1 --numerical-missing-strategy median
+
+python pipeline.py predict --train-file train.csv --test-file test.csv --label SalePrice --use-polynomial-features 2 --use-scaler 1 --numerical-missing-strategy median

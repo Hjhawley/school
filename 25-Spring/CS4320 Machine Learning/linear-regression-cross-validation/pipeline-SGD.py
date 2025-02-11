@@ -119,10 +119,10 @@ def make_numerical_feature_pipeline(my_args):
     numerical_pipeline = sklearn.pipeline.Pipeline(items)
     return numerical_pipeline
 
-def make_Ridge_fit_pipeline(my_args):
+def make_SGD_fit_pipeline(my_args):
     items = []
-    items.append(("features", feature_union))
-    items.append(("model", sklearn.linear_model.Ridge(alpha=1.0)))
+    items.append(("features", feature_union))  # changed this to union categorical features
+    items.append(("model", sklearn.linear_model.SGDRegressor()))
     return sklearn.pipeline.Pipeline(items)
 
 def do_fit(my_args):
@@ -132,7 +132,7 @@ def do_fit(my_args):
 
     X, y = load_data(my_args, train_file)
     
-    pipeline = make_Ridge_fit_pipeline(my_args)
+    pipeline = make_SGD_fit_pipeline(my_args)
     pipeline.fit(X, y)
 
     model_file = get_model_filename(my_args.model_file, train_file)
@@ -322,7 +322,7 @@ def do_cross(my_args):
 
     X, y = load_data(my_args, train_file)
 
-    pipeline = make_Ridge_fit_pipeline(my_args)
+    pipeline = make_SGD_fit_pipeline(my_args)
 
     cv_results = sklearn.model_selection.cross_validate(
         pipeline, X, y, 
@@ -361,8 +361,8 @@ def do_predict(my_args):
 
 def parse_args(argv):
     parser = argparse.ArgumentParser(prog=argv[0], description='Fit Data With Linear Regression Using Pipeline')
-    parser.add_argument('action', default='Ridge',
-                        choices=[ "Ridge", "cross", "predict", "show-function", "score", "loss", "show-model" ], 
+    parser.add_argument('action', default='SGD',
+                        choices=[ "SGD", "cross", "predict", "show-function", "score", "loss", "show-model" ], 
                         nargs='?', help="desired action")
     parser.add_argument('--train-file',    '-t', default="",    type=str,   help="name of file with training data")
     parser.add_argument('--test-file',     '-T', default="",    type=str,   help="name of file with test data (default is constructed from train file name)")
@@ -394,7 +394,7 @@ def main(argv):
     # logging.basicConfig(level=logging.INFO)
     logging.basicConfig(level=logging.WARN)
 
-    if my_args.action == 'Ridge':
+    if my_args.action == 'SGD':
         do_fit(my_args)
     elif my_args.action == 'cross':
         do_cross(my_args)
