@@ -2,7 +2,8 @@
 
 import sklearn.pipeline
 import sklearn.base
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 import pandas as pd
 
@@ -39,21 +40,25 @@ class DataFrameSelector(sklearn.base.BaseEstimator, sklearn.base.TransformerMixi
 filename = "train.csv"
 data = pd.read_csv(filename, index_col=0)
 
-items = []
-items.append(("numerical-features-only", DataFrameSelector(do_predictors=True, do_numerical=True)))
-num_pipeline = sklearn.pipeline.Pipeline(items)
+def make_numeric_pipeline(use_scaler=False, missing_strategy=""):
+    items = [("numerical-features-only", DataFrameSelector(do_predictors=True, do_numerical=True))]
+    if missing_strategy in ("mean","median","most_frequent"):
+        items.append(("imputer", SimpleImputer(strategy=missing_strategy)))
+    if use_scaler:
+        items.append(("scaler", StandardScaler()))
+    return sklearn.pipeline.Pipeline(items)
 
-num_pipeline.fit(data)
-data_transform = num_pipeline.transform(data)
-print(data_transform)
+num_pipeline = make_numeric_pipeline(
+    use_scaler=True,
+    missing_strategy="median"
+)
 
+def make_categorical_pipeline():
+    items = ("categorical-features-only", DataFrameSelector(do_predictors=True, do_numerical=False))
+    items.append(("onehot", OneHotEncoder(handle_unknown='ignore')))
+    return sklearn.pipeline.Pipeline(items)
 
-items = []
-items.append(("categorical-features-only", DataFrameSelector(do_predictors=True, do_numerical=False)))
-items.append(("onehot", OneHotEncoder(handle_unknown='ignore')))
-
-cat_pipeline = sklearn.pipeline.Pipeline(items)
-
+cat_pipeline = make_categorical_pipeline()
 cat_pipeline.fit(data)
 data_transform = cat_pipeline.transform(data)
 print(data_transform)
