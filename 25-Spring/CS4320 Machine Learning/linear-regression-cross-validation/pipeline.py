@@ -63,12 +63,14 @@ def get_data(filename, label_col=None):
     index_col=0 parameter.
     """
     data = pd.read_csv(filename, index_col=0)
+    data = data[data["SalePrice"] <= 500000] # try excluding homes over half a million
     if label_col is not None and label_col in data.columns:
         data = data.dropna(subset=[label_col])
     return data
 
 def load_data(my_args, filename):
     data = pd.read_csv(filename, index_col=0)
+    data = data[data["SalePrice"] <= 500000] # try excluding homes over half a million
     
     # If we do have a label column, and we want to drop missing labels, do so
     if my_args.label in data.columns:
@@ -326,7 +328,7 @@ def do_cross(my_args):
 
     cv_results = sklearn.model_selection.cross_validate(
         pipeline, X, y, 
-        cv=5,  # do 5-fold? see how many i should do
+        cv=7,  # how many validation groups?
         n_jobs=-1, 
         verbose=3, 
         scoring=('r2', 'neg_mean_squared_error', 'neg_mean_absolute_error')
