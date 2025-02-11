@@ -1,0 +1,30 @@
+Classification metric: Confusion Matrix
+A confusion matrix helps analyze prediction errors:
+
+                      | Predicted Negative  | Predicted Positive  |
+    |-----------------|---------------------|---------------------|
+    | Actual Negative | True Negative (TN)  | False Positive (FP) |
+    | Actual Positive | False Negative (FN) | True Positive (TP)  |
+
+    Example:
+                      | Predicted Negative  | Predicted Positive  |
+    |-----------------|---------------------|---------------------|
+    | Actual Negative | 53,892              | 687                 |
+    | Actual Positive | 1,891               | 3,530               |
+
+    We want to minimize false positives (FP) and false negatives (FN).
+    How much we care about FP vs. FN depends on the problem.
+    (false negatives in medical diagnoses are much worse than false positives)
+
+Precision, Recall, and F1 Score
+Precision = (TP)/(TP + FP)
+    Measures how many predicted positives are actually correct.
+    Higher precision means fewer false positives.
+
+Recall = (TP)/(TP + FN)
+    Measures how many actual positives were correctly identified.
+    Higher recall means fewer false negatives.
+
+F1 Score = (2 * Precision * Recall) / (Precision + Recall)
+    Harmonic mean of precision and recall.
+    Useful when both false positives and false negatives matter.

@@ -1,0 +1,91 @@
+Decision Trees & Random Forest
+
+How Do Machines Learn?
+  We humans learn by observing examples, identifying patterns, and making predictions based on experience.
+  Machines do something similar: they get training data (examples), discover patterns (via algorithms), 
+  and then use those patterns to predict outcomes on new data.
+  Supervised Learning: A type of machine learning in which we provide the algorithm with both the inputs (features) 
+  and the desired outputs (labels). The model “learns” the relationship between them.
+
+The Restaurant Dilemma
+  1. Problem: Will customers wait for a table or leave?
+  2. Variables: Are they starving? Is it Friday? Is the wait > 30 minutes?  
+  3. Goal: Predict whether someone will stay or go, based on these variables.  
+
+  We can use a Decision Tree to model these decisions. For example:
+
+                  Are you starving?
+                  /         \
+                  Yes        No
+                /            \
+        (Leave immediately)    Is it Friday?
+                              /           \
+                              Yes         No
+                              ...         Is wait > 30 min?
+                                          ...
+
+  Each branch is a decision (Yes/No or some condition). We keep branching until we reach a prediction (e.g., "they leave" or "they wait").
+
+The “Secret Sauce”: Information Gain
+
+  When building a decision tree, we want each split to give us the best separation of classes. The measure of how “good” a split is often comes down to information gain, which is based on entropy.
+
+  1. Entropy
+  - Definition: A measure of uncertainty or chaos in the data. 
+  - Formula:  
+    \[
+      H(S) = -\sum_{i} p_i \log_2(p_i)
+    \]
+    where \(p_i\) is the proportion of items in class \(i\) within the set \(S\).  
+    - Interpretation: 
+      - If \(H(S)\) is 0, the set \(S\) is perfectly pure (all one class). 
+      - If \(H(S)\) is 1, there’s maximum disorder (classes are evenly mixed).
+
+  2. Information Gain
+  - Definition: How much entropy is reduced when we split based on a certain feature.
+  - Formula:  
+    \[
+      IG(S, A) = H(S) - \sum_{v \in \text{Values}(A)} \frac{|S_v|}{|S|} \, H(S_v)
+    \]
+    - \(S_v\) is the subset of \(S\) where feature \(A\) has value \(v\).
+    - We look at all possible subsets (all values of feature \(A\)), measure their individual entropies, and weight them by their relative sizes.  
+    - A higher information gain means a better split (i.e., it separates the classes more clearly).
+
+  Building a Decision Tree
+  1. Calculate entropy \(H(S)\) of your dataset \(S\).
+  2. For each feature, compute how much information gain you’d get if you split on that feature.
+  3. Choose the feature that has the highest information gain to make the first split.
+  4. Recursively repeat this process for each branch (subset of data), until:
+    - You reach a pure subset (entropy = 0), or
+    - There are no more features to split on, or
+    - You meet a stopping criterion (e.g., tree depth limit).
+
+  It’s like playing “Twenty Questions” and always picking the most revealing question first.
+
+Overfitting
+
+  - Definition: When a model “memorizes” the training data rather than learning general patterns.
+  - Symptoms: 
+    - It performs extremely well on the training data but poorly on unseen data.
+    - Small changes in the data can drastically change the tree.
+  - Why it happens: If you keep making splits until you perfectly classify all training examples, you may capture noise and outliers rather than true signal.
+
+Random Forests
+
+  A Random Forest is an ensemble of decision trees. The general idea is:
+    1. Bootstrap: Take multiple random subsets of your training data.
+    2. Random Subset of Features: At each split, consider only a random subset of the features instead of all features.
+    3. Grow Many Trees: Each tree is trained on a slightly different subset of data and features.
+    4. Aggregate (“Voting”): Predictions from all the individual trees are combined (e.g., by majority vote for classification, or averaging for regression).
+
+  Why Random Forests Help
+  - Reduced Overfitting: Because each tree sees different data and features, the trees’ individual quirks/overfits tend to cancel out.
+  - Stability: No single tree dominates the final decision, so the final prediction is more robust.
+  - Performance: Often one of the strongest “out-of-the-box” algorithms for many tasks (e.g., classification, regression).
+
+  Real-World Applications
+  - Recommendations (Netflix, Spotify, YouTube): Predict user preferences.  
+  - Medical Diagnosis: Classify images or patient data as “healthy” vs. “not healthy”.  
+  - Fraud Detection: Credit card transactions that deviate from normal behavior.  
+  - Weather Forecasting: Predicting temperatures, rainfall, etc.  
+  - Species Identification: Use features (color, shape, size) to identify species in biology.

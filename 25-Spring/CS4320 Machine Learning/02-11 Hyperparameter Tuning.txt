@@ -1,0 +1,18 @@
+Hyperparameter Tuning
+
+       -->      numerical pipeline             \
+      |         dataframe selector -> scaler    |
+data -|                                          -->    model
+      |         categorical pipeline            |
+       -->      dataframe selector -> one-hot  /
+
+in each step we do a fit and then a transform in sequence.
+fit/transform -> fit/transform -> fit/transform -> fit/transform -> etc...
+so whenever we do .fit() on a pipeline, ALL of that happens.
+
+when a .predict() occurs, we simply transform new incoming data in every element in order WITHOUT fitting.
+we don't change parameters, we just use them.
+
+we can build a grid search function that makes a pipeline, collect a dictionary full of key value pairs (the value being a list of allowed parameters)
+and let it cross validate ALL combinations of hyperparameters and remember the one with the best cross-validation score.
+
