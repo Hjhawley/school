@@ -17,6 +17,3 @@ print(series.shape)
 
 df2 = data[[feature,label]].dropna()
 print(df2.shape)
-
-
-

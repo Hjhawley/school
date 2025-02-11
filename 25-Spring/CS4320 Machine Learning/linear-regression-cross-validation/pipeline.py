@@ -13,8 +13,10 @@ import sklearn.pipeline
 import sklearn.base
 import sklearn.metrics
 import sklearn.impute
+import sklearn.model_selection
 import joblib
 
+from pipeline_elements import pipeline as feature_union
 
 class PipelineNoop(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin):
     """
@@ -110,7 +112,7 @@ def make_numerical_feature_pipeline(my_args):
 
 def make_SGD_fit_pipeline(my_args):
     items = []
-    items.append(("features", make_numerical_feature_pipeline(my_args)))
+    items.append(("features", feature_union))  # changed this to union categorical features
     items.append(("model", sklearn.linear_model.SGDRegressor()))
     return sklearn.pipeline.Pipeline(items)
 
@@ -304,12 +306,31 @@ def show_model(my_args):
         print("No scaler.")
     return
 
+def do_cross(my_args):
+    train_file = my_args.train_file
+    if not os.path.exists(train_file):
+        raise Exception("training data file: {} does not exist.".format(train_file))
 
+    X, y = load_data(my_args, train_file)
+
+    pipeline = make_SGD_fit_pipeline(my_args)
+
+    cv_results = sklearn.model_selection.cross_validate(
+        pipeline, X, y, 
+        cv=5,  # do 5-fold? see how many i should do
+        n_jobs=-1, 
+        verbose=3, 
+        scoring=('r2', 'neg_mean_squared_error', 'neg_mean_absolute_error')
+    )
+
+    print("R2:", cv_results['test_r2'], cv_results['test_r2'].mean())
+    print("MSE:", cv_results['test_neg_mean_squared_error'], cv_results['test_neg_mean_squared_error'].mean())
+    print("MAE:", cv_results['test_neg_mean_absolute_error'], cv_results['test_neg_mean_absolute_error'].mean())
 
 def parse_args(argv):
     parser = argparse.ArgumentParser(prog=argv[0], description='Fit Data With Linear Regression Using Pipeline')
     parser.add_argument('action', default='SGD',
-                        choices=[ "SGD", "show-function", "score", "loss", "show-model" ], 
+                        choices=[ "SGD", "cross", "show-function", "score", "loss", "show-model" ], 
                         nargs='?', help="desired action")
     parser.add_argument('--train-file',    '-t', default="",    type=str,   help="name of file with training data")
     parser.add_argument('--test-file',     '-T', default="",    type=str,   help="name of file with test data (default is constructed from train file name)")
@@ -343,6 +364,8 @@ def main(argv):
 
     if my_args.action == 'SGD':
         do_fit(my_args)
+    elif my_args.action == 'cross':
+        do_cross(my_args)
     elif my_args.action == "show-function":
         show_function(my_args)
     elif my_args.action == "score":
@@ -358,4 +381,3 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv)
-    
