@@ -18,6 +18,7 @@ StateMachineClass::StateMachineClass() {
 
     // Define legal moves based on the DFA
     mLegalMoves[START_STATE][WHITESPACE_CHAR] = START_STATE;
+    mLegalMoves[START_STATE][RETURN_CHAR] = START_STATE;
     // Stay in ID state as long as we keep seeing valid chars
     mLegalMoves[START_STATE][LETTER_CHAR] = IDENTIFIER_STATE;
     mLegalMoves[IDENTIFIER_STATE][LETTER_CHAR] = IDENTIFIER_STATE;
