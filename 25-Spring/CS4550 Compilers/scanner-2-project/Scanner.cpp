@@ -1,8 +1,11 @@
 #include "Scanner.h"
+#include "Debug.h"
+
 #include <iostream> // For error messages
 #include <cstdlib>  // For std::exit
 
 ScannerClass::ScannerClass(const std::string &inputFileName) {
+    MSG("Initializing ScannerClass object...");
     // Open the file in binary mode
     mFin.open(inputFileName.c_str(), std::ios::binary);
     if (!mFin) {
@@ -19,6 +22,7 @@ ScannerClass::~ScannerClass() {
 }
 
 TokenClass ScannerClass::GetNextToken() {
+    MSG("Scanning for the next token...");
     StateMachineClass stateMachine; // Instance of the DFA
     std::string lexeme;             // Stores the current token lexeme
     MachineState currentState;      // Current state of the DFA

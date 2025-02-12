@@ -1,4 +1,6 @@
 #include "Token.h"
+#include "Debug.h"
+
 #include <iostream>
 
 // The constructor initializes mType, mLexeme, then checks if the lexeme is a reserved word:
@@ -20,6 +22,7 @@ TokenClass::TokenClass(TokenType type, const std::string &lexeme)
             mType = COUT_TOKEN;
         }
     }
+    MSG("Token initialized.");
 }
 
 // The insertion operator for printing a token

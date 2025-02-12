@@ -1,9 +1,12 @@
 #include "StateMachine.h"
+#include "Debug.h"
+
 #include <iostream>
 #include <cctype>
 #include <cstdlib>
 
 StateMachineClass::StateMachineClass() {
+    MSG("Initializing DFA...");
     mCurrentState = START_STATE;
     // Initialize all transitions to CANTMOVE_STATE by default
     for (int i = 0; i < LAST_STATE; i++) {
@@ -65,6 +68,7 @@ StateMachineClass::StateMachineClass() {
     mCorrespondingTokenTypes[GREATEREQUAL_STATE] = GREATEREQUAL_TOKEN;
     mCorrespondingTokenTypes[NOTEQUAL_STATE] = NOTEQUAL_TOKEN;
     mCorrespondingTokenTypes[ENDFILE_STATE] = ENDFILE_TOKEN;
+    MSG("DFA initialized.");
 }
 
 // Helper to convert a character into its CharacterType
