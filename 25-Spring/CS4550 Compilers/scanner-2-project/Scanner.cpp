@@ -1,10 +1,12 @@
 #include "Scanner.h"
 #include "Debug.h"
 
-#include <iostream> // For error messages
+#include <iostream>
 #include <cstdlib>  // For std::exit
 
-ScannerClass::ScannerClass(const std::string &inputFileName) {
+ScannerClass::ScannerClass(const std::string &inputFileName)
+    : mLineNumber(1) // Initialize line number
+{
     MSG("Initializing ScannerClass object...");
     // Open the file in binary mode
     mFin.open(inputFileName.c_str(), std::ios::binary);
@@ -31,20 +33,28 @@ TokenClass ScannerClass::GetNextToken() {
     // Read characters and update the DFA state
     do {
         char c = mFin.get(); // Read the next character
-
-        // Append it to the lexeme
-        lexeme.push_back(c);
+        lexeme.push_back(c); // Append it to the lexeme
 
         // Update the DFA state
         currentState = stateMachine.UpdateState(c, previousTokenType);
 
-        // Reset the lexeme if in START_STATE or ENDFILE_STATE
+        // If we read a newline, increment the line number
+        if (c == '\n') {
+            mLineNumber++;
+        }
+
+        // If the state resets (e.g., due to whitespace), clear the lexeme
         if (currentState == START_STATE || currentState == ENDFILE_STATE) {
             lexeme.clear();
         }
-    } while (currentState != CANTMOVE_STATE); // Stop when the DFA can't move
+    } while (currentState != CANTMOVE_STATE); // Continue until no valid transition exists
 
-    // Remove the last character (it caused CANTMOVE_STATE)
+    // The last character read caused CANT_MOVE. Remove it from the lexeme
+    // If that character is a newline, it will be re-read later so decrement the line count
+    // to avoid double counting
+    if (!lexeme.empty() && lexeme.back() == '\n') {
+        mLineNumber--;
+    }
     lexeme.pop_back();
     mFin.unget(); // Put the last character back into the input stream
 

@@ -13,15 +13,13 @@ int main() {
     TokenType tt;
 
     try {
-        // Repeatedly call GetNextToken and print each token
         do {
             TokenClass tc = scanner.GetNextToken();
-            std::cout << tc << std::endl; // Print the token using the overloaded << operator
-            tt = tc.GetTokenType();       // Update the token type for the loop condition
-        } while (tt != ENDFILE_TOKEN);    // Stop when we reach the end of the file
+            std::cout << "Line " << scanner.GetLineNumber() << ": " << tc << std::endl;
+            tt = tc.GetTokenType();
+        } while (tt != ENDFILE_TOKEN);        
     }
     catch (const std::exception &e) {
-        // Catch any exceptions thrown (optional)
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
