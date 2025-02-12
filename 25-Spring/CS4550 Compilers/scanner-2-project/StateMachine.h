@@ -11,6 +11,9 @@ enum MachineState {
     MINUS_STATE,
     TIMES_STATE,
     DIVIDE_STATE,
+    LINE_COMMENT_STATE,
+    BLOCK_COMMENT_1_STATE,
+    BLOCK_COMMENT_2_STATE,
     LPAREN_STATE,
     RPAREN_STATE,
     SEMICOLON_STATE,
@@ -32,7 +35,8 @@ enum MachineState {
 enum CharacterType {
     LETTER_CHAR,
     DIGIT_CHAR,
-    WHITESPACE_CHAR,
+    WHITESPACE_CHAR, // space, tab
+    RETURN_CHAR,     // newline (\n)
     PLUS_CHAR,
     MINUS_CHAR,
     TIMES_CHAR,
