@@ -1,10 +1,8 @@
 void main() {
     int x;
-    x = 10 / 2; // This tests the division operator.
-    /* This is a block comment.
-       It spans multiple lines.
-       All of these characters should be ignored,
-       except for the newline count.
-    */
+    x = 10 / 2; // Test line comments and division operator.
+    /***** block comment. //
+       block comment.
+    ****/
     cout << x;
 }
