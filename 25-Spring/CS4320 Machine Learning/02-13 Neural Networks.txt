@@ -53,4 +53,4 @@ Multi-layer perceptrons (MLP)
     then, we take that error delta and divide it up by the number of TLUs in the second to last layer.
     basically we say "you are equally responsible for this error" and update weights accordingly.
     then, the layer does the exact same thing to each of THEIR inputs so their input layer can adjust THEIR weights.
-    and so on and so on. this is called "backwards pass" or "backpropagation". 
+    and so on and so on. this is called "backpropagation". 
