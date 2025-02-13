@@ -3,9 +3,12 @@
 """
 Train a classification model using a cross validation search.
 Use the Kaggle Playground Series - Season 4 - Episode 10 Loan Approval Prediction dataset.
-Train at least two types of classification model (not counting DecistionTreeClassfier). For each type of model do a hyperparameter search using cross validation to verify the quality of the result. 
-For each model, submit at least 1 best prediction to the Kaggle competition. It is expected that you will be able to get above 0.90 on the competition score.
-Write and submit a report of your process. This table should include a table of the models you tried with the CV and full training scores. For the model used to submit, include the Kaggle score on the test set. Include the hyperparmeters used on the best models.
+Train at least two types of classification model (not counting DecistionTreeClassfier). 
+For each type of model do a hyperparameter search using cross validation to verify the quality of the result. 
+For each model, submit at least 1 best prediction to the Kaggle competition. 
+It is expected that you will be able to get above 0.90 on the competition score.
+Write and submit a report of your process. This table should include a table of the models you tried with the CV and full training scores. 
+For the model used to submit, include the Kaggle score on the test set. Include the hyperparmeters used on the best models.
 It is expected you will start with the sample code, and make modifications to be appropriate for this dataset.
 """
 
