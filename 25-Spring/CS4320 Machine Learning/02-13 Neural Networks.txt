@@ -54,3 +54,4 @@ Multi-layer perceptrons (MLP)
     basically we say "you are equally responsible for this error" and update weights accordingly.
     then, the layer does the exact same thing to each of THEIR inputs so their input layer can adjust THEIR weights.
     and so on and so on. this is called "backpropagation". 
+    so once all the weights are adjusted, we do it again! keep doing forward passes and backpropagation until our error gets sufficiently small.
