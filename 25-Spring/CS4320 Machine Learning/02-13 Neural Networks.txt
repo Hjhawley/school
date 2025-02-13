@@ -1,0 +1,56 @@
+Neural Networks
+
+Biological neurons:
+    an actual neuron has a cell body as well as several extensions connecting it to other neurons.
+    these connections are called dendrites.
+    these receive chemical signals called neural transmitters.
+    in addition to these dendrites coming INTO the cell, there are axons which send electrical signals OUT of the cell.
+    these electrical signals cause other chemicals to be secreted.
+    (this is an extremely rough overview but it's sufficient for our analogy.)
+    with large numbers of these neurons we can build a biological network.
+    each neuron has several incoming and outgoing connections, and signals can be propagated to relay complex information.
+    perceptions from sensors (ears, skin, eyes) feed information to the brain (the neural network)
+    and the brain in turn sends output to the nervous system to control muscles, etc 
+
+the general idea is if you have a complex enough network of neurons, they can learn patterns that are helpful for their purposes.
+ideas can be learned by emphasizing and strengthening different patterns via a reward system.
+doing so builds a stronger chemical connection between certain connections, or weakens others.
+
+Artificial neuron:
+    we have a discrete amount of inputs, from x_1 ... x_n.
+    we have exactly one output.
+    to make this a complete neuron we need to decide what happens INSIDE the neuron based on its input to complete the output.
+    for example: maybe the neuron sums up all the inputs, and has a defined threshold of 3. if the sum is greater than 3, output 1. else, output 0.
+    this wuold be an extremely simple binary digital neuron. with enough of these you could simulate digital electronics. 
+    for example, we can use forks to create AND gates, OR gates, etc.
+    but that's not particularly useful. can we go further?
+
+Perceptron (1957)
+    TLU (threshold logic unit)
+    again, we have a neuron body and some inputs.
+    as those inputs come in we have the equivalent of forks, this time with arbitrary floating point weights assigned to each.
+    so, the summation = w_i * x_i
+    note this allows us to have negative (inverse) relationships to inputs as well as positive.
+    the output of this neuron is still binary; a 0 or a 1 based on whether the sum exceeds a particular threshold
+    this is a type of "step function"
+    we can simplify Σ = w_i * x_i to dot product vector notation w→ * x→
+    we can build a network of these, connecting every input to every individual TLU
+    each TLU has different weights 
+    if we have n inputs x and m TLUs t, we have n * m total weights in the perceptron
+    (technically n+1 * m because of the bias at x0)
+    the perceptron was revolutionary, but fairly limited (for example, it's mathematically impossible for such an architecture to learn XOR)
+
+Multi-layer perceptrons (MLP)
+    this time we have an input layer x→, fully connected to a layer of TLUs, followed by ANOTHER layer of TLUs and so on
+    the output of one layer becomes the input to another layer.
+    different layers can have different amounts of TLUs.
+    the number of layers is arbitrary and the amount of TLUs in each individual layer is arbitrary.
+    these layers of TLUs are called the "hidden layer" (as opposed to the input layer and the output layer).
+    the INPUT layer is determined by our feature space, and the OUTPUT layer depends on what values we're trying to predict.
+    we initially randomize the weights of our network, and use supervised learning (gradient ascent) to find optimal weights.
+    we feed a value through the network in a "forward pass". whatever the output layer kicks out is our prediction.
+    we subtract our desired value y from our prediction y-hat to calculate the delta (the error)
+    then, we take that error delta and divide it up by the number of TLUs in the second to last layer.
+    basically we say "you are equally responsible for this error" and update weights accordingly.
+    then, the layer does the exact same thing to each of THEIR inputs so their input layer can adjust THEIR weights.
+    and so on and so on. this is called "backwards pass" or "backpropagation". 
