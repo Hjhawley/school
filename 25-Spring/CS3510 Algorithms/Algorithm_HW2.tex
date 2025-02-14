@@ -39,33 +39,29 @@ Arrange the following in increasing order of the asymptotic growth rate. Explain
 \end{align*}
 
 \subsection*{Solution:}
-We begin by simplifying some of the functions and then comparing their growth rates.
+First, we can simplify some of these functions.
 
-\bigskip
-\noindent \textbf{Step 1. Simplify the Functions:}
 \begin{itemize}
-    \item For \(f_2(n)=2^{\log (n^2)}\):  
+    \item For b \(f_2(n)=2^{\log (n^2)}\):  
     \[
     2^{\log (n^2)} = n^2.
     \]
-    \item For \(f_{10}(n)=(4^2)^{\log n}\):  
+    \item For j \(f_{10}(n)=(4^2)^{\log n}\):  
     \[
-    (4^2)^{\log n} = 16^{\log n} = n^{\log 16} = n^4 \quad \text{(since \(\log_2 16 = 4\))}.
+    (4^2)^{\log n} = 16^{\log n} = n^{\log 16} = n^4 \quad.
     \]
-    \item For \(f_5(n)=4^{(2^{\log n})}\):  
+    \item For e \(f_5(n)=4^{(2^{\log n})}\):  
     \[
     2^{\log n} = n \quad \Longrightarrow \quad f_5(n)=4^n = 2^{2n}.
     \]
-    \item For \(f_9(n)=2^{\log n-\log \log n}\):  
+    \item For i \(f_9(n)=2^{\log n-\log \log n}\):  
     \[
     2^{\log n-\log \log n} = 2^{\log\left(\frac{n}{\log n}\right)} = \frac{n}{\log n}.
     \]
-    \item For \(f_7(n)=\log(n!)\):  
-    Using Stirling's approximation, \(\log(n!) \sim n\log n\).
-    \item For \(f_4(n)=(n!)^2\):  
+    \item For g \(f_7(n)=\log(n!)\):  \(\log(n!) \sim n\log n\).
+    \item For d \(f_4(n)=(n!)^2\):  
     Since \(n! \sim \left(\frac{n}{e}\right)^n\), we have \((n!)^2\) growing super-exponentially.
-    \item For \(f_6(n)=n^{n \log n}\):  
-    Taking logarithms yields
+    \item For f \(f_6(n)=n^{n \log n}\):
     \[
     \log f_6(n) = n \log n \cdot \log n = n(\log n)^2,
     \]
