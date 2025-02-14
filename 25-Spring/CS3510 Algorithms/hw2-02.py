@@ -1,3 +1,11 @@
+"""
+You have a collection of books and need to arrange them on shelves by color. Each shelf
+can hold only books of the same color, but you don't know the colors directly. Instead, you
+are given pairs of books known to be the same color. This relation follows an equivalent
+relation (reflexive, symmetric, and transitive). Your task is to write a code to determine the
+minimum number of shelves needed, ensuring that no two books of different colors share a shelf.
+"""
+
 def min_shelves(books, pairs):
     # Build the graph (adjacency list)
     graph = {book: [] for book in books}

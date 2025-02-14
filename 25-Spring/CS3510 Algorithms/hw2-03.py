@@ -1,3 +1,53 @@
+"""
+You have a 5-gallon jug and a 3-gallon jug, both initially empty. Your goal is to have exactly
+4 gallons of water in the 5-gallon jug, and 0 gallons in the 3-gallon jug.
+
+You are allowed the following operations:
+1. Fill any of the jugs completely.
+2. Pour water from one jug into the other until the first jug is empty or the second jug
+is full.
+3. Empty the contents of a jug.
+
+Objectives:
+
+1. Describe a method to reach the goal state (4 gallons in the 5-gallon jug and 0
+gallons in the 3-gallon jug). You can solve this puzzle step by step in any way that
+works, without needing to apply a general algorithm. Assume (m, n) denote m gallons
+in the 5-gallon jug and n gallons in the 3-gallon jug.
+
+Example
+(a) Start with empty jugs: (0, 0)
+(b) Fill jug 3: (0, 3)
+(c) Pour from jug 3 to jug 5: (3, 0)
+(d) Fill jug 3: (3, 3)
+(e) ...
+(f) Pour from jug 3 to jug 5: (4, 0) (Goal reached)
+
+2. Now we generalize the problem to two jugs of any size, and we hope to find
+steps to reach a target volume in one jug, e.g. two jugs of 7 and 5 gallons for a target
+of 6 gallons. Write a program to automate the solution to this problem. The program
+should find the minimum number of steps and print each step taken to reach the goal
+state.
+
+Function definition:
+reach_target_volumn(size_A, size_B, target_vol)
+
+Output:
+Steps for size_A=7, size_B=5, target_vol=6:
+(0, 0)
+(7, 0)
+(2, 5)
+...
+(6, 5)
+
+If there is no solution, return: "unreachable"
+
+Hint: Treat each state of the jugs as a vertex (m, n), where m and n are the amounts of
+water in the jugs. Operations (filling, pouring, emptying) are edges between states. Use
+Breadth-First Search (BFS) to find the shortest path from the initial state (0, 0) to the
+target state (x, y) or return "unreachable".
+"""
+
 from collections import deque
 
 def reach_target_volumn(size_A, size_B, target_vol):
