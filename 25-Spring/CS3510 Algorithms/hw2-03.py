@@ -30,7 +30,7 @@ should find the minimum number of steps and print each step taken to reach the g
 state.
 
 Function definition:
-reach_target_volumn(size_A, size_B, target_vol)
+reach_target_volume(size_A, size_B, target_vol)
 
 Output:
 Steps for size_A=7, size_B=5, target_vol=6:
@@ -50,8 +50,9 @@ target state (x, y) or return "unreachable".
 
 from collections import deque
 
-def reach_target_volumn(size_A, size_B, target_vol):
-    # Check if the target is reachable.
+def reach_target_volume(size_A, size_B, target_vol):
+    # greatest common divisor
+    # target volume is achievable only if it is a multiple of the GCD of the two jug sizes
     def gcd(a, b):
         while b:
             a, b = b, a % b
@@ -102,3 +103,9 @@ def reach_target_volumn(size_A, size_B, target_vol):
                 q.append(state)
     
     return "unreachable"
+
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
