@@ -46,26 +46,23 @@ First, we can simplify some of these functions.
     \[
     2^{\log (n^2)} = n^2.
     \]
-    \item For j \(f_{10}(n)=(4^2)^{\log n}\):  
-    \[
-    (4^2)^{\log n} = 16^{\log n} = n^{\log 16} = n^4 \quad.
-    \]
+    
     \item For e \(f_5(n)=4^{(2^{\log n})}\):  
     \[
     2^{\log n} = n \quad \Longrightarrow \quad f_5(n)=4^n = 2^{2n}.
     \]
+    
+    \item For g \(f_7(n)=\log(n!)\):  \(\log(n!) \sim n\log n\).
+
     \item For i \(f_9(n)=2^{\log n-\log \log n}\):  
     \[
     2^{\log n-\log \log n} = 2^{\log\left(\frac{n}{\log n}\right)} = \frac{n}{\log n}.
     \]
-    \item For g \(f_7(n)=\log(n!)\):  \(\log(n!) \sim n\log n\).
-    \item For d \(f_4(n)=(n!)^2\):  
-    Since \(n! \sim \left(\frac{n}{e}\right)^n\), we have \((n!)^2\) growing super-exponentially.
-    \item For f \(f_6(n)=n^{n \log n}\):
+    
+    \item For j \(f_{10}(n)=(4^2)^{\log n}\):  
     \[
-    \log f_6(n) = n \log n \cdot \log n = n(\log n)^2,
+    (4^2)^{\log n} = 16^{\log n} = n^{\log 16} = n^4 \quad.
     \]
-    which grows even faster than \((n!)^2\).
 \end{itemize}
 
 \bigskip
