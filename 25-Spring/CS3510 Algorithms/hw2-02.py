@@ -56,8 +56,7 @@ def main():
             else:
                 print(f"Skipping invalid pair: {pair_str}")
     
-    result = min_shelves(books, pairs)
-    print("Minimum number of shelves needed:", result)
+    print(min_shelves(books, pairs))
 
 if __name__ == "__main__":
     main()
