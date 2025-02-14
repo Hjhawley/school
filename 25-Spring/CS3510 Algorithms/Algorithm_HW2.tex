@@ -66,7 +66,7 @@ First, we can simplify some of these functions.
 \end{itemize}
 
 \bigskip
-\noindent \textbf{Step 2. Compare the Growth Rates:}
+\noindent \textbf{Compare the Growth Rates:}
 
 \begin{enumerate}
     \item \(\boldsymbol{f_1(n)=2^{2\sqrt{\log n}}}\):  
@@ -76,33 +76,32 @@ First, we can simplify some of these functions.
     Its exponent \(\frac{\log n}{\log \log n}\) grows faster than \(2\sqrt{\log n}\) for large \(n\).
 
     \item \(\boldsymbol{f_3(n)=\frac{n\,(\log \log n)^{99}}{(\log n)^{99}}}\):  
-    This function is nearly linear (proportional to \(n\)) but is reduced by a factor of \((\log n)^{99}\), making it grow slower than a linear function.
+    This function is almost linear (proportional to \(n\)) but is reduced by a factor of \((\log n)^{99}\), making it grow slower than a linear function.
 
     \item \(\boldsymbol{f_9(n)=\frac{n}{\log n}}\):  
-    This is almost linear but only divided by a single \(\log n\) factor; hence, it grows faster than \(f_3(n)\).
+    This is almost linear but only divided by a single \(\log n\) factor and therefore grows faster than \(f_3(n)\).
 
     \item \(\boldsymbol{f_7(n)=\log(n!)}\):  
-    With Stirling's approximation, we have \(\log(n!)\sim n\log n\), which grows faster than \(n/\log n\).
+    \(\log(n!)\) approximates to \(n\log n\), which grows faster than \(n/\log n\).
 
     \item \(\boldsymbol{f_2(n)=n^2}\):  
-    A polynomial of degree 2; thus, it grows faster than \(n\log n\).
+    A polynomial degree 2, so it grows faster than \(n\log n\).
 
     \item \(\boldsymbol{f_{10}(n)=n^4}\):  
     A polynomial of degree 4, so it grows faster than \(n^2\).
 
     \item \(\boldsymbol{f_5(n)=4^n}\):  
-    An exponential function; exponentials eventually outgrow any polynomial.
+    An exponential will outgrow any polynomial.
 
     \item \(\boldsymbol{f_4(n)=(n!)^2}\):  
-    The factorial grows super-exponentially, so \((n!)^2\) grows even faster than \(4^n\).
+    The factorial grows even faster than exponentials.
 
     \item \(\boldsymbol{f_6(n)=n^{n \log n}}\):  
-    Rewriting \(f_6(n)\) as \(\exp\bigl(n(\log n)^2\bigr)\) shows that it has an enormous growth rate, exceeding even that of \((n!)^2\).
-\end{enumerate}
+    Rewriting \(f_6(n)\) as \(\exp\bigl(n(\log n)^2\bigr)\) grows even larger than factorial.
 
 \bigskip
-\noindent \textbf{Step 3. Final Ordering:}\\[0.5em]
-Arranging the functions in increasing order of their asymptotic growth rates gives:
+\noindent \textbf{Final order:}\\[0.5em]
+
 \[
 \boxed{
 f_1(n) \;<\; f_8(n) \;<\; f_3(n) \;<\; f_9(n) \;<\; f_7(n) \;<\; f_2(n) \;<\; f_{10}(n) \;<\; f_5(n) \;<\; f_4(n) \;<\; f_6(n).
