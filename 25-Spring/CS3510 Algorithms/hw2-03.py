@@ -105,7 +105,24 @@ def reach_target_volume(size_A, size_B, target_vol):
     return "unreachable"
 
 def main():
-    pass
+    # Example 1: 5-gallon and 3-gallon jugs with target 4 gallons.
+    print("Example 1: 5-gallon jug and 3-gallon jug (target 4 gallons)")
+    result = reach_target_volume(5, 3, 4)
+    if result == "unreachable":
+        print("unreachable")
+    else:
+        for step in result:
+            print(step)
+    print()
+
+    # Example 2: 7-gallon and 5-gallon jugs with target 6 gallons.
+    print("Example 2: 7-gallon jug and 5-gallon jug (target 6 gallons)")
+    result = reach_target_volume(7, 5, 6)
+    if result == "unreachable":
+        print("unreachable")
+    else:
+        for step in result:
+            print(step)
 
 if __name__ == "__main__":
     main()
