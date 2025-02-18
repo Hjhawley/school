@@ -8,14 +8,16 @@ In general, x is a vector in n-dimensional space.
 Simple example: f(x) = x^2  
 1. Initialize: Pick a random x. Let’s say x_0 = 2.
 
-2. Evaluate:  
-    f(2) = 4, so f(x_0) = 4.
+2. Evaluate gradient:  
+    Compute f(x_0):
+        f(2) = 4, so f(x_0) = 4.
     Compute the gradient (derivative):  
-    d/dx f(x) = 2x = 2(2) = 4
-    Since the derivative gives the slope of positive change, we actually want to move in the opposite direction:  
-    x_1 = x_0 - ∇ f(x_0)
+        d/dx f(x) = 2x = 2(2) = 4
+    Since the derivative gives the slope of positive change, 
+    we actually want to move in the opposite direction:  
+        x_1 = x_0 - ∇ f(x_0)
 
-3. Introduce Learning Rate η:
+3. Apply the learning rate η:
     Let η = 0.3.
     Update step:
     x_1 = x_0 - η ∇ f(x_0)
@@ -27,7 +29,7 @@ Simple example: f(x) = x^2
     x_2 = 0.8 - (0.3 * 2(0.8)) = 0.32
     f(0.32) = 0.1024, and so on.
 
-Since we approach but never actually reach 0, we can stop based on:
+Since we approach zero (our goal) but never actually reach it, we can stop based on:
     Fixed iterations: Run for a set number of steps.
     Threshold ε: Stop when f(x) is sufficiently small.
     Gradient threshold: Stop when ∇ f(x) ≈ 0.
@@ -37,5 +39,5 @@ Python’s `autograd` package can compute derivatives automatically:
 from autograd import grad
 ```
 
-In a machine learning context, we use gradient descent to minimize the error
-(the "loss function.)
+In machine learning, gradient descent minimizes the loss function (error), 
+improving model predictions over time.
