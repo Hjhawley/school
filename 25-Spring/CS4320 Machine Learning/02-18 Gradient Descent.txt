@@ -1,0 +1,40 @@
+Gradient Descent
+
+an algorithm to locate a minimum value of a function.
+we'll call this function f(x)
+we want to find a value of x such that f(x) is minimized.
+this is a LOCAL optimization algorithm, meaning if we start with a particular value of x, the solution is local to that value of x.
+in general, x is a vector of n-dimensional space.
+
+let's demonstrate the process using f(x) = x^2:
+    1. pick a random x. let's say x = 2.
+    2. f(2) = 4. so we say x_0 = 2 and f(x_0) = 4. 
+    3. we want to evalutate the GRADIENT (an n-dimensional derivative; the slope of the line at that particular point). 
+        Note: Slope is a single number that represents a rate of change in one dimension. Gradient is a vector that represents the rate of change in multiple directions.
+        for this example, we'll just deal with a single dimension.
+        evaluate the gradient of f(x) at x = x_0.
+        d/dx f(x) = 2x = 4
+        if i take that value of x and ADD 4 to it, we'd end up at x = 6 (the opposite of where we want to go)
+        derivative is the slope of positive change; we want NEGATIVE change. so we SUBTRACT the derivative from x_0.
+        x_1 = x_0 - d/dx f(x_0) = 2 - 4 = -2
+        this puts us right back in the same position, just on the other side of the number line!
+    4. we need another ingredient: the LEARNING RATE (eta η)
+        let's let η = 0.3
+        x_1 = x_0 - η▽f(x_0) = 2 - (0.3)4 = 0.8
+    5. repeat! goto 2
+        f(0.8) = 0.64. we're getting closer to 0! let's keep going.
+        x_2 = x_1 - η▽f(x_1) = 0.8 - (0.3)(2 * 0.8) = 0.32
+        f(0.32) = 0.1024.
+        and so on and so on
+
+in this particular example, we will infinitely get closer to zero (the goal) but never exactly reach it.
+we have a few options:
+    fixed count; do this 100 times and then stopping
+    set an epsilon ε (stopping condition) to decide when we're good enough 
+    let ▽ get close to a particular theta θ
+    etc etc
+
+python has a package that automatically computes the derivative for us.
+```
+from autograd import grad
+```
