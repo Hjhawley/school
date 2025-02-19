@@ -20,25 +20,25 @@ int main() {
         return 1;
     }
 
-    // Symbol Table Testing
+    // Symbol Table testing
     SymbolTableClass symbolTable;
 
-    // Add entries.
+    // Add entries
     symbolTable.AddEntry("x");
     symbolTable.AddEntry("y");
 
-    // Test GetCount.
+    // Test GetCount
     std::cout << "Symbol count: " << symbolTable.GetCount() << std::endl;  // Expected: 2
 
-    // Test Exists.
+    // Test Exists
     std::cout << "Exists 'x'? " << (symbolTable.Exists("x") ? "true" : "false") << std::endl;  // true
     std::cout << "Exists 'z'? " << (symbolTable.Exists("z") ? "true" : "false") << std::endl;  // false
 
-    // Test GetIndex.
+    // Test GetIndex
     std::cout << "Index of 'x': " << symbolTable.GetIndex("x") << std::endl;   // 0
     std::cout << "Index of 'y': " << symbolTable.GetIndex("y") << std::endl;   // 1
 
-    // Test GetValue and SetValue.
+    // Test GetValue and SetValue
     std::cout << "Value of 'x': " << symbolTable.GetValue("x") << std::endl;  // Expected: 0
     symbolTable.SetValue("x", 42);
     std::cout << "New value of 'x': " << symbolTable.GetValue("x") << std::endl;  // Expected: 42
