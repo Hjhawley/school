@@ -75,7 +75,7 @@ def make_boost_params(my_args):
 
 def make_forest_params(my_args):
     return {
-        "model__n_estimators": [180, 190, 200, 210, 220],
+        "model__n_estimators": [190, 200, 210],
         "model__max_depth": [8, 10, 12],
         "model__max_features": ["sqrt", "log2"],
         "model__min_samples_split": [2, 3],
