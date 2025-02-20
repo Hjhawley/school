@@ -427,7 +427,7 @@ def parse_args(argv):
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('action', default='fit',
                         choices=[ "fit", "score", "loss", "cross", "predict", "grid-search", "show-best-params", "random-search",
-                                  "cross-score", "confusion-matrix", "precision-recall-plot", "pr-curve" ], 
+                                  "cross-score", "confusion-matrix", "precision-recall-plot", "pr-curve", "full-eval" ],
                         nargs='?', help="desired action")
     parser.add_argument('--model-type',    '-M', default="SGD", type=str,   choices=["SGD", "linear", "SVM", "boost", "forest", "tree"], help="Model type") # change these!!!
     parser.add_argument('--train-file',    '-t', default="",    type=str,   help="name of file with training data")
@@ -460,6 +460,15 @@ def parse_args(argv):
 
     return my_args
 
+def run_full_evaluation(my_args):
+    # macro to do grid search, show best params, cross score, confusion matrix, and pr-curve all in one go
+    # because time is money $$$
+    do_grid_search(my_args)
+    show_best_params(my_args)
+    do_cross_score(my_args)
+    do_confusion_matrix(my_args)
+    do_precision_recall_curve(my_args)
+
 def main(argv):
     my_args = parse_args(argv)
     # logging.basicConfig(level=logging.INFO)
@@ -489,6 +498,8 @@ def main(argv):
         do_precision_recall_plot(my_args)
     elif my_args.action == "pr-curve":
         do_precision_recall_curve(my_args)
+    elif my_args.action == 'full-eval':
+        run_full_evaluation(my_args)
     else:
         raise Exception("Action: {} is not known.".format(my_args.action))
         
