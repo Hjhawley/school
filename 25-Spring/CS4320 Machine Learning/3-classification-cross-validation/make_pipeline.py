@@ -45,26 +45,44 @@ def make_predictor_params(my_args):
     return p1
 
 def make_SGD_params(my_args):
-
-
+    return {
+        "model__loss": ["hinge", "log_loss", "modified_huber"],
+        "model__alpha": [1e-4, 1e-3, 1e-2, 1e-1],
+        "model__penalty": ["l2", "l1"],
+    }
 
 def make_linear_params(my_args):
+    return {
+        "model__alpha": [0.01, 0.1, 1.0, 10.0],
+        "model__solver": ["auto", "sag", "lsqr", "saga"],
+        "model__class_weight": [None, "balanced"]
+    }
 
-        
-        
 def make_SVM_params(my_args):
+    return {
+        "model__C": [0.1, 1, 10],
+        "model__kernel": ["linear", "rbf"],
+        "model__gamma": ["scale", "auto"],
+        "model__class_weight": [None, "balanced"]
+    }
 
-        
-        
 def make_boost_params(my_args):
+    return {
+        "model__n_estimators": [50, 100, 200],
+        "model__learning_rate": [0.01, 0.1, 0.2],
+        "model__max_depth": [3, 5, 7],
+    }
 
-        
-        
 def make_forest_params(my_args):
+    return {
+        "model__n_estimators": [50, 100, 200],
+        "model__max_depth": [None, 5, 10],
+        "model__max_features": ["sqrt", "log2"],
+        "model__min_samples_split": [2, 5],
+        "model__class_weight": [None, "balanced"]
+    }
 
-
-
-def make_tree_params(my_args):
+def make_tree_params(my_args):  # don't use this one
     tree_params = {
         "model__criterion": [ "entropy" ], # [ "entropy", "gini" ],
         "model__splitter": [ "best" ], # [ "best", "random" ],
