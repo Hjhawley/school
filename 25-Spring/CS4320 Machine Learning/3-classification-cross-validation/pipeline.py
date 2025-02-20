@@ -429,7 +429,7 @@ def parse_args(argv):
                         choices=[ "fit", "score", "loss", "cross", "predict", "grid-search", "show-best-params", "random-search",
                                   "cross-score", "confusion-matrix", "precision-recall-plot", "pr-curve" ], 
                         nargs='?', help="desired action")
-    parser.add_argument('--model-type',    '-M', default="SGD", type=str,   choices=["SGD", "linear", "SVM", "boost", "forest", "tree"], help="Model type")
+    parser.add_argument('--model-type',    '-M', default="SGD", type=str,   choices=["SGD", "linear", "SVM", "boost", "forest", "tree"], help="Model type") # change these!!!
     parser.add_argument('--train-file',    '-t', default="",    type=str,   help="name of file with training data")
     parser.add_argument('--test-file',     '-T', default="",    type=str,   help="name of file with test data (default is constructed from train file name)")
     parser.add_argument('--model-file',    '-m', default="",    type=str,   help="name of file for the model (default is constructed from train file name when fitting)")

@@ -44,6 +44,26 @@ def make_predictor_params(my_args):
     p1.update(p2)
     return p1
 
+def make_SGD_params(my_args):
+
+
+
+def make_linear_params(my_args):
+
+        
+        
+def make_SVM_params(my_args):
+
+        
+        
+def make_boost_params(my_args):
+
+        
+        
+def make_forest_params(my_args):
+
+
+
 def make_tree_params(my_args):
     tree_params = {
         "model__criterion": [ "entropy" ], # [ "entropy", "gini" ],
@@ -60,17 +80,17 @@ def make_tree_params(my_args):
 def make_fit_params(my_args):
     params = make_predictor_params(my_args)
     if my_args.model_type == "SGD":
-        model_params = make_SGD_params(my_args)
+        model_params =  make_SGD_params(my_args)
     elif my_args.model_type == "linear":
-        model_params = make_linear_params(my_args)
+        model_params =  make_linear_params(my_args)
     elif my_args.model_type == "SVM":
-        model_params = make_SVM_params(my_args)
+        model_params =  make_SVM_params(my_args)
     elif my_args.model_type == "boost":
-        model_params = make_boost_params(my_args)
+        model_params =  make_boost_params(my_args)
     elif my_args.model_type == "forest":
-        model_params = make_forest_params(my_args)
+        model_params =  make_forest_params(my_args)
     elif my_args.model_type == "tree":
-        model_params = make_tree_params(my_args)
+        model_params =  make_tree_params(my_args)
     else:
         raise Exception("Unknown model type: {} [SGD, linear, SVM, boost, forest]".format(my_args.model_type))
 
