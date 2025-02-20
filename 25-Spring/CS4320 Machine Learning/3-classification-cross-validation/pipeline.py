@@ -437,7 +437,7 @@ def parse_args(argv):
     parser.add_argument('--random-seed',   '-R', default=314159265,type=int,help="random number seed (-1 to use OS entropy)")
     parser.add_argument('--features',      '-f', default=None, action="extend", nargs="+", type=str,
                         help="column names for features")
-    parser.add_argument('--label',         '-l', default="label",   type=str,   help="column name for label")
+    parser.add_argument('--label',         '-l', default="loan_status",   type=str,   help="column name for label")
     parser.add_argument('--use-polynomial-features', '-p', default=0,         type=int,   help="degree of polynomial features.  0 = don't use (default=0)")
     parser.add_argument('--use-scaler',    '-s', default=0,         type=int,   help="0 = don't use scaler, 1 = do use scaler (default=0)")
     parser.add_argument('--categorical-missing-strategy', default="",   type=str, choices=("", "most_frequent"), help="strategy for missing categorical information")
