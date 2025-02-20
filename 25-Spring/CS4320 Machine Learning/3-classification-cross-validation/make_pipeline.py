@@ -68,17 +68,17 @@ def make_SVM_params(my_args):
 
 def make_boost_params(my_args):
     return {
-        "model__n_estimators": [50, 100, 200],
-        "model__learning_rate": [0.01, 0.1, 0.2],
-        "model__max_depth": [3, 5, 7],
+        "model__n_estimators": [180, 190, 200, 210, 220],
+        "model__learning_rate": [0.15, 0.175, 0.2, 0.225, 0.25],
+        "model__max_depth": [3, 5],
     }
 
 def make_forest_params(my_args):
     return {
-        "model__n_estimators": [50, 100, 200],
-        "model__max_depth": [None, 5, 10],
+        "model__n_estimators": [180, 190, 200, 210, 220],
+        "model__max_depth": [8, 10, 12],
         "model__max_features": ["sqrt", "log2"],
-        "model__min_samples_split": [2, 5],
+        "model__min_samples_split": [2, 3],
         "model__class_weight": [None, "balanced"]
     }
 
