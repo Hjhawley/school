@@ -465,6 +465,7 @@ def run_full_evaluation(my_args):
     # because time is money $$$
     do_grid_search(my_args)
     show_best_params(my_args)
+    show_score(my_args)
     do_cross_score(my_args)
     do_confusion_matrix(my_args)
     do_precision_recall_curve(my_args)
