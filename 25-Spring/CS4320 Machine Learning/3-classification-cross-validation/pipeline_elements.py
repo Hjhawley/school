@@ -44,12 +44,10 @@ class Printer(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin):
         return X
 
 class DataFrameSelector(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin):
-    
     def __init__(self, do_predictors=True, do_numerical=True):
-        # skip "name", "ticket", "cabin", "boat", "body", "home.dest"
-        self.mCategoricalPredictors = ["pclass", "sex", "embarked"]
-        self.mNumericalPredictors = ["age", "sibsp", "parch", "fare", ]
-        self.mLabels = ["survived"]
+        self.mCategoricalPredictors = ["person_home_ownership", "cb_person_default_on_file"]
+        self.mNumericalPredictors = ["loan_amnt", "loan_int_rate", "loan_percent_income"]
+        self.mLabels = ["loan_status"]
         self.do_numerical = do_numerical
         self.do_predictors = do_predictors
         
