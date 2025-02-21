@@ -32,6 +32,139 @@ For this problem, we explore the issue of \textit{truthfulness} in the Gale-Shap
 
 \textit{Hint:} Prove the claim by finding one specific instance of stable matching problem and comparing the stable matching before and after the switching.
 
+\subsection*{Solution}
+
+We can show that it is possible for a receiver $r$ to obtain a more-preferred match by being untruthful, by switching the order of two options that $r$ actually likes less (even though in his true ranking one is better than the other).
+
+Let the two sides be:
+\begin{itemize}
+    \item \textbf{Residents (receivers)} $R$: $r, s, t$
+    \item \textbf{Programs (proposers)} $P$: $p, p', q$
+\end{itemize}
+Assume that the matching is produced by a \textbf{program-proposing Gale-Shapley algorithm}.
+
+\subsubsection*{True Preference Lists}
+\begin{itemize}
+    \item \textbf{Resident $r$'s true preferences:}  
+    \[
+    q > p > p'
+    \]
+    So $r$ likes $q$ best; although he prefers $p$ to $p'$, both $p$ and $p'$ are lower than $q$.
+
+    \item \textbf{Resident $s$'s true preferences:}  
+    \[
+    p > q > p'
+    \]
+
+    \item \textbf{Resident $t$'s true preferences:}  
+    \[
+    p > p' > q
+    \]
+
+    \item \textbf{Programs' preferences:}
+    \begin{itemize}
+        \item $p$: $r > s > t$
+        \item $p'$: $r > t > s$
+        \item $q$: $s > r > t$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Outcome When $r$ Reports Truthfully}
+We run the \textbf{program-proposing Gale-Shapley algorithm} using the true lists.
+
+\begin{enumerate}
+    \item \textbf{Round 1:}
+    \begin{itemize}
+        \item $p$ proposes to its top choice: $r$.
+        \item $p'$ also proposes to its top choice: $r$.
+        \item $q$ proposes to its top choice: $s$.
+    \end{itemize}
+
+    \item \textbf{Resident Decisions:}
+    \begin{itemize}
+        \item $r$ receives proposals from $p$ and $p'$.
+        \item Using his true order $q > p > p'$, he compares these two. Since $p > p'$ in his true list, he tentatively holds $p$ and rejects $p'$.
+        \item $s$ gets $q$.
+        \item $t$ gets no proposal in this round.
+    \end{itemize}
+
+    \item \textbf{Round 2:}
+    \begin{itemize}
+        \item $p'$, having been rejected by $r$, now moves to its next choice and proposes to $t$.
+    \end{itemize}
+
+    \item \textbf{Final Matching:}
+    \begin{itemize}
+        \item $r$ is matched with $p$.
+        \item $s$ is matched with $q$.
+        \item $t$ is matched with $p'$.
+    \end{itemize}
+\end{enumerate}
+
+Outcome for $r$: He gets $p$, but he would prefer $q$ over $p$. Since $q$ proposed only to $s$, $q$ is already taken.
+
+\subsubsection*{Outcome When $r$ Misreports}
+Now suppose that $r$ lies about his 2nd and 3rd rankings by switching $p$ and $p'$. In other words, he submits as his preference list:
+\[
+q > p' > p
+\]
+Even though he actually prefers $p$ to $p'$, he reverses these when reporting.
+
+Now run the algorithm again:
+
+\begin{enumerate}
+    \item \textbf{Round 1:}
+    \begin{itemize}
+        \item $p$ proposes to its top choice: $r$.
+        \item $p'$ proposes to its top choice: $r$.
+        \item $q$ proposes to its top choice: $s$.
+    \end{itemize}
+
+    \item \textbf{Resident Decisions:}
+    \begin{itemize}
+        \item $r$ receives proposals from $p$ and $p'$.  
+        \item Using his reported order $q > p' > p$, he compares the two proposals and holds $p'$ (since $p' > p$ in his reported list), rejecting $p$.
+        \item $s$ gets $q$.
+        \item $t$ gets nothing yet.
+    \end{itemize}
+
+    \item \textbf{Round 2:}
+    \begin{itemize}
+        \item $p$, having been rejected by $r$, moves to its next choice and proposes to $s$.
+        \item $s$'s true order is $p > q > p'$, so she prefers $p$ over $q$.
+        \item $s$ drops $q$ and holds $p$.
+        \item $q$, now rejected by $s$, proposes to its next choice, which is $r$.
+    \end{itemize}
+
+    \item \textbf{Round 3:}
+    \begin{itemize}
+        \item $r$ is currently holding $p'$ from round 1.
+        \item Now $r$ receives a proposal from $q$.
+        \item Since $r$'s true order is $q > p > p'$, he prefers $q$ over his current match $p'$.
+        \item So $r$ drops $p'$ and accepts $q$.
+    \end{itemize}
+
+    \item \textbf{Round 4:}
+    \begin{itemize}
+        \item $p'$, now rejected by $r$, goes to its next choice and proposes to $t$.
+        \item $t$ (true order: $p > p' > q$) accepts $p'$.
+    \end{itemize}
+
+    \item \textbf{Final Matching:}
+    \begin{itemize}
+        \item $r$ is now matched with $q$.
+        \item $s$ is matched with $p$.
+        \item $t$ is matched with $p'$.
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection*{Conclusion}
+By simply swapping the order of $p$ and $p'$ in his reported preference list (even though he truly prefers $p$ to $p'$), resident $r$ can trigger a different chain reaction of proposals. 
+
+In the truthful run, he ended up with $p$ (his second choice). However, by lying, he eventually receives a proposal from $q$, his true first choice. 
+
+This proves that in the program-proposing Gale-Shapley algorithm, truth-telling is not necessarily an optimal strategy. A participant can benefit by misreporting their preferences.
+
 \subsection*{Problem 2 (10 pts)}
 Arrange in increasing order of asymptotic growth. All logs are in base 2.
 
