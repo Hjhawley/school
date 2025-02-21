@@ -176,6 +176,111 @@ Arrange in increasing order of asymptotic growth. All logs are in base 2.
     \item \( 2^n \)
 \end{enumerate}
 
+\subsection*{Solution}
+
+\subsubsection*{Step 1: Rewrite Functions}
+
+\begin{enumerate}
+    \item \( f_1(n) = n^{\frac{5}{3}} (\log n)^2 \)
+    \item \( f_3(n) = n^{\frac{n}{2}} \)
+\end{enumerate}
+
+\subsubsection*{Step 2: Comparing \( f_2(n) \) with Polynomials}
+First, compare \( f_2(n) = 2^{\sqrt{\log n}} \) with polynomial functions.
+
+Taking base-2 logarithms:
+\[
+\log_2\big( 2^{\sqrt{\log_2 n}} \big) = \sqrt{\log_2 n}, \quad
+\log_2(n^x) = x \log_2 n.
+\]
+As \( n \) grows to infinity, the polynomial function \( x \log_2 n \) dominates \( \sqrt{\log_2 n} \), meaning:
+
+\[
+2^{\sqrt{\log n}} < n^x.
+\]
+
+Since both \( f_1(n) = n^{5/3} (\log n)^2 \) and \( f_4(n) = \frac{n^2}{\log n} \) are polynomial up to logarithmic factors, we conclude:
+
+\[
+f_2(n) < f_1(n), \quad f_2(n) < f_4(n).
+\]
+
+\subsubsection*{Step 3: Comparing \( f_1(n) \) and \( f_4(n) \)}
+Now, compare:
+\[
+f_1(n) = n^{\frac{5}{3}} (\log n)^2, \quad f_4(n) = \frac{n^2}{\log n}.
+\]
+We examine their ratio:
+
+\[
+\frac{f_1(n)}{f_4(n)}
+= \frac{n^{\frac{5}{3}} (\log n)^2}{\frac{n^2}{\log n}}
+= \frac{n^{\frac{5}{3}} (\log n)^3}{n^2}
+= \frac{(\log n)^3}{n^{\frac{1}{3}}}.
+\]
+
+Since \( n^{1/3} \) grows faster than \( (\log n)^3 \) as \( n \to \infty \), we get:
+
+\[
+\frac{(\log n)^3}{n^{1/3}} \to 0.
+\]
+
+Thus, \( f_1(n) \ll f_4(n) \), meaning:
+
+\[
+n^{\frac{5}{3}} (\log n)^2 \ll \frac{n^2}{\log n}.
+\]
+
+So far, the order is:
+
+\[
+f_2(n) < f_1(n) < f_4(n).
+\]
+
+\subsubsection*{Step 4: Comparing the Exponentials \( f_5(n) \) vs. \( f_3(n) \)}
+We compare:
+\[
+f_3(n) = \sqrt{n^n} = n^{\frac{n}{2}}, \quad f_5(n) = 2^n.
+\]
+
+Rewriting them in exponential form:
+
+\[
+f_3(n) = \exp\left( \frac{n}{2} \ln n \right), \quad f_5(n) = \exp(n \ln 2).
+\]
+
+We compare the growth rates of their exponents:
+
+\[
+\frac{n}{2} \ln n \quad \text{vs.} \quad n \ln 2.
+\]
+
+Since \( \ln n \) grows without bound, it eventually surpasses the constant \( 2 \ln 2 \). Therefore,
+
+\[
+\frac{n}{2} \ln n \gg n \ln 2.
+\]
+
+which implies:
+
+\[
+n^{n/2} \gg 2^n.
+\]
+
+Thus, \( f_3(n) \gg f_5(n) \), meaning \( f_3(n) \) grows the fastest.
+
+\subsubsection*{Step 5: Final Ordering}
+Combining all comparisons, the increasing order of asymptotic growth is:
+
+\[
+\boxed{
+2^{\sqrt{\log n}} \;<\;
+n^{\frac{5}{3}} (\log n)^2 \;<\;
+\frac{n^2}{\log n} \;<\;
+2^n \;<\;
+\sqrt{n^n}.
+}
+\]
 
 \subsection*{Problem 3 (10 pts)}
 We say that $T(n)$ is $O(f(n))$ if there exist $c$ and $n_0$ such that for all $n > n_0,\:T(n) \le cf(n)$. Use this definition for parts $a$ and $b$.
