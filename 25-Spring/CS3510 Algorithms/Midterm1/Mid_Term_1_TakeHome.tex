@@ -64,7 +64,7 @@ We run the program-proposing Gale-Shapley algorithm.
     \begin{itemize}
         \item \(r\) receives proposals from \(p\) and \(p'\). 
               Since \(r\)'s true order is \(q \succ p \succ p'\) (and \(q\) did not propose), \(r\) prefers \(p\) over \(p'\). 
-              Thus \(r\) holds \(p\) and rejects \(p'\).
+              Therefore \(r\) holds \(p\) and rejects \(p'\).
         \item \(s\) holds \(q\). 
         \item \(t\) receives no proposal yet.
     \end{itemize}
@@ -124,7 +124,7 @@ Then:
     \]
 \end{enumerate}
 
-In this scenario, \(r\) ends up with \(q\), which is strictly better under \(r\)'s true preference. Thus, by lying about the order of two less preferred programs, \(r\) can secure a more-preferred match.
+In this scenario, \(r\) ends up with \(q\), which is strictly better under \(r\)'s true preference. Therefore, by lying about the order of two less preferred programs, \(r\) can secure a more-preferred match.
 
 \subsubsection*{Conclusion}
 This example shows that when programs propose, a resident (receiver) can sometimes benefit from misreporting: truth-telling is not an optimal strategy for the receiving side. 
@@ -164,13 +164,13 @@ f_5(n) = 2^n.
 \log_2\bigl(n^x\bigr) 
 = x \log_2 n.
 \]
-Clearly, for large \(n\), \(x \log_2 n\) outgrows \(\sqrt{\log_2 n}\). Hence \(2^{\sqrt{\log_2 n}}\) is sub-polynomial}. It follows that:
+Clearly, for large \(n\), \(x \log_2 n\) outgrows \(\sqrt{\log_2 n}\). Therefore \(2^{\sqrt{\log_2 n}}\) is sub-polynomial. It follows that:
 \[
-f_2(n) \;\ll\; n^x 
+f_2(n) \; < \; n^x 
 \quad
-\text{and thus}
+\text{and Therefore}
 \quad
-f_2(n) \;\ll\; f_1(n),\; f_4(n)
+f_2(n) \; < \; f_1(n),\; f_4(n)
 \]
 since \(f_1,f_4\) are polynomial (up to log factors).
 
@@ -181,9 +181,9 @@ since \(f_1,f_4\) are polynomial (up to log factors).
 = \frac{n^{\tfrac{5}{3}}(\log n)^3}{n^2}
 = \frac{(\log n)^3}{n^{\tfrac{1}{3}}}.
 \]
-As \(n\to\infty\), \(n^{\tfrac{1}{3}}\) eventually outgrows \((\log n)^3\). Thus 
+As \(n\to\infty\), \(n^{\tfrac{1}{3}}\) eventually outgrows \((\log n)^3\). Therefore 
 \[
-f_1(n) \;\ll\; f_4(n).
+f_1(n) \; < \; f_4(n).
 \]
 
 \subsubsection*{Comparing the exponentials $f_3(n)$ and $f_5(n)$}
@@ -194,7 +194,7 @@ f_3(n) = n^{\tfrac{n}{2}}
 f_5(n) = 2^n 
 = \exp\bigl(n\ln 2\bigr).
 \]
-For large \(n\), \(\tfrac{n}{2}\ln n\) dominates \(n\ln 2\). Hence 
+For large \(n\), \(\tfrac{n}{2}\ln n\) dominates \(n\ln 2\). Therefore 
 \[
 n^{\tfrac{n}{2}} \;\gg\; 2^n.
 \]
@@ -235,7 +235,7 @@ We check each term for a bound proportional to \(n^2\):
     \item \(4n^2\) is trivially \(\le 4n^2\).
     \item \(3n\log n \le 3n\cdot n = 3n^2\) for \(n\ge1\) (since \(\log n \le n\)).
     \item \(6n \le 6n^2\) for \(n\ge1\).
-    \item For large \(n\), \(\log n \le n\), hence \((\log n)^2 \le n^2\). So \(20(\log n)^2 \le 20n^2\).
+    \item For large \(n\), \(\log n \le n\), Therefore \((\log n)^2 \le n^2\). So \(20(\log n)^2 \le 20n^2\).
     \item \(11\le 11n^2\) for \(n\ge1\).
 \end{itemize}
 Summing these bounds shows \(T(n)\le (4+3+6+20+11)n^2 = 44n^2\) for \(n\ge1\). Therefore, \(T(n)\in O(n^2)\).
@@ -247,7 +247,7 @@ Assume \(f(n)\) is \(O(r(n))\) and \(g(n)\) is \(O(s(n))\). Then by definition, 
 f(n)\,g(n) \;\le\; c_1\,r(n)\;\cdot\;c_2\,s(n)
 \;=\; (c_1 c_2)\;\bigl(r(n)\,s(n)\bigr).
 \]
-Hence \(f(n)\,g(n)\in O\bigl(r(n)\,s(n)\bigr)\). 
+Therefore \(f(n)\,g(n)\in O\bigl(r(n)\,s(n)\bigr)\). 
 
 \hrule
 \vspace{1em}
@@ -278,7 +278,7 @@ Let \(N(u)\) be the neighbors of \(u\) and \(N(v)\) be the neighbors of \(v\). S
 \quad
 |N(v)| \;\ge\; \frac{n}{2}.
 \]
-Because no vertex is adjacent to both \(u\) and \(v\), the sets \(N(u)\) and \(N(v)\) must be disjoint. Hence
+Because no vertex is adjacent to both \(u\) and \(v\), the sets \(N(u)\) and \(N(v)\) must be disjoint. Therefore
 \[
 |N(u)\cup N(v)| = |N(u)| + |N(v)|
 \;\ge\; \frac{n}{2} + \frac{n}{2}
@@ -288,10 +288,10 @@ But there are only \(n-2\) vertices in total other than \(u\) and \(v\), so it i
 
 \bigskip
 \textbf{Step 3: Conclude diameter at most 2.}
-Since assuming \(\mathrm{diam}(G)\ge3\) led to a contradiction, it follows that every pair of vertices in \(G\) is at distance at most 2. Thus the diameter is \(\le2\).
+Since assuming \(\mathrm{diam}(G)\ge3\) led to a contradiction, it follows that every pair of vertices in \(G\) is at distance at most 2. Therefore the diameter is \(\le2\).
 
 \[
-\boxed{\text{Hence, any }n\text{-vertex graph with minimum degree }\tfrac{n}{2}
+\boxed{\text{Therefore, any }n\text{-vertex graph with minimum degree }\tfrac{n}{2}
 \text{ has diameter at most }2.}
 \]
 
