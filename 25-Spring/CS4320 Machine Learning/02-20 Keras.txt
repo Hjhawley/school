@@ -1,0 +1,32 @@
+Keras - a framework that makes it easier to construct neural networks as opposed to just using TensorFlow or PyTorch.
+
+prepare data
+    scikit-learn has better preprocessing than Keras or TF.
+    polynomial features, imputing, etc are a little more cumbersome in Keras.
+    so, we will use scikit-learn to preprocess and cache our data FIRST.
+    stratgey:
+        buld a scikit learn pipeline
+        do all preprocessing
+        do NOT add a model at the end; only fit and transform the training & testing data
+        these will be set aside as our NEW inputs to be fed into Keras
+        the id and the label will NOT be preprocessed, but set aside and added back in at the end of the scikit-learn pipeline
+
+ build the model
+    our input layer MUST have the same shape as the dataframe; one neuron per feature
+    our output layer depends upon the problem; for binary classification, it's one single neuron
+    as for the hidden layers in between, we have the freedom to experiment with different numbers and widths of layers
+    after specifying what we want our model to look like, we have to COMPILE it.
+    Keras will automatically set up all of the neurons for us.
+    we select an optimizer (for example, the SGD optimizer with a learning rate step size of 0.1)
+    we decide on a loss function (example, binary_crossentropy)
+    we choose a metric: AUC (area under curve). this doesn't guide the training, just lets us watch it 
+    we decide how many epochs (one epoch = look at ALL the training data, do a forward pass + backpropagation)
+    with SGD in particular, in each epoch the data is shuffled and broken into "batches" which are used to adjust weights
+    we can write functions to stop early when our validation score stops improving and save the best model
+
+tune
+    if we're overfitting: add more layers
+    if we're underfitting: add more width to the layers
+    "stretchy pants" model
+    play with different optimizers, metrics, learning rates, etc 
+    ex: look at optimizers.Adam()
