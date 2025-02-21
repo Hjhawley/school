@@ -300,6 +300,38 @@ For example, there are (at least) $3\cdot2^2 = 12$ ways to color a tree with 3 v
     \label{fig:3-color-graph}
 \end{figure}
 
+\subsection*{Solution (Problem 5)}
+
+\noindent
+\textbf{Claim.} A tree \(T\) on \(n\) vertices admits \emph{at least} \(3 \cdot 2^{\,n-1}\) proper 3-colorings.
+
+\medskip
+\noindent
+\textbf{Proof Idea: Root the tree and color downward.}
+\begin{enumerate}
+  \item \textbf{Choose a root.} 
+  Pick any vertex \(r\) in \(T\) as the root. Since \(T\) is acyclic and connected, it has exactly \(n-1\) edges.
+
+  \item \textbf{Color the root.} 
+  There are \(3\) ways to choose a color (from \(\{1,2,3\}\)) for the root vertex \(r\).
+
+  \item \textbf{Proceed top--down.} 
+  View each edge \(\bigl(u,v\bigr)\) so that \(u\) is closer to \(r\) than \(v\). Once \(u\) is colored, vertex \(v\) must be colored differently from \(u\). Therefore \(v\) has at least \(2\) valid color choices (since there are 3 colors in total).
+
+  \item \textbf{Count the colorings.}
+  After coloring the root (3 choices), there remain \(n-1\) vertices (each a “child” of exactly one parent), each of which has at least \(2\) choices. Therefore, 
+  \[
+     \underbrace{3}_{\text{root choices}} 
+     \;\times\; 
+     \underbrace{2^{n-1}}_{\text{each of the other }(n-1)\text{ vertices}}
+     \;=\; 3\cdot 2^{\,n-1}
+  \]
+  distinct proper colorings, showing \(\displaystyle 3\cdot 2^{n-1}\) is a lower bound.
+\end{enumerate}
+
+\noindent
+Therefore we conclude there are \(\mathbf{at~least}\; 3\cdot 2^{n-1}\) ways to properly color any tree \(T\) on \(n\) vertices using 3 colors.
+
 \subsection*{Problem 6 (Extra Credit: 10 pts)}
 Given a directed graph $G$ with $n$ vertices $V = \{1,2,\cdots,n\}$ and $m$ edges. We say that a vertex $j$ is reachable from $i$ if there is a directed path from $i$ to $j$. Design an $O(m+n)$-time algorithm (show the pseudo-code) that for any vertex $i$ outputs the smallest label reachable from $i$. For example, given the following graph you should output 1,2,2,2,1 corresponding to the smallest indices reachable from vertices 1,2,3,4,5 respectively.
 \begin{figure}[H]
