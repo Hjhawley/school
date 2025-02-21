@@ -303,61 +303,41 @@ We say that $T(n)$ is $O(f(n))$ if there exist $c$ and $n_0$ such that for all $
 
 \subsubsection*{(a) Proof that $4n^2 + 3n\text{log}\:n + 6n + 20\text{log}^2n + 11$ is $O(n^2)$.}
 
-We analyze each term in the function:
+Let
 \[
-T(n) = 4n^2 + 3n\log n + 6n + 20\log^2 n + 11.
+T(n) \;=\; 4n^2 \;+\; 3n \log n \;+\; 6n \;+\; 20 (\log n)^2 \;+\; 11.
 \]
-Since we are proving an upper bound, we compare each term to \( O(n^2) \):
-- The first term \( 4n^2 \) is already of the form \( O(n^2) \).
-- The second term \( 3n \log n \) is at most \( n^2 \) for sufficiently large \( n \), because:
-  \[
-  \log n < n \quad \text{for } n \geq 1 \quad \Rightarrow \quad 3n \log n < 3n^2.
-  \]
-- The third term \( 6n \) satisfies:
-  \[
-  6n < 6n^2 \quad \text{for } n \geq 1.
-  \]
-- The fourth term \( 20\log^2 n \) satisfies:
-  \[
-  \log^2 n < n^2 \quad \text{for large } n, \quad \text{so } 20\log^2 n < 20n^2.
-  \]
-- The constant term \( 11 \) is clearly bounded by \( O(n^2) \) for sufficiently large \( n \).
-Since each term is at most some constant multiple of \( n^2 \), we can sum them up:
-\[
-T(n) \leq 4n^2 + 3n^2 + 6n^2 + 20n^2 + 11n^2 = 44n^2.
-\]
-Thus, for \( c = 44 \) and some sufficiently large \( n_0 \), we have:
-\[
-T(n) \leq c n^2, \quad \text{for all } n > n_0.
-\]
-Therefore, we conclude:
-\[
-T(n) = O(n^2).
-\]
+We want to prove that $T(n) = O(n^2)$. We bound each term separately:
+\begin{itemize}
+\item $4n^2$ is obviously $O(n^2)$.
+\item Since $\log n < n$ for $n \ge 1$, $3n \log n < 3n^2$.
+\item For $n \ge 1$, $6n < 6n^2$.
+\item For large $n$, $(\log n)^2 < n^2$, so $20(\log n)^2 < 20n^2$.
+\item For $n \ge 1$, $11 \le 11n^2$.
+\end{itemize}
+Each of these bounds is at most $O(n^2)$.
+Therefore, $T(n)$ is $O(n^2)$.
 
 \subsubsection*{(b) Proof that $h(n)$ is $O(t(n))$.}
 
-We are given:
+Assume $f(n)$ is $O(r(n))$ and $g(n)$ is $O(s(n))$. By definition, there exist constants $c_1, c_2 > 0$ and $n_1, n_2$ such that
 \[
-f(n) \leq c_1 r(n), \quad g(n) \leq c_2 s(n) \quad \text{for some constants } c_1, c_2 \text{ and sufficiently large } n.
+f(n) \;\le\; c_1\,r(n) \quad \text{for all } n > n_1,
+\quad\text{and}\quad
+g(n) \;\le\; c_2\,s(n) \quad \text{for all } n > n_2.
 \]
-Define:
+Let $n_0 = \max\{n_1,\,n_2\}$. Then for $n > n_0$, we have
 \[
-h(n) = f(n) g(n), \quad t(n) = r(n) s(n).
+f(n)\,g(n)
+\;\le\;
+\bigl(c_1\,r(n)\bigr)\,\bigl(c_2\,s(n)\bigr)
+\;=\;
+c_1\,c_2\;\bigl(r(n)\,s(n)\bigr).
 \]
-We substitute the upper bounds:
+Since $c_1 c_2$ is just another constant, this shows
 \[
-h(n) = f(n) g(n) \leq (c_1 r(n)) (c_2 s(n)).
+f(n)\,g(n) = O\bigl(r(n)\,s(n)\bigr).
 \]
-Expanding:
-\[
-h(n) \leq c_1 c_2 (r(n) s(n)).
-\]
-Since \( c_1 c_2 \) is just a constant, we conclude:
-\[
-h(n) = O(t(n)).
-\]
-\qed
 
 \subsection*{Problem 4 (10 pts)}
 The \textit{diameter} of an undirected graph is the maximum distance between any pair of vertices. If a graph is not connected, its diameter is infinite. Let $G$ be an $n$ node undirected graph, where $n$ is even. Suppose that every vertex has degree at least n/2. Prove that G has diameter at most 2.
