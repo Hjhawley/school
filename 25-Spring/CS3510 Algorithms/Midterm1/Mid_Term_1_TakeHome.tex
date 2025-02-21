@@ -23,7 +23,7 @@
 \begin{document}
 
 \noindent CS-3510-\textbf{\red{Your Section\#}} Algorithms, Spring 2025\hfill Mid-Term 1 Take-Home\\
-\blue{FirstName} \blue{LastName} \hfill Collaborator(s):
+\blue{Hayden} \blue{Hawley} \hfill Collaborator(s):
 
 \hrulefill
 
@@ -34,136 +34,101 @@ For this problem, we explore the issue of \textit{truthfulness} in the Gale-Shap
 
 \subsection*{Solution}
 
-We can show that it is possible for a receiver $r$ to obtain a more-preferred match by being untruthful, by switching the order of two options that $r$ actually likes less (even though in his true ranking one is better than the other).
-
-Let the two sides be:
-\begin{itemize}
-    \item \textbf{Residents (receivers)} $R$: $r, s, t$
-    \item \textbf{Programs (proposers)} $P$: $p, p', q$
-\end{itemize}
-Assume that the matching is produced by a \textbf{program-proposing Gale-Shapley algorithm}.
-
-\subsubsection*{True Preference Lists}
-\begin{itemize}
-    \item \textbf{Resident $r$'s true preferences:}  
-    \[
-    q > p > p'
-    \]
-    So $r$ likes $q$ best; although he prefers $p$ to $p'$, both $p$ and $p'$ are lower than $q$.
-
-    \item \textbf{Resident $s$'s true preferences:}  
-    \[
-    p > q > p'
-    \]
-
-    \item \textbf{Resident $t$'s true preferences:}  
-    \[
-    p > p' > q
-    \]
-
-    \item \textbf{Programs' preferences:}
-    \begin{itemize}
-        \item $p$: $r > s > t$
-        \item $p'$: $r > t > s$
-        \item $q$: $s > r > t$
-    \end{itemize}
-\end{itemize}
-
-\subsubsection*{Outcome When $r$ Reports Truthfully}
-We run the \textbf{program-proposing Gale-Shapley algorithm} using the true lists.
-
-\begin{enumerate}
-    \item \textbf{Round 1:}
-    \begin{itemize}
-        \item $p$ proposes to its top choice: $r$.
-        \item $p'$ also proposes to its top choice: $r$.
-        \item $q$ proposes to its top choice: $s$.
-    \end{itemize}
-
-    \item \textbf{Resident Decisions:}
-    \begin{itemize}
-        \item $r$ receives proposals from $p$ and $p'$.
-        \item Using his true order $q > p > p'$, he compares these two. Since $p > p'$ in his true list, he tentatively holds $p$ and rejects $p'$.
-        \item $s$ gets $q$.
-        \item $t$ gets no proposal in this round.
-    \end{itemize}
-
-    \item \textbf{Round 2:}
-    \begin{itemize}
-        \item $p'$, having been rejected by $r$, now moves to its next choice and proposes to $t$.
-    \end{itemize}
-
-    \item \textbf{Final Matching:}
-    \begin{itemize}
-        \item $r$ is matched with $p$.
-        \item $s$ is matched with $q$.
-        \item $t$ is matched with $p'$.
-    \end{itemize}
-\end{enumerate}
-
-Outcome for $r$: He gets $p$, but he would prefer $q$ over $p$. Since $q$ proposed only to $s$, $q$ is already taken.
-
-\subsubsection*{Outcome When $r$ Misreports}
-Now suppose that $r$ lies about his 2nd and 3rd rankings by switching $p$ and $p'$. In other words, he submits as his preference list:
+\textbf{Setup.} Let the two sides be:
 \[
-q > p' > p
+\text{Residents (receivers)}: R = \{r, s, t\}, 
+\quad
+\text{Programs (proposers)}: P = \{p, p', q\}.
 \]
-Even though he actually prefers $p$ to $p'$, he reverses these when reporting.
+We run the program-proposing Gale-Shapley algorithm.
 
-Now run the algorithm again:
+\subsubsection*{True Preferences}
+\begin{itemize}
+    \item \(\text{Resident }r:\quad q \succ p \succ p'\)
+    \item \(\text{Resident }s:\quad p \succ q \succ p'\)
+    \item \(\text{Resident }t:\quad p \succ p' \succ q\)
+    \item \(\text{Program }p:\quad r \succ s \succ t\)
+    \item \(\text{Program }p':\quad r \succ t \succ s\)
+    \item \(\text{Program }q:\quad s \succ r \succ t\)
+\end{itemize}
+
+\subsubsection*{Case 1: $r$ Reports Truthfully}
+\begin{enumerate}
+    \item \textbf{Round 1.} 
+    \begin{itemize}
+        \item \(p\) proposes to \(r\). 
+        \item \(p'\) also proposes to \(r\). 
+        \item \(q\) proposes to \(s\).
+    \end{itemize}
+    \item \textbf{Resident Decisions.}
+    \begin{itemize}
+        \item \(r\) receives proposals from \(p\) and \(p'\). 
+              Since \(r\)'s true order is \(q \succ p \succ p'\) (and \(q\) did not propose), \(r\) prefers \(p\) over \(p'\). 
+              Thus \(r\) holds \(p\) and rejects \(p'\).
+        \item \(s\) holds \(q\). 
+        \item \(t\) receives no proposal yet.
+    \end{itemize}
+    \item \textbf{Round 2.}
+    \begin{itemize}
+        \item \(p'\) (rejected by \(r\)) proposes to its next choice, \(t\). 
+        \item \(t\) accepts \(p'\), having no other offer.
+    \end{itemize}
+    \item \textbf{Final Matching.}
+    \[
+    r \leftrightarrow p, \quad s \leftrightarrow q, \quad t \leftrightarrow p'.
+    \]
+\end{enumerate}
+
+Here, \(r\) ends up with \(p\). Since \(q\) went to \(s\), \(r\) cannot do better under truthful reporting.
+
+\subsubsection*{Case 2: $r$ Misreports by Swapping $p$ and $p'$}
+Now suppose \(r\) reverses \(p\) and \(p'\) in his submitted list:
+\[
+\text{Reported by }r:\quad q \succ p' \succ p.
+\]
+Then:
 
 \begin{enumerate}
-    \item \textbf{Round 1:}
+    \item \textbf{Round 1.}
     \begin{itemize}
-        \item $p$ proposes to its top choice: $r$.
-        \item $p'$ proposes to its top choice: $r$.
-        \item $q$ proposes to its top choice: $s$.
+        \item \(p\) proposes to \(r\).
+        \item \(p'\) also proposes to \(r\).
+        \item \(q\) proposes to \(s\).
     \end{itemize}
-
-    \item \textbf{Resident Decisions:}
+    \item \textbf{Resident Decisions.}
     \begin{itemize}
-        \item $r$ receives proposals from $p$ and $p'$.  
-        \item Using his reported order $q > p' > p$, he compares the two proposals and holds $p'$ (since $p' > p$ in his reported list), rejecting $p$.
-        \item $s$ gets $q$.
-        \item $t$ gets nothing yet.
+        \item \(r\) receives proposals from \(p\) and \(p'\). 
+              According to the reported preference (\(p' \succ p\)), \(r\) holds \(p'\) and rejects \(p\).
+        \item \(s\) holds \(q\).
     \end{itemize}
-
-    \item \textbf{Round 2:}
+    \item \textbf{Round 2.}
     \begin{itemize}
-        \item $p$, having been rejected by $r$, moves to its next choice and proposes to $s$.
-        \item $s$'s true order is $p > q > p'$, so she prefers $p$ over $q$.
-        \item $s$ drops $q$ and holds $p$.
-        \item $q$, now rejected by $s$, proposes to its next choice, which is $r$.
+        \item \(p\), rejected by \(r\), proposes next to \(s\). 
+        \item Since \(s\) truly prefers \(p \succ q\), \(s\) drops \(q\) and holds \(p\).
+        \item \(q\), rejected by \(s\), then proposes to \(r\) (its next choice).
     \end{itemize}
-
-    \item \textbf{Round 3:}
+    \item \textbf{Round 3.}
     \begin{itemize}
-        \item $r$ is currently holding $p'$ from round 1.
-        \item Now $r$ receives a proposal from $q$.
-        \item Since $r$'s true order is $q > p > p'$, he prefers $q$ over his current match $p'$.
-        \item So $r$ drops $p'$ and accepts $q$.
+        \item \(r\) is holding \(p'\), but now receives a proposal from \(q\). 
+        \item By \(r\)'s true preference, \(q \succ p\succ p'\). 
+              So \(r\) prefers \(q\) and drops \(p'\).
     \end{itemize}
-
-    \item \textbf{Round 4:}
+    \item \textbf{Round 4.}
     \begin{itemize}
-        \item $p'$, now rejected by $r$, goes to its next choice and proposes to $t$.
-        \item $t$ (true order: $p > p' > q$) accepts $p'$.
+        \item \(p'\), dropped by \(r\), proposes next to \(t\). 
+        \item \(t\) accepts \(p'\).
     \end{itemize}
-
-    \item \textbf{Final Matching:}
-    \begin{itemize}
-        \item $r$ is now matched with $q$.
-        \item $s$ is matched with $p$.
-        \item $t$ is matched with $p'$.
-    \end{itemize}
+    \item \textbf{Final Matching.}
+    \[
+    r \leftrightarrow q, \quad s \leftrightarrow p, \quad t \leftrightarrow p'.
+    \]
 \end{enumerate}
+
+In this scenario, \(r\) ends up with \(q\), which is strictly better under \(r\)'s true preference. Thus, by lying about the order of two less preferred programs, \(r\) can secure a more-preferred match.
 
 \subsubsection*{Conclusion}
-By simply swapping the order of $p$ and $p'$ in his reported preference list (even though he truly prefers $p$ to $p'$), resident $r$ can trigger a different chain reaction of proposals. 
+This example shows that when programs propose, a resident (receiver) can sometimes benefit from misreporting: truth-telling is not an optimal strategy for the receiving side. 
 
-In the truthful run, he ended up with $p$ (his second choice). However, by lying, he eventually receives a proposal from $q$, his true first choice. 
-
-This proves that in the program-proposing Gale-Shapley algorithm, truth-telling is not necessarily an optimal strategy. A participant can benefit by misreporting their preferences.
 
 \subsection*{Problem 2 (10 pts)}
 Arrange in increasing order of asymptotic growth. All logs are in base 2.
@@ -178,8 +143,7 @@ Arrange in increasing order of asymptotic growth. All logs are in base 2.
 
 \subsection*{Solution}
 
-We want to compare the asymptotic growth of five functions as \(n \to \infty\):
-
+Define the five functions:
 \[
 f_1(n) = n^{\tfrac{5}{3}} (\log n)^2, 
 \quad
@@ -192,102 +156,61 @@ f_4(n) = \frac{n^2}{\log n},
 f_5(n) = 2^n.
 \]
 
-\subsubsection*{Step 1: Comparing \(f_2(n)\) with polynomials}
-First, compare \(f_2(n) = 2^{\sqrt{\log n}}\) to polynomial functions of \(n\). 
-
-Note that 
+\subsubsection*{Comparing $f_2(n)$ with polynomials}
 \[
-\log_2 \bigl( 2^{\sqrt{\log_2 n}} \bigr) 
-= \sqrt{\log_2 n},
-\quad
-\log_2 \bigl(n^x \bigr)
+\log_2\bigl(2^{\sqrt{\log_2 n}}\bigr) 
+= \sqrt{\log_2 n}, 
+\quad 
+\log_2\bigl(n^x\bigr) 
 = x \log_2 n.
 \]
-As \(n \to \infty\), \(x \log_2 n\) (linear in \(\log_2 n\)) will outgrow \(\sqrt{\log_2 n}\). Therefore
+Clearly, for large \(n\), \(x \log_2 n\) outgrows \(\sqrt{\log_2 n}\). Hence \(2^{\sqrt{\log_2 n}}\) is sub-polynomial}. It follows that:
 \[
-2^{\sqrt{\log n}} = 2^{\sqrt{\log_2 n}} 
-\; < \; 
-n^x
+f_2(n) \;\ll\; n^x 
 \quad
-\text{for any fixed } x > 0.
-\]
-Because \(f_1(n) = n^{5/3} (\log n)^2\) and \(f_4(n) = \tfrac{n^2}{\log n}\) are both polynomial, we can conclude
-\[
-f_2(n) \; < \; f_1(n), 
+\text{and thus}
 \quad
-f_2(n) \; < \; f_4(n).
+f_2(n) \;\ll\; f_1(n),\; f_4(n)
 \]
+since \(f_1,f_4\) are polynomial (up to log factors).
 
-\subsubsection*{Step 2: Comparing \(f_1(n)\) and \(f_4(n)\)}
-Next, compare
-\[
-f_1(n) = n^{\tfrac{5}{3}} (\log n)^2
-\quad\text{and}\quad
-f_4(n) = \frac{n^2}{\log n}.
-\]
-Examine their ratio:
+\subsubsection*{Comparing $f_1(n)$ and $f_4(n)$}
 \[
 \frac{f_1(n)}{f_4(n)}
-= \frac{n^{\tfrac{5}{3}} \,(\log n)^2}{\tfrac{n^2}{\log n}}
-= \frac{n^{\tfrac{5}{3}} (\log n)^3}{n^2}
+= \frac{n^{\tfrac{5}{3}}(\log n)^2}{\tfrac{n^2}{\log n}}
+= \frac{n^{\tfrac{5}{3}}(\log n)^3}{n^2}
 = \frac{(\log n)^3}{n^{\tfrac{1}{3}}}.
 \]
-Since \(n^{\tfrac{1}{3}}\) outgrows \((\log n)^3\) as \(n\to\infty\), we have 
-\(\tfrac{(\log n)^3}{n^{1/3}} \to 0\). Therefore
+As \(n\to\infty\), \(n^{\tfrac{1}{3}}\) eventually outgrows \((\log n)^3\). Thus 
 \[
-f_1(n) \; < \; f_4(n).
+f_1(n) \;\ll\; f_4(n).
 \]
 
-So far, we have
+\subsubsection*{Comparing the exponentials $f_3(n)$ and $f_5(n)$}
 \[
-f_2(n) \; < \; f_1(n) \; < \; f_4(n).
-\]
-
-\subsubsection*{Step 3: Comparing the exponentials \(f_3(n)\) vs.\ \(f_5(n)\)}
-Finally, compare
-\[
-f_3(n) = n^{\tfrac{n}{2}},
-\quad 
-f_5(n) = 2^n.
-\]
-Rewrite them as exponentials:
-\[
-f_3(n) = \exp\Bigl(\tfrac{n}{2} \ln n\Bigr),
+f_3(n) = n^{\tfrac{n}{2}} 
+= \exp\Bigl(\tfrac{n}{2}\ln n\Bigr),
 \quad
-f_5(n) = \exp\bigl(n \ln 2\bigr).
+f_5(n) = 2^n 
+= \exp\bigl(n\ln 2\bigr).
 \]
-Compare their exponents:
+For large \(n\), \(\tfrac{n}{2}\ln n\) dominates \(n\ln 2\). Hence 
 \[
-\tfrac{n}{2} \ln n
-\quad \text{vs.} \quad
-n \ln 2.
+n^{\tfrac{n}{2}} \;\gg\; 2^n.
 \]
-Since \(\ln n\) grows unbounded, eventually \(\tfrac{1}{2}\ln n\) exceeds \(\ln 2\), so
-\[
-\tfrac{n}{2} \ln n 
-\;\gg\;
-n \ln 2.
-\]
-Therefore 
-\[
-n^{\tfrac{n}{2}} 
-\;\gg\;
-2^n,
-\]
-meaning \(f_3(n)\) grows faster than \(f_5(n)\).
 
-\subsubsection*{Step 4: Final Ordering}
-Combining all comparisons, the increasing order of asymptotic growth is:
+\subsubsection*{Final Ordering}
+Putting it all together:
+\[
+f_2(n) \;<\; f_1(n) \;<\; f_4(n) \;<\; f_5(n) \;<\; f_3(n).
+\]
+In explicit form:
 \[
 \boxed{
-2^{\sqrt{\log n}} 
-\;<\; 
-n^{\tfrac{5}{3}} (\log n)^2 
-\;<\; 
-\frac{n^2}{\log n} 
-\;<\; 
-2^n 
-\;<\; 
+2^{\sqrt{\log n}} \;<\;
+n^{\tfrac{5}{3}} (\log n)^2 \;<\;
+\frac{n^2}{\log n} \;<\;
+2^n \;<\;
 \sqrt{n^n}\,.
 }
 \]
@@ -301,43 +224,34 @@ We say that $T(n)$ is $O(f(n))$ if there exist $c$ and $n_0$ such that for all $
 
 \subsection*{Solution}
 
-\subsubsection*{(a) Proof that $4n^2 + 3n\text{log}\:n + 6n + 20\text{log}^2n + 11$ is $O(n^2)$.}
+\subsubsection*{(a) Showing $4n^2 + 3n\log n + 6n + 20(\log n)^2 + 11$ is $O(n^2)$}
 
 Let
 \[
-T(n) \;=\; 4n^2 \;+\; 3n \log n \;+\; 6n \;+\; 20 (\log n)^2 \;+\; 11.
+T(n) \;=\; 4n^2 \;+\; 3n\log n \;+\; 6n \;+\; 20(\log n)^2 \;+\; 11.
 \]
-We want to prove that $T(n) = O(n^2)$. We bound each term separately:
+We check each term for a bound proportional to \(n^2\):
 \begin{itemize}
-\item $4n^2$ is obviously $O(n^2)$.
-\item Since $\log n < n$ for $n \ge 1$, $3n \log n < 3n^2$.
-\item For $n \ge 1$, $6n < 6n^2$.
-\item For large $n$, $(\log n)^2 < n^2$, so $20(\log n)^2 < 20n^2$.
-\item For $n \ge 1$, $11 \le 11n^2$.
+    \item \(4n^2\) is trivially \(\le 4n^2\).
+    \item \(3n\log n \le 3n\cdot n = 3n^2\) for \(n\ge1\) (since \(\log n \le n\)).
+    \item \(6n \le 6n^2\) for \(n\ge1\).
+    \item For large \(n\), \(\log n \le n\), hence \((\log n)^2 \le n^2\). So \(20(\log n)^2 \le 20n^2\).
+    \item \(11\le 11n^2\) for \(n\ge1\).
 \end{itemize}
-Each of these bounds is at most $O(n^2)$.
-Therefore, $T(n)$ is $O(n^2)$.
+Summing these bounds shows \(T(n)\le (4+3+6+20+11)n^2 = 44n^2\) for \(n\ge1\). Therefore, \(T(n)\in O(n^2)\).
 
-\subsubsection*{(b) Proof that $h(n)$ is $O(t(n))$.}
+\subsubsection*{(b) Product of two $O(\cdot)$ functions}
 
-Assume $f(n)$ is $O(r(n))$ and $g(n)$ is $O(s(n))$. By definition, there exist constants $c_1, c_2 > 0$ and $n_1, n_2$ such that
+Assume \(f(n)\) is \(O(r(n))\) and \(g(n)\) is \(O(s(n))\). Then by definition, there exist constants \(c_1,c_2\) and \(n_1,n_2\) such that for all \(n>n_1,\; f(n)\le c_1\,r(n)\), and for all \(n>n_2,\; g(n)\le c_2\,s(n)\). Let \(n_0 = \max\{n_1,n_2\}\). Then for \(n>n_0\),
 \[
-f(n) \;\le\; c_1\,r(n) \quad \text{for all } n > n_1,
-\quad\text{and}\quad
-g(n) \;\le\; c_2\,s(n) \quad \text{for all } n > n_2.
+f(n)\,g(n) \;\le\; c_1\,r(n)\;\cdot\;c_2\,s(n)
+\;=\; (c_1 c_2)\;\bigl(r(n)\,s(n)\bigr).
 \]
-Let $n_0 = \max\{n_1,\,n_2\}$. Then for $n > n_0$, we have
-\[
-f(n)\,g(n)
-\;\le\;
-\bigl(c_1\,r(n)\bigr)\,\bigl(c_2\,s(n)\bigr)
-\;=\;
-c_1\,c_2\;\bigl(r(n)\,s(n)\bigr).
-\]
-Since $c_1 c_2$ is just another constant, this shows
-\[
-f(n)\,g(n) = O\bigl(r(n)\,s(n)\bigr).
-\]
+Hence \(f(n)\,g(n)\in O\bigl(r(n)\,s(n)\bigr)\). 
+
+\hrule
+\vspace{1em}
+
 
 \subsection*{Problem 4 (10 pts)}
 The \textit{diameter} of an undirected graph is the maximum distance between any pair of vertices. If a graph is not connected, its diameter is infinite. Let $G$ be an $n$ node undirected graph, where $n$ is even. Suppose that every vertex has degree at least n/2. Prove that G has diameter at most 2.
@@ -346,41 +260,39 @@ The \textit{diameter} of an undirected graph is the maximum distance between any
 
 \subsection*{Solution}
 
-Let $G$ be an undirected graph on $n$ vertices (with $n$ even) in which every vertex has degree at least $\frac{n}{2}$. We aim to show that the diameter of $G$ is at most 2, meaning that for any two vertices $u$ and $v$, the distance $d(u,v) \le 2$.
+Let \(G\) be an undirected graph on \(n\) vertices, with \(n\) even, and every vertex of degree at least \(\tfrac{n}{2}\). We will show the diameter of \(G\) cannot exceed 2.
 
 \bigskip
-\textbf{Step 1: Assume for contradiction that $\mathrm{diam}(G) \ge 3$.}
-
-Then, there exist vertices $u$ and $v$ in $G$ such that $d(u,v) \ge 3$. In particular:
+\textbf{Step 1: Contradiction assumption.}
+Assume \(\mathrm{diam}(G)\ge3\). Then there exist vertices \(u,v\) such that the distance \(d(u,v)\ge3\). In particular:
 \begin{enumerate}
-    \item $u$ and $v$ are not adjacent (otherwise, $d(u,v)=1$), and 
-    \item There is no vertex that is adjacent to both $u$ and $v$ (otherwise, $d(u,v)=2$).
+    \item \(u\) and \(v\) are not adjacent (otherwise \(d(u,v)=1\)),
+    \item There is no single vertex adjacent to both \(u\) and \(v\) (otherwise \(d(u,v)=2\)).
 \end{enumerate}
 
 \bigskip
-\textbf{Step 2: Analyze the neighbor sets of $u$ and $v$.}
-
-Let $N(u)$ and $N(v)$ denote the sets of neighbors of $u$ and $v$, respectively. Since every vertex has degree at least $\frac{n}{2}$, we have
+\textbf{Step 2: Neighborhood sizes.}
+Let \(N(u)\) be the neighbors of \(u\) and \(N(v)\) be the neighbors of \(v\). Since each vertex has degree at least \(\tfrac{n}{2}\),
 \[
-|N(u)| \ge \frac{n}{2} \quad \text{and} \quad |N(v)| \ge \frac{n}{2}.
+|N(u)| \;\ge\; \frac{n}{2}, 
+\quad
+|N(v)| \;\ge\; \frac{n}{2}.
 \]
-Because no vertex is adjacent to both $u$ and $v$, the sets $N(u)$ and $N(v)$ must be disjoint. Therefore, the total number of vertices in $N(u) \cup N(v)$ is
+Because no vertex is adjacent to both \(u\) and \(v\), the sets \(N(u)\) and \(N(v)\) must be disjoint. Hence
 \[
-|N(u) \cup N(v)| = |N(u)| + |N(v)| \ge \frac{n}{2} + \frac{n}{2} = n.
+|N(u)\cup N(v)| = |N(u)| + |N(v)|
+\;\ge\; \frac{n}{2} + \frac{n}{2}
+= n.
 \]
-However, aside from $u$ and $v$, there are only $n-2$ vertices in $G$. This implies
-\[
-n \le |N(u) \cup N(v)| \le n - 2,
-\]
-which is a contradiction.
+But there are only \(n-2\) vertices in total other than \(u\) and \(v\), so it is impossible for two disjoint neighbor sets to each contain \(\tfrac{n}{2}\) different vertices. We have a contradiction.
 
 \bigskip
-\textbf{Step 3: Conclude that the diameter is at most 2.}
-
-Since our assumption that there exist vertices at distance at least 3 leads to a contradiction, it follows that every pair of vertices in $G$ must be at most 2 edges apart. Therefore, the diameter of $G$ is at most 2.
+\textbf{Step 3: Conclude diameter at most 2.}
+Since assuming \(\mathrm{diam}(G)\ge3\) led to a contradiction, it follows that every pair of vertices in \(G\) is at distance at most 2. Thus the diameter is \(\le2\).
 
 \[
-\boxed{\text{Every } n\text{-vertex graph with minimum degree } \frac{n}{2} \text{ has diameter at most } 2.}
+\boxed{\text{Hence, any }n\text{-vertex graph with minimum degree }\tfrac{n}{2}
+\text{ has diameter at most }2.}
 \]
 
 \subsection*{Problem 5 (10 pts)}
@@ -402,5 +314,3 @@ Given a directed graph $G$ with $n$ vertices $V = \{1,2,\cdots,n\}$ and $m$ edge
 \end{figure}
 
 \end{document}
-
-
