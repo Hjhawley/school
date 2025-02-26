@@ -88,8 +88,13 @@ def build_model_1():
     #print(model.summary())
     #print(model.layers[1].get_weights())
     return model, model_filename, learning_curve_filename
+
+def build_model_2():
+    pass
     
 model, model_filename, learning_curve_filename = build_model_1()
+#model, model_filename, learning_curve_filename = build_model_2()
+#model, model_filename, learning_curve_filename = build_model_3()
 
 #
 # Compile the model
