@@ -24,6 +24,7 @@ x64/
 *.tlog
 
 # Temporary files
+*.csv
 *.tmp
 *.bak
 *.old
