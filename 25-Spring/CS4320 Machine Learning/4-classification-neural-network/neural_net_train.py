@@ -90,37 +90,43 @@ def build_model_1():
     return model, model_filename, learning_curve_filename
 
 def build_model_2():
-    from keras import regularizers
     model_filename = "model-2.keras"
     learning_curve_filename = "learning-curve-2.png"
     model = keras.Sequential([
         keras.layers.Input(shape=input_shape),
-        keras.layers.Dense(64, activation="relu", kernel_regularizer=regularizers.l2(0.001)),
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
         keras.layers.Dropout(0.3),
-        keras.layers.Dense(32, activation="relu", kernel_regularizer=regularizers.l2(0.001)),
+        keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
         keras.layers.Dropout(0.3),
-        keras.layers.Dense(16, activation="relu", kernel_regularizer=regularizers.l2(0.001)),
+        keras.layers.Dense(16, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
         keras.layers.Dropout(0.3),
-        keras.layers.Dense(8, activation="relu", kernel_regularizer=regularizers.l2(0.001)),
+        keras.layers.Dense(8, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
         keras.layers.Dense(1, activation="sigmoid")
     ])
     return model, model_filename, learning_curve_filename
 
 def build_model_3():
-    from keras import regularizers
     model_filename = "model-3.keras"
     learning_curve_filename = "learning-curve-3.png"
     model = keras.Sequential([
         keras.layers.Input(shape=input_shape),
-        keras.layers.Dense(128, activation="relu", kernel_regularizer=regularizers.l2(0.001)),
+        keras.layers.Dense(256, kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.LeakyReLU(alpha=0.1),
         keras.layers.Dropout(0.3),
-        keras.layers.Dense(64, activation="relu", kernel_regularizer=regularizers.l2(0.001)),
-        keras.layers.Dropout(0.3),
-        keras.layers.Dense(32, activation="relu", kernel_regularizer=regularizers.l2(0.001)),
-        keras.layers.Dropout(0.3),
-        keras.layers.Dense(16, activation="relu", kernel_regularizer=regularizers.l2(0.001)),
-        keras.layers.Dropout(0.3),
-        keras.layers.Dense(8, activation="relu", kernel_regularizer=regularizers.l2(0.001)),
+        keras.layers.Dense(128, kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.LeakyReLU(alpha=0.1),
+        keras.layers.Dropout(0.25),
+        keras.layers.Dense(64, kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.LeakyReLU(alpha=0.1),
+        keras.layers.Dropout(0.2),
+        keras.layers.Dense(32, kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.LeakyReLU(alpha=0.1),
+        keras.layers.Dropout(0.15),
+        keras.layers.Dense(16, kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.LeakyReLU(alpha=0.1),
+        keras.layers.Dropout(0.1),
+        keras.layers.Dense(8, kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.LeakyReLU(alpha=0.1),
         keras.layers.Dense(1, activation="sigmoid")
     ])
     return model, model_filename, learning_curve_filename
