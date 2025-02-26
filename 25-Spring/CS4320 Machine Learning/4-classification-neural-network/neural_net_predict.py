@@ -4,11 +4,11 @@ import pandas as pd
 import tensorflow as tf
 import keras
 
-label = "loss"
+label = "Depression"
 input_filename = "test-preprocessed.csv"
 model_filename = "model-1.keras"
-proba_filename = "predictions_proba.csv"
-predictions_filename = "predictions.csv"
+proba_filename = "predictions-1_proba.csv"
+predictions_filename = "predictions-1.csv"
 
 #
 # Load the test data, removing the label column, if it exists
