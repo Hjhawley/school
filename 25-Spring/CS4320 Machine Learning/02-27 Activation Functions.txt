@@ -1,84 +1,84 @@
 Activation Functions
 
 What is an activation function?  
-- In a neuron, an activation function takes the weighted sum of inputs and applies a non-linear transformation (or sometimes linear). This output is then passed to the next layer.  
-- The choice of activation function can greatly affect how well gradient descent converges, and whether gradients vanish or explode.
+- In a neuron, an activation function takes the weighted sum of inputs and applies a non-linear (or sometimes linear) transformation. The resulting output is then passed to the next layer.  
+- The choice of activation function can greatly affect how well gradient descent converges, and it influences whether gradients vanish or explode.
 
 Common Activation Functions
 
 1. Linear (Identity)  
-   - Essentially passes values straight through: \(\text{output} = x\).  
-   - Smooth and fast, but not typically used in hidden layers if your goal is to learn non-linear patterns; it’s often only used in output layers for regression.
+   - Simply passes values straight through: output = x.  
+   - It is smooth and fast, but it is generally not used in hidden layers if the goal is to learn non-linear patterns; it is often reserved for output layers in regression tasks.
 
 2. ReLU (Rectified Linear Unit)  
-   - \(\text{ReLU}(x) = \max(0, x)\).  
-   - When \(x\) is negative, output is \(0\); when \(x\) is positive, output is \(x\).  
-   - Fast to compute, but not differentiable at \(x=0\); neurons can “die” if they get stuck with negative inputs.
+   - Defined as: ReLU(x) = max(0, x).  
+   - For negative x, the output is 0; for positive x, the output is x.  
+   - It is fast to compute but not differentiable at x = 0; neurons can “die” if they consistently receive negative inputs.
 
 3. Leaky ReLU  
-   - \(\text{LeakyReLU}(x) = \max(\alpha x, x)\), where \(\alpha\) is a small constant (e.g., 0.01).  
-   - Allows a small, non-zero gradient for negative inputs, preventing “dead” neurons.  
-   - Slightly more expensive to compute than ReLU but still relatively fast.
+   - Defined as: LeakyReLU(x) = max(alpha * x, x), where alpha is a small constant (for example, 0.01).  
+   - It allows a small, non-zero gradient when the input is negative, which helps prevent “dead” neurons.  
+   - It is slightly more computationally expensive than ReLU but remains relatively fast.
 
 4. ELU (Exponential Linear Unit)  
-   - \(\text{ELU}(x) = x\) if \(x > 0\), else \(\alpha (e^x - 1)\).  
-   - Smooth and often helps gradient-based learning converge faster. Slightly more expensive to compute than ReLU/Leaky ReLU.  
-   - SELU (Scaled ELU) is a variant that includes a scaling constant to normalize outputs automatically, but it’s typically used in special “self-normalizing” networks with only Dense layers and no Batch Normalization.
+   - Defined as: ELU(x) = x if x > 0; otherwise, ELU(x) = alpha * (exp(x) - 1).  
+   - This function is smooth and can help gradient-based learning converge faster. It is somewhat more expensive to compute than ReLU or Leaky ReLU.  
+   - A variant, called SELU (Scaled ELU), includes a scaling constant to automatically normalize outputs and is typically used in “self-normalizing” networks that use only Dense layers without Batch Normalization.
 
 5. GELU (Gaussian Error Linear Unit)  
-   - A smooth function that uses the Gaussian cumulative distribution function.  
-   - Can yield good results, but is more computationally expensive than ReLU/Leaky ReLU.
+   - This smooth function uses the Gaussian cumulative distribution function to transform its input.  
+   - While it can yield good results, it is more computationally expensive than ReLU or Leaky ReLU.
 
 6. SiLU (Swish) / Mish  
-   - These are newer smooth activations (SiLU is sometimes called “Swish”):  
-     \(\text{silu}(x) = x \cdot \sigma(x)\)  
-   - Mish is another smooth function that can sometimes outperform other activations at the cost of higher compute time.
+   - These are newer smooth activations. For SiLU (also known as Swish), the function is defined as: silu(x) = x * sigma(x), where sigma(x) represents the sigmoid of x.  
+   - Mish is another smooth function that can sometimes outperform other activations, though it requires more computation.
 
 Key Takeaway:  
-- Each activation has its pros and cons regarding smoothness, speed, and gradient behavior.  
-- ReLU (and variants) remain extremely popular due to simplicity and good performance, but you can experiment if you suspect ReLU is causing too many dead neurons or slow convergence.
+- Each activation function has its own advantages and disadvantages in terms of smoothness, speed, and how they affect gradient behavior.  
+- ReLU and its variants remain popular due to their simplicity and good performance, but it is worth experimenting with alternatives if issues like dead neurons or slow convergence arise.
 
 Weight Initialization
 
-Proper initialization helps avoid vanishing or exploding gradients.
+Proper weight initialization is crucial to help avoid vanishing or exploding gradients.
 
-- RandomUniform: Samples from a uniform distribution. Useful as a general default, but can sometimes lead to suboptimal convergence in deeper networks.  
-- RandomNormal: Samples from a Gaussian distribution with specified mean/std.  
+- RandomUniform: Samples weights from a uniform distribution. It is a general default but may lead to suboptimal convergence in deeper networks.  
+- RandomNormal: Samples weights from a Gaussian distribution with a specified mean and standard deviation.  
 - Glorot (Xavier) Initialization:  
-  - Often used for sigmoid, tanh, or linear layers.  
-  - Can be uniform (`GlorotUniform`) or normal (`GlorotNormal`).  
-  - Balances the variance of activations between layers by scaling by \(\sqrt{\frac{2}{(\text{fan\_in} + \text{fan\_out})}}\) (slightly different formula for uniform vs. normal).  
+  - Commonly used for layers with sigmoid, tanh, or linear activations.  
+  - Can be implemented in two ways: GlorotUniform or GlorotNormal.  
+  - It balances the variance of activations between layers by scaling using the square root of (2 / (fan_in + fan_out)). (The exact formula varies slightly between the uniform and normal versions.)  
 - He Initialization:  
-  - Often used for ReLU and related (Leaky ReLU, ELU, etc.).  
-  - Can be uniform (`HeUniform`) or normal (`HeNormal`).  
-  - Scales by \(\sqrt{\frac{2}{\text{fan\_in}}}\).  
+  - Often preferred for layers using ReLU and related functions (such as Leaky ReLU and ELU).  
+  - Available as either HeUniform or HeNormal.  
+  - It scales weights using the square root of (2 / fan_in).  
 - LeCun Initialization:  
-  - Good for SELU or self-normalizing networks.  
-  - Scales by \(\sqrt{\frac{1}{\text{fan\_in}}}\).  
+  - Particularly useful for networks employing SELU or other self-normalizing techniques.  
+  - It scales weights using the square root of (1 / fan_in).
 
-> Note: The “pyramid shape” or “no tails” terminology is more of a conceptual or visual way of describing how these initializers constrain the variance. In practice, they each have specific mathematical formulas to preserve variance and avoid overly large or tiny gradients.
+Note: Terms like “pyramid shape” or “no tails” are conceptual descriptions that explain how these initialization methods control variance. In practice, each initializer has its own precise mathematical formula to preserve variance and prevent gradients from becoming too large or too small.
 
 Vanishing vs. Exploding Gradients
 
-Even with good initializers and activation functions, gradients can still:  
-- Vanish to near zero, slowing or halting learning.  
-- Explode to very large values, causing erratic updates.
+Even with appropriate initialization and activation functions, gradients can still:
+- Vanish to nearly zero, which slows or stops learning.
+- Explode to extremely large values, causing erratic weight updates.
 
-Mitigation Strategies  
-- Use appropriate activation functions and weight initialization schemes.  
-- Batch Normalization: Applies normalization (zero mean, unit variance, then scale/shift) at each batch, which often speeds convergence and can reduce the risk of vanishing/exploding gradients.  
-- Gradient Clipping: If the gradient exceeds a threshold, it’s “clipped” to that threshold. This prevents excessively large weight updates.
+Mitigation Strategies:
+- Choose activation functions and weight initialization schemes that help stabilize gradients.
+- Batch Normalization: Normalizes the input of each batch to have zero mean and unit variance (with subsequent scaling and shifting). This often speeds up convergence and reduces the risk of vanishing or exploding gradients.
+- Gradient Clipping: If gradients exceed a predetermined threshold, they are "clipped" to that threshold, preventing overly large weight updates.
 
 Optimizers & Convergence
 
-- Goal: Minimize the loss quickly (fewer epochs) while reaching a good solution.
-- SGD: 
-  - A fundamental optimizer. 
-  - `momentum=0.9` adds a fraction of the previous update to the current update, helping push through local minima or flat regions.
-  - `nesterov=True` (Nesterov Accelerated Gradient) looks ahead before making the update and can sometimes converge faster than standard momentum.
+The goal is to minimize the loss quickly (fewer epochs) while reaching an optimal solution.
 
-- Adam:
-  - Adapts the learning rate for each parameter individually based on past gradients.
-  - Often converges faster than plain SGD and is a popular default for many tasks.
+- SGD (Stochastic Gradient Descent):  
+  - A fundamental optimizer that updates weights incrementally.  
+  - Using a momentum value (for example, momentum = 0.9) adds a fraction of the previous update to the current update, helping overcome local minima or flat regions.  
+  - The Nesterov Accelerated Gradient (enabled with nesterov = True) looks ahead before updating weights, which can result in faster convergence compared to standard momentum.
 
-Choose an optimizer based on experimentation and the nature of your problem.
+- Adam:  
+  - An optimizer that adapts the learning rate for each parameter based on past gradients.  
+  - It often converges faster than plain SGD and is a popular default choice for many tasks.
+
+Ultimately, the choice of optimizer should be guided by experimentation and the specific nature of the problem you are addressing.
