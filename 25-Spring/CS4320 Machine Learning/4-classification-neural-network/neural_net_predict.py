@@ -6,9 +6,9 @@ import keras
 
 label = "Depression"
 input_filename = "test-preprocessed.csv"
-model_filename = "model-1.keras"
-proba_filename = "predictions-1_proba.csv"
-predictions_filename = "predictions-1.csv"
+model_filename = "model-3.keras"
+proba_filename = "predictions-3_proba.csv"
+predictions_filename = "predictions-3.csv"
 
 #
 # Load the test data, removing the label column, if it exists
