@@ -1,0 +1,52 @@
+Activation Functions
+
+review
+activation function - some function within a neuron that receives inputs x as well as their weights, does the summation of them, 
+    and then computes some function on that sum.
+loss function (J(theta)) - the difference between our predictions and the known label predictions
+gradient descent algorithm - take the piecewise deriveative of that loss function with respect to each parameter 
+    (in other words, how responsible is each parameter for its contribution to the loss)
+
+types of activation Functions
+
+* linear - a noop; the default. takes the summation and passes it straight through. smooth (no discontinuities) and fast.
+* rectified linear (relu) - tries to deal with vascillating positive / negative values by setting negative values to zero. not smooth, no gradient on the left side (neurons "die") but still very fast and functional
+* leaky relu - instead of setting negatives to zero, we multiply negatives by some constant (neurons go into a "coma" and don't die but slow down; can be recovered) still pretty fast 
+* exponential linear unit (elu) - smooth if constant a = 1. slower to compute, but gradient descent may converge faster and neurons don't die 
+* scaled elu (selu) - multiply by some value. only useful on stacks of dense layers. 
+* gaussian elu (gelu) - uses the gaussian cumulative distribution function, nice and smooth but computationall expensive 
+* sigmoid linear unit (silu, swish) - uses sigmoid function
+* mish - slightly better in some situations but even more computationally expensive 
+and you can even write your own activation functions! the keras framework is flexible enough to handle that
+
+we want our gradient descent to have informative gradients to reach a good result. this means the activation functions we choose will depend on the problem.
+
+each of these functions become more effective depending on specific weight distributions; provably better than random weights.
+
+types of weight initialization
+
+* RandomUniform - every value has equal probability of being chosen
+* RandomNormal - random weights such that the values create a gaussian distribution; central values are more likely 
+* GlorotNormal - creates a sort of pyramid shape, less extreme than gaussian and no tails. use for linear, sigmoid, hyperbolic tangent
+* HeNormal - similar appearance to Glorot, but more effective in some cases. use for relu, leaky relu, elu, gelu, swish, mish
+* LecunNormal - again similar appearance to Glorot, just slightly different. use for selu
+
+vanishing gradient problem / exploding gradient problem
+
+even with proper initialization techniques, gradients can vanish to zero or explode into very large numbers.
+there are many techniques to combat this, including different types of activation functions.
+other ideas:
+normalization before each layer
+    squeeze all weights into a 0 to 1 range by subtracting the mean and dividing by the std dev 
+    model.add(keras.layers.BatchNormalization())
+    more computation time but improves results and might even improve speed overall by converging faster
+clipping
+    if the gradient is higher than some value, hard set it to that value.
+
+optimizers
+
+gradient descent
+good convergence STOPS QUICKLY and GETS A GOOD VALUE. both are important.
+momentum: we can track ACCELERATION of a gradient rather than just the rate of change, to take steeper steps when appropriate and smaller when we need to slow down.
+keras.optimizers.SGD(momentum=0.9)
+nesterov
