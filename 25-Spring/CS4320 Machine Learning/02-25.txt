@@ -1,4 +1,0 @@
-live case study - training a neural network on a new task
-
-https://www.kaggle.com/competitions/playground-series
-

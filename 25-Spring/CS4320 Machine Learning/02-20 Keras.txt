@@ -1,32 +1,42 @@
-Keras - a framework that makes it easier to construct neural networks as opposed to just using TensorFlow or PyTorch.
+Keras vs. Other Frameworks
+    Keras is a high-level framework (often used with TensorFlow) that simplifies the process of building neural networks.  
+    You could also use TensorFlow or PyTorch directly, but Keras typically provides a more user-friendly API.
 
-prepare data
-    scikit-learn has better preprocessing than Keras or TF.
-    polynomial features, imputing, etc are a little more cumbersome in Keras.
-    so, we will use scikit-learn to preprocess and cache our data FIRST.
-    stratgey:
-        buld a scikit learn pipeline
-        do all preprocessing
-        do NOT add a model at the end; only fit and transform the training & testing data
-        these will be set aside as our NEW inputs to be fed into Keras
-        the id and the label will NOT be preprocessed, but set aside and added back in at the end of the scikit-learn pipeline
+Data Preprocessing Strategy
+    scikit-learn generally offers more convenient tools for data preprocessing than Keras/TensorFlow (ex:, 'PolynomialFeatures', 'SimpleImputer', scaling, etc.).
+    Plan: 
+        1. Build a scikit-learn pipeline that handles all preprocessing (ex:, polynomial features, imputation, scaling).  
+        2. At the end of this pipeline, do not attach a model; just transform the data.  
+        3. Fit the pipeline on the training data, then transform both the training and test sets so you have “cleaned” numerical arrays ready for Keras.  
+        4. Keep your ID and label/target out of the pipeline. They do not need the same transformations as your feature columns. You’ll add them back in or keep them separate as needed.
 
- build the model
-    our input layer MUST have the same shape as the dataframe; one neuron per feature
-    our output layer depends upon the problem; for binary classification, it's one single neuron
-    as for the hidden layers in between, we have the freedom to experiment with different numbers and widths of layers
-    after specifying what we want our model to look like, we have to COMPILE it.
-    Keras will automatically set up all of the neurons for us.
-    we select an optimizer (for example, the SGD optimizer with a learning rate step size of 0.1)
-    we decide on a loss function (example, binary_crossentropy)
-    we choose a metric: AUC (area under curve). this doesn't guide the training, just lets us watch it 
-    we decide how many epochs (one epoch = look at ALL the training data, do a forward pass + backpropagation)
-    with SGD in particular, in each epoch the data is shuffled and broken into "batches" which are used to adjust weights
-    we can write functions to stop early when our validation score stops improving and save the best model
+Building the Keras Model
+    1. Input Layer: 
+        Must match the shape (number of features) of your preprocessed data. 
+        One neuron per input feature.  
+    2. Hidden Layers: 
+        You can experiment with different numbers of layers and different widths (neurons per layer).  
+        Example: 'Dense(64, activation='relu')' repeated several times.  
+    3. Output Layer:
+        Depends on the problem. For binary classification, a single output neuron with a sigmoid activation.  
+        For multi-class classification, you’d have one neuron per class with a softmax activation.  
+    4. Compile:
+        Optimizer: ex: 'tf.keras.optimizers.SGD(learning_rate=0.1)' or 'tf.keras.optimizers.Adam()'.  
+        Loss function: ex: 'binary_crossentropy' for binary classification.  
+        Metrics: ex: 'AUC', 'accuracy', etc. (Doesn’t guide training but helps you monitor performance.)  
+    5. Training:
+        Choose the number of epochs (full passes over the training data).  
+        With SGD (Stochastic Gradient Descent), data is shuffled each epoch and processed in “batches.”  
+        Consider using callbacks for early stopping and model checkpointing (ex:, stop when validation metric no longer improves).
 
-tune
-    if we're overfitting: add more layers
-    if we're underfitting: add more width to the layers
-    "stretchy pants" model
-    play with different optimizers, metrics, learning rates, etc 
-    ex: look at optimizers.Adam()
+Tuning Tips
+    If you’re underfitting (model performs poorly on both training and validation sets):
+        Increase model capacity (more layers or more neurons per layer).  
+        Reduce regularization.  
+        Adjust learning rate.  
+    If you’re overfitting (model performs well on training but poorly on validation):
+        Reduce model capacity (fewer/smaller layers) or add regularization (dropout, weight decay).  
+        Use early stopping or gather more data.  
+        Lower the learning rate if needed.  
+
+Experiment with different optimizers, learning rates, and architectures—like wearing “stretchy pants,” you can adjust the model shape to fit the data better.
