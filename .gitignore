@@ -51,3 +51,8 @@ venv/
 *.fls
 *.fdb_latexmk
 *.synctex.gz
+
+# Machine Learning
+
+*.joblib
+*.keras
