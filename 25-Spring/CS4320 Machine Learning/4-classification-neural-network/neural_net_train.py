@@ -111,22 +111,22 @@ def build_model_3():
     model = keras.Sequential([
         keras.layers.Input(shape=input_shape),
         keras.layers.Dense(256, kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.LeakyReLU(alpha=0.1),
+        keras.layers.LeakyReLU(negative_slope=0.1),
         keras.layers.Dropout(0.3),
         keras.layers.Dense(128, kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.LeakyReLU(alpha=0.1),
+        keras.layers.LeakyReLU(negative_slope=0.1),
         keras.layers.Dropout(0.25),
         keras.layers.Dense(64, kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.LeakyReLU(alpha=0.1),
+        keras.layers.LeakyReLU(negative_slope=0.1),
         keras.layers.Dropout(0.2),
         keras.layers.Dense(32, kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.LeakyReLU(alpha=0.1),
+        keras.layers.LeakyReLU(negative_slope=0.1),
         keras.layers.Dropout(0.15),
         keras.layers.Dense(16, kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.LeakyReLU(alpha=0.1),
+        keras.layers.LeakyReLU(negative_slope=0.1),
         keras.layers.Dropout(0.1),
         keras.layers.Dense(8, kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.LeakyReLU(alpha=0.1),
+        keras.layers.LeakyReLU(negative_slope=0.1),
         keras.layers.Dense(1, activation="sigmoid")
     ])
     return model, model_filename, learning_curve_filename
