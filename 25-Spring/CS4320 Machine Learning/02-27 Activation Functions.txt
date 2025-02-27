@@ -38,8 +38,6 @@ Key Takeaway:
 - Each activation has its pros and cons regarding smoothness, speed, and gradient behavior.  
 - ReLU (and variants) remain extremely popular due to simplicity and good performance, but you can experiment if you suspect ReLU is causing too many dead neurons or slow convergence.
 
-
-
 Weight Initialization
 
 Proper initialization helps avoid vanishing or exploding gradients.
@@ -60,8 +58,6 @@ Proper initialization helps avoid vanishing or exploding gradients.
 
 > Note: The “pyramid shape” or “no tails” terminology is more of a conceptual or visual way of describing how these initializers constrain the variance. In practice, they each have specific mathematical formulas to preserve variance and avoid overly large or tiny gradients.
 
-
-
 Vanishing vs. Exploding Gradients
 
 Even with good initializers and activation functions, gradients can still:  
@@ -73,14 +69,16 @@ Mitigation Strategies
 - Batch Normalization: Applies normalization (zero mean, unit variance, then scale/shift) at each batch, which often speeds convergence and can reduce the risk of vanishing/exploding gradients.  
 - Gradient Clipping: If the gradient exceeds a threshold, it’s “clipped” to that threshold. This prevents excessively large weight updates.
 
+Optimizers & Convergence
 
+- Goal: Minimize the loss quickly (fewer epochs) while reaching a good solution.
+- SGD: 
+  - A fundamental optimizer. 
+  - `momentum=0.9` adds a fraction of the previous update to the current update, helping push through local minima or flat regions.
+  - `nesterov=True` (Nesterov Accelerated Gradient) looks ahead before making the update and can sometimes converge faster than standard momentum.
 
-Optimizers
-Gradient Descent & Convergence
+- Adam:
+  - Adapts the learning rate for each parameter individually based on past gradients.
+  - Often converges faster than plain SGD and is a popular default for many tasks.
 
-- Goal: Stop quickly (fewer epochs) and converge to a good minimum.  
-- Momentum: Speeds up training by incorporating a fraction of the previous update’s velocity.  
-  ```python
-  keras.optimizers.SGD(learning_rate=0.01, momentum=0.9)
-  ```
-  - Nesterov . . .
+Choose an optimizer based on experimentation and the nature of your problem.
