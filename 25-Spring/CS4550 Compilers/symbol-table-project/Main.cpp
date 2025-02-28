@@ -3,8 +3,7 @@
 #include "Scanner.h"
 #include "Token.h"
 
-int main() {
-    // Scanner testing
+void testScanner() {
     const std::string inputFileName = "code.txt";
     ScannerClass scanner(inputFileName);
     TokenType tt;
@@ -16,37 +15,41 @@ int main() {
         } while (tt != ENDFILE_TOKEN);
     }
     catch (const std::exception &e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
+        std::cerr << "Error (Scanner): " << e.what() << std::endl;
+        std::exit(1);
     }
+}
 
-    // Symbol Table testing
+void testSymbolTable() {
     SymbolTableClass symbolTable;
 
-    // Add entries
     symbolTable.AddEntry("x");
     symbolTable.AddEntry("y");
 
-    // Test GetCount
     std::cout << "Symbol count: " << symbolTable.GetCount() << std::endl;  // Expected: 2
 
-    // Test Exists
-    std::cout << "Exists 'x'? " << (symbolTable.Exists("x") ? "true" : "false") << std::endl;  // true
-    std::cout << "Exists 'z'? " << (symbolTable.Exists("z") ? "true" : "false") << std::endl;  // false
+    std::cout << "Exists 'x'? " << (symbolTable.Exists("x") ? "true" : "false") << std::endl;  // Expected: true
+    std::cout << "Exists 'z'? " << (symbolTable.Exists("z") ? "true" : "false") << std::endl;  // Expected: false
 
-    // Test GetIndex
-    std::cout << "Index of 'x': " << symbolTable.GetIndex("x") << std::endl;   // 0
-    std::cout << "Index of 'y': " << symbolTable.GetIndex("y") << std::endl;   // 1
+    std::cout << "Index of 'x': " << symbolTable.GetIndex("x") << std::endl;   // Expected: 0
+    std::cout << "Index of 'y': " << symbolTable.GetIndex("y") << std::endl;   // Expected: 1
 
-    // Test GetValue and SetValue
     std::cout << "Value of 'x': " << symbolTable.GetValue("x") << std::endl;  // Expected: 0
     symbolTable.SetValue("x", 42);
     std::cout << "New value of 'x': " << symbolTable.GetValue("x") << std::endl;  // Expected: 42
 
-    // These should all throw an error and exit:
-    // symbolTable.AddEntry("x");
-    // symbolTable.GetValue("z");
-    // symbolTable.SetValue("z", 10);
+    // Uncomment these to test error handling
+    // symbolTable.AddEntry("x");         // Should print an error and exit.
+    // symbolTable.GetValue("z");         // Should print an error and exit.
+    // symbolTable.SetValue("z", 10);       // Should print an error and exit.
+}
 
+int main() {
+    std::cout << "----- Scanner Test -----\n";
+    testScanner();
+    
+    std::cout << "\n----- Symbol Table Test -----\n";
+    testSymbolTable();
+    
     return 0;
 }
