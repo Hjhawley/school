@@ -304,3 +304,4 @@ NotEqualNode::~NotEqualNode() {
 
 int NotEqualNode::Evaluate() const {
     return (mLeft->Evaluate() != mRight->Evaluate()) ? 1 : 0;
+}
