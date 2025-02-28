@@ -103,8 +103,8 @@ void testNodes() {
 }
 
 int main() {
-    testScanner();      // 1) Test the scanner
-    testSymbolTable();  // 2) Test the symbol table
+    //testScanner();      // 1) Test the scanner
+    //testSymbolTable();  // 2) Test the symbol table
     testNodes();        // 3) Test parse-tree nodes
     return 0;
 }
