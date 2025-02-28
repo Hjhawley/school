@@ -2,10 +2,8 @@
 #include "Symbol.h" // For IdentifierNode methods, if needed.
 #include <cstdlib>
 
-// ---------------- Node ----------------
 Node::~Node() { }
 
-// ---------------- StartNode ----------------
 StartNode::StartNode(ProgramNode* program)
     : mProgram(program) { }
 
@@ -17,7 +15,6 @@ ProgramNode* StartNode::GetProgram() const {
     return mProgram;
 }
 
-// ---------------- ProgramNode ----------------
 ProgramNode::ProgramNode(BlockNode* block)
     : mBlock(block) { }
 
@@ -29,7 +26,6 @@ BlockNode* ProgramNode::GetBlock() const {
     return mBlock;
 }
 
-// ---------------- BlockNode ----------------
 BlockNode::BlockNode(StatementGroupNode* statementGroup)
     : mStatementGroup(statementGroup) { }
 
@@ -41,7 +37,6 @@ StatementGroupNode* BlockNode::GetStatementGroup() const {
     return mStatementGroup;
 }
 
-// ---------------- StatementGroupNode ----------------
 StatementGroupNode::StatementGroupNode() { }
 
 StatementGroupNode::~StatementGroupNode() {
@@ -58,10 +53,8 @@ const std::vector<StatementNode*>& StatementGroupNode::GetStatements() const {
     return mStatements;
 }
 
-// ---------------- StatementNode ----------------
 StatementNode::~StatementNode() { }
 
-// ---------------- DeclarationStatementNode ----------------
 DeclarationStatementNode::DeclarationStatementNode(IdentifierNode* identifier)
     : mIdentifier(identifier) { }
 
@@ -73,7 +66,6 @@ IdentifierNode* DeclarationStatementNode::GetIdentifier() const {
     return mIdentifier;
 }
 
-// ---------------- AssignmentStatementNode ----------------
 AssignmentStatementNode::AssignmentStatementNode(IdentifierNode* identifier, ExpressionNode* expression)
     : mIdentifier(identifier), mExpression(expression) { }
 
@@ -90,7 +82,6 @@ ExpressionNode* AssignmentStatementNode::GetExpression() const {
     return mExpression;
 }
 
-// ---------------- CoutStatementNode ----------------
 CoutStatementNode::CoutStatementNode(ExpressionNode* expression)
     : mExpression(expression) { }
 
@@ -102,10 +93,8 @@ ExpressionNode* CoutStatementNode::GetExpression() const {
     return mExpression;
 }
 
-// ---------------- ExpressionNode ----------------
 ExpressionNode::~ExpressionNode() { }
 
-// ---------------- IntegerNode ----------------
 IntegerNode::IntegerNode(int value)
     : mValue(value) { }
 
@@ -115,14 +104,12 @@ int IntegerNode::Evaluate() const {
     return mValue;
 }
 
-// ---------------- IdentifierNode ----------------
 IdentifierNode::IdentifierNode(const std::string& label)
     : mLabel(label) { }
 
 IdentifierNode::~IdentifierNode() { }
 
 int IdentifierNode::Evaluate() const {
-    // For now, return a dummy value; later, use the symbol table.
     return 0;
 }
 
@@ -139,7 +126,6 @@ int IdentifierNode::GetIndex() const {
     return -1;
 }
 
-// ---------------- BinaryOperatorNode ----------------
 BinaryOperatorNode::BinaryOperatorNode(ExpressionNode* left, ExpressionNode* right)
     : mLeft(left), mRight(right) { }
 
@@ -148,7 +134,6 @@ BinaryOperatorNode::~BinaryOperatorNode() {
     delete mRight;
 }
 
-// ---------------- PlusNode ----------------
 PlusNode::PlusNode(ExpressionNode* left, ExpressionNode* right)
     : BinaryOperatorNode(left, right) { }
 
