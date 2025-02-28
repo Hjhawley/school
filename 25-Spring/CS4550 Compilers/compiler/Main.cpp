@@ -49,7 +49,10 @@ void testSymbolTable() {
 void testNodes() {
     std::cout << "\n----- Node (Parse Tree) Test -----\n";
 
-    // 1) Create a small expression tree: 10 + 20
+    // First, create a symbol table that all IdentifierNodes will use:
+    SymbolTableClass testSymbolTable;
+
+    // 1) Create a small, stand-alone expression tree: 10 + 20
     ExpressionNode* plusExpr = new PlusNode(
         new IntegerNode(10),
         new IntegerNode(20)
@@ -64,22 +67,22 @@ void testNodes() {
 
     // Declaration: int x;
     StatementNode* declStmt = new DeclarationStatementNode(
-        new IdentifierNode("x")
+        new IdentifierNode("x", &testSymbolTable)
     );
 
-    // Assignment: x = (plusExpr) or build a fresh expression:
+    // Assignment: x = (plusExpr2) 
     ExpressionNode* plusExpr2 = new PlusNode(
         new IntegerNode(10),
         new IntegerNode(20)
     );
     StatementNode* assignStmt = new AssignmentStatementNode(
-        new IdentifierNode("x"),
+        new IdentifierNode("x", &testSymbolTable),
         plusExpr2
     );
 
     // cout << x;
     StatementNode* coutStmt = new CoutStatementNode(
-        new IdentifierNode("x")
+        new IdentifierNode("x", &testSymbolTable)
     );
 
     // 3) Put these statements into a StatementGroupNode
@@ -98,13 +101,13 @@ void testNodes() {
     StartNode* startNode = new StartNode(programNode);
 
     // 7) Clean up.
-    delete plusExpr;  // This is the stand-alone expression.
-    delete startNode; // Recursively deletes all child nodes.
+    delete plusExpr;  // This is the stand-alone expression test
+    delete startNode; // Recursively deletes all child nodes
 }
 
 int main() {
-    //testScanner();      // 1) Test the scanner
-    //testSymbolTable();  // 2) Test the symbol table
-    testNodes();        // 3) Test parse-tree nodes
+    //testScanner();
+    //testSymbolTable();
+    testNodes();
     return 0;
 }
