@@ -55,8 +55,6 @@ Proper weight initialization is crucial to help avoid vanishing or exploding gra
   - Particularly useful for networks employing SELU or other self-normalizing techniques.  
   - It scales weights using the square root of (1 / fan_in).
 
-Note: Terms like “pyramid shape” or “no tails” are conceptual descriptions that explain how these initialization methods control variance. In practice, each initializer has its own precise mathematical formula to preserve variance and prevent gradients from becoming too large or too small.
-
 Vanishing vs. Exploding Gradients
 
 Even with appropriate initialization and activation functions, gradients can still:
