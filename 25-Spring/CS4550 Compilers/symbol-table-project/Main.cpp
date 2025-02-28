@@ -4,6 +4,8 @@
 #include "Token.h"
 
 void testScanner() {
+    std::cout << "----- Scanner Test -----\n";
+    
     const std::string inputFileName = "code.txt";
     ScannerClass scanner(inputFileName);
     TokenType tt;
@@ -21,6 +23,8 @@ void testScanner() {
 }
 
 void testSymbolTable() {
+    std::cout << "\n----- Symbol Table Test -----\n";
+    
     SymbolTableClass symbolTable;
 
     symbolTable.AddEntry("x");
@@ -45,11 +49,7 @@ void testSymbolTable() {
 }
 
 int main() {
-    std::cout << "----- Scanner Test -----\n";
     testScanner();
-    
-    std::cout << "\n----- Symbol Table Test -----\n";
     testSymbolTable();
-    
     return 0;
 }
