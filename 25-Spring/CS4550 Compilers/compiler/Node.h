@@ -184,3 +184,53 @@ public:
     virtual ~DivideNode();
     virtual int Evaluate() const override;
 };
+
+
+// Relational operator nodes
+
+class LessNode : public BinaryOperatorNode {
+    public:
+        LessNode(ExpressionNode* left, ExpressionNode* right);
+        virtual ~LessNode();
+        virtual int Evaluate() const override;
+    };
+
+
+class LessEqualNode : public BinaryOperatorNode {
+public:
+    LessEqualNode(ExpressionNode* left, ExpressionNode* right);
+    virtual ~LessEqualNode();
+    virtual int Evaluate() const override;
+};
+
+
+class GreaterNode : public BinaryOperatorNode {
+public:
+    GreaterNode(ExpressionNode* left, ExpressionNode* right);
+    virtual ~GreaterNode();
+    virtual int Evaluate() const override;
+};
+
+
+class GreaterEqualNode : public BinaryOperatorNode {
+public:
+    GreaterEqualNode(ExpressionNode* left, ExpressionNode* right);
+    virtual ~GreaterEqualNode();
+    virtual int Evaluate() const override;
+};
+
+
+class EqualNode : public BinaryOperatorNode {
+public:
+    EqualNode(ExpressionNode* left, ExpressionNode* right);
+    virtual ~EqualNode();
+    virtual int Evaluate() const override;
+};
+
+
+class NotEqualNode : public BinaryOperatorNode {
+public:
+    NotEqualNode(ExpressionNode* left, ExpressionNode* right);
+    virtual ~NotEqualNode();
+    virtual int Evaluate() const override;
+};

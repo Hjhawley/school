@@ -197,7 +197,60 @@ DivideNode::~DivideNode() {}
 
 int DivideNode::Evaluate() const {
     int rightVal = mRight->Evaluate();
-    // Your assignment might expect integer division. 
-    // Handle divide-by-zero logic if you wish.
     return mLeft->Evaluate() / rightVal;
+}
+
+
+LessNode::LessNode(ExpressionNode* left, ExpressionNode* right)
+    : BinaryOperatorNode(left, right) { }
+
+LessNode::~LessNode() { }
+
+int LessNode::Evaluate() const {
+    return (mLeft->Evaluate() < mRight->Evaluate()) ? 1 : 0;
+}
+
+LessEqualNode::LessEqualNode(ExpressionNode* left, ExpressionNode* right)
+    : BinaryOperatorNode(left, right) { }
+
+LessEqualNode::~LessEqualNode() { }
+
+int LessEqualNode::Evaluate() const {
+    return (mLeft->Evaluate() <= mRight->Evaluate()) ? 1 : 0;
+}
+
+GreaterNode::GreaterNode(ExpressionNode* left, ExpressionNode* right)
+    : BinaryOperatorNode(left, right) { }
+
+GreaterNode::~GreaterNode() { }
+
+int GreaterNode::Evaluate() const {
+    return (mLeft->Evaluate() > mRight->Evaluate()) ? 1 : 0;
+}
+
+GreaterEqualNode::GreaterEqualNode(ExpressionNode* left, ExpressionNode* right)
+    : BinaryOperatorNode(left, right) { }
+
+GreaterEqualNode::~GreaterEqualNode() { }
+
+int GreaterEqualNode::Evaluate() const {
+    return (mLeft->Evaluate() >= mRight->Evaluate()) ? 1 : 0;
+}
+
+EqualNode::EqualNode(ExpressionNode* left, ExpressionNode* right)
+    : BinaryOperatorNode(left, right) { }
+
+EqualNode::~EqualNode() { }
+
+int EqualNode::Evaluate() const {
+    return (mLeft->Evaluate() == mRight->Evaluate()) ? 1 : 0;
+}
+
+NotEqualNode::NotEqualNode(ExpressionNode* left, ExpressionNode* right)
+    : BinaryOperatorNode(left, right) { }
+
+NotEqualNode::~NotEqualNode() { }
+
+int NotEqualNode::Evaluate() const {
+    return (mLeft->Evaluate() != mRight->Evaluate()) ? 1 : 0;
 }
