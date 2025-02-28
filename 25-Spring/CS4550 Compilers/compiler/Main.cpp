@@ -2,8 +2,11 @@
 #include "Symbol.h"
 #include "Scanner.h"
 #include "Token.h"
+#include "Node.h"
 
 void testScanner() {
+    std::cout << "----- Scanner Test -----\n";
+    
     const std::string inputFileName = "code.txt";
     ScannerClass scanner(inputFileName);
     TokenType tt;
@@ -21,6 +24,8 @@ void testScanner() {
 }
 
 void testSymbolTable() {
+    std::cout << "\n----- Symbol Table Test -----\n";
+    
     SymbolTableClass symbolTable;
 
     symbolTable.AddEntry("x");
@@ -44,12 +49,66 @@ void testSymbolTable() {
     // symbolTable.SetValue("z", 10);       // Should print an error and exit.
 }
 
+void testNodes() {
+    std::cout << "\n----- Node (Parse Tree) Test -----\n";
+
+    // 1) Create a small expression tree: 10 + 20
+    ExpressionNode *plusExpr = new PlusNode(
+        new IntegerNode(10),
+        new IntegerNode(20)
+    );
+    // Test Evaluate (should print 30)
+    std::cout << "Evaluate(10 + 20) = " << plusExpr->Evaluate() << std::endl;
+
+    // 2) Create a tiny snippet of statements:
+    //    int x;        (DeclarationStatementNode)
+    //    x = 10 + 20;  (AssignmentStatementNode)
+    //    cout << x;    (CoutStatementNode)
+
+    // Declaration: int x;
+    StatementNode *declStmt = new DeclarationStatementNode(
+        new IdentifierNode("x")
+    );
+
+    // Assignment: x = (plusExpr)
+    // Reuse plusExpr, or build a fresh expression:
+    ExpressionNode *plusExpr2 = new PlusNode(
+        new IntegerNode(10),
+        new IntegerNode(20)
+    );
+    StatementNode *assignStmt = new AssignmentStatementNode(
+        new IdentifierNode("x"),
+        plusExpr2
+    );
+
+    // cout << x;
+    StatementNode *coutStmt = new CoutStatementNode(
+        new IdentifierNode("x")
+    );
+
+    // 3) Put these statements into a StatementGroupNode
+    StatementGroupNode *stmtGroup = new StatementGroupNode();
+    stmtGroup->AddStatement(declStmt);
+    stmtGroup->AddStatement(assignStmt);
+    stmtGroup->AddStatement(coutStmt);
+
+    // 4) Wrap the StatementGroupNode in a BlockNode
+    BlockNode *blockNode = new BlockNode(stmtGroup);
+
+    // 5) Create a ProgramNode that holds this BlockNode
+    ProgramNode *programNode = new ProgramNode(blockNode);
+
+    // 6) Finally, create a StartNode that holds the ProgramNode
+    StartNode *startNode = new StartNode(programNode);
+
+    // 7) Test done. Clean up. Deleting startNode
+    //    should recursively delete the entire tree.
+    delete plusExpr;   // This is a stand-alone expression we created earlier.
+    delete startNode;  // This should delete everything else recursively.
+}
+
 int main() {
-    std::cout << "----- Scanner Test -----\n";
     testScanner();
-    
-    std::cout << "\n----- Symbol Table Test -----\n";
     testSymbolTable();
-    
     return 0;
 }
