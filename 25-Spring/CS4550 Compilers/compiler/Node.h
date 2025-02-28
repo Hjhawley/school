@@ -17,6 +17,7 @@ class IdentifierNode;
 class IntegerNode;
 class BinaryOperatorNode;
 class PlusNode;
+class MinusNode;
 
 
 class Node {
@@ -154,5 +155,13 @@ class PlusNode : public BinaryOperatorNode {
 public:
     PlusNode(ExpressionNode* left, ExpressionNode* right);
     virtual ~PlusNode();
+    virtual int Evaluate() const;
+};
+
+
+class MinusNode : public BinaryOperatorNode {
+public:
+    MinusNode(ExpressionNode* left, ExpressionNode* right);
+    virtual ~MinusNode();
     virtual int Evaluate() const;
 };
