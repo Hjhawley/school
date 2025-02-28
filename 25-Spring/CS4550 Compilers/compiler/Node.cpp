@@ -1,8 +1,9 @@
 #include "Node.h"
-#include "Symbol.h" // For IdentifierNode methods, if needed.
+#include "Symbol.h"
 #include <cstdlib>
 
 Node::~Node() {}
+
 
 StartNode::StartNode(ProgramNode* program)
     : mProgram(program) {
@@ -16,6 +17,7 @@ ProgramNode* StartNode::GetProgram() const {
     return mProgram;
 }
 
+
 ProgramNode::ProgramNode(BlockNode* block)
     : mBlock(block) {
 }
@@ -27,6 +29,7 @@ ProgramNode::~ProgramNode() {
 BlockNode* ProgramNode::GetBlock() const {
     return mBlock;
 }
+
 
 BlockNode::BlockNode(StatementGroupNode* statementGroup)
     : mStatementGroup(statementGroup) {
@@ -40,6 +43,7 @@ StatementGroupNode* BlockNode::GetStatementGroup() const {
     return mStatementGroup;
 }
 
+
 StatementGroupNode::StatementGroupNode() {}
 
 StatementGroupNode::~StatementGroupNode() {
@@ -52,11 +56,13 @@ void StatementGroupNode::AddStatement(StatementNode* stmt) {
     mStatements.push_back(stmt);
 }
 
+
 const std::vector<StatementNode*>& StatementGroupNode::GetStatements() const {
     return mStatements;
 }
 
 StatementNode::~StatementNode() {}
+
 
 DeclarationStatementNode::DeclarationStatementNode(IdentifierNode* identifier)
     : mIdentifier(identifier) {
@@ -69,6 +75,7 @@ DeclarationStatementNode::~DeclarationStatementNode() {
 IdentifierNode* DeclarationStatementNode::GetIdentifier() const {
     return mIdentifier;
 }
+
 
 AssignmentStatementNode::AssignmentStatementNode(IdentifierNode* identifier, ExpressionNode* expression)
     : mIdentifier(identifier), mExpression(expression) {
@@ -87,6 +94,7 @@ ExpressionNode* AssignmentStatementNode::GetExpression() const {
     return mExpression;
 }
 
+
 CoutStatementNode::CoutStatementNode(ExpressionNode* expression)
     : mExpression(expression) {
 }
@@ -99,7 +107,9 @@ ExpressionNode* CoutStatementNode::GetExpression() const {
     return mExpression;
 }
 
+
 ExpressionNode::~ExpressionNode() {}
+
 
 IntegerNode::IntegerNode(int value)
     : mValue(value) {
@@ -111,28 +121,28 @@ int IntegerNode::Evaluate() const {
     return mValue;
 }
 
-IdentifierNode::IdentifierNode(const std::string& label)
-    : mLabel(label) {
-}
 
-IdentifierNode::~IdentifierNode() {}
+IdentifierNode::IdentifierNode(const std::string& label, SymbolTableClass* symbolTable)
+    : mLabel(label), mSymbolTable(symbolTable) { }
+
+IdentifierNode::~IdentifierNode() { }
 
 int IdentifierNode::Evaluate() const {
-    return 0;
+    return mSymbolTable->GetValue(mLabel);
 }
 
 void IdentifierNode::DeclareVariable() {
-    // Implementation: call symbol table's AddEntry using mLabel.
+    mSymbolTable->AddEntry(mLabel);
 }
 
 void IdentifierNode::SetValue(int v) {
-    // Implementation: call symbol table's SetValue using mLabel.
+    mSymbolTable->SetValue(mLabel, v);
 }
 
 int IdentifierNode::GetIndex() const {
-    // Implementation: return symbol table's index for mLabel.
-    return -1;
+    return mSymbolTable->GetIndex(mLabel);
 }
+
 
 BinaryOperatorNode::BinaryOperatorNode(ExpressionNode* left, ExpressionNode* right)
     : mLeft(left), mRight(right) {
@@ -142,6 +152,7 @@ BinaryOperatorNode::~BinaryOperatorNode() {
     delete mLeft;
     delete mRight;
 }
+
 
 PlusNode::PlusNode(ExpressionNode* left, ExpressionNode* right)
     : BinaryOperatorNode(left, right) {
@@ -153,6 +164,7 @@ int PlusNode::Evaluate() const {
     return mLeft->Evaluate() + mRight->Evaluate();
 }
 
+
 MinusNode::MinusNode(ExpressionNode* left, ExpressionNode* right)
     : BinaryOperatorNode(left, right) {
 }
@@ -161,4 +173,31 @@ MinusNode::~MinusNode() {}
 
 int MinusNode::Evaluate() const {
     return mLeft->Evaluate() - mRight->Evaluate();
+}
+
+
+TimesNode::TimesNode(ExpressionNode* left, ExpressionNode* right)
+    : BinaryOperatorNode(left, right)
+{
+}
+
+TimesNode::~TimesNode() {}
+
+int TimesNode::Evaluate() const {
+    return mLeft->Evaluate() * mRight->Evaluate();
+}
+
+
+DivideNode::DivideNode(ExpressionNode* left, ExpressionNode* right)
+    : BinaryOperatorNode(left, right)
+{
+}
+
+DivideNode::~DivideNode() {}
+
+int DivideNode::Evaluate() const {
+    int rightVal = mRight->Evaluate();
+    // Your assignment might expect integer division. 
+    // Handle divide-by-zero logic if you wish.
+    return mLeft->Evaluate() / rightVal;
 }

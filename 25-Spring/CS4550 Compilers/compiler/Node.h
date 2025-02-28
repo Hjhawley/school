@@ -126,16 +126,19 @@ private:
 };
 
 
+class SymbolTableClass;
 class IdentifierNode : public ExpressionNode {
 public:
-    IdentifierNode(const std::string& label);
+    // The constructor takes a label and a symbol table pointer
+    IdentifierNode(const std::string& label, SymbolTableClass* symbolTable);
     virtual ~IdentifierNode();
-    virtual int Evaluate() const;
+    virtual int Evaluate() const override;
     void DeclareVariable();
     void SetValue(int v);
     int GetIndex() const;
 private:
     std::string mLabel;
+    SymbolTableClass* mSymbolTable;
 };
 
 
@@ -163,5 +166,21 @@ class MinusNode : public BinaryOperatorNode {
 public:
     MinusNode(ExpressionNode* left, ExpressionNode* right);
     virtual ~MinusNode();
-    virtual int Evaluate() const;
+    virtual int Evaluate() const override;
+};
+
+
+class TimesNode : public BinaryOperatorNode {
+public:
+    TimesNode(ExpressionNode* left, ExpressionNode* right);
+    virtual ~TimesNode();
+    virtual int Evaluate() const override;
+};
+
+
+class DivideNode : public BinaryOperatorNode {
+public:
+    DivideNode(ExpressionNode* left, ExpressionNode* right);
+    virtual ~DivideNode();
+    virtual int Evaluate() const override;
 };
