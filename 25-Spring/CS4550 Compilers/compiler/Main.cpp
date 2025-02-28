@@ -44,7 +44,7 @@ void testSymbolTable() {
 void testNodes() {
     std::cout << "\n----- Node (Parse Tree) Test -----\n";
 
-    // 1) Create a small expression tree: 10 + 20
+    // Create a small expression tree: 10 + 20
     ExpressionNode* plusExpr = new PlusNode(
         new IntegerNode(10),
         new IntegerNode(20)
