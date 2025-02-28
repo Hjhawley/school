@@ -44,52 +44,144 @@ void testSymbolTable() {
 void testNodes() {
     std::cout << "\n----- Node (Parse Tree) Test -----\n";
 
-    // Create a small expression tree: 10 + 20
+    // Create a SymbolTable for IdentifierNodes
+    SymbolTableClass symbolTable;
+    symbolTable.AddEntry("x");
+    symbolTable.AddEntry("y");
+    symbolTable.AddEntry("z");
+
+    // Test arithmetic operators
+
+    // 10 + 20
     ExpressionNode* plusExpr = new PlusNode(
         new IntegerNode(10),
         new IntegerNode(20)
     );
-    // Test Evaluate (should print 30)
     std::cout << "Evaluate(10 + 20) = " << plusExpr->Evaluate() << std::endl;
+    delete plusExpr;
 
-    // Declaration: int x;
-    StatementNode* declStmt = new DeclarationStatementNode(
-        new IdentifierNode("x", nullptr)  // Using nullptr for now if no symbol table is provided.
+    // 6 * 7
+    ExpressionNode* timesExpr = new TimesNode(
+        new IntegerNode(6),
+        new IntegerNode(7)
+    );
+    std::cout << "Evaluate(6 * 7) = " << timesExpr->Evaluate() << std::endl;
+    delete timesExpr;
+
+    // 12 - 5
+    ExpressionNode* minusExpr = new MinusNode(
+        new IntegerNode(12),
+        new IntegerNode(5)
+    );
+    std::cout << "Evaluate(12 - 5) = " << minusExpr->Evaluate() << std::endl;
+    delete minusExpr;
+
+    // 48 / 6
+    ExpressionNode* divideExpr = new DivideNode(
+        new IntegerNode(48),
+        new IntegerNode(6)
+    );
+    std::cout << "Evaluate(48 / 6) = " << divideExpr->Evaluate() << std::endl;
+    delete divideExpr;
+
+    // Test some relational operators
+    // 3 < 5
+    ExpressionNode* lessExpr = new LessNode(
+        new IntegerNode(3),
+        new IntegerNode(5)
+    );
+    std::cout << "Evaluate(3 < 5) = " << lessExpr->Evaluate() << std::endl; // expected 1
+    delete lessExpr;
+
+    // 10 == 10
+    ExpressionNode* equalExpr = new EqualNode(
+        new IntegerNode(10),
+        new IntegerNode(10)
+    );
+    std::cout << "Evaluate(10 == 10) = " << equalExpr->Evaluate() << std::endl; // expected 1
+    delete equalExpr;
+
+    //    int x;
+    //    int y;
+    //    int z;
+    //    x = 10 + 20;
+    //    y = (x - 10) / 2;
+    //    z = (x < y);
+    //    cout << z;
+
+    // Declarations
+    StatementNode* declX = new DeclarationStatementNode(
+        new IdentifierNode("x", &symbolTable)
+    );
+    StatementNode* declY = new DeclarationStatementNode(
+        new IdentifierNode("y", &symbolTable)
+    );
+    StatementNode* declZ = new DeclarationStatementNode(
+        new IdentifierNode("z", &symbolTable)
     );
 
-    // Assignment: x = (plusExpr)
-    ExpressionNode* plusExpr2 = new PlusNode(
+    // x = 10 + 20
+    ExpressionNode* assignXExpr = new PlusNode(
         new IntegerNode(10),
         new IntegerNode(20)
     );
-    StatementNode* assignStmt = new AssignmentStatementNode(
-        new IdentifierNode("x", nullptr),
-        plusExpr2
+    StatementNode* assignX = new AssignmentStatementNode(
+        new IdentifierNode("x", &symbolTable),
+        assignXExpr
     );
 
-    // cout << x;
-    StatementNode* coutStmt = new CoutStatementNode(
-        new IdentifierNode("x", nullptr)
+    // y = (x - 10) / 2
+    ExpressionNode* minusX10 = new MinusNode(
+        new IdentifierNode("x", &symbolTable),
+        new IntegerNode(10)
+    );
+    ExpressionNode* divideExpr2 = new DivideNode(
+        minusX10,
+        new IntegerNode(2)
+    );
+    StatementNode* assignY = new AssignmentStatementNode(
+        new IdentifierNode("y", &symbolTable),
+        divideExpr2
     );
 
-    // 3) Put these statements into a StatementGroupNode
+    // z = (x < y)
+    ExpressionNode* lessXY = new LessNode(
+        new IdentifierNode("x", &symbolTable),
+        new IdentifierNode("y", &symbolTable)
+    );
+    StatementNode* assignZ = new AssignmentStatementNode(
+        new IdentifierNode("z", &symbolTable),
+        lessXY
+    );
+
+    // cout << z
+    StatementNode* coutZ = new CoutStatementNode(
+        new IdentifierNode("z", &symbolTable)
+    );
+
+    // Put these statements into a StatementGroupNode
     StatementGroupNode* stmtGroup = new StatementGroupNode();
-    stmtGroup->AddStatement(declStmt);
-    stmtGroup->AddStatement(assignStmt);
-    stmtGroup->AddStatement(coutStmt);
+    stmtGroup->AddStatement(declX);
+    stmtGroup->AddStatement(declY);
+    stmtGroup->AddStatement(declZ);
+    stmtGroup->AddStatement(assignX);
+    stmtGroup->AddStatement(assignY);
+    stmtGroup->AddStatement(assignZ);
+    stmtGroup->AddStatement(coutZ);
 
-    // 4) Wrap the StatementGroupNode in a BlockNode
+    // Wrap the StatementGroupNode in a BlockNode
     BlockNode* blockNode = new BlockNode(stmtGroup);
 
-    // 5) Create a ProgramNode that holds this BlockNode
+    // Create a ProgramNode that holds this BlockNode
     ProgramNode* programNode = new ProgramNode(blockNode);
 
-    // 6) Create a StartNode that holds the ProgramNode
+    // Create a StartNode that holds the ProgramNode
     StartNode* startNode = new StartNode(programNode);
 
-    // 7) Clean up.
-    delete plusExpr;  // Delete the stand-alone expression.
-    delete startNode; // Recursively deletes the entire tree.
+    // Delete the entire tree (recursively frees all children)
+    delete startNode;
+
+    std::cout << "\nFinished Node (Parse Tree) Test.\n";
 }
 
 int main() {
