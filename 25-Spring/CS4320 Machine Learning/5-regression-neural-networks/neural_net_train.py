@@ -2,189 +2,102 @@
 
 import pandas as pd
 import tensorflow as tf
-import keras
+from tensorflow import keras
 import matplotlib.pyplot as plt
 
+# Load the preprocessed training data
 input_filename = "train-preprocessed.csv"
 train_ratio = 0.80
-#
-# Load the training dataframe, separate into X/y
-#
+
 dataframe = pd.read_csv(input_filename, index_col=0)
-label = dataframe.columns[-1] # assume the last column is the label
+label = dataframe.columns[-1]  # assume the last column is our regression target
 X = dataframe.drop(label, axis=1)
 y = dataframe[label]
 
-print(dataframe)
-print(X)
-print(y)
 
-#
-# Prepare a tensorflow dataset from the dataframe
-#
+# Create a TensorFlow dataset
 dataset = tf.data.Dataset.from_tensor_slices((X, y))
-# print(dataset)
-# print(list(dataset.as_numpy_iterator()))
-# print(dataset.element_spec)
 
-
-#
-# Find the shape of the inputs and outputs.
-# Necessary for the model to have correctly sized input and output layers
-#
-#
-# This is happening *before* batching, so
-# the shape does not yet include the batch size
-#
+# Find shape info
 for features, labels in dataset.take(1):
     input_shape = features.shape
-    output_shape = labels.shape
-# print(input_shape)
-# print(output_shape)
 
-
-#
-# Split the dataset into train and validation sets.
-#
-dataset_size       = dataset.cardinality().numpy()
-train_size         = int(train_ratio * dataset_size)
-validate_size      = dataset_size - train_size
-train_dataset      = dataset.take(train_size)
+# Determine train/val split
+dataset_size = dataset.cardinality().numpy()
+train_size = int(train_ratio * dataset_size)
+validate_size = dataset_size - train_size
+train_dataset = dataset.take(train_size)
 validation_dataset = dataset.skip(train_size)
 
-#
-# Cause the datasets to shuffle, internally
-#
-train_dataset      = train_dataset.shuffle(buffer_size=train_size)
+# Shuffle & Batch
+train_dataset = train_dataset.shuffle(buffer_size=train_size)
 validation_dataset = validation_dataset.shuffle(buffer_size=validate_size)
-
-#
-# Cause the datasets to batch.
-# Efficiency benefits.
-# Training differences.
-#
 BATCH_SIZE = 32
-train_dataset      = train_dataset.batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
+train_dataset = train_dataset.batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
 validation_dataset = validation_dataset.batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
 
 
-
-#
-# Build the model
-#
-tf.random.set_seed(42)
-
-def build_model_1():
-    model_filename = "model-1.keras"
-    learning_curve_filename = "learning-curve-1.png"
+# Build a regression model with regularization
+def build_regression_model():
     model = keras.Sequential([
         keras.layers.Input(shape=input_shape),
-        keras.layers.Dense(64, activation="relu"),
-        keras.layers.Dense(32, activation="relu"),
-        keras.layers.Dense(16, activation="relu"),
-        keras.layers.Dense(8, activation="relu"),
-        keras.layers.Dense(1, activation="sigmoid")
-    ])
-    #print(model.summary())
-    #print(model.layers[1].get_weights())
-    return model, model_filename, learning_curve_filename
-
-def build_model_2():
-    model_filename = "model-2.keras"
-    learning_curve_filename = "learning-curve-2.png"
-    model = keras.Sequential([
-        keras.layers.Input(shape=input_shape),
+        
         keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.Dropout(0.3),
-        keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.Dropout(0.3),
-        keras.layers.Dense(16, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.Dropout(0.3),
-        keras.layers.Dense(8, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.Dense(1, activation="sigmoid")
-    ])
-    return model, model_filename, learning_curve_filename
-
-def build_model_3():
-    model_filename = "model-3.keras"
-    learning_curve_filename = "learning-curve-3.png"
-    model = keras.Sequential([
-        keras.layers.Input(shape=input_shape),
-        keras.layers.Dense(256, kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.LeakyReLU(negative_slope=0.1),
-        keras.layers.Dropout(0.3),
-        keras.layers.Dense(128, kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.LeakyReLU(negative_slope=0.1),
-        keras.layers.Dropout(0.25),
-        keras.layers.Dense(64, kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.LeakyReLU(negative_slope=0.1),
         keras.layers.Dropout(0.2),
-        keras.layers.Dense(32, kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.LeakyReLU(negative_slope=0.1),
-        keras.layers.Dropout(0.15),
-        keras.layers.Dense(16, kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.LeakyReLU(negative_slope=0.1),
-        keras.layers.Dropout(0.1),
-        keras.layers.Dense(8, kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.LeakyReLU(negative_slope=0.1),
-        keras.layers.Dense(1, activation="sigmoid")
+        
+        keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.Dropout(0.2),
+        
+        keras.layers.Dense(1, activation="linear")  
     ])
-    return model, model_filename, learning_curve_filename
-    
-#model, model_filename, learning_curve_filename = build_model_1()
-#model, model_filename, learning_curve_filename = build_model_2()
-model, model_filename, learning_curve_filename = build_model_3()
+    return model
 
-#
-# Compile the model
-#
-loss = "binary_crossentropy"
-model.compile(loss=loss,
-              optimizer=keras.optimizers.Adam(learning_rate=0.001),
-              metrics=["accuracy"])
+model = build_regression_model()
 
 
-#
-# Update the learning rate dynamically
-#
-def scheduler(epoch, learning_rate):
-    r = learning_rate
+# Choose a suitable loss, metrics, and optimizer
+model.compile(
+    loss="mse",  
+    optimizer=keras.optimizers.Adam(learning_rate=0.001),
+    metrics=["mae"]
+)
+
+
+# Learning rate scheduling & early stopping
+def lr_scheduler(epoch, lr):
+    # Example: after 10 epochs, decay the LR exponentially
     if epoch >= 10:
-        r = learning_rate * float(tf.exp(-0.005))
-    return r
-learning_rate_callback = keras.callbacks.LearningRateScheduler(scheduler)
+        return lr * tf.math.exp(-0.01)
+    return lr
 
-#
-# Stop training if validation loss does not improve
-#
-early_stop_callback = keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, restore_best_weights=True)
+learning_rate_callback = keras.callbacks.LearningRateScheduler(lr_scheduler)
+early_stop_callback = keras.callbacks.EarlyStopping(
+    monitor="val_loss",
+    patience=5,
+    restore_best_weights=True
+)
 
-#
-# Train for up to epoch_count epochs
-#
+
+# Train the model
 epoch_count = 50
-history = model.fit(x=train_dataset,
-                    epochs=epoch_count,
-                    validation_data=validation_dataset,
-                    callbacks=[learning_rate_callback, early_stop_callback])
+history = model.fit(
+    train_dataset,
+    epochs=epoch_count,
+    validation_data=validation_dataset,
+    callbacks=[learning_rate_callback, early_stop_callback]
+)
+
+
+# Plot learning curves and save the model
 epochs = len(history.epoch)
-# print(history)
-
-
-#
-# Display the learning curves
-#
-line_style = ["r--", "r--*", "r--+", "b-", "b-*", "b-+"]
-line_style = ["r--*", "r--+", "b-*", "b-+"]
 pd.DataFrame(history.history).plot(
-    figsize=(8, 5), xlim=[0, epochs-1], ylim=[0, 1], grid=True, xlabel="Epoch",
-    style=line_style)
-# plt.show()
-plt.savefig(learning_curve_filename)
+    figsize=(8, 5),
+    xlim=[0, epochs - 1],
+    grid=True,
+    xlabel="Epoch"
+)
+plt.title("Regression Learning Curves")
+plt.savefig("learning-curve-regression.png")
 plt.clf()
 
-
-#
-# Save the model
-#
-model.save(model_filename)
+model.save("model-regression.keras")
