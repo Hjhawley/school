@@ -56,7 +56,7 @@ model = build_regression_model()
 
 # Choose loss, optimizer, metrics
 model.compile(
-    loss="mse",  
+    loss="msle",  
     optimizer=keras.optimizers.Adam(learning_rate=0.001),
     metrics=["mae"]
 )
@@ -64,7 +64,7 @@ model.compile(
 
 # Learning rate scheduling & early stopping
 def lr_scheduler(epoch, lr):
-    # Example: after 10 epochs, decay the LR exponentially
+    # After 10 epochs, decay the LR exponentially
     if epoch >= 10:
         return lr * tf.math.exp(-0.01)
     return lr
@@ -95,7 +95,7 @@ pd.DataFrame(history.history).plot(
     grid=True,
     xlabel="Epoch"
 )
-plt.title("Regression Learning Curves")
+plt.title("Learning Curves")
 plt.savefig("learning-curve.png")
 plt.clf()
 
