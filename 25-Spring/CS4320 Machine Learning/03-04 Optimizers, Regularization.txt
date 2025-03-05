@@ -1,32 +1,39 @@
 Optimizers
-The goal of an optimizer is to minimize the loss more quickly (in fewer epochs) while still reaching an optimal solution
+The purpose of an optimizer is to minimize the loss more quickly (in fewer epochs) while still reaching an optimal solution.
 
-"Stochastic Gradient Descent" (SGD) is an iterative method for optimizing an objective function. It can be regarded as a stochastic approximation of gradient descent optimization, since it replaces the actual gradient (calculated from the entire data set) by an estimate thereof (calculated from a randomly selected subset of the data). Especially in high-dimensional optimization problems this reduces the very high computational burden, achieving faster iterations in exchange for a lower convergence rate.
+Stochastic Gradient Descent (SGD)
+An iterative method for optimizing an objective function by approximating the true gradient with a randomly chosen subset of data. 
+This greatly reduces computational cost (compared to full-batch gradient descent) at the expense of a slower convergence rate.
 
-Some extensions and variants of SGD:
+Common Extensions and Variants of SGD
+1. Learning Rate Schedule
+	Gradually decrease the learning rate (η) over time for more precise updates as training progresses.
+2. Momentum (β)
+	Adds a fraction of the previous update (ex, 0.9) to the current update to help the model escape local minima or flat regions.
+3. Nesterov Accelerated Gradient (NAG)
+	A variant of momentum that looks ahead before updating weights, often leading to faster convergence ('nesterov=True').
+4. Adagrad
+	Adapts the gradient based on its historical magnitudes in different directions, scaling the learning rate for each parameter.
+5. RMSProp
+	Divides the learning rate by a moving average of recent gradient magnitudes ('RMSprop(rho=0.9)') to stabilize updates.
+6. Adam (Adaptive Moment Estimation)
+	Combines ideas from momentum and RMSProp, adjusting the learning rate for each parameter based on past gradients ('Adam(beta_1=0.9, beta_2=0.999)'). 
+	Often the default choice for many tasks.
 
-   One example is using a learning rate schedule in gradient descent to reduce eta η (learning rate or "step size") over time
-
-   Using a momentum value β (for example, momentum = 0.9) adds a fraction of the previous update to the current update, which helps overcome local minima or flat regions
-
-   Nesterov Accelerated Gradient looks ahead before updating weights, can give faster convergence compared to standard momentum. (nesterov = True)
-
-   Adagrad (adaptive gradient algorithm): scales the gradient based upon the gradient size in different directions. 
-
-   RMSProp (Root Mean Square Propagation): the idea is to divide the learning rate for a weight by a running average of the magnitudes of recent gradients for that weight. (RMSprop(rho=0.9))
-
-   Adam (Adaptive Moment Estimation): adapts the learning rate for each parameter based on past gradients. An update to RMSProp and a popular default choice for many tasks. (Adam(beta_1=0.9, beta_2=0.999))
-
-SGD with momentum is great, RMSProp is even better, Adam is fantastic and usually the go-to default.
+- SGD + Momentum: Good improvement over basic SGD
+- RMSProp: Often better for non-stationary objectives
+- Adam: Very popular and generally a great default
 
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-Regularization - techniques we use to try to prevent overfitting. In other words, regularization improves generalization.
+Regularization
+Regularization helps prevent overfitting by improving a model’s ability to generalize beyond the training data.
 
-if we let coefficients of features or terms shrink to zero when they're found to be unimportant, we can avoid overfitting to noise in the training data.
-L1 (Lasso) - minimize the absolute value
-L2 (ridge regression) - minimize the square
-
-Early stopping - Stops training when validation performance deteriorates, preventing overfitting by halting before the model memorizes training data
-
-Dropout - repeatedly ignores random subsets of neurons during training, which simulates the training of multiple neural network architectures at once to improve generalization. each layer is given a parameter, say 50% dropout rate, and during any particular forward pass, half of the neurons will be randomly shut off.
+- L1 Regularization (Lasso)
+	Minimizes the absolute values of coefficients, causing some of them to shrink to zero, effectively eliminating unimportant features.
+- L2 Regularization (Ridge)
+	Minimizes the squared values of coefficients, keeping them small but not necessarily zero.
+- Early Stopping
+	Stops training when validation performance starts to worsen, preventing the model from memorizing the training data.
+- Dropout
+	Randomly “drops” (ignores) neurons during training (with a specified rate, 50%), which simulates training multiple network architectures at once and improves generalization.
