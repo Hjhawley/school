@@ -10,15 +10,14 @@ input_filename = "train-preprocessed.csv"
 train_ratio = 0.80
 
 dataframe = pd.read_csv(input_filename, index_col=0)
-label = dataframe.columns[-1]  # assume the last column is our regression target
+label = dataframe.columns[-1]  # last column is our regression target
 X = dataframe.drop(label, axis=1)
 y = dataframe[label]
 
 
-# Create a TensorFlow dataset
+# Create a TensorFlow dataset and find shape
 dataset = tf.data.Dataset.from_tensor_slices((X, y))
 
-# Find shape info
 for features, labels in dataset.take(1):
     input_shape = features.shape
 
@@ -55,7 +54,7 @@ def build_regression_model():
 model = build_regression_model()
 
 
-# Choose a suitable loss, metrics, and optimizer
+# Choose loss, optimizer, metrics
 model.compile(
     loss="mse",  
     optimizer=keras.optimizers.Adam(learning_rate=0.001),
@@ -97,7 +96,7 @@ pd.DataFrame(history.history).plot(
     xlabel="Epoch"
 )
 plt.title("Regression Learning Curves")
-plt.savefig("learning-curve-regression.png")
+plt.savefig("learning-curve.png")
 plt.clf()
 
-model.save("model-regression.keras")
+model.save("model.keras")
