@@ -13,10 +13,6 @@ label = dataframe.columns[-1] # last column is the label
 X = dataframe.drop(label, axis=1)
 y = dataframe[label]
 
-print(dataframe)
-print(X)
-print(y)
-
 dataset = tf.data.Dataset.from_tensor_slices((X, y))
 
 for features, labels in dataset.take(1):
@@ -38,26 +34,33 @@ validation_dataset = validation_dataset.batch(BATCH_SIZE).prefetch(tf.data.AUTOT
 
 tf.random.set_seed(42)
 
-def build_model():
-    model_filename = "model.keras"
-    learning_curve_filename = "learning-curve.png"
+def build_model(input_shape):
     model = keras.Sequential([
-        keras.layers.Input(shape=input_shape),
-        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
-        keras.layers.Dropout(0.5),
-        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
-        keras.layers.Dropout(0.5),
-        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
-        keras.layers.Dropout(0.5),
-        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
-        keras.layers.Dropout(0.5),
-        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
-        keras.layers.Dropout(0.5),
+        keras.layers.Input(shape=input_shape),  # Ensure correct shape format
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.Dropout(0.25),
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.Dropout(0.25),
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.Dropout(0.25),
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.Dropout(0.25),
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.Dropout(0.25),
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.Dropout(0.25),
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.Dropout(0.25),
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.Dropout(0.25),
         keras.layers.Dense(1)
     ])
-    return model, model_filename, learning_curve_filename
-    
-model, model_filename, learning_curve_filename = build_model()
+    return model
+
+model_filename = "model.keras"
+learning_curve_filename = "learning-curve.png"
+
+model = build_model(input_shape)
 
 model.compile(
     loss="msle",
@@ -66,9 +69,7 @@ model.compile(
 )
 
 def lr_scheduler(epoch, lr):
-    if epoch >= 10:
-        return float(lr * tf.math.exp(-0.01))
-    return float(lr)
+    return 0.001 * (0.975 ** epoch)  # Decay smoothly each epoch
 
 learning_rate_callback = keras.callbacks.LearningRateScheduler(lr_scheduler)
 early_stop_callback = keras.callbacks.EarlyStopping(
