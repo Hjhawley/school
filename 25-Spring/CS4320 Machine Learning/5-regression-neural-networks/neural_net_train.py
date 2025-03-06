@@ -36,22 +36,15 @@ train_dataset = train_dataset.batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
 validation_dataset = validation_dataset.batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
 
 
-# Build a regression model with regularization
-def build_regression_model():
-    model = keras.Sequential([
-        keras.layers.Input(shape=input_shape),
-        
-        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.Dropout(0.2),
-        
-        keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
-        keras.layers.Dropout(0.2),
-        
-        keras.layers.Dense(1, activation="linear")  
-    ])
-    return model
-
-model = build_regression_model()
+# Build the regression model
+model = keras.Sequential([
+    keras.layers.Input(shape=input_shape),
+    keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+    keras.layers.Dropout(0.4),
+    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+    keras.layers.Dropout(0.3),
+    keras.layers.Dense(1)
+])
 
 
 # Choose loss, optimizer, metrics
