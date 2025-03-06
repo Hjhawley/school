@@ -106,7 +106,7 @@ def main_train():
     data_filename = "train.csv"
     out_filename = "train-preprocessed.csv"
     pipeline_filename = "train.joblib"
-    label = "Depression"
+    label = "Premium Amount"
     preprocess_file(data_filename, out_filename, pipeline_filename, label)
     
 def main_test():
@@ -114,7 +114,7 @@ def main_test():
     out_filename = "test-preprocessed.csv"
     # Use the same pipeline from training
     pipeline_filename = "train.joblib"
-    label = "Depression"
+    label = "Premium Amount"
     preprocess_file(data_filename, out_filename, pipeline_filename, label)
     
 def main():
