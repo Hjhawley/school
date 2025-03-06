@@ -2,60 +2,69 @@
 
 import pandas as pd
 import tensorflow as tf
-from tensorflow import keras
+import keras
 import matplotlib.pyplot as plt
 
-# Load the preprocessed training data
 input_filename = "train-preprocessed.csv"
 train_ratio = 0.80
 
 dataframe = pd.read_csv(input_filename, index_col=0)
-label = dataframe.columns[-1]
+label = dataframe.columns[-1] # last column is the label
 X = dataframe.drop(label, axis=1)
 y = dataframe[label]
 
-# Create a TensorFlow dataset and find input shape
-dataset = tf.data.Dataset.from_tensor_slices((X.values, y.values))
-input_shape = X.shape[1]
+print(dataframe)
+print(X)
+print(y)
 
-# Shuffle the full dataset first for unbiased splits
-dataset = dataset.shuffle(buffer_size=len(X), seed=42)
+dataset = tf.data.Dataset.from_tensor_slices((X, y))
 
-# Explicitly determine train/validation split sizes
-dataset_size = dataset.cardinality().numpy()
-train_size = int(train_ratio * dataset_size)
+for features, labels in dataset.take(1):
+    input_shape = features.shape
+    output_shape = labels.shape
 
-train_dataset = dataset.take(train_size)
+dataset_size       = dataset.cardinality().numpy()
+train_size         = int(train_ratio * dataset_size)
+validate_size      = dataset_size - train_size
+train_dataset      = dataset.take(train_size)
 validation_dataset = dataset.skip(train_size)
 
-# Batch and Prefetch (cleaner chaining)
+train_dataset      = train_dataset.shuffle(buffer_size=train_size)
+validation_dataset = validation_dataset.shuffle(buffer_size=validate_size)
+
 BATCH_SIZE = 32
-train_dataset = train_dataset.batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
+train_dataset      = train_dataset.batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
 validation_dataset = validation_dataset.batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
 
-# Build the model
-model = keras.Sequential([
-    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005), input_shape=(input_shape,)),
-    keras.layers.Dropout(0.5),
-    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
-    keras.layers.Dropout(0.5),
-    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
-    keras.layers.Dropout(0.5),
-    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
-    keras.layers.Dropout(0.5),
-    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
-    keras.layers.Dropout(0.5),
-    keras.layers.Dense(1)
-])
+tf.random.set_seed(42)
 
-# Compile the model
+def build_model():
+    model_filename = "model.keras"
+    learning_curve_filename = "learning-curve.png"
+    model = keras.Sequential([
+        keras.layers.Input(shape=input_shape),
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
+        keras.layers.Dropout(0.5),
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
+        keras.layers.Dropout(0.5),
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
+        keras.layers.Dropout(0.5),
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
+        keras.layers.Dropout(0.5),
+        keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
+        keras.layers.Dropout(0.5),
+        keras.layers.Dense(1)
+    ])
+    return model, model_filename, learning_curve_filename
+    
+model, model_filename, learning_curve_filename = build_model()
+
 model.compile(
     loss="msle",
     optimizer=keras.optimizers.Adam(learning_rate=0.001),
     metrics=["mae"]
 )
 
-# Learning rate scheduling & early stopping
 def lr_scheduler(epoch, lr):
     if epoch >= 10:
         return float(lr * tf.math.exp(-0.01))
@@ -68,7 +77,6 @@ early_stop_callback = keras.callbacks.EarlyStopping(
     restore_best_weights=True
 )
 
-# Train the model
 epoch_count = 50
 history = model.fit(
     train_dataset,
@@ -77,7 +85,6 @@ history = model.fit(
     callbacks=[learning_rate_callback, early_stop_callback]
 )
 
-# Plot learning curves and save the model
 epochs = len(history.epoch)
 pd.DataFrame(history.history).plot(
     figsize=(8, 5),
