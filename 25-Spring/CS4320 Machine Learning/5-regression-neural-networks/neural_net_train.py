@@ -35,12 +35,16 @@ validation_dataset = validation_dataset.batch(BATCH_SIZE).prefetch(tf.data.AUTOT
 
 # Build the model
 model = keras.Sequential([
-    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001), input_shape=(input_shape,)),
-    keras.layers.Dropout(0.4),
-    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
-    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001), input_shape=(input_shape,)),
-    keras.layers.Dropout(0.4),
-    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005), input_shape=(input_shape,)),
+    keras.layers.Dropout(0.5),
+    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
+    keras.layers.Dropout(0.5),
+    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
+    keras.layers.Dropout(0.5),
+    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
+    keras.layers.Dropout(0.5),
+    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.005)),
+    keras.layers.Dropout(0.5),
     keras.layers.Dense(1)
 ])
 
