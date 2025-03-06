@@ -4,16 +4,20 @@ import pandas as pd
 import tensorflow as tf
 import keras
 
-label = "label"
+# Kaggle expects the "id" column and "Premium Amount"
+id_column = "id"  # Adjust if your dataset uses a different column name
+prediction_column = "Premium Amount"
+
 input_filename = "test-preprocessed.csv"
 model_filenames = ["model-2.keras", "model-best.keras"]
 predictions_filenames = ["predictions-2.csv", "predictions-best.csv"]
 
 # Load test data
-dataframe = pd.read_csv(input_filename, index_col=0)
+dataframe = pd.read_csv(input_filename, index_col=0)  # Ensure the index column is correctly handled
 
-if label in dataframe.columns:
-    X = dataframe.drop(label, axis=1)
+# Extract features (without labels, if present)
+if prediction_column in dataframe.columns:
+    X = dataframe.drop(prediction_column, axis=1)
 else:
     X = dataframe
 
@@ -24,11 +28,11 @@ for model_filename, predictions_filename in zip(model_filenames, predictions_fil
     
     # Make predictions
     y_hat = model.predict(X)
-    
+
     # Construct a dataframe with predictions
     results_df = pd.DataFrame({
-        "Index": dataframe.index,
-        label: y_hat[:, 0]  # Flatten if needed
+        id_column: dataframe.index,
+        prediction_column: y_hat[:, 0]  # Flatten if needed
     })
     
     # Save predictions
