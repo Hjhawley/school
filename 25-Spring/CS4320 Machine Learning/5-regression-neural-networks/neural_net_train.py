@@ -35,14 +35,16 @@ validation_dataset = validation_dataset.batch(BATCH_SIZE).prefetch(tf.data.AUTOT
 
 # Build the model
 model = keras.Sequential([
-    keras.layers.Dense(64, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001), input_shape=(input_shape,)),
+    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001), input_shape=(input_shape,)),
     keras.layers.Dropout(0.4),
     keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
-    keras.layers.Dropout(0.3),
-    keras.layers.Dense(1)  # Linear regression output
+    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001), input_shape=(input_shape,)),
+    keras.layers.Dropout(0.4),
+    keras.layers.Dense(32, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+    keras.layers.Dense(1)
 ])
 
-# Compile the model (keeping your required loss: 'msle')
+# Compile the model
 model.compile(
     loss="msle",
     optimizer=keras.optimizers.Adam(learning_rate=0.001),
@@ -51,10 +53,9 @@ model.compile(
 
 # Learning rate scheduling & early stopping
 def lr_scheduler(epoch, lr):
-    # Exponential LR decay after 10 epochs
     if epoch >= 10:
-        return lr * tf.math.exp(-0.01)
-    return lr
+        return float(lr * tf.math.exp(-0.01))
+    return float(lr)
 
 learning_rate_callback = keras.callbacks.LearningRateScheduler(lr_scheduler)
 early_stop_callback = keras.callbacks.EarlyStopping(
