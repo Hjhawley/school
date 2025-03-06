@@ -87,6 +87,10 @@ def load_pipeline(filename):
 
 def preprocess_file(input_filename, output_filename, pipeline_filename, label):
     dataframe = pd.read_csv(input_filename, index_col=0)
+    # Convert "Policy Start Date" to "Policy Start Year"
+    if "Policy Start Date" in dataframe.columns:
+        dataframe["Policy Start Year"] = pd.to_datetime(dataframe["Policy Start Date"]).dt.year
+        dataframe = dataframe.drop("Policy Start Date", axis=1)
     
     # If this is test data, drop the label column if it exists.
     if "test" in input_filename.lower() and label in dataframe.columns:

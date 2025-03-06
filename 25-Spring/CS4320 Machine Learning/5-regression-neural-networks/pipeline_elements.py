@@ -47,7 +47,7 @@ class Printer(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin):
 class DataFrameSelector(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin):
     def __init__(self, do_predictors=True, do_numerical=True):
         self.mCategoricalPredictors = ["Gender", "Marital Status", "Education Level", "Occupation", "Location", "Policy Type", "Customer Feedback", "Smoking Status", "Exercise Frequency", "Property Type", ]
-        self.mNumericalPredictors = ["Age", "Annual Income", "Number of Dependents", "Health Score", "Previous Claims", "Vehicle Age", "Credit Score", "Insurance Duration", "Policy Start Date",]
+        self.mNumericalPredictors = ["Age", "Annual Income", "Number of Dependents", "Health Score", "Previous Claims", "Vehicle Age", "Credit Score", "Insurance Duration", "Policy Start Year",]
         self.mLabels = ["Premium Amount"]
         self.do_numerical = do_numerical
         self.do_predictors = do_predictors
