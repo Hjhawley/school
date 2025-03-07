@@ -66,13 +66,13 @@ def multi_hot_encode(label_list, type_to_index):
 
 def preprocess_image(image_path, img_size=IMG_SIZE):
     """
-    Loads an image in grayscale, resizes it to IMG_SIZE, normalizes the pixels,
-    and expands dimensions so that the shape becomes (height, width, 1).
+    Loads an image in color, converts it from BGR (OpenCV default) to RGB, 
+    resizes it to IMG_SIZE, normalizes the pixels, and returns an image tensor.
     """
-    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    img = cv2.imread(image_path, cv2.IMREAD_COLOR)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = cv2.resize(img, img_size)
     img = img.astype('float32') / 255.0
-    img = np.expand_dims(img, axis=-1)
     return img
 
 def create_dataset(image_paths, labels, type_to_index):

@@ -7,7 +7,7 @@ num_types = len(type_to_index)
 
 # Build the CNN model with on-the-fly horizontal flip augmentation
 model = tf.keras.models.Sequential([
-    tf.keras.layers.RandomFlip("horizontal", input_shape=(IMG_SIZE[0], IMG_SIZE[1], 1)),
+    tf.keras.layers.RandomFlip("horizontal", input_shape=(IMG_SIZE[0], IMG_SIZE[1], 3)),
     
     tf.keras.layers.Conv2D(128, (3, 3), activation='relu',
                            kernel_regularizer=tf.keras.regularizers.l2(0.001)),
