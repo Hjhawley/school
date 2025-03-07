@@ -6,6 +6,7 @@ import numpy as np
 import tensorflow as tf
 import json
 from preprocess import IMG_SIZE, preprocess_image, get_data
+from cnn import at_least_one_accuracy
 
 def load_type_mapping(json_path="pokemon_types_processed.json"):
     """
@@ -36,7 +37,7 @@ def predict_image(image_path, model, index_to_type):
 
 if __name__ == "__main__":
     # Load the trained model
-    model = tf.keras.models.load_model("model.keras")
+    model = tf.keras.models.load_model("model-good.keras", custom_objects={'at_least_one_accuracy': at_least_one_accuracy})
     type_to_index, index_to_type = load_type_mapping()
 
     # Get validation file paths from preprocess.py

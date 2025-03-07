@@ -54,13 +54,15 @@ def at_least_one_accuracy(y_true, y_pred):
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy', at_least_one_accuracy])
 model.summary()
 
-# Create a callback that monitors validation at_least_one_accuracy
-checkpoint = tf.keras.callbacks.ModelCheckpoint("model.keras",
-                               monitor='val_at_least_one_accuracy',
-                               mode='max',
-                               save_best_only=True,
-                               verbose=1)
 
-# Train the model with the checkpoint callback
-history = model.fit(X_train, y_train, epochs=50, validation_data=(X_val, y_val), callbacks=[checkpoint])
-print("Training complete. Best model saved as model.keras")
+if __name__ == "__main__":
+    # Create a callback that monitors validation at_least_one_accuracy
+    checkpoint = tf.keras.callbacks.ModelCheckpoint("model.keras",
+                                monitor='val_at_least_one_accuracy',
+                                mode='max',
+                                save_best_only=True,
+                                verbose=1)
+
+    # Train the model with the checkpoint callback
+    history = model.fit(X_train, y_train, epochs=50, validation_data=(X_val, y_val), callbacks=[checkpoint])
+    print("Training complete. Best model saved as model.keras")
