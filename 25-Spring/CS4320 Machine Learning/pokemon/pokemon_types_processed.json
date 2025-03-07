@@ -13,11 +13,11 @@
     ],
     "004": [
         "fire",
-        "none"
+        "fire"
     ],
     "005": [
         "fire",
-        "none"
+        "fire"
     ],
     "006": [
         "fire",
@@ -25,23 +25,23 @@
     ],
     "007": [
         "water",
-        "none"
+        "water"
     ],
     "008": [
         "water",
-        "none"
+        "water"
     ],
     "009": [
         "water",
-        "none"
+        "water"
     ],
     "010": [
         "bug",
-        "none"
+        "bug"
     ],
     "011": [
         "bug",
-        "none"
+        "bug"
     ],
     "012": [
         "bug",
@@ -73,11 +73,11 @@
     ],
     "019": [
         "normal",
-        "none"
+        "normal"
     ],
     "020": [
         "normal",
-        "none"
+        "normal"
     ],
     "021": [
         "normal",
@@ -89,35 +89,35 @@
     ],
     "023": [
         "poison",
-        "none"
+        "poison"
     ],
     "024": [
         "poison",
-        "none"
+        "poison"
     ],
     "025": [
         "electric",
-        "none"
+        "electric"
     ],
     "026": [
         "electric",
-        "none"
+        "electric"
     ],
     "027": [
         "ground",
-        "none"
+        "ground"
     ],
     "028": [
         "ground",
-        "none"
+        "ground"
     ],
     "029": [
         "poison",
-        "none"
+        "poison"
     ],
     "030": [
         "poison",
-        "none"
+        "poison"
     ],
     "031": [
         "poison",
@@ -125,11 +125,11 @@
     ],
     "032": [
         "poison",
-        "none"
+        "poison"
     ],
     "033": [
         "poison",
-        "none"
+        "poison"
     ],
     "034": [
         "poison",
@@ -137,19 +137,19 @@
     ],
     "035": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "036": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "037": [
         "fire",
-        "none"
+        "fire"
     ],
     "038": [
         "fire",
-        "none"
+        "fire"
     ],
     "039": [
         "normal",
@@ -197,51 +197,51 @@
     ],
     "050": [
         "ground",
-        "none"
+        "ground"
     ],
     "051": [
         "ground",
-        "none"
+        "ground"
     ],
     "052": [
         "normal",
-        "none"
+        "normal"
     ],
     "053": [
         "normal",
-        "none"
+        "normal"
     ],
     "054": [
         "water",
-        "none"
+        "water"
     ],
     "055": [
         "water",
-        "none"
+        "water"
     ],
     "056": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "057": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "058": [
         "fire",
-        "none"
+        "fire"
     ],
     "059": [
         "fire",
-        "none"
+        "fire"
     ],
     "060": [
         "water",
-        "none"
+        "water"
     ],
     "061": [
         "water",
-        "none"
+        "water"
     ],
     "062": [
         "water",
@@ -249,27 +249,27 @@
     ],
     "063": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "064": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "065": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "066": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "067": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "068": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "069": [
         "grass",
@@ -305,11 +305,11 @@
     ],
     "077": [
         "fire",
-        "none"
+        "fire"
     ],
     "078": [
         "fire",
-        "none"
+        "fire"
     ],
     "079": [
         "water",
@@ -341,7 +341,7 @@
     ],
     "086": [
         "water",
-        "none"
+        "water"
     ],
     "087": [
         "water",
@@ -349,15 +349,15 @@
     ],
     "088": [
         "poison",
-        "none"
+        "poison"
     ],
     "089": [
         "poison",
-        "none"
+        "poison"
     ],
     "090": [
         "water",
-        "none"
+        "water"
     ],
     "091": [
         "water",
@@ -381,27 +381,27 @@
     ],
     "096": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "097": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "098": [
         "water",
-        "none"
+        "water"
     ],
     "099": [
         "water",
-        "none"
+        "water"
     ],
     "100": [
         "electric",
-        "none"
+        "electric"
     ],
     "101": [
         "electric",
-        "none"
+        "electric"
     ],
     "102": [
         "grass",
@@ -413,31 +413,31 @@
     ],
     "104": [
         "ground",
-        "none"
+        "ground"
     ],
     "105": [
         "ground",
-        "none"
+        "ground"
     ],
     "106": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "107": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "108": [
         "normal",
-        "none"
+        "normal"
     ],
     "109": [
         "poison",
-        "none"
+        "poison"
     ],
     "110": [
         "poison",
-        "none"
+        "poison"
     ],
     "111": [
         "ground",
@@ -449,35 +449,35 @@
     ],
     "113": [
         "normal",
-        "none"
+        "normal"
     ],
     "114": [
         "grass",
-        "none"
+        "grass"
     ],
     "115": [
         "normal",
-        "none"
+        "normal"
     ],
     "116": [
         "water",
-        "none"
+        "water"
     ],
     "117": [
         "water",
-        "none"
+        "water"
     ],
     "118": [
         "water",
-        "none"
+        "water"
     ],
     "119": [
         "water",
-        "none"
+        "water"
     ],
     "120": [
         "water",
-        "none"
+        "water"
     ],
     "121": [
         "water",
@@ -497,23 +497,23 @@
     ],
     "125": [
         "electric",
-        "none"
+        "electric"
     ],
     "126": [
         "fire",
-        "none"
+        "fire"
     ],
     "127": [
         "bug",
-        "none"
+        "bug"
     ],
     "128": [
         "normal",
-        "none"
+        "normal"
     ],
     "129": [
         "water",
-        "none"
+        "water"
     ],
     "130": [
         "water",
@@ -525,27 +525,27 @@
     ],
     "132": [
         "normal",
-        "none"
+        "normal"
     ],
     "133": [
         "normal",
-        "none"
+        "normal"
     ],
     "134": [
         "water",
-        "none"
+        "water"
     ],
     "135": [
         "electric",
-        "none"
+        "electric"
     ],
     "136": [
         "fire",
-        "none"
+        "fire"
     ],
     "137": [
         "normal",
-        "none"
+        "normal"
     ],
     "138": [
         "rock",
@@ -569,7 +569,7 @@
     ],
     "143": [
         "normal",
-        "none"
+        "normal"
     ],
     "144": [
         "ice",
@@ -585,11 +585,11 @@
     ],
     "147": [
         "dragon",
-        "none"
+        "dragon"
     ],
     "148": [
         "dragon",
-        "none"
+        "dragon"
     ],
     "149": [
         "dragon",
@@ -597,55 +597,55 @@
     ],
     "150": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "151": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "152": [
         "grass",
-        "none"
+        "grass"
     ],
     "153": [
         "grass",
-        "none"
+        "grass"
     ],
     "154": [
         "grass",
-        "none"
+        "grass"
     ],
     "155": [
         "fire",
-        "none"
+        "fire"
     ],
     "156": [
         "fire",
-        "none"
+        "fire"
     ],
     "157": [
         "fire",
-        "none"
+        "fire"
     ],
     "158": [
         "water",
-        "none"
+        "water"
     ],
     "159": [
         "water",
-        "none"
+        "water"
     ],
     "160": [
         "water",
-        "none"
+        "water"
     ],
     "161": [
         "normal",
-        "none"
+        "normal"
     ],
     "162": [
         "normal",
-        "none"
+        "normal"
     ],
     "163": [
         "normal",
@@ -685,11 +685,11 @@
     ],
     "172": [
         "electric",
-        "none"
+        "electric"
     ],
     "173": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "174": [
         "normal",
@@ -697,7 +697,7 @@
     ],
     "175": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "176": [
         "fairy",
@@ -713,19 +713,19 @@
     ],
     "179": [
         "electric",
-        "none"
+        "electric"
     ],
     "180": [
         "electric",
-        "none"
+        "electric"
     ],
     "181": [
         "electric",
-        "none"
+        "electric"
     ],
     "182": [
         "grass",
-        "none"
+        "grass"
     ],
     "183": [
         "water",
@@ -737,11 +737,11 @@
     ],
     "185": [
         "rock",
-        "none"
+        "rock"
     ],
     "186": [
         "water",
-        "none"
+        "water"
     ],
     "187": [
         "grass",
@@ -757,15 +757,15 @@
     ],
     "190": [
         "normal",
-        "none"
+        "normal"
     ],
     "191": [
         "grass",
-        "none"
+        "grass"
     ],
     "192": [
         "grass",
-        "none"
+        "grass"
     ],
     "193": [
         "bug",
@@ -781,11 +781,11 @@
     ],
     "196": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "197": [
         "dark",
-        "none"
+        "dark"
     ],
     "198": [
         "dark",
@@ -797,15 +797,15 @@
     ],
     "200": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "201": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "202": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "203": [
         "normal",
@@ -813,7 +813,7 @@
     ],
     "204": [
         "bug",
-        "none"
+        "bug"
     ],
     "205": [
         "bug",
@@ -821,7 +821,7 @@
     ],
     "206": [
         "normal",
-        "none"
+        "normal"
     ],
     "207": [
         "ground",
@@ -833,11 +833,11 @@
     ],
     "209": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "210": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "211": [
         "water",
@@ -861,15 +861,15 @@
     ],
     "216": [
         "normal",
-        "none"
+        "normal"
     ],
     "217": [
         "normal",
-        "none"
+        "normal"
     ],
     "218": [
         "fire",
-        "none"
+        "fire"
     ],
     "219": [
         "fire",
@@ -889,11 +889,11 @@
     ],
     "223": [
         "water",
-        "none"
+        "water"
     ],
     "224": [
         "water",
-        "none"
+        "water"
     ],
     "225": [
         "ice",
@@ -921,31 +921,31 @@
     ],
     "231": [
         "ground",
-        "none"
+        "ground"
     ],
     "232": [
         "ground",
-        "none"
+        "ground"
     ],
     "233": [
         "normal",
-        "none"
+        "normal"
     ],
     "234": [
         "normal",
-        "none"
+        "normal"
     ],
     "235": [
         "normal",
-        "none"
+        "normal"
     ],
     "236": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "237": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "238": [
         "ice",
@@ -953,31 +953,31 @@
     ],
     "239": [
         "electric",
-        "none"
+        "electric"
     ],
     "240": [
         "fire",
-        "none"
+        "fire"
     ],
     "241": [
         "normal",
-        "none"
+        "normal"
     ],
     "242": [
         "normal",
-        "none"
+        "normal"
     ],
     "243": [
         "electric",
-        "none"
+        "electric"
     ],
     "244": [
         "fire",
-        "none"
+        "fire"
     ],
     "245": [
         "water",
-        "none"
+        "water"
     ],
     "246": [
         "rock",
@@ -1005,19 +1005,19 @@
     ],
     "252": [
         "grass",
-        "none"
+        "grass"
     ],
     "253": [
         "grass",
-        "none"
+        "grass"
     ],
     "254": [
         "grass",
-        "none"
+        "grass"
     ],
     "255": [
         "fire",
-        "none"
+        "fire"
     ],
     "256": [
         "fire",
@@ -1029,7 +1029,7 @@
     ],
     "258": [
         "water",
-        "none"
+        "water"
     ],
     "259": [
         "water",
@@ -1041,27 +1041,27 @@
     ],
     "261": [
         "dark",
-        "none"
+        "dark"
     ],
     "262": [
         "dark",
-        "none"
+        "dark"
     ],
     "263": [
         "normal",
-        "none"
+        "normal"
     ],
     "264": [
         "normal",
-        "none"
+        "normal"
     ],
     "265": [
         "bug",
-        "none"
+        "bug"
     ],
     "266": [
         "bug",
-        "none"
+        "bug"
     ],
     "267": [
         "bug",
@@ -1069,7 +1069,7 @@
     ],
     "268": [
         "bug",
-        "none"
+        "bug"
     ],
     "269": [
         "bug",
@@ -1089,7 +1089,7 @@
     ],
     "273": [
         "grass",
-        "none"
+        "grass"
     ],
     "274": [
         "grass",
@@ -1137,7 +1137,7 @@
     ],
     "285": [
         "grass",
-        "none"
+        "grass"
     ],
     "286": [
         "grass",
@@ -1145,15 +1145,15 @@
     ],
     "287": [
         "normal",
-        "none"
+        "normal"
     ],
     "288": [
         "normal",
-        "none"
+        "normal"
     ],
     "289": [
         "normal",
-        "none"
+        "normal"
     ],
     "290": [
         "bug",
@@ -1169,23 +1169,23 @@
     ],
     "293": [
         "normal",
-        "none"
+        "normal"
     ],
     "294": [
         "normal",
-        "none"
+        "normal"
     ],
     "295": [
         "normal",
-        "none"
+        "normal"
     ],
     "296": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "297": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "298": [
         "normal",
@@ -1193,15 +1193,15 @@
     ],
     "299": [
         "rock",
-        "none"
+        "rock"
     ],
     "300": [
         "normal",
-        "none"
+        "normal"
     ],
     "301": [
         "normal",
-        "none"
+        "normal"
     ],
     "302": [
         "dark",
@@ -1233,27 +1233,27 @@
     ],
     "309": [
         "electric",
-        "none"
+        "electric"
     ],
     "310": [
         "electric",
-        "none"
+        "electric"
     ],
     "311": [
         "electric",
-        "none"
+        "electric"
     ],
     "312": [
         "electric",
-        "none"
+        "electric"
     ],
     "313": [
         "bug",
-        "none"
+        "bug"
     ],
     "314": [
         "bug",
-        "none"
+        "bug"
     ],
     "315": [
         "grass",
@@ -1261,11 +1261,11 @@
     ],
     "316": [
         "poison",
-        "none"
+        "poison"
     ],
     "317": [
         "poison",
-        "none"
+        "poison"
     ],
     "318": [
         "water",
@@ -1277,11 +1277,11 @@
     ],
     "320": [
         "water",
-        "none"
+        "water"
     ],
     "321": [
         "water",
-        "none"
+        "water"
     ],
     "322": [
         "fire",
@@ -1293,23 +1293,23 @@
     ],
     "324": [
         "fire",
-        "none"
+        "fire"
     ],
     "325": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "326": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "327": [
         "normal",
-        "none"
+        "normal"
     ],
     "328": [
         "ground",
-        "none"
+        "ground"
     ],
     "329": [
         "ground",
@@ -1321,7 +1321,7 @@
     ],
     "331": [
         "grass",
-        "none"
+        "grass"
     ],
     "332": [
         "grass",
@@ -1337,11 +1337,11 @@
     ],
     "335": [
         "normal",
-        "none"
+        "normal"
     ],
     "336": [
         "poison",
-        "none"
+        "poison"
     ],
     "337": [
         "rock",
@@ -1361,7 +1361,7 @@
     ],
     "341": [
         "water",
-        "none"
+        "water"
     ],
     "342": [
         "water",
@@ -1393,35 +1393,35 @@
     ],
     "349": [
         "water",
-        "none"
+        "water"
     ],
     "350": [
         "water",
-        "none"
+        "water"
     ],
     "351": [
         "normal",
-        "none"
+        "normal"
     ],
     "352": [
         "normal",
-        "none"
+        "normal"
     ],
     "353": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "354": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "355": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "356": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "357": [
         "grass",
@@ -1429,23 +1429,23 @@
     ],
     "358": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "359": [
         "dark",
-        "none"
+        "dark"
     ],
     "360": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "361": [
         "ice",
-        "none"
+        "ice"
     ],
     "362": [
         "ice",
-        "none"
+        "ice"
     ],
     "363": [
         "ice",
@@ -1461,15 +1461,15 @@
     ],
     "366": [
         "water",
-        "none"
+        "water"
     ],
     "367": [
         "water",
-        "none"
+        "water"
     ],
     "368": [
         "water",
-        "none"
+        "water"
     ],
     "369": [
         "water",
@@ -1477,15 +1477,15 @@
     ],
     "370": [
         "water",
-        "none"
+        "water"
     ],
     "371": [
         "dragon",
-        "none"
+        "dragon"
     ],
     "372": [
         "dragon",
-        "none"
+        "dragon"
     ],
     "373": [
         "dragon",
@@ -1505,15 +1505,15 @@
     ],
     "377": [
         "rock",
-        "none"
+        "rock"
     ],
     "378": [
         "ice",
-        "none"
+        "ice"
     ],
     "379": [
         "steel",
-        "none"
+        "steel"
     ],
     "380": [
         "dragon",
@@ -1525,11 +1525,11 @@
     ],
     "382": [
         "water",
-        "none"
+        "water"
     ],
     "383": [
         "ground",
-        "none"
+        "ground"
     ],
     "384": [
         "dragon",
@@ -1541,15 +1541,15 @@
     ],
     "386": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "387": [
         "grass",
-        "none"
+        "grass"
     ],
     "388": [
         "grass",
-        "none"
+        "grass"
     ],
     "389": [
         "grass",
@@ -1557,7 +1557,7 @@
     ],
     "390": [
         "fire",
-        "none"
+        "fire"
     ],
     "391": [
         "fire",
@@ -1569,11 +1569,11 @@
     ],
     "393": [
         "water",
-        "none"
+        "water"
     ],
     "394": [
         "water",
-        "none"
+        "water"
     ],
     "395": [
         "water",
@@ -1593,7 +1593,7 @@
     ],
     "399": [
         "normal",
-        "none"
+        "normal"
     ],
     "400": [
         "normal",
@@ -1601,23 +1601,23 @@
     ],
     "401": [
         "bug",
-        "none"
+        "bug"
     ],
     "402": [
         "bug",
-        "none"
+        "bug"
     ],
     "403": [
         "electric",
-        "none"
+        "electric"
     ],
     "404": [
         "electric",
-        "none"
+        "electric"
     ],
     "405": [
         "electric",
-        "none"
+        "electric"
     ],
     "406": [
         "grass",
@@ -1629,11 +1629,11 @@
     ],
     "408": [
         "rock",
-        "none"
+        "rock"
     ],
     "409": [
         "rock",
-        "none"
+        "rock"
     ],
     "410": [
         "rock",
@@ -1645,7 +1645,7 @@
     ],
     "412": [
         "bug",
-        "none"
+        "bug"
     ],
     "413": [
         "bug",
@@ -1665,27 +1665,27 @@
     ],
     "417": [
         "electric",
-        "none"
+        "electric"
     ],
     "418": [
         "water",
-        "none"
+        "water"
     ],
     "419": [
         "water",
-        "none"
+        "water"
     ],
     "420": [
         "grass",
-        "none"
+        "grass"
     ],
     "421": [
         "grass",
-        "none"
+        "grass"
     ],
     "422": [
         "water",
-        "none"
+        "water"
     ],
     "423": [
         "water",
@@ -1693,7 +1693,7 @@
     ],
     "424": [
         "normal",
-        "none"
+        "normal"
     ],
     "425": [
         "ghost",
@@ -1705,15 +1705,15 @@
     ],
     "427": [
         "normal",
-        "none"
+        "normal"
     ],
     "428": [
         "normal",
-        "none"
+        "normal"
     ],
     "429": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "430": [
         "dark",
@@ -1721,15 +1721,15 @@
     ],
     "431": [
         "normal",
-        "none"
+        "normal"
     ],
     "432": [
         "normal",
-        "none"
+        "normal"
     ],
     "433": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "434": [
         "poison",
@@ -1749,7 +1749,7 @@
     ],
     "438": [
         "rock",
-        "none"
+        "rock"
     ],
     "439": [
         "psychic",
@@ -1757,7 +1757,7 @@
     ],
     "440": [
         "normal",
-        "none"
+        "normal"
     ],
     "441": [
         "normal",
@@ -1781,11 +1781,11 @@
     ],
     "446": [
         "normal",
-        "none"
+        "normal"
     ],
     "447": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "448": [
         "fighting",
@@ -1793,11 +1793,11 @@
     ],
     "449": [
         "ground",
-        "none"
+        "ground"
     ],
     "450": [
         "ground",
-        "none"
+        "ground"
     ],
     "451": [
         "poison",
@@ -1817,15 +1817,15 @@
     ],
     "455": [
         "grass",
-        "none"
+        "grass"
     ],
     "456": [
         "water",
-        "none"
+        "water"
     ],
     "457": [
         "water",
-        "none"
+        "water"
     ],
     "458": [
         "water",
@@ -1849,7 +1849,7 @@
     ],
     "463": [
         "normal",
-        "none"
+        "normal"
     ],
     "464": [
         "ground",
@@ -1857,15 +1857,15 @@
     ],
     "465": [
         "grass",
-        "none"
+        "grass"
     ],
     "466": [
         "electric",
-        "none"
+        "electric"
     ],
     "467": [
         "fire",
-        "none"
+        "fire"
     ],
     "468": [
         "fairy",
@@ -1877,11 +1877,11 @@
     ],
     "470": [
         "grass",
-        "none"
+        "grass"
     ],
     "471": [
         "ice",
-        "none"
+        "ice"
     ],
     "472": [
         "ground",
@@ -1893,7 +1893,7 @@
     ],
     "474": [
         "normal",
-        "none"
+        "normal"
     ],
     "475": [
         "psychic",
@@ -1905,7 +1905,7 @@
     ],
     "477": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "478": [
         "ice",
@@ -1917,15 +1917,15 @@
     ],
     "480": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "481": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "482": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "483": [
         "steel",
@@ -1941,7 +1941,7 @@
     ],
     "486": [
         "normal",
-        "none"
+        "normal"
     ],
     "487": [
         "ghost",
@@ -1949,27 +1949,27 @@
     ],
     "488": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "489": [
         "water",
-        "none"
+        "water"
     ],
     "490": [
         "water",
-        "none"
+        "water"
     ],
     "491": [
         "dark",
-        "none"
+        "dark"
     ],
     "492": [
         "grass",
-        "none"
+        "grass"
     ],
     "493": [
         "normal",
-        "none"
+        "normal"
     ],
     "494": [
         "psychic",
@@ -1977,19 +1977,19 @@
     ],
     "495": [
         "grass",
-        "none"
+        "grass"
     ],
     "496": [
         "grass",
-        "none"
+        "grass"
     ],
     "497": [
         "grass",
-        "none"
+        "grass"
     ],
     "498": [
         "fire",
-        "none"
+        "fire"
     ],
     "499": [
         "fire",
@@ -2001,75 +2001,75 @@
     ],
     "501": [
         "water",
-        "none"
+        "water"
     ],
     "502": [
         "water",
-        "none"
+        "water"
     ],
     "503": [
         "water",
-        "none"
+        "water"
     ],
     "504": [
         "normal",
-        "none"
+        "normal"
     ],
     "505": [
         "normal",
-        "none"
+        "normal"
     ],
     "506": [
         "normal",
-        "none"
+        "normal"
     ],
     "507": [
         "normal",
-        "none"
+        "normal"
     ],
     "508": [
         "normal",
-        "none"
+        "normal"
     ],
     "509": [
         "dark",
-        "none"
+        "dark"
     ],
     "510": [
         "dark",
-        "none"
+        "dark"
     ],
     "511": [
         "grass",
-        "none"
+        "grass"
     ],
     "512": [
         "grass",
-        "none"
+        "grass"
     ],
     "513": [
         "fire",
-        "none"
+        "fire"
     ],
     "514": [
         "fire",
-        "none"
+        "fire"
     ],
     "515": [
         "water",
-        "none"
+        "water"
     ],
     "516": [
         "water",
-        "none"
+        "water"
     ],
     "517": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "518": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "519": [
         "normal",
@@ -2085,23 +2085,23 @@
     ],
     "522": [
         "electric",
-        "none"
+        "electric"
     ],
     "523": [
         "electric",
-        "none"
+        "electric"
     ],
     "524": [
         "rock",
-        "none"
+        "rock"
     ],
     "525": [
         "rock",
-        "none"
+        "rock"
     ],
     "526": [
         "rock",
-        "none"
+        "rock"
     ],
     "527": [
         "psychic",
@@ -2113,7 +2113,7 @@
     ],
     "529": [
         "ground",
-        "none"
+        "ground"
     ],
     "530": [
         "ground",
@@ -2121,23 +2121,23 @@
     ],
     "531": [
         "normal",
-        "none"
+        "normal"
     ],
     "532": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "533": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "534": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "535": [
         "water",
-        "none"
+        "water"
     ],
     "536": [
         "water",
@@ -2149,11 +2149,11 @@
     ],
     "538": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "539": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "540": [
         "bug",
@@ -2189,15 +2189,15 @@
     ],
     "548": [
         "grass",
-        "none"
+        "grass"
     ],
     "549": [
         "grass",
-        "none"
+        "grass"
     ],
     "550": [
         "water",
-        "none"
+        "water"
     ],
     "551": [
         "ground",
@@ -2213,15 +2213,15 @@
     ],
     "554": [
         "fire",
-        "none"
+        "fire"
     ],
     "555": [
         "fire",
-        "none"
+        "fire"
     ],
     "556": [
         "grass",
-        "none"
+        "grass"
     ],
     "557": [
         "bug",
@@ -2245,11 +2245,11 @@
     ],
     "562": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "563": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "564": [
         "water",
@@ -2269,51 +2269,51 @@
     ],
     "568": [
         "poison",
-        "none"
+        "poison"
     ],
     "569": [
         "poison",
-        "none"
+        "poison"
     ],
     "570": [
         "dark",
-        "none"
+        "dark"
     ],
     "571": [
         "dark",
-        "none"
+        "dark"
     ],
     "572": [
         "normal",
-        "none"
+        "normal"
     ],
     "573": [
         "normal",
-        "none"
+        "normal"
     ],
     "574": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "575": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "576": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "577": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "578": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "579": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "580": [
         "water",
@@ -2325,15 +2325,15 @@
     ],
     "582": [
         "ice",
-        "none"
+        "ice"
     ],
     "583": [
         "ice",
-        "none"
+        "ice"
     ],
     "584": [
         "ice",
-        "none"
+        "ice"
     ],
     "585": [
         "normal",
@@ -2349,7 +2349,7 @@
     ],
     "588": [
         "bug",
-        "none"
+        "bug"
     ],
     "589": [
         "bug",
@@ -2373,7 +2373,7 @@
     ],
     "594": [
         "water",
-        "none"
+        "water"
     ],
     "595": [
         "bug",
@@ -2393,35 +2393,35 @@
     ],
     "599": [
         "steel",
-        "none"
+        "steel"
     ],
     "600": [
         "steel",
-        "none"
+        "steel"
     ],
     "601": [
         "steel",
-        "none"
+        "steel"
     ],
     "602": [
         "electric",
-        "none"
+        "electric"
     ],
     "603": [
         "electric",
-        "none"
+        "electric"
     ],
     "604": [
         "electric",
-        "none"
+        "electric"
     ],
     "605": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "606": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "607": [
         "ghost",
@@ -2437,35 +2437,35 @@
     ],
     "610": [
         "dragon",
-        "none"
+        "dragon"
     ],
     "611": [
         "dragon",
-        "none"
+        "dragon"
     ],
     "612": [
         "dragon",
-        "none"
+        "dragon"
     ],
     "613": [
         "ice",
-        "none"
+        "ice"
     ],
     "614": [
         "ice",
-        "none"
+        "ice"
     ],
     "615": [
         "ice",
-        "none"
+        "ice"
     ],
     "616": [
         "bug",
-        "none"
+        "bug"
     ],
     "617": [
         "bug",
-        "none"
+        "bug"
     ],
     "618": [
         "ground",
@@ -2473,15 +2473,15 @@
     ],
     "619": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "620": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "621": [
         "dragon",
-        "none"
+        "dragon"
     ],
     "622": [
         "ground",
@@ -2501,7 +2501,7 @@
     ],
     "626": [
         "normal",
-        "none"
+        "normal"
     ],
     "627": [
         "normal",
@@ -2521,7 +2521,7 @@
     ],
     "631": [
         "fire",
-        "none"
+        "fire"
     ],
     "632": [
         "bug",
@@ -2561,7 +2561,7 @@
     ],
     "641": [
         "flying",
-        "none"
+        "flying"
     ],
     "642": [
         "electric",
@@ -2597,11 +2597,11 @@
     ],
     "650": [
         "grass",
-        "none"
+        "grass"
     ],
     "651": [
         "grass",
-        "none"
+        "grass"
     ],
     "652": [
         "grass",
@@ -2609,11 +2609,11 @@
     ],
     "653": [
         "fire",
-        "none"
+        "fire"
     ],
     "654": [
         "fire",
-        "none"
+        "fire"
     ],
     "655": [
         "fire",
@@ -2621,11 +2621,11 @@
     ],
     "656": [
         "water",
-        "none"
+        "water"
     ],
     "657": [
         "water",
-        "none"
+        "water"
     ],
     "658": [
         "water",
@@ -2633,7 +2633,7 @@
     ],
     "659": [
         "normal",
-        "none"
+        "normal"
     ],
     "660": [
         "normal",
@@ -2653,11 +2653,11 @@
     ],
     "664": [
         "bug",
-        "none"
+        "bug"
     ],
     "665": [
         "bug",
-        "none"
+        "bug"
     ],
     "666": [
         "bug",
@@ -2673,27 +2673,27 @@
     ],
     "669": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "670": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "671": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "672": [
         "grass",
-        "none"
+        "grass"
     ],
     "673": [
         "grass",
-        "none"
+        "grass"
     ],
     "674": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "675": [
         "fighting",
@@ -2701,15 +2701,15 @@
     ],
     "676": [
         "normal",
-        "none"
+        "normal"
     ],
     "677": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "678": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "679": [
         "steel",
@@ -2725,19 +2725,19 @@
     ],
     "682": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "683": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "684": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "685": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "686": [
         "dark",
@@ -2765,11 +2765,11 @@
     ],
     "692": [
         "water",
-        "none"
+        "water"
     ],
     "693": [
         "water",
-        "none"
+        "water"
     ],
     "694": [
         "electric",
@@ -2797,7 +2797,7 @@
     ],
     "700": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "701": [
         "fighting",
@@ -2813,15 +2813,15 @@
     ],
     "704": [
         "dragon",
-        "none"
+        "dragon"
     ],
     "705": [
         "dragon",
-        "none"
+        "dragon"
     ],
     "706": [
         "dragon",
-        "none"
+        "dragon"
     ],
     "707": [
         "steel",
@@ -2845,11 +2845,11 @@
     ],
     "712": [
         "ice",
-        "none"
+        "ice"
     ],
     "713": [
         "ice",
-        "none"
+        "ice"
     ],
     "714": [
         "flying",
@@ -2861,7 +2861,7 @@
     ],
     "716": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "717": [
         "dark",
@@ -2897,11 +2897,11 @@
     ],
     "725": [
         "fire",
-        "none"
+        "fire"
     ],
     "726": [
         "fire",
-        "none"
+        "fire"
     ],
     "727": [
         "fire",
@@ -2909,11 +2909,11 @@
     ],
     "728": [
         "water",
-        "none"
+        "water"
     ],
     "729": [
         "water",
-        "none"
+        "water"
     ],
     "730": [
         "water",
@@ -2933,15 +2933,15 @@
     ],
     "734": [
         "normal",
-        "none"
+        "normal"
     ],
     "735": [
         "normal",
-        "none"
+        "normal"
     ],
     "736": [
         "bug",
-        "none"
+        "bug"
     ],
     "737": [
         "bug",
@@ -2953,7 +2953,7 @@
     ],
     "739": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "740": [
         "fighting",
@@ -2973,15 +2973,15 @@
     ],
     "744": [
         "rock",
-        "none"
+        "rock"
     ],
     "745": [
         "rock",
-        "none"
+        "rock"
     ],
     "746": [
         "water",
-        "none"
+        "water"
     ],
     "747": [
         "poison",
@@ -2993,11 +2993,11 @@
     ],
     "749": [
         "ground",
-        "none"
+        "ground"
     ],
     "750": [
         "ground",
-        "none"
+        "ground"
     ],
     "751": [
         "water",
@@ -3009,11 +3009,11 @@
     ],
     "753": [
         "grass",
-        "none"
+        "grass"
     ],
     "754": [
         "grass",
-        "none"
+        "grass"
     ],
     "755": [
         "grass",
@@ -3041,19 +3041,19 @@
     ],
     "761": [
         "grass",
-        "none"
+        "grass"
     ],
     "762": [
         "grass",
-        "none"
+        "grass"
     ],
     "763": [
         "grass",
-        "none"
+        "grass"
     ],
     "764": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "765": [
         "normal",
@@ -3061,7 +3061,7 @@
     ],
     "766": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "767": [
         "bug",
@@ -3081,15 +3081,15 @@
     ],
     "771": [
         "water",
-        "none"
+        "water"
     ],
     "772": [
         "normal",
-        "none"
+        "normal"
     ],
     "773": [
         "normal",
-        "none"
+        "normal"
     ],
     "774": [
         "rock",
@@ -3097,7 +3097,7 @@
     ],
     "775": [
         "normal",
-        "none"
+        "normal"
     ],
     "776": [
         "fire",
@@ -3125,7 +3125,7 @@
     ],
     "782": [
         "dragon",
-        "none"
+        "dragon"
     ],
     "783": [
         "dragon",
@@ -3153,11 +3153,11 @@
     ],
     "789": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "790": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "791": [
         "psychic",
@@ -3181,7 +3181,7 @@
     ],
     "796": [
         "electric",
-        "none"
+        "electric"
     ],
     "797": [
         "steel",
@@ -3197,7 +3197,7 @@
     ],
     "800": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "801": [
         "steel",
@@ -3209,7 +3209,7 @@
     ],
     "803": [
         "poison",
-        "none"
+        "poison"
     ],
     "804": [
         "poison",
@@ -3225,67 +3225,67 @@
     ],
     "807": [
         "electric",
-        "none"
+        "electric"
     ],
     "808": [
         "steel",
-        "none"
+        "steel"
     ],
     "809": [
         "steel",
-        "none"
+        "steel"
     ],
     "810": [
         "grass",
-        "none"
+        "grass"
     ],
     "811": [
         "grass",
-        "none"
+        "grass"
     ],
     "812": [
         "grass",
-        "none"
+        "grass"
     ],
     "813": [
         "fire",
-        "none"
+        "fire"
     ],
     "814": [
         "fire",
-        "none"
+        "fire"
     ],
     "815": [
         "fire",
-        "none"
+        "fire"
     ],
     "816": [
         "water",
-        "none"
+        "water"
     ],
     "817": [
         "water",
-        "none"
+        "water"
     ],
     "818": [
         "water",
-        "none"
+        "water"
     ],
     "819": [
         "normal",
-        "none"
+        "normal"
     ],
     "820": [
         "normal",
-        "none"
+        "normal"
     ],
     "821": [
         "flying",
-        "none"
+        "flying"
     ],
     "822": [
         "flying",
-        "none"
+        "flying"
     ],
     "823": [
         "flying",
@@ -3293,7 +3293,7 @@
     ],
     "824": [
         "bug",
-        "none"
+        "bug"
     ],
     "825": [
         "bug",
@@ -3305,31 +3305,31 @@
     ],
     "827": [
         "dark",
-        "none"
+        "dark"
     ],
     "828": [
         "dark",
-        "none"
+        "dark"
     ],
     "829": [
         "grass",
-        "none"
+        "grass"
     ],
     "830": [
         "grass",
-        "none"
+        "grass"
     ],
     "831": [
         "normal",
-        "none"
+        "normal"
     ],
     "832": [
         "normal",
-        "none"
+        "normal"
     ],
     "833": [
         "water",
-        "none"
+        "water"
     ],
     "834": [
         "water",
@@ -3337,15 +3337,15 @@
     ],
     "835": [
         "electric",
-        "none"
+        "electric"
     ],
     "836": [
         "electric",
-        "none"
+        "electric"
     ],
     "837": [
         "rock",
-        "none"
+        "rock"
     ],
     "838": [
         "rock",
@@ -3369,11 +3369,11 @@
     ],
     "843": [
         "ground",
-        "none"
+        "ground"
     ],
     "844": [
         "ground",
-        "none"
+        "ground"
     ],
     "845": [
         "flying",
@@ -3381,11 +3381,11 @@
     ],
     "846": [
         "water",
-        "none"
+        "water"
     ],
     "847": [
         "water",
-        "none"
+        "water"
     ],
     "848": [
         "electric",
@@ -3405,27 +3405,27 @@
     ],
     "852": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "853": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "854": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "855": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "856": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "857": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "858": [
         "psychic",
@@ -3449,15 +3449,15 @@
     ],
     "863": [
         "steel",
-        "none"
+        "steel"
     ],
     "864": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "865": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "866": [
         "ice",
@@ -3469,19 +3469,19 @@
     ],
     "868": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "869": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "870": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "871": [
         "electric",
-        "none"
+        "electric"
     ],
     "872": [
         "ice",
@@ -3493,11 +3493,11 @@
     ],
     "874": [
         "rock",
-        "none"
+        "rock"
     ],
     "875": [
         "ice",
-        "none"
+        "ice"
     ],
     "876": [
         "psychic",
@@ -3509,11 +3509,11 @@
     ],
     "878": [
         "steel",
-        "none"
+        "steel"
     ],
     "879": [
         "steel",
-        "none"
+        "steel"
     ],
     "880": [
         "electric",
@@ -3549,11 +3549,11 @@
     ],
     "888": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "889": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "890": [
         "poison",
@@ -3561,7 +3561,7 @@
     ],
     "891": [
         "fighting",
-        "none"
+        "fighting"
     ],
     "892": [
         "fighting",
@@ -3573,19 +3573,19 @@
     ],
     "894": [
         "electric",
-        "none"
+        "electric"
     ],
     "895": [
         "dragon",
-        "none"
+        "dragon"
     ],
     "896": [
         "ice",
-        "none"
+        "ice"
     ],
     "897": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "898": [
         "psychic",
@@ -3621,11 +3621,11 @@
     ],
     "906": [
         "grass",
-        "none"
+        "grass"
     ],
     "907": [
         "grass",
-        "none"
+        "grass"
     ],
     "908": [
         "grass",
@@ -3633,11 +3633,11 @@
     ],
     "909": [
         "fire",
-        "none"
+        "fire"
     ],
     "910": [
         "fire",
-        "none"
+        "fire"
     ],
     "911": [
         "fire",
@@ -3645,11 +3645,11 @@
     ],
     "912": [
         "water",
-        "none"
+        "water"
     ],
     "913": [
         "water",
-        "none"
+        "water"
     ],
     "914": [
         "water",
@@ -3657,23 +3657,23 @@
     ],
     "915": [
         "normal",
-        "none"
+        "normal"
     ],
     "916": [
         "normal",
-        "none"
+        "normal"
     ],
     "917": [
         "bug",
-        "none"
+        "bug"
     ],
     "918": [
         "bug",
-        "none"
+        "bug"
     ],
     "919": [
         "bug",
-        "none"
+        "bug"
     ],
     "920": [
         "bug",
@@ -3681,7 +3681,7 @@
     ],
     "921": [
         "electric",
-        "none"
+        "electric"
     ],
     "922": [
         "electric",
@@ -3693,19 +3693,19 @@
     ],
     "924": [
         "normal",
-        "none"
+        "normal"
     ],
     "925": [
         "normal",
-        "none"
+        "normal"
     ],
     "926": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "927": [
         "fairy",
-        "none"
+        "fairy"
     ],
     "928": [
         "grass",
@@ -3725,19 +3725,19 @@
     ],
     "932": [
         "rock",
-        "none"
+        "rock"
     ],
     "933": [
         "rock",
-        "none"
+        "rock"
     ],
     "934": [
         "rock",
-        "none"
+        "rock"
     ],
     "935": [
         "fire",
-        "none"
+        "fire"
     ],
     "936": [
         "fire",
@@ -3749,11 +3749,11 @@
     ],
     "938": [
         "electric",
-        "none"
+        "electric"
     ],
     "939": [
         "electric",
-        "none"
+        "electric"
     ],
     "940": [
         "electric",
@@ -3765,11 +3765,11 @@
     ],
     "942": [
         "dark",
-        "none"
+        "dark"
     ],
     "943": [
         "dark",
-        "none"
+        "dark"
     ],
     "944": [
         "poison",
@@ -3797,11 +3797,11 @@
     ],
     "950": [
         "rock",
-        "none"
+        "rock"
     ],
     "951": [
         "grass",
-        "none"
+        "grass"
     ],
     "952": [
         "grass",
@@ -3809,7 +3809,7 @@
     ],
     "953": [
         "bug",
-        "none"
+        "bug"
     ],
     "954": [
         "bug",
@@ -3817,11 +3817,11 @@
     ],
     "955": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "956": [
         "psychic",
-        "none"
+        "psychic"
     ],
     "957": [
         "fairy",
@@ -3837,11 +3837,11 @@
     ],
     "960": [
         "water",
-        "none"
+        "water"
     ],
     "961": [
         "water",
-        "none"
+        "water"
     ],
     "962": [
         "flying",
@@ -3849,11 +3849,11 @@
     ],
     "963": [
         "water",
-        "none"
+        "water"
     ],
     "964": [
         "water",
-        "none"
+        "water"
     ],
     "965": [
         "steel",
@@ -3869,7 +3869,7 @@
     ],
     "968": [
         "steel",
-        "none"
+        "steel"
     ],
     "969": [
         "rock",
@@ -3881,11 +3881,11 @@
     ],
     "971": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "972": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "973": [
         "flying",
@@ -3893,11 +3893,11 @@
     ],
     "974": [
         "ice",
-        "none"
+        "ice"
     ],
     "975": [
         "ice",
-        "none"
+        "ice"
     ],
     "976": [
         "water",
@@ -3905,7 +3905,7 @@
     ],
     "977": [
         "water",
-        "none"
+        "water"
     ],
     "978": [
         "dragon",
@@ -3925,7 +3925,7 @@
     ],
     "982": [
         "normal",
-        "none"
+        "normal"
     ],
     "983": [
         "dark",
@@ -3993,7 +3993,7 @@
     ],
     "999": [
         "ghost",
-        "none"
+        "ghost"
     ],
     "1000": [
         "steel",
@@ -4065,7 +4065,7 @@
     ],
     "1017": [
         "grass",
-        "none"
+        "grass"
     ],
     "1018": [
         "steel",
@@ -4093,7 +4093,7 @@
     ],
     "1024": [
         "normal",
-        "none"
+        "normal"
     ],
     "1025": [
         "poison",

@@ -11,18 +11,17 @@ IMAGE_DIR = 'pokemon_sprites'
 JSON_PATH = 'pokemon_types.json'
 PROCESSED_JSON_PATH = 'pokemon_types_processed.json'
 
-def preprocess_json_file(input_json_path, output_json_path, placeholder="none"):
+def preprocess_json_file(input_json_path, output_json_path):
     """
-    Loads the JSON file, and for any Pokémon with only one type,
-    appends a placeholder so that every Pokémon has two types.
+    Loads the JSON file and, for any Pokémon with only one type,
+    duplicates that type so that every Pokémon has two types.
     """
     with open(input_json_path, "r") as f:
         type_mapping = json.load(f)
-    # Process each entry: if only one type, append the placeholder
     for dex, types in type_mapping.items():
         if len(types) == 1:
-            type_mapping[dex] = types + [placeholder]
-    # Save the processed JSON mapping
+            # Duplicate the single type
+            type_mapping[dex] = [types[0], types[0]]
     with open(output_json_path, "w") as f:
         json.dump(type_mapping, f, indent=4)
     return type_mapping
