@@ -90,7 +90,7 @@ def get_data():
     """
     Preprocesses the JSON (if needed), loads data, and splits it into training and validation sets.
     Returns:
-      X_train, X_val, y_train, y_val, type_to_index
+      X_train, X_val, y_train, y_val, paths_train, paths_val, type_to_index
     """
     # Preprocess JSON only if the processed file doesn't exist
     if not os.path.exists(PROCESSED_JSON_PATH):
@@ -99,12 +99,15 @@ def get_data():
     image_paths, raw_labels = load_data(IMAGE_DIR, PROCESSED_JSON_PATH)
     type_to_index = build_type_index(raw_labels)
     X, y = create_dataset(image_paths, raw_labels, type_to_index)
-    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
-    return X_train, X_val, y_train, y_val, type_to_index
+    # Also split the image_paths so we know which images belong to which set
+    X_train, X_val, y_train, y_val, paths_train, paths_val = train_test_split(
+        X, y, image_paths, test_size=0.2, random_state=42)
+    return X_train, X_val, y_train, y_val, paths_train, paths_val, type_to_index
 
-# Allow running this module standalone for testing purposes.
+# For testing the preprocessing steps independently.
 if __name__ == "__main__":
-    X_train, X_val, y_train, y_val, type_to_index = get_data()
+    X_train, X_val, y_train, y_val, paths_train, paths_val, type_to_index = get_data()
     print("Training data shape:", X_train.shape, y_train.shape)
     print("Validation data shape:", X_val.shape, y_val.shape)
+    print("Validation image paths:", paths_val[:5])  # Print a few sample paths
     print("Type mapping:", type_to_index)

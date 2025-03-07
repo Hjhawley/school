@@ -2,8 +2,8 @@
 import tensorflow as tf
 from preprocess import IMG_SIZE, get_data
 
-# Load data and type mapping from preprocess.py
-X_train, X_val, y_train, y_val, type_to_index = get_data()
+# Load training data (we don't need validation paths here)
+X_train, X_val, y_train, y_val, _, _, type_to_index = get_data()
 num_types = len(type_to_index)
 
 # Build the CNN model with on-the-fly horizontal flip augmentation
@@ -25,6 +25,6 @@ model.summary()
 # Train the model
 history = model.fit(X_train, y_train, epochs=10, validation_data=(X_val, y_val))
 
-# Save the trained model to a .keras file
+# Save the model
 model.save("model.keras")
 print("Model saved as model.keras")
