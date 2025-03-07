@@ -31,7 +31,29 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(num_types, activation='sigmoid')  # Multi-label output
 ])
 
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+def at_least_one_accuracy(y_true, y_pred):
+    # Computes the fraction of samples for which at least one of the true labels
+    # appears in the top-2 predicted labels.
+
+    # Get the top 2 predicted indices for each sample.
+    top2 = tf.math.top_k(y_pred, k=2).indices  # shape: (batch_size, 2)
+    
+    # Convert ground truth to boolean.
+    true_mask = tf.cast(y_true, tf.bool)  # shape: (batch_size, num_types)
+    
+    # For each sample, gather the boolean values at the top2 indices.
+    # We use batch_dims=1 so that for each row, we gather from that row.
+    top2_true = tf.gather(true_mask, top2, batch_dims=1)  # shape: (batch_size, 2)
+    
+    # A sample is correct if any of the top2 predictions is True.
+    sample_correct = tf.reduce_any(top2_true, axis=1)  # shape: (batch_size,)
+    
+    # Convert booleans to floats (True -> 1.0, False -> 0.0) and average.
+    return tf.reduce_mean(tf.cast(sample_correct, tf.float32))
+
+model.compile(optimizer='adam',
+              loss='binary_crossentropy',
+              metrics=['accuracy', at_least_one_accuracy])
 model.summary()
 
 # Train the model
