@@ -101,7 +101,7 @@ def get_data():
     X, y = create_dataset(image_paths, raw_labels, type_to_index)
     # Also split the image_paths so we know which images belong to which set
     X_train, X_val, y_train, y_val, paths_train, paths_val = train_test_split(
-        X, y, image_paths, test_size=0.2, random_state=42)
+        X, y, image_paths, test_size=0.2, random_state=1996) # update seed here
     return X_train, X_val, y_train, y_val, paths_train, paths_val, type_to_index
 
 # For testing the preprocessing steps independently.
