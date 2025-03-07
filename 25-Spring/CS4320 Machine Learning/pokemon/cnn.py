@@ -10,7 +10,7 @@ num_types = len(type_to_index)
 
 # Build the CNN model with on-the-fly horizontal flip augmentation
 model = Sequential([
-    # RandomFlip applies a horizontal flip to all images during training
+    # This layer applies a random horizontal flip to all images during training.
     RandomFlip("horizontal", input_shape=(IMG_SIZE[0], IMG_SIZE[1], 1)),
     Conv2D(32, (3, 3), activation='relu'),
     MaxPooling2D((2, 2)),
@@ -26,3 +26,7 @@ model.summary()
 
 # Train the model
 history = model.fit(X_train, y_train, epochs=10, validation_data=(X_val, y_val))
+
+# Save the trained model to a .keras file
+model.save("model.keras")
+print("Model saved as model.keras")
