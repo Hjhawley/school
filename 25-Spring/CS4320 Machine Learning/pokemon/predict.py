@@ -20,15 +20,18 @@ def load_type_mapping(json_path="pokemon_types_processed.json"):
     index_to_type = {i: t for t, i in type_to_index.items()}
     return type_to_index, index_to_type
 
-def predict_image(image_path, model, index_to_type, threshold=0.5):
+def predict_image(image_path, model, index_to_type):
     """
     Loads and preprocesses the image, then uses the model to predict type probabilities.
-    Returns a list of predicted type names (with probability above threshold) and the full probability array.
+    Returns the two type names with the highest probabilities and the full probability array.
     """
     img = preprocess_image(image_path)
     img = np.expand_dims(img, axis=0)  # add batch dimension
     preds = model.predict(img)[0]
-    predicted_labels = [index_to_type[i] for i, prob in enumerate(preds) if prob >= threshold]
+    # Get the indices of the top two predictions
+    sorted_indices = preds.argsort()[::-1]
+    top_two_indices = sorted_indices[:2]
+    predicted_labels = [index_to_type[i] for i in top_two_indices]
     return predicted_labels, preds
 
 if __name__ == "__main__":
@@ -43,7 +46,7 @@ if __name__ == "__main__":
     csv_filename = "validation_predictions.csv"
     with open(csv_filename, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(["image_path", "predicted_labels", "probabilities"])
+        writer.writerow(["image_path", "top_two_predictions", "full_probabilities"])
         for img_path in paths_val:
             predicted_labels, probabilities = predict_image(img_path, model, index_to_type)
             writer.writerow([img_path, ",".join(predicted_labels), probabilities.tolist()])
