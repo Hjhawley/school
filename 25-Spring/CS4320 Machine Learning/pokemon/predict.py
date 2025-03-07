@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 import json
 from preprocess import IMG_SIZE, preprocess_image, get_data
-from cnn import at_least_one_accuracy
+from train import at_least_one_accuracy
 
 def load_type_mapping(json_path="pokemon_types_processed.json"):
     """
