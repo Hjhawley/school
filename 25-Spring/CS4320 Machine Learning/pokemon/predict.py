@@ -37,7 +37,7 @@ def predict_image(image_path, model, index_to_type):
 
 if __name__ == "__main__":
     # Load the trained model
-    model = tf.keras.models.load_model("model-good.keras", custom_objects={'at_least_one_accuracy': at_least_one_accuracy})
+    model = tf.keras.models.load_model("model.keras", custom_objects={'at_least_one_accuracy': at_least_one_accuracy})
     type_to_index, index_to_type = load_type_mapping()
 
     # Get validation file paths from preprocess.py
