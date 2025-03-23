@@ -9,11 +9,10 @@ import (
 	"sync"
 	"time"
 
-	pb "chord/protocol" // Update as needed
+	pb "chord/protocol"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
-
 
 const (
 	defaultPort       = "3410"
@@ -128,72 +127,68 @@ func (n *Node) GetAll(ctx context.Context, req *pb.GetAllRequest) (*pb.GetAllRes
 }
 
 func (n *Node) checkPredecessor() {
-	// TODO: Student will implement this
+	// TODO
 }
 
 func (n *Node) stabilize() {
-    n.mu.Lock()
-    successor := n.Successors[0] // Get first successor
-    n.mu.Unlock()
+	n.mu.Lock()
+	successor := n.Successors[0]
+	n.mu.Unlock()
 
-    if successor == n.Address {
-        // If we're our own successor (only one node in the ring), nothing to do
-        return
-    }
+	if successor == n.Address {
+		return
+	}
 
-    // Contact successor to get its predecessor
-    ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-    defer cancel()
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
 
-    conn, err := grpc.Dial(successor, grpc.WithTransportCredentials(insecure.NewCredentials()))
-    if err != nil {
-        log.Printf("stabilize: failed to connect to successor %s: %v", successor, err)
-        return
-    }
-    defer conn.Close()
+	conn, err := grpc.Dial(successor, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Printf("stabilize: failed to connect to successor %s: %v", successor, err)
+		return
+	}
+	defer conn.Close()
 
-    client := pb.NewChordClient(conn)
-    response, err := client.GetPredecessorAndSuccessors(ctx, &pb.GetPredecessorAndSuccessorsRequest{})
-    if err != nil {
-        log.Printf("stabilize: failed to get predecessor from successor %s: %v", successor, err)
-        return
-    }
+	client := pb.NewChordClient(conn)
+	response, err := client.GetPredecessorAndSuccessors(ctx, &pb.GetPredecessorAndSuccessorsRequest{})
+	if err != nil {
+		log.Printf("stabilize: failed to get predecessor from successor %s: %v", successor, err)
+		return
+	}
 
-    pred := response.Predecessor
-    if pred != "" && pred != n.Address {
-        predID := hash(pred)
-        selfID := hash(n.Address)
-        succID := hash(successor)
+	pred := response.Predecessor
+	if pred != "" && pred != n.Address {
+		predID := hash(pred)
+		selfID := hash(n.Address)
+		succID := hash(successor)
 
-        if between(selfID, predID, succID, false) {
-            // If the predecessor of our successor is a better fit, update successor
-            log.Printf("stabilize: updating successor from %s to %s", successor, pred)
-            n.mu.Lock()
-            n.Successors[0] = pred
-            n.mu.Unlock()
-        }
-    }
+		if between(selfID, predID, succID, false) {
+			log.Printf("stabilize: updating successor from %s to %s", successor, pred)
+			n.mu.Lock()
+			n.Successors[0] = pred
+			n.mu.Unlock()
+		}
+	}
 
-    // Notify our (possibly updated) successor that we exist
-    notifyCtx, notifyCancel := context.WithTimeout(context.Background(), time.Second)
-    defer notifyCancel()
+	notifyCtx, notifyCancel := context.WithTimeout(context.Background(), time.Second)
+	defer notifyCancel()
 
-    _, err = client.Notify(notifyCtx, &pb.NotifyRequest{Address: n.Address})
-    if err != nil {
-        log.Printf("stabilize: notify failed: %v", err)
-    }
+	_, err = client.Notify(notifyCtx, &pb.NotifyRequest{Address: n.Address})
+	if err != nil {
+		log.Printf("stabilize: notify failed: %v", err)
+	}
 }
 
 func (n *Node) Notify(ctx context.Context, req *pb.NotifyRequest) (*pb.NotifyResponse, error) {
-    n.mu.Lock()
-    defer n.mu.Unlock()
+	n.mu.Lock()
+	defer n.mu.Unlock()
 
-    if n.Predecessor == "" || between(hash(n.Predecessor), hash(req.Address), hash(n.Address), false) {
-        log.Printf("notify: updating predecessor from %s to %s", n.Predecessor, req.Address)
-        n.Predecessor = req.Address
-    }
+	if n.Predecessor == "" || between(hash(n.Predecessor), hash(req.Address), hash(n.Address), false) {
+		log.Printf("notify: updating predecessor from %s to %s", n.Predecessor, req.Address)
+		n.Predecessor = req.Address
+	}
 
-    return &pb.NotifyResponse{}, nil
+	return &pb.NotifyResponse{}, nil
 }
 
 // GetPredecessorAndSuccessors returns the predecessor and successors list
@@ -201,7 +196,7 @@ func (n *Node) GetPredecessorAndSuccessors(ctx context.Context, req *pb.GetPrede
 	n.mu.RLock()
 	defer n.mu.RUnlock()
 
-	// Ensure we return a valid successor list (minimum 1)
+	// Return a valid successor list (minimum 1)
 	var successors []string
 	if len(n.Successors) > 0 {
 		successors = append(successors, n.Successors...)
@@ -214,41 +209,65 @@ func (n *Node) GetPredecessorAndSuccessors(ctx context.Context, req *pb.GetPrede
 }
 
 func (n *Node) fixFingers(nextFinger int) int {
-	// TODO: Student will implement this
 	nextFinger++
 	if nextFinger > keySize {
 		nextFinger = 1
 	}
+
+	id := jump(n.Address, nextFinger)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	// Lookup node responsible for this id
+	client := pb.NewChordClient(grpcClient(n.Successors[0]))
+	res, err := client.FindSuccessor(ctx, &pb.FindSuccessorRequest{Id: id.String()})
+	if err != nil {
+		log.Printf("fixFingers: failed to find successor for finger[%d]: %v", nextFinger, err)
+		return nextFinger
+	}
+
+	n.mu.Lock()
+	n.FingerTable[nextFinger] = res.Address
+	n.mu.Unlock()
+
+	log.Printf("fixFingers: updated finger[%d] to %s", nextFinger, res.Address)
 	return nextFinger
 }
 
+func grpcClient(address string) *grpc.ClientConn {
+	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("grpcClient: failed to dial %s: %v", address, err)
+	}
+	return conn
+}
+
 func (n *Node) closestPrecedingNode(id *big.Int) string {
-    selfID := hash(n.Address)
-    for i := keySize; i >= 1; i-- {
-        finger := n.FingerTable[i]
-        if finger != "" && between(selfID, hash(finger), id, false) {
-            return finger
-        }
-    }
-    return n.Successors[0] // fallback
+	selfID := hash(n.Address)
+	for i := keySize; i >= 1; i-- {
+		finger := n.FingerTable[i]
+		if finger != "" && between(selfID, hash(finger), id, false) {
+			return finger
+		}
+	}
+	return n.Successors[0]
 }
 
 func (n *Node) FindSuccessor(ctx context.Context, req *pb.FindSuccessorRequest) (*pb.FindSuccessorResponse, error) {
-    id := new(big.Int)
-    id.SetString(req.Id, 10)
+	id := new(big.Int)
+	id.SetString(req.Id, 10)
 
-    n.mu.RLock()
-    selfID := hash(n.Address)
-    succID := hash(n.Successors[0])
-    n.mu.RUnlock()
+	n.mu.RLock()
+	selfID := hash(n.Address)
+	succID := hash(n.Successors[0])
+	n.mu.RUnlock()
 
-    if between(selfID, id, succID, true) {
-        return &pb.FindSuccessorResponse{Address: n.Successors[0]}, nil
-    }
+	if between(selfID, id, succID, true) {
+		return &pb.FindSuccessorResponse{Address: n.Successors[0]}, nil
+	}
 
-    // Otherwise, forward to closest preceding node
-    next := n.closestPrecedingNode(id)
-    return &pb.FindSuccessorResponse{Address: next}, nil
+	next := n.closestPrecedingNode(id)
+	return &pb.FindSuccessorResponse{Address: next}, nil
 }
 
 // format an address for printing
