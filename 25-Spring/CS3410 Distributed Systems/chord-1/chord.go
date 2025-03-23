@@ -26,7 +26,7 @@ var (
 	hashMod = new(big.Int).Exp(big.NewInt(2), big.NewInt(keySize), nil)
 )
 
-// Node represents a node in the Chord DHT
+// Node represents a node in the Chord DHT.
 type Node struct {
 	pb.UnimplementedChordServer
 	mu sync.RWMutex
@@ -39,29 +39,23 @@ type Node struct {
 	Bucket map[string]string
 }
 
-// get the sha1 hash of a string as a bigint
+// hash computes the sha1 hash of a string as a big.Int.
 func hash(elt string) *big.Int {
 	hasher := sha1.New()
 	hasher.Write([]byte(elt))
 	return new(big.Int).SetBytes(hasher.Sum(nil))
 }
 
-// calculate the address of a point somewhere across the ring
-// this gets the target point for a given finger table entry
-// the successor of this point is the finger table entry
+// jump calculates the address for a finger table entry.
 func jump(address string, fingerentry int) *big.Int {
 	n := hash(address)
-
 	fingerentryminus1 := big.NewInt(int64(fingerentry) - 1)
 	distance := new(big.Int).Exp(two, fingerentryminus1, nil)
-
 	sum := new(big.Int).Add(n, distance)
-
 	return new(big.Int).Mod(sum, hashMod)
 }
 
-// returns true if elt is between start and end, accounting for the right
-// if inclusive is true, it can match the end
+// between returns true if elt is between start and end on the ring.
 func between(start, elt, end *big.Int, inclusive bool) bool {
 	if end.Cmp(start) > 0 {
 		return (start.Cmp(elt) < 0 && elt.Cmp(end) < 0) || (inclusive && elt.Cmp(end) == 0)
@@ -70,66 +64,89 @@ func between(start, elt, end *big.Int, inclusive bool) bool {
 	}
 }
 
-// Ping implements the Ping RPC method
+// Ping is a simple health check.
 func (n *Node) Ping(ctx context.Context, req *pb.PingRequest) (*pb.PingResponse, error) {
-	log.Print("ping: received request")
+	//log.Print("ping: received request")
 	return &pb.PingResponse{}, nil
 }
 
-// Put implements the Put RPC method
+// Put stores a key-value pair in the node’s bucket.
 func (n *Node) Put(ctx context.Context, req *pb.PutRequest) (*pb.PutResponse, error) {
 	n.mu.Lock()
 	defer n.mu.Unlock()
-	log.Print("put: [", req.Key, "] => [", req.Value, "]")
+	log.Printf("put: [%s] => [%s]", req.Key, req.Value)
 	n.Bucket[req.Key] = req.Value
 	return &pb.PutResponse{}, nil
 }
 
-// Get implements the Get RPC method
+// Get retrieves a value for a key.
 func (n *Node) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
 	n.mu.RLock()
 	defer n.mu.RUnlock()
 	value, exists := n.Bucket[req.Key]
 	if !exists {
-		log.Print("get: [", req.Key, "] miss")
+		log.Printf("get: [%s] miss", req.Key)
 		return &pb.GetResponse{Value: ""}, nil
 	}
-	log.Print("get: [", req.Key, "] found [", value, "]")
+	log.Printf("get: [%s] found [%s]", req.Key, value)
 	return &pb.GetResponse{Value: value}, nil
 }
 
-// Delete implements the Delete RPC method
+// Delete removes a key from the bucket.
 func (n *Node) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.DeleteResponse, error) {
 	n.mu.Lock()
 	defer n.mu.Unlock()
 	if _, exists := n.Bucket[req.Key]; exists {
-		log.Print("delete: found and deleted [", req.Key, "]")
+		log.Printf("delete: found and deleted [%s]", req.Key)
 		delete(n.Bucket, req.Key)
 	} else {
-		log.Print("delete: not found [", req.Key, "]")
+		log.Printf("delete: not found [%s]", req.Key)
 	}
 	return &pb.DeleteResponse{}, nil
 }
 
-// GetAll implements the GetAll RPC method
+// GetAll returns all key-value pairs.
 func (n *Node) GetAll(ctx context.Context, req *pb.GetAllRequest) (*pb.GetAllResponse, error) {
 	n.mu.RLock()
 	defer n.mu.RUnlock()
 	log.Printf("getall: returning %d key-value pairs", len(n.Bucket))
-
-	// Create a copy of the bucket map
 	keyValues := make(map[string]string)
 	for k, v := range n.Bucket {
 		keyValues[k] = v
 	}
-
 	return &pb.GetAllResponse{KeyValues: keyValues}, nil
 }
 
+// checkPredecessor pings the predecessor and resets it if unreachable.
 func (n *Node) checkPredecessor() {
-	// TODO
+	n.mu.RLock()
+	pred := n.Predecessor
+	n.mu.RUnlock()
+	if pred == "" || pred == n.Address {
+		return
+	}
+	conn, err := grpc.Dial(pred, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Printf("checkPredecessor: failed to connect to %s: %v", pred, err)
+		n.mu.Lock()
+		n.Predecessor = ""
+		n.mu.Unlock()
+		return
+	}
+	defer conn.Close()
+	client := pb.NewChordClient(conn)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	_, err = client.Ping(ctx, &pb.PingRequest{})
+	if err != nil {
+		log.Printf("checkPredecessor: ping to %s failed: %v", pred, err)
+		n.mu.Lock()
+		n.Predecessor = ""
+		n.mu.Unlock()
+	}
 }
 
+// stabilize maintains the successor pointer and notifies the successor.
 func (n *Node) stabilize() {
 	n.mu.Lock()
 	successor := n.Successors[0]
@@ -161,7 +178,6 @@ func (n *Node) stabilize() {
 		predID := hash(pred)
 		selfID := hash(n.Address)
 		succID := hash(successor)
-
 		if between(selfID, predID, succID, false) {
 			log.Printf("stabilize: updating successor from %s to %s", successor, pred)
 			n.mu.Lock()
@@ -179,35 +195,32 @@ func (n *Node) stabilize() {
 	}
 }
 
+// Notify is invoked by another node to suggest a new predecessor.
 func (n *Node) Notify(ctx context.Context, req *pb.NotifyRequest) (*pb.NotifyResponse, error) {
 	n.mu.Lock()
 	defer n.mu.Unlock()
-
 	if n.Predecessor == "" || between(hash(n.Predecessor), hash(req.Address), hash(n.Address), false) {
 		log.Printf("notify: updating predecessor from %s to %s", n.Predecessor, req.Address)
 		n.Predecessor = req.Address
 	}
-
 	return &pb.NotifyResponse{}, nil
 }
 
-// GetPredecessorAndSuccessors returns the predecessor and successors list
+// GetPredecessorAndSuccessors returns the predecessor and successors list.
 func (n *Node) GetPredecessorAndSuccessors(ctx context.Context, req *pb.GetPredecessorAndSuccessorsRequest) (*pb.GetPredecessorAndSuccessorsResponse, error) {
 	n.mu.RLock()
 	defer n.mu.RUnlock()
-
-	// Return a valid successor list (minimum 1)
 	var successors []string
 	if len(n.Successors) > 0 {
 		successors = append(successors, n.Successors...)
 	}
-
 	return &pb.GetPredecessorAndSuccessorsResponse{
 		Predecessor: n.Predecessor,
 		Successors:  successors,
 	}, nil
 }
 
+// fixFingers updates one finger table entry per call.
 func (n *Node) fixFingers(nextFinger int) int {
 	nextFinger++
 	if nextFinger > keySize {
@@ -218,7 +231,6 @@ func (n *Node) fixFingers(nextFinger int) int {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	// Lookup node responsible for this id
 	client := pb.NewChordClient(grpcClient(n.Successors[0]))
 	res, err := client.FindSuccessor(ctx, &pb.FindSuccessorRequest{Id: id.String()})
 	if err != nil {
@@ -230,10 +242,11 @@ func (n *Node) fixFingers(nextFinger int) int {
 	n.FingerTable[nextFinger] = res.Address
 	n.mu.Unlock()
 
-	log.Printf("fixFingers: updated finger[%d] to %s", nextFinger, res.Address)
+	//log.Printf("fixFingers: updated finger[%d] to %s", nextFinger, res.Address)
 	return nextFinger
 }
 
+// grpcClient creates a new gRPC client connection.
 func grpcClient(address string) *grpc.ClientConn {
 	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
@@ -242,6 +255,7 @@ func grpcClient(address string) *grpc.ClientConn {
 	return conn
 }
 
+// closestPrecedingNode returns the best finger preceding the target id.
 func (n *Node) closestPrecedingNode(id *big.Int) string {
 	selfID := hash(n.Address)
 	for i := keySize; i >= 1; i-- {
@@ -253,6 +267,7 @@ func (n *Node) closestPrecedingNode(id *big.Int) string {
 	return n.Successors[0]
 }
 
+// FindSuccessor implements the core lookup: it returns the successor of a given id.
 func (n *Node) FindSuccessor(ctx context.Context, req *pb.FindSuccessorRequest) (*pb.FindSuccessorResponse, error) {
 	id := new(big.Int)
 	id.SetString(req.Id, 10)
@@ -270,7 +285,7 @@ func (n *Node) FindSuccessor(ctx context.Context, req *pb.FindSuccessorRequest) 
 	return &pb.FindSuccessorResponse{Address: next}, nil
 }
 
-// format an address for printing
+// addr formats an address (and its hash) for printing.
 func addr(a string) string {
 	if a == "" {
 		return "(empty)"
@@ -279,15 +294,13 @@ func addr(a string) string {
 	return s[:8] + ".. (" + a + ")"
 }
 
-// print useful info about the local node
+// dump prints the node’s state (neighbors, finger table, and stored keys).
 func (n *Node) dump() {
 	n.mu.RLock()
 	defer n.mu.RUnlock()
 
 	fmt.Println()
 	fmt.Println("Dump: information about this node")
-
-	// predecessor and successor links
 	fmt.Println("Neighborhood")
 	fmt.Println("pred:   ", addr(n.Predecessor))
 	fmt.Println("self:   ", addr(n.Address))

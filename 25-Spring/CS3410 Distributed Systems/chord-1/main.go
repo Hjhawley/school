@@ -3,27 +3,29 @@ package main
 import (
 	"bufio"
 	"context"
+	"crypto/rand"
+	"encoding/hex"
 	"flag"
 	"fmt"
 	"io"
 	"log"
 	"net"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
-	pb "chord/protocol" // Update path as needed
+	pb "chord/protocol"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 var localaddress string
 
-// Find our local IP address
+// init finds the local IP address.
 func init() {
-	// Configure log package to show short filename, line number and timestamp with only time
 	log.SetFlags(log.Lshortfile | log.Ltime)
-
 	conn, err := net.Dial("udp", "8.8.8.8:80")
 	if err != nil {
 		log.Fatal(err)
@@ -39,7 +41,7 @@ func init() {
 	log.Printf("found local address %s\n", localaddress)
 }
 
-// resolveAddress handles :port format by adding the local address
+// resolveAddress handles shorthand address formats.
 func resolveAddress(address string) string {
 	if strings.HasPrefix(address, ":") {
 		return net.JoinHostPort(localaddress, address[1:])
@@ -49,7 +51,8 @@ func resolveAddress(address string) string {
 	return address
 }
 
-// StartServer starts the gRPC server for this node
+// StartServer initializes the node and RPC server.
+// If joining an existing ring, it also attempts to fetch key-value pairs.
 func StartServer(address string, nprime string) (*Node, error) {
 	address = resolveAddress(address)
 
@@ -61,19 +64,29 @@ func StartServer(address string, nprime string) (*Node, error) {
 		Bucket:      make(map[string]string),
 	}
 
-	// Are we the first node?
 	if nprime == "" {
 		log.Print("StartServer: creating new ring")
 		node.Successors = []string{node.Address}
 	} else {
 		log.Print("StartServer: joining existing ring using ", nprime)
-		// For now use the given address as our successor
 		nprime = resolveAddress(nprime)
 		node.Successors = []string{nprime}
-		// TODO: use a GetAll request to populate our bucket
+		// Migrate keys from the successor (a simple approach).
+		conn, err := grpc.Dial(nprime, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err == nil {
+			client := pb.NewChordClient(conn)
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+			defer cancel()
+			resp, err := client.GetAll(ctx, &pb.GetAllRequest{})
+			if err == nil {
+				for k, v := range resp.KeyValues {
+					node.Bucket[k] = v
+				}
+			}
+			conn.Close()
+		}
 	}
 
-	// Start listening for RPC calls
 	grpcServer := grpc.NewServer()
 	pb.RegisterChordServer(grpcServer, node)
 
@@ -82,7 +95,6 @@ func StartServer(address string, nprime string) (*Node, error) {
 		return nil, fmt.Errorf("failed to listen: %v", err)
 	}
 
-	// Start server in goroutine
 	log.Printf("Starting Chord node server on %s", node.Address)
 	go func() {
 		if err := grpcServer.Serve(lis); err != nil {
@@ -90,16 +102,14 @@ func StartServer(address string, nprime string) (*Node, error) {
 		}
 	}()
 
-	// Start background tasks
+	// Start background maintenance tasks.
 	go func() {
 		nextFinger := 0
 		for {
 			time.Sleep(time.Second / 3)
 			node.stabilize()
-
 			time.Sleep(time.Second / 3)
 			nextFinger = node.fixFingers(nextFinger)
-
 			time.Sleep(time.Second / 3)
 			node.checkPredecessor()
 		}
@@ -108,10 +118,149 @@ func StartServer(address string, nprime string) (*Node, error) {
 	return node, nil
 }
 
-// RunShell provides an interactive command shell
+// lookupResponsibleNode iteratively locates the node responsible for a given key.
+func lookupResponsibleNode(startAddress, key string) (string, error) {
+	id := hash(key)
+	current := resolveAddress(startAddress)
+	for i := 0; i < maxLookupSteps; i++ {
+		conn, err := grpc.Dial(current, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			return "", fmt.Errorf("lookup: failed to dial %s: %v", current, err)
+		}
+		client := pb.NewChordClient(conn)
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		resp, err := client.FindSuccessor(ctx, &pb.FindSuccessorRequest{Id: id.String()})
+		cancel()
+		conn.Close()
+		if err != nil {
+			return "", fmt.Errorf("lookup: error calling FindSuccessor on %s: %v", current, err)
+		}
+		// If the returned address equals the current node, we assume it is responsible.
+		if resp.Address == current {
+			return current, nil
+		}
+		current = resp.Address
+	}
+	return "", fmt.Errorf("lookup: exceeded maximum steps")
+}
+
+// PingNode sends a ping RPC to the given address.
+func PingNode(ctx context.Context, address string) error {
+	address = resolveAddress(address)
+	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	client := pb.NewChordClient(conn)
+	_, err = client.Ping(ctx, &pb.PingRequest{})
+	return err
+}
+
+// PutKeyValue uses iterative lookup to find the responsible node and then puts the key-value pair.
+func PutKeyValue(ctx context.Context, key, value, address string) error {
+	responsible, err := lookupResponsibleNode(address, key)
+	if err != nil {
+		return err
+	}
+	conn, err := grpc.Dial(responsible, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	client := pb.NewChordClient(conn)
+	_, err = client.Put(ctx, &pb.PutRequest{Key: key, Value: value})
+	return err
+}
+
+// GetValue locates the responsible node and retrieves the value.
+func GetValue(ctx context.Context, key, address string) (string, error) {
+	responsible, err := lookupResponsibleNode(address, key)
+	if err != nil {
+		return "", err
+	}
+	conn, err := grpc.Dial(responsible, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return "", err
+	}
+	defer conn.Close()
+	client := pb.NewChordClient(conn)
+	resp, err := client.Get(ctx, &pb.GetRequest{Key: key})
+	if err != nil {
+		return "", err
+	}
+	return resp.Value, nil
+}
+
+// DeleteKey finds the responsible node and deletes the key.
+func DeleteKey(ctx context.Context, key, address string) error {
+	responsible, err := lookupResponsibleNode(address, key)
+	if err != nil {
+		return err
+	}
+	conn, err := grpc.Dial(responsible, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	client := pb.NewChordClient(conn)
+	_, err = client.Delete(ctx, &pb.DeleteRequest{Key: key})
+	return err
+}
+
+// GetAllKeyValues retrieves all key-value pairs from a node.
+func GetAllKeyValues(ctx context.Context, address string) (map[string]string, error) {
+	address = resolveAddress(address)
+	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+	client := pb.NewChordClient(conn)
+	resp, err := client.GetAll(ctx, &pb.GetAllRequest{})
+	if err != nil {
+		return nil, err
+	}
+	return resp.KeyValues, nil
+}
+
+// ShutdownNode migrates all local keys to the immediate successor before quitting.
+func ShutdownNode(node *Node) {
+	node.mu.Lock()
+	defer node.mu.Unlock()
+	if len(node.Successors) > 0 && node.Successors[0] != node.Address {
+		successor := node.Successors[0]
+		conn, err := grpc.Dial(successor, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			log.Printf("Shutdown: failed to dial successor %s: %v", successor, err)
+			return
+		}
+		client := pb.NewChordClient(conn)
+		for k, v := range node.Bucket {
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+			_, err := client.Put(ctx, &pb.PutRequest{Key: k, Value: v})
+			cancel()
+			if err != nil {
+				log.Printf("Shutdown: failed to migrate key %s: %v", k, err)
+			}
+		}
+		conn.Close()
+	}
+}
+
+// generateRandomKeyValue creates random key-value pairs for testing.
+func generateRandomKeyValue() (string, string) {
+	// Generate 4 random bytes for both key and value.
+	keyBytes := make([]byte, 4)
+	valueBytes := make([]byte, 4)
+	rand.Read(keyBytes)
+	rand.Read(valueBytes)
+	return hex.EncodeToString(keyBytes), hex.EncodeToString(valueBytes)
+}
+
+// RunShell provides an interactive command shell.
 func RunShell(node *Node) {
 	reader := bufio.NewReader(os.Stdin)
-
 	for {
 		fmt.Print("> ")
 		input, err := reader.ReadString('\n')
@@ -123,34 +272,30 @@ func RunShell(node *Node) {
 			fmt.Println("Error reading input:", err)
 			continue
 		}
-
 		parts := strings.Fields(input)
 		if len(parts) == 0 {
 			continue
 		}
-
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
-
 		switch parts[0] {
 		case "help":
 			fmt.Println("Available commands:")
-			fmt.Println("  help              - Show this help message")
-			fmt.Println("  ping <address>    - Ping another node")
-			fmt.Println("                      (You can use :port for localhost)")
-			fmt.Println("  put <key> <value> <address> - Store a key-value pair on a node")
-			fmt.Println("  get <key> <address>         - Get a value for a key from a node")
-			fmt.Println("  delete <key> <address>      - Delete a key from a node")
-			fmt.Println("  getall <address>            - Get all key-value pairs from a node")
-			fmt.Println("  dump              - Display info about the current node")
-			fmt.Println("  quit              - Exit the program")
+			fmt.Println("  help                     - Show this help message")
+			fmt.Println("  ping <address>           - Ping another node")
+			fmt.Println("  put <key> <value> <address>    - Store a key-value pair in the ring")
+			fmt.Println("  putrandom <n> <address>  - Insert n random key-value pairs")
+			fmt.Println("  get <key> <address>      - Get a value for a key from the ring")
+			fmt.Println("  delete <key> <address>   - Delete a key from the ring")
+			fmt.Println("  getall <address>         - Get all key-value pairs from a node")
+			fmt.Println("  dump                     - Display info about the current node")
+			fmt.Println("  quit                     - Exit the program (migrates data if necessary)")
 
 		case "ping":
 			if len(parts) < 2 {
 				fmt.Println("Usage: ping <address>")
 				continue
 			}
-
 			err := PingNode(ctx, parts[1])
 			if err != nil {
 				fmt.Printf("Ping failed: %v\n", err)
@@ -163,7 +308,6 @@ func RunShell(node *Node) {
 				fmt.Println("Usage: put <key> <value> <address>")
 				continue
 			}
-
 			err := PutKeyValue(ctx, parts[1], parts[2], parts[3])
 			if err != nil {
 				fmt.Printf("Put failed: %v\n", err)
@@ -171,12 +315,31 @@ func RunShell(node *Node) {
 				fmt.Printf("Put successful: %s -> %s\n", parts[1], parts[2])
 			}
 
+		case "putrandom":
+			if len(parts) < 3 {
+				fmt.Println("Usage: putrandom <n> <address>")
+				continue
+			}
+			n, err := strconv.Atoi(parts[1])
+			if err != nil {
+				fmt.Println("Invalid number for putrandom")
+				continue
+			}
+			for i := 0; i < n; i++ {
+				key, value := generateRandomKeyValue()
+				err := PutKeyValue(ctx, key, value, parts[2])
+				if err != nil {
+					fmt.Printf("putrandom: failed to insert %s: %v\n", key, err)
+				} else {
+					fmt.Printf("putrandom: inserted %s -> %s\n", key, value)
+				}
+			}
+
 		case "get":
 			if len(parts) < 3 {
 				fmt.Println("Usage: get <key> <address>")
 				continue
 			}
-
 			value, err := GetValue(ctx, parts[1], parts[2])
 			if err != nil {
 				fmt.Printf("Get failed: %v\n", err)
@@ -191,7 +354,6 @@ func RunShell(node *Node) {
 				fmt.Println("Usage: delete <key> <address>")
 				continue
 			}
-
 			err := DeleteKey(ctx, parts[1], parts[2])
 			if err != nil {
 				fmt.Printf("Delete failed: %v\n", err)
@@ -204,7 +366,6 @@ func RunShell(node *Node) {
 				fmt.Println("Usage: getall <address>")
 				continue
 			}
-
 			keyValues, err := GetAllKeyValues(ctx, parts[1])
 			if err != nil {
 				fmt.Printf("GetAll failed: %v\n", err)
@@ -223,6 +384,8 @@ func RunShell(node *Node) {
 			node.dump()
 
 		case "quit":
+			fmt.Println("Shutting down node and migrating data...")
+			ShutdownNode(node)
 			fmt.Println("Exiting...")
 			return
 
@@ -233,7 +396,6 @@ func RunShell(node *Node) {
 }
 
 func main() {
-	// Parse command line flags
 	createCmd := flag.NewFlagSet("create", flag.ExitOnError)
 	createPort := createCmd.Int("port", 3410, "Port to listen on")
 
@@ -255,7 +417,6 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-
 		address = fmt.Sprintf(":%d", *createPort)
 		node, err = StartServer(address, "")
 		if err != nil {
@@ -268,11 +429,9 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-
 		if *joinAddr == "" {
 			log.Fatal("Join requires an address of an existing node")
 		}
-
 		address = fmt.Sprintf(":%d", *joinPort)
 		node, err = StartServer(address, *joinAddr)
 		if err != nil {
@@ -285,6 +444,5 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Run the interactive shell
 	RunShell(node)
 }
