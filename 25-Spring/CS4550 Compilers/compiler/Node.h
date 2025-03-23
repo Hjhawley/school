@@ -48,31 +48,31 @@ private:
 };
 
 
-class BlockNode : public Node {
-public:
-    BlockNode(StatementGroupNode* statementGroup);
-    virtual ~BlockNode();
-    StatementGroupNode* GetStatementGroup() const;
-private:
-    StatementGroupNode* mStatementGroup;
-};
+class StatementNode : public Node {
+    public:
+        virtual ~StatementNode();
+    };
 
 
 class StatementGroupNode : public Node {
-public:
-    StatementGroupNode();
-    virtual ~StatementGroupNode();
-    void AddStatement(StatementNode* stmt);
-    const std::vector<StatementNode*>& GetStatements() const;
-private:
-    std::vector<StatementNode*> mStatements;
-};
+    public:
+        StatementGroupNode();
+        virtual ~StatementGroupNode();
+        void AddStatement(StatementNode* stmt);
+        const std::vector<StatementNode*>& GetStatements() const;
+    private:
+        std::vector<StatementNode*> mStatements;
+    };
 
-
-class StatementNode : public Node {
-public:
-    virtual ~StatementNode();
-};
+    
+class BlockNode : public StatementNode {
+    public:
+        BlockNode(StatementGroupNode* statementGroup);
+        virtual ~BlockNode();
+        StatementGroupNode* GetStatementGroup() const;
+    private:
+        StatementGroupNode* mStatementGroup;
+    };    
 
 
 class DeclarationStatementNode : public StatementNode {

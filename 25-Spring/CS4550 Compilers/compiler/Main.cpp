@@ -185,7 +185,7 @@ void testNodes() {
     std::cout << "\nFinished Node (Parse Tree) Test.\n";
 }
 
-void testParser() {
+void testParserNoOutput() {
     std::cout << "\n----- Parser Test -----\n";
 
     // Setup a scanner to read from "code.txt"
@@ -208,11 +208,37 @@ void testParser() {
     std::cout << "Parser recognized the input as valid." << std::endl;
 }
 
+void testParserWithOutput() {
+    std::cout << "\n----- Parser With Output Test -----\n";
+
+    // Create a scanner to read your source file "code.txt"
+    const std::string inputFileName = "code.txt";
+    ScannerClass scanner(inputFileName);
+
+    // Create a symbol table
+    SymbolTableClass symbolTable;
+
+    // Create a parser that returns parse-tree nodes
+    ParserClass parser(&scanner, &symbolTable);
+
+    // The parser's Start() now returns a StartNode*
+    // That pointer is your entire parse tree's root, if no error occurs.
+    StartNode* root = parser.Start();
+
+    // If we got here, the parse was successful.
+    std::cout << "Parser returned a StartNode. The input is valid!\n";
+
+    // Recusrively delete the tree:
+    delete root;
+    std::cout << "Parse tree deleted.\n";
+}
+
 int main() {
     //testScanner();
     //testSymbolTable();
     //testNodes();
-    testParser();
+    //testParserNoOutput();
+    testParserWithOutput();
 
     return 0;
 }

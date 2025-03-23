@@ -2,56 +2,66 @@
 
 #include "Scanner.h"
 #include "Symbol.h"
+#include "Node.h"
 
 class ParserClass {
 public:
-    // Constructor saves pointers to your scanner and symbol table
     ParserClass(ScannerClass *scanner, SymbolTableClass *symTable);
 
-    // The main driver: checks if the tokens from Scanner form a valid program
-    void Start();
+    // Now returns a StartNode pointer
+    StartNode* Start();
 
 private:
-    // Pointers to existing objects (not owned by ParserClass)
     ScannerClass *mScanner;
     SymbolTableClass *mSymbolTable;
 
-    // Helper methods matching your grammar:
-    // <Start> → <Program> ENDFILE_TOKEN
-    void StartRule();
+    // <Start> → <Program> ENDFILE
+    StartNode* StartRule();
 
     // <Program> → VOID MAIN LPAREN RPAREN <Block>
-    void Program();
+    ProgramNode* Program();
 
-    // <Block> → LCURLY_TOKEN <StatementGroup> RCURLY_TOKEN
-    void Block();
+    // <Block> → LCURLY <StatementGroup> RCURLY
+    // Our BlockNode might derive from StatementNode, but we return BlockNode* for clarity
+    BlockNode* Block();
 
-    // <StatementGroup> → <Statement> <StatementGroup> | {empty}
-    void StatementGroup();
+    // <StatementGroup> → {empty} | <Statement> <StatementGroup>
+    StatementGroupNode* StatementGroup();
 
-    // <Statement> → <DeclarationStatement> | <AssignmentStatement> | <CoutStatement> | <Block>
-    bool Statement();  // returns true if it recognized a statement, false otherwise
+    // <Statement> -> <DeclarationStatement> | <AssignmentStatement> | <CoutStatement> | <Block>
+    // Return nullptr if no statement recognized
+    StatementNode* Statement();
 
     // <DeclarationStatement> → INT <Identifier> SEMICOLON
-    void DeclarationStatement();
+    DeclarationStatementNode* DeclarationStatement();
 
     // <AssignmentStatement> → <Identifier> ASSIGNMENT <Expression> SEMICOLON
-    void AssignmentStatement();
+    AssignmentStatementNode* AssignmentStatement();
 
     // <CoutStatement> → COUT INSERTION <Expression> SEMICOLON
-    void CoutStatement();
+    CoutStatementNode* CoutStatement();
 
-    // <Expression> → <Relational>
-    // We'll do the sub-rules: Relational → ...
-    void Expression(); // or use a hierarchy: Expression() → Relational()
+    // <Expression> -> <Relational>
+    ExpressionNode* Expression();
 
-    void Relational();
-    void PlusMinus();
-    void TimesDivide();
-    void Factor();
-    void Identifier();
-    void Integer();
+    // <Relational> -> <PlusMinus> [ one relational operator <PlusMinus> ]
+    ExpressionNode* Relational();
 
-    // Matches a token of the expected type or exits if mismatch
+    // <PlusMinus> -> <TimesDivide> { ( + | - ) <TimesDivide> }
+    ExpressionNode* PlusMinus();
+
+    // <TimesDivide> -> <Factor> { ( * | / ) <Factor> }
+    ExpressionNode* TimesDivide();
+
+    // <Factor> -> <Identifier> | <Integer> | LPAREN <Expression> RPAREN
+    ExpressionNode* Factor();
+
+    // <Identifier> -> IDENTIFIER_TOKEN
+    IdentifierNode* Identifier();
+
+    // <Integer> -> INTEGER_TOKEN
+    IntegerNode* Integer();
+
+    // Match a token or exit on error
     TokenClass Match(TokenType expected);
 };
