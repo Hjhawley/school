@@ -68,3 +68,27 @@ TokenClass ScannerClass::GetNextToken() {
     TokenClass token(previousTokenType, lexeme);
     return token;
 }
+
+TokenClass ScannerClass::PeekNextToken() {
+    // Save the current "get" position
+    std::streampos filePos = mFin.tellg();
+    int oldLineNumber = mLineNumber;
+
+    // Call GetNextToken()
+    TokenClass tc = GetNextToken();
+
+    // If we triggered EOF, we need to clear it before seeking back
+    if (!mFin) {
+        mFin.clear();
+    }
+
+    // Reset "get" position
+    mFin.seekg(filePos);
+
+    // Restore line number
+    mLineNumber = oldLineNumber;
+
+    // Return the token we got
+    return tc;
+}
+

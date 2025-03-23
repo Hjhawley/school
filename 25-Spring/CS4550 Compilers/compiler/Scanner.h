@@ -15,6 +15,8 @@ public:
     // Reads the next token from the file and returns it
     TokenClass GetNextToken();
 
+    TokenClass PeekNextToken();
+
     // Accessor for the current line number
     int GetLineNumber() const { return mLineNumber; }
 

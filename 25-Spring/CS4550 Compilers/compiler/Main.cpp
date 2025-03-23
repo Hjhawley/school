@@ -3,6 +3,7 @@
 #include "Scanner.h"
 #include "Token.h"
 #include "Node.h"
+#include "Parser.h"
 
 void testScanner() {
     std::cout << "----- Scanner Test -----\n";
@@ -184,9 +185,34 @@ void testNodes() {
     std::cout << "\nFinished Node (Parse Tree) Test.\n";
 }
 
+void testParser() {
+    std::cout << "\n----- Parser Test -----\n";
+
+    // Setup a scanner to read from "code.txt"
+    //    (Adjust filename as needed.)
+    const std::string inputFileName = "code.txt";
+    ScannerClass scanner(inputFileName);
+
+    // Create a symbol table
+    SymbolTableClass symbolTable;
+
+    // Create a Parser with the scanner and symbol table
+    ParserClass parser(&scanner, &symbolTable);
+
+    // Call parser.Start()
+    //    If the tokens in "code.txt" follow the grammar, it should succeed silently.
+    //    If there's an error, parser.Start() will print a message and exit(1).
+    parser.Start();
+
+    // If we reach here, no errors were found.
+    std::cout << "Parser recognized the input as valid." << std::endl;
+}
+
 int main() {
-    // testScanner();
-    // testSymbolTable();
-    testNodes();
+    //testScanner();
+    //testSymbolTable();
+    //testNodes();
+    testParser();
+
     return 0;
 }
