@@ -8,18 +8,24 @@ option go_package = "chord/protocol";
 service Chord {
   // Ping is a simple health check
   rpc Ping(PingRequest) returns (PingResponse) {}
-  
+
   // Put stores a key-value pair
   rpc Put(PutRequest) returns (PutResponse) {}
-  
+
   // Get retrieves a value for a key
   rpc Get(GetRequest) returns (GetResponse) {}
-  
+
   // Delete removes a key-value pair
   rpc Delete(DeleteRequest) returns (DeleteResponse) {}
-  
+
   // GetAll retrieves all key-value pairs
   rpc GetAll(GetAllRequest) returns (GetAllResponse) {}
+
+  // Notify informs a node that another node might be its predecessor
+  rpc Notify(NotifyRequest) returns (NotifyResponse) {}
+
+  // GetPredecessorAndSuccessors retrieves the predecessor and successor list
+  rpc GetPredecessorAndSuccessors(GetPredecessorAndSuccessorsRequest) returns (GetPredecessorAndSuccessorsResponse) {}
 }
 
 // The request message for Ping, containing no fields
@@ -61,4 +67,19 @@ message GetAllRequest {}
 // The response message for GetAll
 message GetAllResponse {
   map<string, string> key_values = 1;
+}
+
+message NotifyRequest {
+  string address = 1;
+}
+
+message NotifyResponse {}
+
+// Request for GetPredecessorAndSuccessors
+message GetPredecessorAndSuccessorsRequest {}
+
+// Response for GetPredecessorAndSuccessors
+message GetPredecessorAndSuccessorsResponse {
+  string predecessor = 1;
+  repeated string successors = 2;
 }
