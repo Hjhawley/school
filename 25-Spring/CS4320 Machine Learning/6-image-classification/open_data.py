@@ -22,7 +22,7 @@ def load_batch_from_keras(number):
     number < 1 -> test batch
     number > 6 -> load training batches 1,2,3,4,5
     """
-    (x_train, y_train), (x_test, y_test) = keras.datasets.fashion_mnist.load_data()
+    (x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
 
     # shuffle training data (always the same seed)
     np.random.seed(42)

@@ -18,7 +18,7 @@ def create_model(my_args, input_shape):
         "a": create_model_a,
     }
     if my_args.model_name not in create_functions:
-        raise InvalidArgumentException("Invalid model name: {} not in {}".format(my_args.model_name, list(create_functions.keys())))
+        raise ValueError("Invalid model name: {} not in {}".format(my_args.model_name, list(create_functions.keys())))
         
     model = create_functions[my_args.model_name](my_args, input_shape)
     print(model.summary())
