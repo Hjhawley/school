@@ -35,7 +35,7 @@ Thumbs.db
 # Python
 __pycache__/
 *.py[cod]
-venv/
+*venv/
 
 # Compiled files
 *.o
