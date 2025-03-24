@@ -44,9 +44,8 @@ def load_batch_from_keras(number):
 
     # one-hot-encode labels
     labels = keras.utils.to_categorical(labels, num_classes=10)
-    # reshape the (28,28) images to (28,28,1). Conv2D expects (w,h,depth)
-    images = images.reshape(-1, 28, 28, 1)
-    # scale images to [0,1] range
+    # CIFAR-10 is already (32, 32, 3), no reshape needed
+    # make sure the data is in float32 and scaled properly
     images = images.astype(np.float32) / 255.0
 
     return images, labels
