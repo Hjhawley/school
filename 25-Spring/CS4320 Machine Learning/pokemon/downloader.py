@@ -24,7 +24,7 @@ def get_pokemon_data(pokemon_id):
 # Dictionary to store type mappings
 pokemon_types = {}
 
-# Fetch first 50 Pokémon
+# Fetch Pokémon
 for pokemon_id in range(1, 1026):
     types, sprite_url = get_pokemon_data(pokemon_id)
     

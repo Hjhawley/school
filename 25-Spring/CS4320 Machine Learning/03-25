@@ -1,0 +1,12 @@
+in the context of convolutional neural networks, teach me a bit about:
+
+"skip connections"; residual learning - residual units
+
+pooling layer, average pooling layer (finding the "heat" of any given feature map)
+
+how to use pretrained models: 
+	load and use as-is for your use case
+	load and fine-tune (by freezing earlier layers and adding more, for example)
+	localization (finding WHERE an object exists in an image, not just THAT it exists)
+		accuracy calcualted by Intersection/Union
+		an example: take a pretrained classification model (which flower is this)? and ADD another output layer that predicts the location of the object as well as the class.
