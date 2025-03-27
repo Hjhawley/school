@@ -23,13 +23,13 @@ Statistical Time Series Models
 ARMA (AutoRegressive Moving Average)
 - A classic statistical model used for forecasting time series.
 - Components:
-  - ŷ(t): Forecast at time step *t*
-  - y(t): Actual value at time *t*
+  - ŷ(t): Forecast at time step t
+  - y(t): Actual value at time t
   - αᵢ: Learned weights for past values (AutoRegressive part)
   - θᵢ: Learned weights for past errors (Moving Average part)
   - p: How many past values to use (lookback for trends)
-  - q: How many past errors to use (lookback for residuals)
-- Note: *p* and *q* are hyperparameters, and don’t need to be equal.
+  - q: How many past errors to use (lookback for residuals (errors))
+  - p and q are hyperparameters, and don’t need to be equal.
 
 
 
@@ -38,6 +38,6 @@ SARIMA: Seasonal ARIMA
 
 - SARIMA extends ARMA by explicitly modeling seasonal patterns.
 - Adds:
-  - P and Q: Seasonal analogues of *p* and *q*, operating over entire seasons (s).
+  - P and Q: Seasonal analogues of p and q, operating over entire seasons (s).
 - Best used with stationary (flat) sequences.
   - If data is not stationary, apply a derivative (1st, 2nd, etc.) to model the change instead of raw values.
