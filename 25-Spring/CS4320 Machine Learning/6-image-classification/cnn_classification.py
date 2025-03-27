@@ -25,7 +25,7 @@ def do_cnn_fit(my_args):
     X, y = open_data.load_batch(my_args.batch_number)
     model = model_creation.create_model(my_args, X.shape[1:])
     early_stopping = keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
-    history = model.fit(X, y, epochs=10, verbose=1, callbacks=[early_stopping], validation_split=0.2, shuffle=True, batch_size=1)
+    history = model.fit(X, y, epochs=10, verbose=1, callbacks=[early_stopping], validation_split=0.2, shuffle=True, batch_size=32)
     model_file = my_args.model_file
     joblib.dump(model, model_file)
     joblib.dump(history.history, "{}.history".format(model_file))
@@ -36,7 +36,7 @@ def do_cnn_refit(my_args):
     model_file = my_args.model_file
     model = joblib.load(model_file)
     early_stopping = keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
-    history = model.fit(X, y, epochs=10, verbose=1, callbacks=[early_stopping], validation_split=0.2, shuffle=True, batch_size=1)
+    history = model.fit(X, y, epochs=10, verbose=1, callbacks=[early_stopping], validation_split=0.2, shuffle=True, batch_size=32)
     joblib.dump(model, model_file)
     joblib.dump(history.history, "{}.history".format(model_file))
     return
