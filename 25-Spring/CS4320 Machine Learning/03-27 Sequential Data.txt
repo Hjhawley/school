@@ -1,6 +1,5 @@
 Learning with Sequential Data
-
-Why Use RNNs Instead of CNNs?
+RNNs Instead of CNNs
 - Recurrent Neural Networks (RNNs) are designed to handle sequential data, unlike Convolutional Neural Networks (CNNs).
 - Example: Given historical ridership data (e.g. from the Chicago Transit Authority), predict the next day's rider count.
 
@@ -33,9 +32,8 @@ ARMA (AutoRegressive Moving Average)
 
 
 
-- ARMA does not explicitly model seasonality.
 SARIMA: Seasonal ARIMA
-
+- ARMA does not explicitly model seasonality.
 - SARIMA extends ARMA by explicitly modeling seasonal patterns.
 - Adds:
   - P and Q: Seasonal analogues of p and q, operating over entire seasons (s).
