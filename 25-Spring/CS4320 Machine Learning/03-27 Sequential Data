@@ -1,0 +1,24 @@
+How to learn with sequential data
+RNN (recurrent neural networks) as opposed to a CNN
+
+i.e. given a period of ridership data, predict the next day's rider data (chicago transit authority)
+
+translation as prediction
+if you see an obvious weekly pattern, your initial guess for a future week should simply be the same as last week.
+these patterns are called "seasonalities"
+this can reveal outliers easily; ex, if you visualize the error you'll see a massive spike on Memorial Day (didn't behave as expected compared to the week before)
+
+Autoregressive moving average (ARMA) - a statistical model that can be used in ML
+looking at how to make a model that predicts the future
+y-hat(t) is the forecast for time step t
+y(t) is the actual value for time step t
+alpha_i is a learned weighting factor for past values
+theta_i is the learned weight for past errors
+p and q are hyperparameters, for how far back we want to look
+p is looking back for trends, q is looking back for errors; they do not have to be the same
+
+what ARMA doesn't do is EXPLICITLY describe seasonality
+that's where SARIMA comes in
+in addition to p and q, also add P and Q which go back "seasons" (s) for trends and errors
+this works best with stationary (flat) sequences but we can take the derivative (or even 2nd, 3rd etc) to flatten the curve and just look for the CHANGE
+
