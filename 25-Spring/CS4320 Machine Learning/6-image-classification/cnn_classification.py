@@ -9,6 +9,7 @@ import os.path
 import joblib
 import tensorflow as tf
 import keras
+#tf.debugging.set_log_device_placement(True) # make sure i'm using cuda
 
 import open_data
 import model_creation
