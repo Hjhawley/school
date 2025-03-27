@@ -27,17 +27,17 @@ def do_cnn_fit(my_args):
     early_stopping = keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
     history = model.fit(X, y, epochs=10, verbose=1, callbacks=[early_stopping], validation_split=0.2, shuffle=True, batch_size=32)
     model_file = my_args.model_file
-    joblib.dump(model, model_file)
+    model.save(model_file)
     joblib.dump(history.history, "{}.history".format(model_file))
     return
 
 def do_cnn_refit(my_args):
     X, y = open_data.load_batch(my_args.batch_number)
     model_file = my_args.model_file
-    model = joblib.load(model_file)
+    model = keras.models.load_model(model_file)
     early_stopping = keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
     history = model.fit(X, y, epochs=10, verbose=1, callbacks=[early_stopping], validation_split=0.2, shuffle=True, batch_size=32)
-    joblib.dump(model, model_file)
+    model.save(model_file)
     joblib.dump(history.history, "{}.history".format(model_file))
     return
 #
@@ -65,7 +65,7 @@ def parse_args(argv):
                         nargs='?', help="desired action")
 
     parser.add_argument('--batch-number',  '-b', default=1,     type=int,   help="which training batch to use (default=1)")
-    parser.add_argument('--model-file',    '-m', default="model.joblib",    type=str,   help="name of file for the model (default is constructed from train file name when fitting)")
+    parser.add_argument('--model-file',    '-m', default="model.keras",    type=str,   help="name of file for the model (default is constructed from train file name when fitting)")
     parser.add_argument('--model-name',    '-M', default="v",    type=str,   help="name of model create function")
 
     my_args = parser.parse_args(argv[1:])

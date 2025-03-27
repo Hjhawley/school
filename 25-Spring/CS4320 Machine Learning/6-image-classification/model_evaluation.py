@@ -9,6 +9,7 @@ import numpy as np
 import os.path
 import joblib
 import open_data
+import keras
 
 
 def sklearn_metric(y, yhat):
@@ -62,8 +63,8 @@ def show_score(my_args):
 
     X_train, y_train = open_data.load_batch(my_args.batch_number)
 
-    model = joblib.load(model_file)
-
+    model = keras.models.load_model(model_file)
+    print(f"X_train.shape: {X_train.shape}, y_train.shape: {y_train.shape}")
     yhat_train_proba = model.predict(X_train)
     yhat_train = np.argmax(yhat_train_proba, axis=1)
     print()
