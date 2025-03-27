@@ -1,24 +1,43 @@
-How to learn with sequential data
-RNN (recurrent neural networks) as opposed to a CNN
+Learning with Sequential Data
 
-i.e. given a period of ridership data, predict the next day's rider data (chicago transit authority)
+Why Use RNNs Instead of CNNs?
+- Recurrent Neural Networks (RNNs) are designed to handle sequential data, unlike Convolutional Neural Networks (CNNs).
+- Example: Given historical ridership data (e.g. from the Chicago Transit Authority), predict the next day's rider count.
 
-translation as prediction
-if you see an obvious weekly pattern, your initial guess for a future week should simply be the same as last week.
-these patterns are called "seasonalities"
-this can reveal outliers easily; ex, if you visualize the error you'll see a massive spike on Memorial Day (didn't behave as expected compared to the week before)
 
-Autoregressive moving average (ARMA) - a statistical model that can be used in ML
-looking at how to make a model that predicts the future
-y-hat(t) is the forecast for time step t
-y(t) is the actual value for time step t
-alpha_i is a learned weighting factor for past values
-theta_i is the learned weight for past errors
-p and q are hyperparameters, for how far back we want to look
-p is looking back for trends, q is looking back for errors; they do not have to be the same
 
-what ARMA doesn't do is EXPLICITLY describe seasonality
-that's where SARIMA comes in
-in addition to p and q, also add P and Q which go back "seasons" (s) for trends and errors
-this works best with stationary (flat) sequences but we can take the derivative (or even 2nd, 3rd etc) to flatten the curve and just look for the CHANGE
+Recognizing Patterns in Time Series
 
+Translation as Prediction
+- If there's an obvious weekly pattern, your best initial guess for a future week might be to copy the previous week's values.
+- These repeated patterns are known as seasonalities.
+
+Value of Error Visualization
+- Visualizing prediction errors can easily highlight outliers.
+  - Example: A large spike in error on Memorial Day likely signals behavior that didn’t match the seasonal trend.
+
+
+
+Statistical Time Series Models
+
+ARMA (AutoRegressive Moving Average)
+- A classic statistical model used for forecasting time series.
+- Components:
+  - ŷ(t): Forecast at time step *t*
+  - y(t): Actual value at time *t*
+  - αᵢ: Learned weights for past values (AutoRegressive part)
+  - θᵢ: Learned weights for past errors (Moving Average part)
+  - p: How many past values to use (lookback for trends)
+  - q: How many past errors to use (lookback for residuals)
+- Note: *p* and *q* are hyperparameters, and don’t need to be equal.
+
+
+
+- ARMA does not explicitly model seasonality.
+SARIMA: Seasonal ARIMA
+
+- SARIMA extends ARMA by explicitly modeling seasonal patterns.
+- Adds:
+  - P and Q: Seasonal analogues of *p* and *q*, operating over entire seasons (s).
+- Best used with stationary (flat) sequences.
+  - If data is not stationary, apply a derivative (1st, 2nd, etc.) to model the change instead of raw values.
