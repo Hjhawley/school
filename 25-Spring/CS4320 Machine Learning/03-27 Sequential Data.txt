@@ -1,9 +1,8 @@
 Learning with Sequential Data
+
 RNNs Instead of CNNs
 - Recurrent Neural Networks (RNNs) are designed to handle sequential data, unlike Convolutional Neural Networks (CNNs).
 - Example: Given historical ridership data (e.g. from the Chicago Transit Authority), predict the next day's rider count.
-
-
 
 Recognizing Patterns in Time Series
 
@@ -15,7 +14,7 @@ Value of Error Visualization
 - Visualizing prediction errors can easily highlight outliers.
   - Example: A large spike in error on Memorial Day likely signals behavior that didn’t match the seasonal trend.
 
-
+* * * * * * * * * * * * * * * * * * * *
 
 Statistical Time Series Models
 
@@ -29,8 +28,6 @@ ARMA (AutoRegressive Moving Average)
   - p: How many past values to use (lookback for trends)
   - q: How many past errors to use (lookback for residuals (errors))
   - p and q are hyperparameters, and don’t need to be equal.
-
-
 
 SARIMA: Seasonal ARIMA
 - ARMA does not explicitly model seasonality.
