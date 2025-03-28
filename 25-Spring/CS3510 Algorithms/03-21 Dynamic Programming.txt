@@ -1,0 +1,70 @@
+🔧 Dynamic Programming (DP) Basics
+- Definition: Solve problems by combining solutions to overlapping subproblems.
+- Comparison to other paradigms:
+  - *Greedy*: Optimizes locally at each step.
+  - *Divide and Conquer*: Splits into independent subproblems.
+  - *DP*: Solves overlapping subproblems and builds up.
+
+
+
+✅ Three Steps to Apply DP
+1. Formulate a recurrence (recursive relationship).
+2. Identify valid subproblem parameters (should be bounded by a low-degree polynomial).
+3. Choose an evaluation order to ensure subproblems are solved before they're used.
+
+
+
+💡 Memoization vs Iteration
+- Memoization: Recursive with caching.
+- Iteration: Bottom-up, usually more space/time efficient.
+- Goal: Optimize space if possible once a correct DP algorithm is written.
+
+
+
+📘 Example 1: Fibonacci
+- Recurrence: 'F(n) = F(n-1) + F(n-2)'
+- Without memoization = exponential time.
+- With memoization = O(n) time, O(n) space.
+- With space optimization = O(n) time, O(1) space.
+
+
+
+📦 Example 2: Weighted Interval Scheduling
+- Input: Jobs with start time, end time, and weight.
+- Goal: Maximize total weight of non-overlapping jobs.
+- Key Steps:
+  - Sort jobs by finish time.
+  - Define 'p(j)' = latest job that doesn’t overlap with job 'j'.
+  - Recurrence: 'OPT(j) = max(vj + OPT(p(j)), OPT(j-1))'
+- Implementation:
+  - Recursive (slow),
+  - Memoized,
+  - Iterative (fastest).
+- Can reconstruct the optimal solution by backtracking.
+
+
+
+📈 Example 3: Longest Increasing Subsequence (LIS)
+- Input: Array of numbers.
+- Goal: Longest strictly increasing subsequence.
+- Recurrence: 'OPT[j] = max(1 + OPT[i])' for all 'i < j' and 'A[i] < A[j]'
+- Track predecessors to reconstruct the sequence.
+
+
+
+🎒 Example 4: 0/1 Knapsack
+- Input: Items with weight 'wi', value 'vi', total capacity 'W'.
+- Goal: Maximize value without exceeding capacity.
+- Recurrence:
+  - 'OPT(i, w) = max(OPT(i-1, w), vi + OPT(i-1, w - wi))' if 'wi ≤ w'
+- Time complexity: O(nW) → pseudo-polynomial time.
+
+
+
+📊 DP Patterns Summary
+| Problem                      | Space | Access Pattern                  |
+|--|-|-|
+| Fibonacci                   | O(1)  | Immediate previous values        |
+| Weighted Interval Scheduling| O(n)  | Arbitrary previous values        |
+| Longest Increasing Subseq.  | O(n)  | All previous values              |
+| Knapsack                    | O(nW) | 2D subproblem table              |

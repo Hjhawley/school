@@ -1,0 +1,110 @@
+🎒 Knapsack Problem (Dynamic Programming)
+
+🔍 Problem Definition
+- Given 'n' items with:
+  - weight 'wi > 0'
+  - value 'vi > 0'
+- Knapsack capacity = 'W'
+- Goal: Choose a subset of items such that:
+  - Total weight ≤ 'W'
+  - Total value is maximized
+
+
+
+❌ Why Greedy Fails
+- Greedy (choosing item with best 'vi/wi' ratio) doesn't guarantee optimal.
+- Counterexample: Greedy might choose items '{5,2,1}' for value = 35, but the optimal subset '{3,4}' gives value = 40.
+
+
+
+🧠 Dynamic Programming Approach
+
+🚫 False Start:
+- Let 'OPT(i)' = best value using items 1 to 'i'
+- Problem: we can’t decide whether item 'i' fits without knowing remaining capacity → missing information
+
+✅ Correct State Definition:
+- Let 'OPT(i, w)' = best value using first 'i' items and weight limit 'w'
+
+🔁 Recurrence:
+'''plaintext
+If wi > w:
+    OPT(i, w) = OPT(i-1, w)  // item i doesn't fit
+Else:
+    OPT(i, w) = max(OPT(i-1, w), vi + OPT(i-1, w - wi))
+'''
+
+🧮 Table Construction:
+- Bottom-up table: size 'n x W'
+- Initialize 'OPT(0, w) = 0' for all 'w' (no items = 0 value)
+- Iterate through all 'i = 1 to n' and 'w = 0 to W'
+
+
+
+🧾 Finding the Optimal Set
+- Once the table is filled:
+  - Backtrack from 'OPT(n, W)' to reconstruct which items were chosen
+  - If 'OPT(i, w) ≠ OPT(i-1, w)', then item 'i' was included
+
+
+
+⏱ Runtime Analysis
+- Time Complexity: 'O(nW)' → pseudo-polynomial
+- Why “pseudo”?
+  - Input size is proportional to log(W) (binary encoding), but runtime is proportional to 'W'
+  - So, technically exponential in the input size
+
+
+
+📍 Bellman-Ford Algorithm (Shortest Paths with Negative Weights)
+
+🔍 Problem Definition
+- Directed weighted graph 'G = (V, E)', source vertex 's'
+- Edge weights 'c(u,v)' can be negative
+- Goal: Find shortest paths from 's' to all other vertices
+
+
+
+❌ Why Not Dijkstra?
+- Dijkstra’s algorithm fails with negative weights because it assumes once a node is visited with the shortest path, it's final — which isn’t true when negative weights can cause future improvements.
+
+
+
+✅ DP Formulation
+- Let 'OPT(v, i)' = length of shortest path from 's' to 'v' using at most 'i' edges
+
+🧾 Initialization:
+'''plaintext
+For all v:
+    OPT[v, 0] = ∞
+OPT[s, 0] = 0
+'''
+
+🔁 Recurrence:
+'''plaintext
+For i = 1 to n-1:
+    For each v in V:
+        OPT[v, i] = OPT[v, i-1]
+        For each edge (u,v):
+            OPT[v, i] = min(OPT[v, i], OPT[u, i-1] + c(u,v))
+'''
+
+- After 'n-1' iterations, 'OPT[v, n-1]' is the shortest path (since no path has more than 'n-1' edges without a cycle)
+
+
+
+⚠️ Detecting Negative Cycles
+- After 'n-1' iterations, run for up to '2n' iterations
+- If any 'OPT[v, 2n] ≠ OPT[v, n-1]', a negative-weight cycle exists
+
+
+
+🧠 Path Reconstruction
+- Keep a 'pred[v]' array to track where each shortest path came from (which 'u' gave the best path to 'v')
+- Use it to reconstruct full paths after the table is complete
+
+
+
+⏱ Runtime Analysis
+- Time: 'O(nm)' (where 'm' = number of edges)
+- Space: 'O(n²)' (2D array for 'OPT[v, i]')
