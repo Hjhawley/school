@@ -1,70 +1,73 @@
 🔧 Dynamic Programming (DP) Basics
-- Definition: Solve problems by combining solutions to overlapping subproblems.
+- Definition: A method for solving problems by breaking them down into overlapping subproblems and reusing previously computed solutions.
 - Comparison to other paradigms:
-  - *Greedy*: Optimizes locally at each step.
-  - *Divide and Conquer*: Splits into independent subproblems.
-  - *DP*: Solves overlapping subproblems and builds up.
+  - *Greedy*: Makes the locally optimal choice at each step.
+  - *Divide and Conquer*: Splits into independent subproblems (no overlap).
+  - *DP*: Solves overlapping subproblems and combines results (with reuse).
 
 
 
 ✅ Three Steps to Apply DP
-1. Formulate a recurrence (recursive relationship).
-2. Identify valid subproblem parameters (should be bounded by a low-degree polynomial).
-3. Choose an evaluation order to ensure subproblems are solved before they're used.
+1. Define the recurrence — establish a recursive relation.
+2. Identify the subproblem space — parameters should be bounded by a low-degree polynomial to ensure tractability.
+3. Choose an evaluation order — ensure subproblems are computed before they're needed (e.g., top-down with memoization or bottom-up iteration).
 
 
 
-💡 Memoization vs Iteration
-- Memoization: Recursive with caching.
-- Iteration: Bottom-up, usually more space/time efficient.
-- Goal: Optimize space if possible once a correct DP algorithm is written.
+💡 Memoization vs. Iteration
+- Memoization: Top-down recursion with caching. Simple to write, easier to get right.
+- Iteration: Bottom-up approach using loops. Often more space/time efficient and avoids call stack overhead.
+- Tip: Start with memoization to validate correctness, then optimize with iteration if needed.
 
 
 
-📘 Example 1: Fibonacci
-- Recurrence: 'F(n) = F(n-1) + F(n-2)'
-- Without memoization = exponential time.
-- With memoization = O(n) time, O(n) space.
-- With space optimization = O(n) time, O(1) space.
+📘 Example 1: Fibonacci Numbers
+- Recurrence: `F(n) = F(n-1) + F(n-2)`
+- Naive recursion: Exponential time.
+- Memoized: O(n) time, O(n) space.
+- Space-optimized: O(n) time, O(1) space (only store last two values).
 
 
 
 📦 Example 2: Weighted Interval Scheduling
-- Input: Jobs with start time, end time, and weight.
+- Input: List of jobs with start time, end time, and weight/value.
 - Goal: Maximize total weight of non-overlapping jobs.
-- Key Steps:
-  - Sort jobs by finish time.
-  - Define 'p(j)' = latest job that doesn’t overlap with job 'j'.
-  - Recurrence: 'OPT(j) = max(vj + OPT(p(j)), OPT(j-1))'
-- Implementation:
-  - Recursive (slow),
-  - Memoized,
-  - Iterative (fastest).
-- Can reconstruct the optimal solution by backtracking.
+- Steps:
+  - Sort jobs by end time.
+  - Precompute `p(j)` = index of the last job before job `j` that doesn’t overlap.
+  - Recurrence: `OPT(j) = max(v_j + OPT(p(j)), OPT(j-1))`
+- Approaches:
+  - Recursive: exponential.
+  - Memoized: O(n log n) (if `p(j)` is binary searched).
+  - Iterative: same complexity, faster in practice.
+- Recovery: Track choices to reconstruct optimal job subset.
 
 
 
 📈 Example 3: Longest Increasing Subsequence (LIS)
 - Input: Array of numbers.
-- Goal: Longest strictly increasing subsequence.
-- Recurrence: 'OPT[j] = max(1 + OPT[i])' for all 'i < j' and 'A[i] < A[j]'
-- Track predecessors to reconstruct the sequence.
+- Goal: Find longest strictly increasing subsequence.
+- Recurrence: `OPT[j] = max(1 + OPT[i])` for all `i < j` and `A[i] < A[j]`
+- Time: O(n²) with classic DP, O(n log n) with binary search.
+- Recovery: Store predecessors to reconstruct the sequence.
 
 
 
 🎒 Example 4: 0/1 Knapsack
-- Input: Items with weight 'wi', value 'vi', total capacity 'W'.
-- Goal: Maximize value without exceeding capacity.
+- Input: Items with weight `wᵢ`, value `vᵢ`, and total capacity `W`.
+- Goal: Maximize total value without exceeding capacity.
 - Recurrence:
-  - 'OPT(i, w) = max(OPT(i-1, w), vi + OPT(i-1, w - wi))' if 'wi ≤ w'
-- Time complexity: O(nW) → pseudo-polynomial time.
+  - If `wᵢ ≤ w`: `OPT(i, w) = max(OPT(i-1, w), vᵢ + OPT(i-1, w - wᵢ))`
+  - Else: `OPT(i, w) = OPT(i-1, w)`
+- Time/Space: O(nW), pseudo-polynomial (depends on numerical value of `W`, not its bit-length).
 
 
 
-📊 DP Patterns Summary
-| Problem                      | Space | Access Pattern                  |
-|--|-|-|
-| Fibonacci                   | O(1)  | Immediate previous values        |
-| Weighted Interval Scheduling| O(n)  | Arbitrary previous values        |
-| Longest Increasing Subseq.  | O(n)  | All previous values              |
-| Knapsack                    | O(nW) | 2D subproblem table              |
+📊 Summary
+
+| Problem                     | Time   | Space  | Access Pattern                    |
+------------------------------------------------------------------------------------|
+| Fibonacci                   | O(n)   | O(1)   | Immediate previous values         |
+| Weighted Interval Scheduling| O(n)   | O(n)   | Arbitrary previous values (via p) |
+| Longest Increasing Subseq.  | O(n²)  | O(n)   | All previous values               |
+| 0/1 Knapsack                | O(nW)  | O(nW)  | 2D DP table                       |

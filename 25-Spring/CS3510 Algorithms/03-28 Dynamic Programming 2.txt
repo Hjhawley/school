@@ -1,110 +1,123 @@
-🎒 Knapsack Problem (Dynamic Programming)
+🎒 0/1 Knapsack Problem (Dynamic Programming)
 
 🔍 Problem Definition
-- Given 'n' items with:
-  - weight 'wi > 0'
-  - value 'vi > 0'
-- Knapsack capacity = 'W'
-- Goal: Choose a subset of items such that:
+- Given 'n' items, each with:
+  - Weight 'wᵢ > 0'
+  - Value 'vᵢ > 0'
+- Knapsack has capacity 'W'.
+- Goal: Select a subset of items such that:
   - Total weight ≤ 'W'
   - Total value is maximized
 
 
 
 ❌ Why Greedy Fails
-- Greedy (choosing item with best 'vi/wi' ratio) doesn't guarantee optimal.
-- Counterexample: Greedy might choose items '{5,2,1}' for value = 35, but the optimal subset '{3,4}' gives value = 40.
+- A greedy strategy (e.g. picking items with highest 'vᵢ / wᵢ' ratio) does not guarantee optimality.
+- Counterexample:
+  - Greedy might choose items '{5, 2, 1}' with total value 35,
+  - But optimal subset '{3, 4}' has total value 40.
 
 
 
 🧠 Dynamic Programming Approach
 
-🚫 False Start:
-- Let 'OPT(i)' = best value using items 1 to 'i'
-- Problem: we can’t decide whether item 'i' fits without knowing remaining capacity → missing information
+🚫 False Start (Incorrect State):
+- 'OPT(i)' = best value using first 'i' items.
+- ❗ Problem: Doesn’t account for remaining capacity — insufficient state information.
 
 ✅ Correct State Definition:
-- Let 'OPT(i, w)' = best value using first 'i' items and weight limit 'w'
+- Let 'OPT(i, w)' = best value achievable using the first 'i' items and capacity 'w'.
 
-🔁 Recurrence:
-'''plaintext
-If wi > w:
-    OPT(i, w) = OPT(i-1, w)  // item i doesn't fit
+🔁 Recurrence Relation:
+
+If wᵢ > w:
+    OPT(i, w) = OPT(i-1, w)                   # Item i doesn't fit
 Else:
-    OPT(i, w) = max(OPT(i-1, w), vi + OPT(i-1, w - wi))
-'''
-
-🧮 Table Construction:
-- Bottom-up table: size 'n x W'
-- Initialize 'OPT(0, w) = 0' for all 'w' (no items = 0 value)
-- Iterate through all 'i = 1 to n' and 'w = 0 to W'
+    OPT(i, w) = max(
+        OPT(i-1, w),                          # Don't take item i
+        vᵢ + OPT(i-1, w - wᵢ)                 # Take item i
+    )
 
 
+🧮 Table Construction
+- Use bottom-up DP: 2D table of size '(n+1) × (W+1)'
+- Base case: 'OPT(0, w) = 0' for all 'w' (0 items = 0 value)
+- Fill table row-by-row, iterating:
+  - 'i = 1 to n'
+  - 'w = 0 to W'
 
-🧾 Finding the Optimal Set
-- Once the table is filled:
-  - Backtrack from 'OPT(n, W)' to reconstruct which items were chosen
-  - If 'OPT(i, w) ≠ OPT(i-1, w)', then item 'i' was included
+
+
+🧾 Finding the Optimal Item Subset
+- Backtrack from 'OPT(n, W)':
+  - If 'OPT(i, w) ≠ OPT(i-1, w)', then item 'i' was included.
+  - Subtract 'wᵢ' and move to 'OPT(i-1, w - wᵢ)'.
 
 
 
 ⏱ Runtime Analysis
-- Time Complexity: 'O(nW)' → pseudo-polynomial
-- Why “pseudo”?
-  - Input size is proportional to log(W) (binary encoding), but runtime is proportional to 'W'
-  - So, technically exponential in the input size
+- Time: O(nW)
+- Why pseudo-polynomial?
+  - Input size is 'O(n + log W)' (binary encoding of 'W')
+  - But runtime is proportional to numeric value 'W', not its bit-length
+  - So it's exponential in input size, hence pseudo-polynomial
 
 
 
 📍 Bellman-Ford Algorithm (Shortest Paths with Negative Weights)
 
 🔍 Problem Definition
-- Directed weighted graph 'G = (V, E)', source vertex 's'
-- Edge weights 'c(u,v)' can be negative
-- Goal: Find shortest paths from 's' to all other vertices
+- Given a directed weighted graph 'G = (V, E)' and a source 's'
+- Edge weights 'c(u, v)' can be negative
+- Goal: Compute shortest paths from 's' to all vertices in 'V'
 
 
 
 ❌ Why Not Dijkstra?
-- Dijkstra’s algorithm fails with negative weights because it assumes once a node is visited with the shortest path, it's final — which isn’t true when negative weights can cause future improvements.
+- Dijkstra assumes once a node is visited with the shortest path, it's final.
+- This fails when negative weights allow future paths to improve previously finalized paths.
 
 
 
-✅ DP Formulation
-- Let 'OPT(v, i)' = length of shortest path from 's' to 'v' using at most 'i' edges
+✅ Dynamic Programming Formulation
+- Let 'OPT(v, i)' = length of the shortest path from 's' to 'v' using at most 'i' edges
 
 🧾 Initialization:
-'''plaintext
-For all v:
-    OPT[v, 0] = ∞
-OPT[s, 0] = 0
-'''
+
+For all v in V:
+    OPT[v][0] = ∞
+OPT[s][0] = 0
+
 
 🔁 Recurrence:
-'''plaintext
+
 For i = 1 to n-1:
-    For each v in V:
-        OPT[v, i] = OPT[v, i-1]
-        For each edge (u,v):
-            OPT[v, i] = min(OPT[v, i], OPT[u, i-1] + c(u,v))
-'''
+    For each vertex v:
+        OPT[v][i] = OPT[v][i-1]
+        For each edge (u, v):
+            OPT[v][i] = min(
+                OPT[v][i],
+                OPT[u][i-1] + c(u, v)
+            )
 
-- After 'n-1' iterations, 'OPT[v, n-1]' is the shortest path (since no path has more than 'n-1' edges without a cycle)
+
+- After 'n-1' iterations, 'OPT[v][n-1]' holds the shortest distance (since no simple path has more than 'n-1' edges).
 
 
 
-⚠️ Detecting Negative Cycles
-- After 'n-1' iterations, run for up to '2n' iterations
-- If any 'OPT[v, 2n] ≠ OPT[v, n-1]', a negative-weight cycle exists
+⚠️ Negative Cycle Detection
+- Run the algorithm up to '2n' iterations.
+- If any 'OPT[v][2n] ≠ OPT[v][n-1]', a negative-weight cycle is reachable from 's'.
 
 
 
 🧠 Path Reconstruction
-- Keep a 'pred[v]' array to track where each shortest path came from (which 'u' gave the best path to 'v')
-- Use it to reconstruct full paths after the table is complete
+- Maintain a 'pred[v]' array:
+  - 'pred[v]' = previous node 'u' that gave the best path to 'v'
+- After table completion, backtrack from each node to 's' using 'pred[v]' to reconstruct paths.
 
 
 
 ⏱ Runtime Analysis
-- Time: 'O(nm)' (where 'm' = number of edges)
-- Space: 'O(n²)' (2D array for 'OPT[v, i]')
+- Time: O(nm) (n iterations over m edges)
+- Space: O(n²) (if full 'OPT[v][i]' table is stored; can optimize with just two rows)
