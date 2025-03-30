@@ -83,3 +83,43 @@ def create_model_b(my_args, input_shape):
         metrics=["accuracy"]
     )
     return model
+
+def create_model_b(my_args, input_shape):
+    model = keras.models.Sequential()
+    model.add(keras.layers.Input(shape=input_shape))
+
+    # Add batch norm early to stabilize activations
+    model.add(keras.layers.Conv2D(32, (3, 3), padding="same", kernel_initializer="he_normal"))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Activation("relu"))
+
+    model.add(keras.layers.Conv2D(32, (3, 3), padding="same", kernel_initializer="he_normal"))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Activation("relu"))
+    model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
+    model.add(keras.layers.Dropout(0.25))
+
+    model.add(keras.layers.Conv2D(64, (3, 3), padding="same", kernel_initializer="he_normal"))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Activation("relu"))
+
+    model.add(keras.layers.Conv2D(64, (3, 3), padding="same", kernel_initializer="he_normal"))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Activation("relu"))
+    model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
+    model.add(keras.layers.Dropout(0.25))
+
+    model.add(keras.layers.Flatten())
+    model.add(keras.layers.Dense(256, kernel_initializer="he_normal"))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Activation("relu"))
+    model.add(keras.layers.Dropout(0.5))
+
+    model.add(keras.layers.Dense(10, activation="softmax"))
+
+    model.compile(
+        loss="categorical_crossentropy",
+        optimizer=keras.optimizers.Adam(learning_rate=0.001),
+        metrics=["accuracy"]
+    )
+    return model
