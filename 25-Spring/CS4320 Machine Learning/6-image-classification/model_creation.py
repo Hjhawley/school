@@ -84,21 +84,11 @@ def create_model_b(my_args, input_shape):
     )
     return model
 
-def create_model_b(my_args, input_shape):
+def create_model_c(my_args, input_shape):
     model = keras.models.Sequential()
     model.add(keras.layers.Input(shape=input_shape))
 
-    # Add batch norm early to stabilize activations
-    model.add(keras.layers.Conv2D(32, (3, 3), padding="same", kernel_initializer="he_normal"))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Activation("relu"))
-
-    model.add(keras.layers.Conv2D(32, (3, 3), padding="same", kernel_initializer="he_normal"))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Activation("relu"))
-    model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
-    model.add(keras.layers.Dropout(0.25))
-
+    # Block 1
     model.add(keras.layers.Conv2D(64, (3, 3), padding="same", kernel_initializer="he_normal"))
     model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.Activation("relu"))
@@ -107,10 +97,29 @@ def create_model_b(my_args, input_shape):
     model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.Activation("relu"))
     model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
-    model.add(keras.layers.Dropout(0.25))
+    model.add(keras.layers.Dropout(0.35))
 
+    # Block 2
+    model.add(keras.layers.Conv2D(128, (3, 3), padding="same", kernel_initializer="he_normal"))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Activation("relu"))
+
+    model.add(keras.layers.Conv2D(128, (3, 3), padding="same", kernel_initializer="he_normal"))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Activation("relu"))
+    model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
+    model.add(keras.layers.Dropout(0.4))
+
+    # Block 3
+    model.add(keras.layers.Conv2D(256, (3, 3), padding="same", kernel_initializer="he_normal"))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Activation("relu"))
+    model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
+    model.add(keras.layers.Dropout(0.45))
+
+    # Dense layers
     model.add(keras.layers.Flatten())
-    model.add(keras.layers.Dense(256, kernel_initializer="he_normal"))
+    model.add(keras.layers.Dense(512, kernel_initializer="he_normal"))
     model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.Activation("relu"))
     model.add(keras.layers.Dropout(0.5))
