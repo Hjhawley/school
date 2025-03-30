@@ -233,12 +233,33 @@ void testParserWithOutput() {
     std::cout << "Parse tree deleted.\n";
 }
 
+void testInterpreter() {
+    std::cout << "\n----- Interpreter Test -----\n";
+
+    // same as parser test
+    const std::string inputFileName = "code.txt";
+    ScannerClass scanner(inputFileName);
+    SymbolTableClass symbolTable;
+    ParserClass parser(&scanner, &symbolTable);
+    StartNode* root = parser.Start();
+    std::cout << "Parser built a StartNode. The input is valid!\n";
+
+    // add this
+    std::cout << "Interpreting the parse tree...\n";
+    root->Interpret();
+
+    delete root;
+    std::cout << "Finished interpretation and parse tree cleanup.\n";
+}
+
+
 int main() {
     //testScanner();
     //testSymbolTable();
     //testNodes();
     //testParserNoOutput();
-    testParserWithOutput();
+    //testParserWithOutput();
+    testInterpreter();
 
     return 0;
 }
