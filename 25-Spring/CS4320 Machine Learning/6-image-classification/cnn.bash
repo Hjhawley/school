@@ -1,6 +1,6 @@
 #!/bin/bash
 
-model_name=a
+model_name=c
 
 time ./cnn_classification.py cnn-fit \
      --model-name ${model_name} --model-file ${model_name}.joblib \
