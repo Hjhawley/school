@@ -1,0 +1,83 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{soul}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{framed} % For the box
+\sethlcolor{yellow}
+\usepackage{enumitem}
+
+% Adjust margins
+\geometry{margin=1in}
+
+\begin{document}
+
+\noindent CS-3510-(write here your section number) Algorithms, Spring 2025\hfill Homework 4\\
+Name: \hfill Collaborator(s):
+
+\hrulefill
+
+\subsection*{Problem 1 (18 pts)}
+Suppose you are choosing between the following three algorithms:
+\begin{enumerate}[label=(\alph*)]
+    \item (5pts) Algorithm A solves the problem by dividing it into seven subproblems of half the size, recursively solves each subproblem, and then combines the solution in linear time. 
+    \item (5pts) Algorithm B solves the problem by dividing it into twenty-five subproblems of one fifth the size, recursively solves each subproblem, and then combines the solutions in quadratic time.
+    \item (8pts) Algorithm C solves problems of size n by recursively solving four subproblems of size n-4, and then combines the solution in constant time.
+\end{enumerate}
+In all cases you can assume it takes O(1) time to solve instances of size 1. What are the running times of each of these algorithms? Justify your answers. You can use the Master Theorem in your answers.
+
+\subsection*{Problem 2 (10 pts)}
+Solve the following recurrences by unrolling the recurrence. \textbf{DO NOT apply the Master Theorem}:
+\begin{enumerate}[label=(\alph*)]
+    \item (5 pts) $T(n) = 4T(n/3) + n^{3/2}$ for $n\ge2; T(1)=1;$
+    \item (5 pts) $T(n) = T(3n/4) + n$ for $n \ge 2; T(1)=1;$
+\end{enumerate}
+
+\subsection*{Problem 3 (10 pts)}
+You are given two sorted lists of integers of length $m$ and $n$ (no ties exist and sorted in increasing order). Give an $O(\log m + \log n)$ time algorithm for computing the $k$-th smallest integer in the union of the lists.\\
+
+Show the pseudo-code for your proposed algorithm and include any necessary justifications. \textbf{You need to analyze} the time complexity of your algorithm to show that it is $O(\log m + \log n)$
+
+\subsection*{Problem 4 (10 pts)}
+Strassen’s algorithm is a classic example of using the divide‐and‐conquer paradigm to reduce the asymptotic time complexity of matrix multiplication from $O(n^3)$ to approximately $O(n^{\log_2 7}) \approx O(n^{2.8074})$. In practice, Strassen’s method has larger constant factors and can introduce more overhead than the standard algorithm for smaller matrices, but it remains an important illustration of how clever partitioning can speed up large matrix multiplications.\\
+
+\textbf{Task}:
+\begin{enumerate}
+    \item Implement Standard (Naïve) Matrix Multiplication
+    \begin{enumerate}[label=(\alph*)]
+        \item Write a function \textbf{naiveMultiply(A, B)} that takes two $n\times n$ matrices A and B and returns their product C.
+        \item Use the straightforward triple‐nested loop approach, which runs in $O(n^3)$ time.
+    \end{enumerate}
+   \item Implement Strassen’s Matrix Multiplication
+   \begin{enumerate}[label=(\alph*)]
+       \item Write a function \textbf{strassenMultiply(A, B)} that recursively applies Strassen’s algorithm.
+       \item Partition each $n \times n$ matrix into four $n/2 \times n/2$ submatrices.
+       \item Compute the seven products according to Strassen’s formula.
+       \item Use these products to construct the resulting $n/2 \times n/2$ blocks of the product matrix.
+       \item Recursively apply Strassen’s method until the subproblem size falls below a certain threshold (e.g., $2 \times 2$), at which point you may switch to the naïve multiplication for simplicity.
+   \end{enumerate}
+
+\textbf{Compare Performance}
+\begin{itemize}
+    \item Generate random square matrices A and B of sizes $n=64,128,256,512$.
+    \item For each $n$:
+    \begin{enumerate}
+        \item Record the runtime of naiveMultiply(A, B).
+        \item Record the runtime of strassenMultiply(A, B).
+        \item Present your findings in a table with four columns:
+        \begin{itemize}
+            \item Size: the value of n
+            \item Naïve time (s): running time of Naïve method
+            \item Strassen time (s): running time of Strassen method
+            \item Correct?: whether two output matrices are equal or not
+        \end{itemize}
+    \end{enumerate}
+\end{itemize}
+\end{enumerate}
+\textit{Note}: Strassen's algorithm may not show advantage in running time for matrices with size of testing. Beside showing the table. Please also \textbf{upload your source code file} to Canvas.
+
+\end{document}
+
+
