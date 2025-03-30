@@ -30,4 +30,4 @@ mv ${model_name}.keras.learning_curve.png ${model_name}.keras.learning_curve-c.p
 
 time ./cnn_classification.py score \
      --model-file ${model_name}.keras \
-     --batch-number 6
+     --batch-number 5
