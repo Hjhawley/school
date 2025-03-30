@@ -22,6 +22,12 @@ ProgramNode* StartNode::GetProgram() const {
     return mProgram;
 }
 
+void StartNode::Interpret() {
+    // Just forward the call to the ProgramNode
+    if(mProgram)
+        mProgram->Interpret();
+}
+
 // ProgramNode
 ProgramNode::ProgramNode(BlockNode* block)
     : mBlock(block) {
@@ -36,6 +42,12 @@ BlockNode* ProgramNode::GetBlock() const {
     return mBlock;
 }
 
+void ProgramNode::Interpret() {
+    // Forward to BlockNode
+    if(mBlock)
+        mBlock->Interpret();
+}
+
 // BlockNode
 BlockNode::BlockNode(StatementGroupNode* statementGroup)
     : mStatementGroup(statementGroup) {
@@ -48,6 +60,12 @@ BlockNode::~BlockNode() {
 
 StatementGroupNode* BlockNode::GetStatementGroup() const {
     return mStatementGroup;
+}
+
+void BlockNode::Interpret() {
+    // Just interpret the StatementGroup
+    if(mStatementGroup)
+        mStatementGroup->Interpret();
 }
 
 // StatementGroupNode
@@ -69,6 +87,14 @@ const std::vector<StatementNode*>& StatementGroupNode::GetStatements() const {
     return mStatements;
 }
 
+void StatementGroupNode::Interpret() {
+    for(StatementNode* stmt : mStatements) {
+        if(stmt) {
+            stmt->Interpret();
+        }
+    }
+}
+
 // StatementNode
 StatementNode::~StatementNode() {
     MSG("~StatementNode() called");
@@ -86,6 +112,12 @@ DeclarationStatementNode::~DeclarationStatementNode() {
 
 IdentifierNode* DeclarationStatementNode::GetIdentifier() const {
     return mIdentifier;
+}
+
+void DeclarationStatementNode::Interpret() {
+    // Tells its IdentifierNode to declare a variable in the symbol table
+    if(mIdentifier)
+        mIdentifier->DeclareVariable();
 }
 
 // AssignmentStatementNode
@@ -107,6 +139,11 @@ ExpressionNode* AssignmentStatementNode::GetExpression() const {
     return mExpression;
 }
 
+void AssignmentStatementNode::Interpret() {
+    int value = mExpression->Evaluate(); // from ExpressionNode
+    mIdentifier->SetValue(value);
+}
+
 // CoutStatementNode
 CoutStatementNode::CoutStatementNode(ExpressionNode* expression)
     : mExpression(expression) {
@@ -119,6 +156,12 @@ CoutStatementNode::~CoutStatementNode() {
 
 ExpressionNode* CoutStatementNode::GetExpression() const {
     return mExpression;
+}
+
+void CoutStatementNode::Interpret() {
+    // Evaluate the expression and print it
+    int value = mExpression->Evaluate();
+    std::cout << value << " ";  // or endl, or anything you want
 }
 
 // ExpressionNode

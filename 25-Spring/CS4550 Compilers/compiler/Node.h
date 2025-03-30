@@ -23,6 +23,7 @@ class MinusNode;
 class Node {
 public:
     virtual ~Node();
+    virtual void Interpret() = 0; // pure virtual, implement in children
 };
 
 
@@ -32,6 +33,7 @@ class StartNode : public Node {
 public:
     StartNode(ProgramNode* program);
     virtual ~StartNode();
+    virtual void Interpret() override;
     ProgramNode* GetProgram() const;
 private:
     ProgramNode* mProgram;
@@ -42,6 +44,7 @@ class ProgramNode : public Node {
 public:
     ProgramNode(BlockNode* block);
     virtual ~ProgramNode();
+    virtual void Interpret() override;
     BlockNode* GetBlock() const;
 private:
     BlockNode* mBlock;
@@ -49,36 +52,39 @@ private:
 
 
 class StatementNode : public Node {
-    public:
-        virtual ~StatementNode();
-    };
+public:
+    virtual ~StatementNode();
+};
 
 
 class StatementGroupNode : public Node {
-    public:
-        StatementGroupNode();
-        virtual ~StatementGroupNode();
-        void AddStatement(StatementNode* stmt);
-        const std::vector<StatementNode*>& GetStatements() const;
-    private:
-        std::vector<StatementNode*> mStatements;
-    };
+public:
+    StatementGroupNode();
+    virtual ~StatementGroupNode();
+    virtual void Interpret() override;
+    void AddStatement(StatementNode* stmt);
+    const std::vector<StatementNode*>& GetStatements() const;
+private:
+    std::vector<StatementNode*> mStatements;
+};
 
-    
+
 class BlockNode : public StatementNode {
-    public:
-        BlockNode(StatementGroupNode* statementGroup);
-        virtual ~BlockNode();
-        StatementGroupNode* GetStatementGroup() const;
-    private:
-        StatementGroupNode* mStatementGroup;
-    };    
+public:
+    BlockNode(StatementGroupNode* statementGroup);
+    virtual ~BlockNode();
+    virtual void Interpret() override;
+    StatementGroupNode* GetStatementGroup() const;
+private:
+    StatementGroupNode* mStatementGroup;
+};
 
 
 class DeclarationStatementNode : public StatementNode {
 public:
     DeclarationStatementNode(IdentifierNode* identifier);
     virtual ~DeclarationStatementNode();
+    virtual void Interpret() override;
     IdentifierNode* GetIdentifier() const;
 private:
     IdentifierNode* mIdentifier;
@@ -89,6 +95,7 @@ class AssignmentStatementNode : public StatementNode {
 public:
     AssignmentStatementNode(IdentifierNode* identifier, ExpressionNode* expression);
     virtual ~AssignmentStatementNode();
+    virtual void Interpret() override;
     IdentifierNode* GetIdentifier() const;
     ExpressionNode* GetExpression() const;
 private:
@@ -101,6 +108,7 @@ class CoutStatementNode : public StatementNode {
 public:
     CoutStatementNode(ExpressionNode* expression);
     virtual ~CoutStatementNode();
+    virtual void Interpret() override;
     ExpressionNode* GetExpression() const;
 private:
     ExpressionNode* mExpression;
