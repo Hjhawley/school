@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source .venv/bin/activate
+
 model_name=c
 
 time ./cnn_classification.py cnn-fit \
