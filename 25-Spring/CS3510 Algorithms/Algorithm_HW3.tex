@@ -47,7 +47,7 @@ The algorithm proceeds as follows:
     \item \(L_3\) starts at 3. Room 1's last lecture (\(L_1\)) finishes at 4 and Room 2's last lecture (\(L_2\)) finishes at 5; hence, neither is available. Allocate Room 3 for \(L_3\).
     \item \(L_4\) starts at 1. Checking all rooms, we see that in each room the last scheduled lecture finishes after time 1. Therefore, a new Room 4 is allocated for \(L_4\).
 \end{enumerate}
-Thus, the algorithm uses 4 classrooms even though the depth is only 3. This shows the algorithm is not optimal.
+Therefore, the algorithm uses 4 classrooms even though the depth is only 3. This shows the algorithm is not optimal.
 
 \bigskip
 
@@ -78,7 +78,7 @@ The idea is to choose a total order on the edges so that all edges in \(T\) are 
     \item For any \(e\in T\) and \(g\notin T\), let \(e\) precede \(g\).
     \item For any \(g,h\notin T\), order them by their weights.
 \end{itemize}
-With this ordering, when Kruskal's algorithm is executed, every edge of \(T\) will be considered before any non–tree edge that could create a cycle with already chosen edges. Hence, the algorithm will choose exactly the edges of \(T\), and so \(T\) is produced. \(\square\)
+With this ordering, when Kruskal's algorithm is executed, every edge of \(T\) will be considered before any non-tree edge that could create a cycle with already chosen edges. Therefore, the algorithm will choose exactly the edges of \(T\), and so \(T\) is produced. \(\square\)
 
 \bigskip
 
@@ -105,7 +105,7 @@ MinimizeMaxPairSum(a[1..n]):
     return maxSum
 \end{verbatim}
 \textbf{Analysis:}  
-The sort takes \(O(n\log n)\) time and the pairing loop takes \(O(n)\). Hence, the overall time complexity is \(O(n\log n)\), which is polynomial.
+The sort takes \(O(n\log n)\) time and the pairing loop takes \(O(n)\). Therefore, the overall time complexity is \(O(n\log n)\), which is polynomial.
 
 \bigskip
 
@@ -204,7 +204,7 @@ function minCostSupplyWater(n, wells, pipes):
     return totalCost
 \end{verbatim}
 \textbf{Time Complexity:}  
-If there are \(m\) pipes, then the graph has \(O(n+m)\) edges. Sorting the edges takes \(O((n+m)\log (n+m))\) time. Thus, the algorithm is polynomial.
+If there are \(m\) pipes, then the graph has \(O(n+m)\) edges. Sorting the edges takes \(O((n+m)\log (n+m))\) time. Therefore, the algorithm is polynomial.
 
 \vspace{0.5cm}
 
