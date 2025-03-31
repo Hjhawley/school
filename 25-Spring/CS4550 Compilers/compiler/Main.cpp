@@ -112,13 +112,16 @@ void testNodes() {
 
     // Declarations
     StatementNode* declX = new DeclarationStatementNode(
-        new IdentifierNode("x", &symbolTable)
+        new IdentifierNode("x", &symbolTable),
+        nullptr // fix for midterm 2 question 1
     );
     StatementNode* declY = new DeclarationStatementNode(
-        new IdentifierNode("y", &symbolTable)
+        new IdentifierNode("y", &symbolTable),
+        nullptr
     );
     StatementNode* declZ = new DeclarationStatementNode(
-        new IdentifierNode("z", &symbolTable)
+        new IdentifierNode("z", &symbolTable),
+        nullptr
     );
 
     // x = 10 + 20

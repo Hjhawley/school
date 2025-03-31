@@ -7,4 +7,7 @@ void main() {
        except for the newline count.
     */
     cout << x;
+    // midterm 2: check that declaration and initialization are supported on the same line
+    int y = x-3;
+    cout << y;
 }

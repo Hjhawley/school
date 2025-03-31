@@ -101,24 +101,30 @@ StatementNode::~StatementNode() {
 }
 
 // DeclarationStatementNode
-DeclarationStatementNode::DeclarationStatementNode(IdentifierNode* identifier)
-    : mIdentifier(identifier) {
+DeclarationStatementNode::DeclarationStatementNode(IdentifierNode* identifier, ExpressionNode* initExpr)
+    : mIdentifier(identifier), mInitExpr(initExpr) {
 }
 
 DeclarationStatementNode::~DeclarationStatementNode() {
     MSG("~DeclarationStatementNode() called");
     delete mIdentifier;
+    delete mInitExpr;
+}
+
+void DeclarationStatementNode::Interpret() {
+    // Declare variable
+    mIdentifier->DeclareVariable();
+    // If there's an init expression, Evaluate it and assign to the identifier
+    if(mInitExpr) {
+        int value = mInitExpr->Evaluate();
+        mIdentifier->SetValue(value);
+    }
 }
 
 IdentifierNode* DeclarationStatementNode::GetIdentifier() const {
     return mIdentifier;
 }
 
-void DeclarationStatementNode::Interpret() {
-    // Tells its IdentifierNode to declare a variable in the symbol table
-    if(mIdentifier)
-        mIdentifier->DeclareVariable();
-}
 
 // AssignmentStatementNode
 AssignmentStatementNode::AssignmentStatementNode(IdentifierNode* identifier, ExpressionNode* expression)

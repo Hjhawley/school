@@ -82,12 +82,17 @@ private:
 
 class DeclarationStatementNode : public StatementNode {
 public:
-    DeclarationStatementNode(IdentifierNode* identifier);
+    DeclarationStatementNode(IdentifierNode* identifier, ExpressionNode* initExpr);
     virtual ~DeclarationStatementNode();
+
     virtual void Interpret() override;
+
     IdentifierNode* GetIdentifier() const;
+    ExpressionNode* GetInitExpr() const;
+
 private:
     IdentifierNode* mIdentifier;
+    ExpressionNode* mInitExpr;
 };
 
 

@@ -86,10 +86,15 @@ StatementNode* ParserClass::Statement() {
 DeclarationStatementNode* ParserClass::DeclarationStatement() {
     Match(INT_TOKEN);
     IdentifierNode* idNode = Identifier();
+    ExpressionNode* initExpr = nullptr; // default, if just a semicolon
+    TokenType tt = mScanner->PeekNextToken().GetTokenType(); // peek to check if ASSIGNMENT or SEMICOLON
+    if(tt == ASSIGNMENT_TOKEN) {
+        Match(ASSIGNMENT_TOKEN);  // consume =
+        initExpr = Expression();  // "x - 3"
+    }
+    // otherwise we just saw a semicolon
     Match(SEMICOLON_TOKEN);
-
-    // Return a node
-    return new DeclarationStatementNode(idNode);
+    return new DeclarationStatementNode(idNode, initExpr);
 }
 
 // <AssignmentStatement> -> <Identifier> ASSIGNMENT <Expression> SEMICOLON
