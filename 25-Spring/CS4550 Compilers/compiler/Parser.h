@@ -38,6 +38,9 @@ private:
     // <AssignmentStatement> → <Identifier> ASSIGNMENT <Expression> SEMICOLON
     AssignmentStatementNode* AssignmentStatement();
 
+    // <IfStatement> -> IF LPAREN <Expression> RPAREN <Statement>
+    StatementNode* IfStatement();
+
     // <CoutStatement> → COUT INSERTION <Expression> SEMICOLON
     CoutStatementNode* CoutStatement();
 

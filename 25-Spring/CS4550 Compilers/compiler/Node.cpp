@@ -125,6 +125,9 @@ IdentifierNode* DeclarationStatementNode::GetIdentifier() const {
     return mIdentifier;
 }
 
+ExpressionNode* DeclarationStatementNode::GetInitExpr() const {
+    return mInitExpr;
+}
 
 // AssignmentStatementNode
 AssignmentStatementNode::AssignmentStatementNode(IdentifierNode* identifier, ExpressionNode* expression)
@@ -353,4 +356,34 @@ NotEqualNode::~NotEqualNode() {
 
 int NotEqualNode::Evaluate() const {
     return (mLeft->Evaluate() != mRight->Evaluate()) ? 1 : 0;
+}
+
+// IfStatementNode
+IfStatementNode::IfStatementNode(ExpressionNode* condition, StatementNode* body)
+    : mCondition(condition), mBody(body) {
+}
+
+IfStatementNode::~IfStatementNode() {
+    MSG("~IfStatementNode() called");
+    delete mCondition;
+    delete mBody;
+}
+
+void IfStatementNode::Interpret() {
+    if (mCondition->Evaluate()) {
+        mBody->Interpret();
+    }
+}
+
+// EmptyStatementNode
+EmptyStatementNode::EmptyStatementNode() { 
+    // do nothing
+}
+
+EmptyStatementNode::~EmptyStatementNode() {
+    MSG("~EmptyStatementNode() called");
+}
+
+void EmptyStatementNode::Interpret() {
+    // do nothing
 }

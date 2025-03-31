@@ -21,6 +21,9 @@ TokenClass::TokenClass(TokenType type, const std::string &lexeme)
         else if (lexeme == "cout") {
             mType = COUT_TOKEN;
         }
+        else if (lexeme == "if") {
+            mType = IF_TOKEN;
+        }        
     }
     MSG("Token initialized.");
 }

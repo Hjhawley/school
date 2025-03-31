@@ -84,12 +84,9 @@ class DeclarationStatementNode : public StatementNode {
 public:
     DeclarationStatementNode(IdentifierNode* identifier, ExpressionNode* initExpr);
     virtual ~DeclarationStatementNode();
-
     virtual void Interpret() override;
-
     IdentifierNode* GetIdentifier() const;
     ExpressionNode* GetInitExpr() const;
-
 private:
     IdentifierNode* mIdentifier;
     ExpressionNode* mInitExpr;
@@ -246,4 +243,23 @@ public:
     NotEqualNode(ExpressionNode* left, ExpressionNode* right);
     virtual ~NotEqualNode();
     virtual int Evaluate() const override;
+};
+
+
+class IfStatementNode : public StatementNode {
+    public:
+        IfStatementNode(ExpressionNode* condition, StatementNode* body);
+        virtual ~IfStatementNode();
+        virtual void Interpret() override;
+    private:
+        ExpressionNode* mCondition;
+        StatementNode* mBody;
+    };
+
+
+class EmptyStatementNode : public StatementNode {
+public:
+    EmptyStatementNode();
+    virtual ~EmptyStatementNode();
+    virtual void Interpret() override; // do nothing
 };

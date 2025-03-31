@@ -65,17 +65,24 @@ StatementGroupNode* ParserClass::StatementGroup() {
 StatementNode* ParserClass::Statement() {
     // Peek to see what we have
     TokenType tt = mScanner->PeekNextToken().GetTokenType();
-    if(tt == INT_TOKEN) {
+    if(tt == SEMICOLON_TOKEN) {
+        Match(SEMICOLON_TOKEN);
+        return new EmptyStatementNode(); // do nothing
+    }
+    else if (tt == IF_TOKEN) {
+        return IfStatement();
+    }    
+    else if(tt == INT_TOKEN) {
         return DeclarationStatement();
     }
     else if(tt == IDENTIFIER_TOKEN) {
         return AssignmentStatement();
     }
-    else if(tt == COUT_TOKEN) {
+    else if(tt == COUT_TOKEN) { 
         return CoutStatement();
     }
     else if(tt == LCURLY_TOKEN) {
-        // a block is also a StatementNode
+        // a block is also a statement node
         return Block();
     }
     // no statement recognized
@@ -116,6 +123,16 @@ CoutStatementNode* ParserClass::CoutStatement() {
     Match(SEMICOLON_TOKEN);
 
     return new CoutStatementNode(expr);
+}
+
+// <IfStatement> -> IF LPAREN <Expression> RPAREN <Statement>
+StatementNode* ParserClass::IfStatement() {
+    Match(IF_TOKEN);
+    Match(LPAREN_TOKEN);
+    ExpressionNode* cond = Expression();
+    Match(RPAREN_TOKEN);
+    StatementNode* body = Statement(); // single statement only (could be block or anything else)
+    return new IfStatementNode(cond, body);
 }
 
 // <Expression> -> <Relational>

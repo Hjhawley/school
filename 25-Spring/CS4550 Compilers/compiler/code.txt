@@ -1,5 +1,6 @@
 void main() {
     int x;
+    ;   ;
     x = 10 / 2; // This tests the division operator.
     /* This is a block comment.
        It spans multiple lines.
@@ -10,4 +11,7 @@ void main() {
     // midterm 2: check that declaration and initialization are supported on the same line
     int y = x-3;
     cout << y;
+    // midterm 2: support empty statements
+    ;
+    ;   ;
 }
