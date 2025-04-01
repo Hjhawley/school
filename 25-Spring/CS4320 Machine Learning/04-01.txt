@@ -1,0 +1,15 @@
+Sequential Data pt 2
+
+vector: a collection of values
+sequecne: a series of vectors
+
+recurrent neuron: in addition to its input and output, also has a hidden internal loop simulating a history
+Simple RNN: a series of recurrent neurons, each taking one value from a vector and each doing their own history
+
+memory cell: we don't consider neurons or layers; just some structure that informs its future self of what its doing right now 
+
+architectures:
+sequence to sequence
+sequence to vector
+vector to sequence
+encoder-decoder
