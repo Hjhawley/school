@@ -23,7 +23,10 @@ TokenClass::TokenClass(TokenType type, const std::string &lexeme)
         }
         else if (lexeme == "if") {
             mType = IF_TOKEN;
-        }        
+        }
+        else if (lexeme == "while") {
+            mType = WHILE_TOKEN;
+        }
     }
     MSG("Token initialized.");
 }

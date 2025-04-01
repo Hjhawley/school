@@ -55,8 +55,7 @@ StatementGroupNode* ParserClass::StatementGroup() {
         if(stmt == nullptr) {
             break; // no statement found
         }
-        // Add it
-        sg->AddStatement(stmt);
+        sg->AddStatement(stmt); // add it
     }
     return sg;
 }
@@ -71,6 +70,9 @@ StatementNode* ParserClass::Statement() {
     }
     else if (tt == IF_TOKEN) {
         return IfStatement();
+    }
+    else if (tt == WHILE_TOKEN) {
+        return WhileStatement();
     }    
     else if(tt == INT_TOKEN) {
         return DeclarationStatement();
@@ -96,7 +98,7 @@ DeclarationStatementNode* ParserClass::DeclarationStatement() {
     ExpressionNode* initExpr = nullptr; // default, if just a semicolon
     TokenType tt = mScanner->PeekNextToken().GetTokenType(); // peek to check if ASSIGNMENT or SEMICOLON
     if(tt == ASSIGNMENT_TOKEN) {
-        Match(ASSIGNMENT_TOKEN);  // consume =
+        Match(ASSIGNMENT_TOKEN);  // consume "="
         initExpr = Expression();  // "x - 3"
     }
     // otherwise we just saw a semicolon
@@ -133,6 +135,16 @@ StatementNode* ParserClass::IfStatement() {
     Match(RPAREN_TOKEN);
     StatementNode* body = Statement(); // single statement only (could be block or anything else)
     return new IfStatementNode(cond, body);
+}
+
+// <WhileStatement> -> WHILE LPAREN <Expression> RPAREN <Statement>
+StatementNode* ParserClass::WhileStatement() {
+    Match(WHILE_TOKEN);
+    Match(LPAREN_TOKEN);
+    ExpressionNode* cond = Expression();
+    Match(RPAREN_TOKEN);
+    StatementNode* body = Statement();
+    return new WhileStatementNode(cond, body);
 }
 
 // <Expression> -> <Relational>

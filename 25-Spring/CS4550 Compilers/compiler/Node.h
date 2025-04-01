@@ -247,14 +247,25 @@ public:
 
 
 class IfStatementNode : public StatementNode {
-    public:
-        IfStatementNode(ExpressionNode* condition, StatementNode* body);
-        virtual ~IfStatementNode();
-        virtual void Interpret() override;
-    private:
-        ExpressionNode* mCondition;
-        StatementNode* mBody;
-    };
+public:
+    IfStatementNode(ExpressionNode* condition, StatementNode* body);
+    virtual ~IfStatementNode();
+    virtual void Interpret() override;
+private:
+    ExpressionNode* mCondition;
+    StatementNode* mBody;
+};
+
+
+class WhileStatementNode : public StatementNode {
+public:
+    WhileStatementNode(ExpressionNode* condition, StatementNode* body);
+    virtual ~WhileStatementNode();
+    virtual void Interpret() override;
+private:
+    ExpressionNode* mCondition;
+    StatementNode* mBody;
+};
 
 
 class EmptyStatementNode : public StatementNode {

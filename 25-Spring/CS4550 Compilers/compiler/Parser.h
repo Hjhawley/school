@@ -41,6 +41,9 @@ private:
     // <IfStatement> -> IF LPAREN <Expression> RPAREN <Statement>
     StatementNode* IfStatement();
 
+    // <WhileStatement> -> WHILE LPAREN <Expression> RPAREN <Statement>
+    StatementNode* ParserClass::WhileStatement();
+
     // <CoutStatement> → COUT INSERTION <Expression> SEMICOLON
     CoutStatementNode* CoutStatement();
 

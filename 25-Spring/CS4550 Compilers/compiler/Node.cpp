@@ -375,6 +375,22 @@ void IfStatementNode::Interpret() {
     }
 }
 
+// WhileStatementNode
+WhileStatementNode::WhileStatementNode(ExpressionNode* condition, StatementNode* body)
+    : mCondition(condition), mBody(body) {}
+
+WhileStatementNode::~WhileStatementNode() {
+    MSG("~WhileStatementNode() called");
+    delete mCondition;
+    delete mBody;
+}
+
+void WhileStatementNode::Interpret() {
+    while (mCondition->Evaluate()) {
+        mBody->Interpret();
+    }
+}
+
 // EmptyStatementNode
 EmptyStatementNode::EmptyStatementNode() { 
     // do nothing
