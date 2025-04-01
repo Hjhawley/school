@@ -56,3 +56,6 @@ __pycache__/
 
 *.joblib
 *.keras
+
+# WAV files
+*.wav
