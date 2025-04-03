@@ -20,9 +20,10 @@ def cut_audio(source_dir, out_dir):
         audio = audio.set_frame_rate(sample_rate).set_channels(channels)
         
         duration = len(audio)
+        base = os.path.splitext(fname)[0]
         for start_ms in range(0, duration - clip_length_ms + 1, clip_length_ms):
             clip = audio[start_ms:start_ms + clip_length_ms]
-            clip_fname = f"clip_{clip_count:05}.wav"
+            clip_fname = f"{base}_{clip_count:05}.wav"
             clip_path = os.path.join(out_dir, clip_fname)
             clip.export(clip_path, format="wav")
             clip_count += 1
