@@ -28,7 +28,7 @@ def cut_audio(source_dir, out_dir):
             clip.export(clip_path, format="wav")
             clip_count += 1
     
-    print(f"Saved {clip_count} clips to {out_dir}")
+        print(f"Saved {clip_count} clips from {fname} to {out_dir}")
 
 if __name__ == "__main__":
     cut_audio("data/train-uncut", "data/train-cut")

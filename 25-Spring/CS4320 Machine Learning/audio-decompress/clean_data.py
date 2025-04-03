@@ -1,10 +1,11 @@
+# obsolete?
 import os
 from pydub import AudioSegment
 import ffmpeg
 
 # Constants
 SAMPLE_RATE = 44100  # 44.1 kHz
-CLIP_LEN_MS = 7000   # 7 seconds
+CLIP_LEN_MS = 5000   # 5 seconds
 
 # Directory paths
 DATA_DIR = "data"
@@ -14,7 +15,7 @@ RAW_DIR = "path/to/your/musdb18hq"  # Update this to your actual path
 
 def split_to_clips(source_dir, out_dir, target_sr=SAMPLE_RATE):
     """
-    Splits audio files in the source directory into 7-second clips and saves them to the output directory.
+    Splits audio files in the source directory into 5-second clips and saves them to the output directory.
     """
     os.makedirs(out_dir, exist_ok=True)
     count = 0
@@ -53,7 +54,7 @@ def compress_with_mp3(input_dir, output_dir, bitrate="64k"):
     print(f"Generated degraded audio in {output_dir}")
 
 if __name__ == "__main__":
-    print("STEP 1: Splitting WAVs into 7-second clips...")
+    print("STEP 1: Splitting WAVs into 5-second clips...")
     wav_root = os.path.join(RAW_DIR, "train")  # or "test"
     split_to_clips(wav_root, ORIGINAL_CLIPS_DIR)
 
