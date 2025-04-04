@@ -1,7 +1,9 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
+	"hash/fnv"
 	"log"
 	"net"
 	"net/http"
@@ -10,6 +12,8 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type MapTask struct {
@@ -91,6 +95,179 @@ func (c Client) Reduce(key string, values <-chan string, output chan<- Pair) err
 	}
 	p := Pair{Key: key, Value: strconv.Itoa(count)}
 	output <- p
+	return nil
+}
+
+func (task *MapTask) Process(tempdir string, client Interface) error {
+	// Step 1: Download the source file
+	url := makeURL(task.SourceHost, mapSourceFile(task.N))
+	inputPath := filepath.Join(tempdir, mapInputFile(task.N))
+	if err := download(url, inputPath); err != nil {
+		return fmt.Errorf("failed to download input file: %w", err)
+	}
+
+	// Step 2: Open the input DB
+	db, err := openDatabase(inputPath)
+	if err != nil {
+		return fmt.Errorf("failed to open input database: %w", err)
+	}
+	defer db.Close()
+
+	// Step 3: Create output DBs and prepared statements
+	outs := make([]*sql.DB, task.R)
+	inserts := make([]*sql.Stmt, task.R)
+	for r := 0; r < task.R; r++ {
+		path := filepath.Join(tempdir, mapOutputFile(task.N, r))
+		out, err := createDatabase(path)
+		if err != nil {
+			return fmt.Errorf("failed to create output DB for reducer %d: %w", r, err)
+		}
+		outs[r] = out
+		stmt, err := out.Prepare("insert into pairs (key, value) values (?, ?)")
+		if err != nil {
+			return fmt.Errorf("failed to prepare insert for reducer %d: %w", r, err)
+		}
+		inserts[r] = stmt
+	}
+	defer func() {
+		for _, stmt := range inserts {
+			if stmt != nil {
+				stmt.Close()
+			}
+		}
+		for _, db := range outs {
+			if db != nil {
+				db.Close()
+			}
+		}
+	}()
+
+	// Step 4: Read from input DB
+	rows, err := db.Query("select key, value from pairs")
+	if err != nil {
+		return fmt.Errorf("querying input: %w", err)
+	}
+	defer rows.Close()
+
+	inputCount := 0
+	outputCount := 0
+	for rows.Next() {
+		var key, value string
+		if err := rows.Scan(&key, &value); err != nil {
+			return fmt.Errorf("scanning input: %w", err)
+		}
+		inputCount++
+
+		// Call client.Map
+		ch := make(chan Pair, 100)
+		err := client.Map(key, value, ch)
+		if err != nil {
+			return fmt.Errorf("client.Map error: %w", err)
+		}
+		for pair := range ch {
+			hash := fnv.New32()
+			hash.Write([]byte(pair.Key))
+			r := int(hash.Sum32() % uint32(task.R))
+			if _, err := inserts[r].Exec(pair.Key, pair.Value); err != nil {
+				return fmt.Errorf("inserting pair into reducer %d: %w", r, err)
+			}
+			outputCount++
+		}
+	}
+	if err := rows.Err(); err != nil {
+		return fmt.Errorf("row iteration error: %w", err)
+	}
+
+	log.Printf("map task %d processed %d pairs, generated %d pairs", task.N, inputCount, outputCount)
+	return nil
+}
+
+func (task *ReduceTask) Process(tempdir string, client Interface) error {
+	// Step 1: gather all map outputs for this reducer
+	var urls []string
+	for m := 0; m < task.M; m++ {
+		file := mapOutputFile(m, task.N)
+		urls = append(urls, makeURL(task.SourceHosts[m], file))
+	}
+	inputPath := filepath.Join(tempdir, reduceInputFile(task.N))
+	db, err := mergeDatabases(urls, inputPath, reduceTempFile(task.N))
+	if err != nil {
+		return fmt.Errorf("mergeDatabases failed: %w", err)
+	}
+	defer db.Close()
+
+	// Step 2: create output DB and prepare insert
+	outPath := filepath.Join(tempdir, reduceOutputFile(task.N))
+	outDB, err := createDatabase(outPath)
+	if err != nil {
+		return fmt.Errorf("create output database: %w", err)
+	}
+	defer outDB.Close()
+	stmt, err := outDB.Prepare("insert into pairs (key, value) values (?, ?)")
+	if err != nil {
+		return fmt.Errorf("prepare insert: %w", err)
+	}
+	defer stmt.Close()
+
+	// Step 3: read and reduce sorted pairs
+	rows, err := db.Query("select key, value from pairs order by key, value")
+	if err != nil {
+		return fmt.Errorf("query input db: %w", err)
+	}
+	defer rows.Close()
+
+	var (
+		currentKey string
+		inputChan  chan string
+		outputChan chan Pair
+		done       chan error
+		keys, values, outputs int
+	)
+	flush := func() error {
+		if inputChan != nil {
+			close(inputChan)
+			err := <-done
+			if err != nil {
+				return fmt.Errorf("client.Reduce failed: %w", err)
+			}
+			for pair := range outputChan {
+				if _, err := stmt.Exec(pair.Key, pair.Value); err != nil {
+					return fmt.Errorf("insert reduce result: %w", err)
+				}
+				outputs++
+			}
+		}
+		return nil
+	}
+	for rows.Next() {
+		var key, value string
+		if err := rows.Scan(&key, &value); err != nil {
+			return fmt.Errorf("scan: %w", err)
+		}
+		values++
+		if key != currentKey {
+			if err := flush(); err != nil {
+				return err
+			}
+			currentKey = key
+			inputChan = make(chan string, 100)
+			outputChan = make(chan Pair, 100)
+			done = make(chan error, 1)
+			go func(k string, in <-chan string, out chan<- Pair) {
+				done <- client.Reduce(k, in, out)
+			}(key, inputChan, outputChan)
+			keys++
+		}
+		inputChan <- value
+	}
+	if err := flush(); err != nil {
+		return err
+	}
+	if err := rows.Err(); err != nil {
+		return fmt.Errorf("row iteration error: %w", err)
+	}
+
+	log.Printf("reduce task %d processed %d keys and %d values, generated %d pairs", task.N, keys, values, outputs)
 	return nil
 }
 
