@@ -82,7 +82,7 @@ func testSplitDatabase() {
 }
 
 func main() {
-    testOpenDatabase()
+    //testOpenDatabase()
     //testCreateDatabase()
-    //testSplitDatabase()
+    testSplitDatabase()
 }
