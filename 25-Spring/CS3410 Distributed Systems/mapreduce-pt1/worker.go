@@ -217,10 +217,10 @@ func (task *ReduceTask) Process(tempdir string, client Interface) error {
 	defer rows.Close()
 
 	var (
-		currentKey string
-		inputChan  chan string
-		outputChan chan Pair
-		done       chan error
+		currentKey            string
+		inputChan             chan string
+		outputChan            chan Pair
+		done                  chan error
 		keys, values, outputs int
 	)
 	flush := func() error {
@@ -375,5 +375,18 @@ func main() {
 	if err != nil {
 		log.Fatalf("counting final output rows: %v", err)
 	}
-	log.Printf("final output database contains %d rows", total)	
+	log.Printf("final output database contains %d rows", total)
+
+	// show top 20 most frequent words
+	rows, err := db.Query("select key, value from pairs order by cast(value as int) desc limit 20")
+	if err != nil {
+		log.Fatalf("query top results: %v", err)
+	}
+	defer rows.Close()
+	log.Println("Top 20 words:")
+	for rows.Next() {
+		var key, val string
+		rows.Scan(&key, &val)
+		log.Printf("%s: %s", key, val)
+	}
 }
