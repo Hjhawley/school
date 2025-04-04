@@ -356,4 +356,24 @@ func main() {
 	}
 
 	// gather outputs into final target.db file
+	var outputURLs []string
+	for i := 0; i < r; i++ {
+		file := reduceOutputFile(i)
+		outputURLs = append(outputURLs, makeURL(myAddress, file))
+	}
+	finalPath := filepath.Join(tempdir, "target.db")
+	finalTemp := filepath.Join(tempdir, "target_temp.db")
+
+	db, err := mergeDatabases(outputURLs, finalPath, finalTemp)
+	if err != nil {
+		log.Fatalf("final merge failed: %v", err)
+	}
+	defer db.Close()
+
+	var total int
+	err = db.QueryRow("select count(1) from pairs").Scan(&total)
+	if err != nil {
+		log.Fatalf("counting final output rows: %v", err)
+	}
+	log.Printf("final output database contains %d rows", total)	
 }
