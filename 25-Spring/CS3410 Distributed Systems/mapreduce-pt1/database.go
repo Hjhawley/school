@@ -11,13 +11,13 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func openDatabase(path string) (*sql.DB, error) {
+func OpenDatabase(path string) (*sql.DB, error) {
 	if _, err := os.Stat(path); err != nil {
 		if os.IsNotExist(err) {
-			log.Printf("openDatabase: file [%s] does not exist", path)
+			log.Printf("OpenDatabase: file [%s] does not exist", path)
 			return nil, err
 		} else {
-			log.Printf("openDatabase: error trying to access source file [%s]: %v", path, err)
+			log.Printf("OpenDatabase: error trying to access source file [%s]: %v", path, err)
 			return nil, err
 		}
 	}
@@ -39,7 +39,7 @@ func openDatabase(path string) (*sql.DB, error) {
 	return db, nil
 }
 
-func createDatabase(path string) (*sql.DB, error) {
+func CreateDatabase(path string) (*sql.DB, error) {
 	// delete any existing file
 	os.Remove(path)
 
@@ -65,8 +65,8 @@ func createDatabase(path string) (*sql.DB, error) {
 	return db, nil
 }
 
-func splitDatabase(source string, paths []string) error {
-	db, err := openDatabase(source)
+func SplitDatabase(source string, paths []string) error {
+	db, err := OpenDatabase(source)
 	if err != nil {
 		return err
 	}
@@ -90,7 +90,7 @@ func splitDatabase(source string, paths []string) error {
 		}
 	}()
 	for _, path := range paths {
-		out, err := createDatabase(path)
+		out, err := CreateDatabase(path)
 		if err != nil {
 			return err
 		}
@@ -135,7 +135,7 @@ func splitDatabase(source string, paths []string) error {
 
 func mergeDatabases(urls []string, path string, temp string) (*sql.DB, error) {
 	// create the output file
-	db, err := createDatabase(path)
+	db, err := CreateDatabase(path)
 	if err != nil {
 		return nil, err
 	}
