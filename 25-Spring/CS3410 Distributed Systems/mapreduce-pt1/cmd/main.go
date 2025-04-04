@@ -4,33 +4,30 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"mapreduce"
 	"os"
 )
 
 func testOpenDatabase() {
 	// Test on austen.db
-	{
-		db, err := mapreduce.OpenDatabase("austen.db")
-		if err != nil {
-			log.Fatalf("Failed to open database: %v", err)
-		}
-		defer db.Close()
-
-		var count int
-		err = db.QueryRow("select count(1) from pairs").Scan(&count)
-		if err != nil {
-			log.Fatalf("Query error: %v", err)
-		}
-		fmt.Printf("austen.db contains %d rows in the pairs table.\n", count)
+	db, err := openDatabase("austen.db")
+	if err != nil {
+		log.Fatalf("Failed to open database: %v", err)
 	}
+	defer db.Close()
+
+	var count int
+	err = db.QueryRow("select count(1) from pairs").Scan(&count)
+	if err != nil {
+		log.Fatalf("Query error: %v", err)
+	}
+	fmt.Printf("austen.db contains %d rows in the pairs table.\n", count)
 }
 
 func testCreateDatabase() {
 	path := "test.db"
-	os.Remove(path)	// Clean up previous test file
+	os.Remove(path) // Clean up previous test file
 
-	db, err := mapreduce.CreateDatabase(path)
+	db, err := createDatabase(path)
 	if err != nil {
 		log.Fatalf("Failed to create database: %v", err)
 	}
@@ -58,7 +55,7 @@ func testSplitDatabase() {
 	}
 
 	// Split the input database
-	err := mapreduce.SplitDatabase("austen.db", outputFiles)
+	err := splitDatabase("austen.db", outputFiles)
 	if err != nil {
 		log.Fatalf("splitDatabase failed: %v", err)
 	}
@@ -66,7 +63,7 @@ func testSplitDatabase() {
 	// Print out row counts for each split file
 	total := 0
 	for _, f := range outputFiles {
-		db, err := mapreduce.OpenDatabase(f)
+		db, err := openDatabase(f)
 		if err != nil {
 			log.Fatalf("Failed to open split database %s: %v", f, err)
 		}
