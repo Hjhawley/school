@@ -133,7 +133,7 @@ func SplitDatabase(source string, paths []string) error {
 	return nil
 }
 
-func mergeDatabases(urls []string, path string, temp string) (*sql.DB, error) {
+func MergeDatabases(urls []string, path string, temp string) (*sql.DB, error) {
 	// create the output file
 	db, err := CreateDatabase(path)
 	if err != nil {
