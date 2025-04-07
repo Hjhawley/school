@@ -70,8 +70,45 @@ Therefore, this greedy algorithm picked a smaller set than was possible.
 \subsection*{Problem 2 (10 pts)}
 Suppose $A$ is an array of $n$ integers that is a strictly decreasing sequence, followed by a strictly increasing sequence such as $[12, 9, 8, 6, 3, 4, 7, 9, 11]$. Give an $O(\log n)$ algorithm to find the minimum element of the array. Justify your algorithm is correct.
 
+\textbf{Solution:}
+
+This is a simple binary search problem. You can find the lowest point by recursively splitting the array in half.
+
+\begin{enumerate}
+    \item Start with the whole array, which can really be thought of as two concatenated pre-sorted arrays. We're trying to find the value which is smaller than the values to its left AND right.
+    \item Look at the middle (index len($A$)/2) element:
+    \begin{itemize}
+        \item If it's \textbf{greater} than the element after it, the valley is to the \textbf{right}. Throw away the left half.
+        \item If it's \textbf{smaller} than the next element, check if it's also smaller than the previous element. If so, we found the minimum.
+        \item Otherwise, the valley is to the \textbf{left}. Throw away the right half.
+    \end{itemize}
+    \item Repeat until we find the minimum.
+\end{enumerate}
+
+Since we halve the array at each step, the runtime is $O(\log n)$ like any binary search problem.
+
 \subsection*{Problem 3 (10 pts)}
 Consider a graph that is a path, where the vertices are $v_1, v_2, \ldots, v_n$, with edges between $v_i$ and $v_{i+1}$. Suppose that each node $v_i$ has an associated weight $w_i$. Give an algorithm that takes an $n$-vertex path with weights and returns an independent set of maximum total weight. The runtime of the algorithm should be polynomial in $n$. Justify your algorithm is correct.
+
+\textbf{Solution:}
+
+We have a path of weighted nodes, and we want to choose a set of non-adjacent nodes such that the total weight is maximized. We can use dynamic programming to break the problem down.
+
+At each node $i$, we have two options:
+\begin{itemize}
+    \item \textbf{Skip} the current node and take the best total from $i - 1$
+    \item \textbf{Take} the current node and add its weight $w[i]$ to the best total from $i - 2$
+\end{itemize}
+
+\textbf{Pseudocode:}
+\begin{verbatim}
+dp[0] = w[0]
+dp[1] = max(w[0], w[1])
+for i from 2 to n-1:
+    dp[i] = max(dp[i-1], dp[i-2] + w[i])
+\end{verbatim}
+
+This algorithm runs in $O(n)$ time.
 
 \end{document}
 
