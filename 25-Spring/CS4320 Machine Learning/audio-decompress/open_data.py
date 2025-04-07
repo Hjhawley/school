@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 
 # === CONFIG ===
 SAMPLE_RATE = 44100  # Audio sample rate (standard CD quality)
-N_FFT = 1024         # FFT window size for STFT
+N_FFT = 1024         # FFT window size for Short-Time Fourier Transform (STFT)
 HOP_LENGTH = 256     # Hop length for STFT (overlap control)
 WIN_LENGTH = 1024    # Window length for STFT
 CLIP_DURATION = 5    # Duration of each audio clip in seconds
@@ -33,7 +33,7 @@ def load_audio_pair(path_degraded, path_clean):
     log_cln = librosa.amplitude_to_db(S_cln, ref=np.max)
 
     # Normalize values to range [0, 1] to help the neural network train more stably
-    norm_deg = (log_deg + 80) / 80  # Assumes dB values fall in [-80, 0]
+    norm_deg = (log_deg + 80) / 80  # Assumes dB values fall somewhere between [-80, 0]
     norm_cln = (log_cln + 80) / 80
 
     # Add channel dimension to match expected model input: (freq, time, 1)
