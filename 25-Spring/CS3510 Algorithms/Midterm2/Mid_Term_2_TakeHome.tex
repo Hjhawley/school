@@ -1,0 +1,54 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{soul}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{framed} % For the box
+\sethlcolor{yellow}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Adjust margins
+\geometry{margin=1in}
+
+\begin{document}
+
+\noindent CS-3510-[section number] Algorithms, Spring 2025\hfill Mid-term 2 take home part\\
+Full Name \hfill Collaborator(s):
+
+\hrulefill
+
+\textbf{Academic Integrity Requirement:} You must write your solution in your own words. Do not copy from external sources, classmates, or generative AI tools.
+
+\subsection*{Problem 1 (10 pts)}
+
+An independent set $I$ in an undirected graph $G = (V, E)$ is a subset $I \subseteq V$ of vertices such that no two vertices in $I$ are joined by an edge of $E$. Consider the following greedy algorithm to try to find a maximum size independent set which is based on the general idea that choosing vertices with small degree to be in $I$ will rule out fewer other vertices:
+
+\begin{algorithm}
+\caption{GreedyIndependentSet}
+\begin{algorithmic}[1]
+\State $I \gets \emptyset$
+\While{$G$ is not empty}
+    \State Choose a vertex $v$ of smallest degree in $G$ \Comment{Not counting deleted edges}
+    \State $I \gets I \cup \{v\}$
+    \State Delete $v$ and all its neighbors and their connected edges from $G$\\
+    \Comment{None of the neighbors can be included since $v$ is included}
+\EndWhile
+\State \textbf{return} $I$
+\end{algorithmic}
+\end{algorithm}
+
+Prove that this algorithm is incorrect by counterexample. Specifically, give an example of a graph on which this algorithm does not produce a largest size independent set. Show both the independent set that the algorithm finds and a larger independent set.
+
+\subsection*{Problem 2 (10 pts)}
+Suppose $A$ is an array of $n$ integers that is a strictly decreasing sequence, followed by a strictly increasing sequence such as $[12, 9, 8, 6, 3, 4, 7, 9, 11]$. Give an $O(\log n)$ algorithm to find the minimum element of the array. Justify your algorithm is correct.
+
+\subsection*{Problem 3 (10 pts)}
+Consider a graph that is a path, where the vertices are $v_1, v_2, \ldots, v_n$, with edges between $v_i$ and $v_{i+1}$. Suppose that each node $v_i$ has an associated weight $w_i$. Give an algorithm that takes an $n$-vertex path with weights and returns an independent set of maximum total weight. The runtime of the algorithm should be polynomial in $n$. Justify your algorithm is correct.
+
+\end{document}
+
+
