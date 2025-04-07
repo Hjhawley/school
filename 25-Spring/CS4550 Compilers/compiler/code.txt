@@ -1,9 +1,41 @@
 void main() {
-    int x = 2;
-    int y = 3;
-    int z = 1;
+    // Identifiers & keywords
+    int _validIdentifier123 = 42;
+    int voidReturn = 0;  // 'void' should not be mistaken inside identifier
+    int main = 1;
 
-    if (x < 3 && y != 2) {
-        cout << x;
-    }
+    // Literals
+    int num = 123456;
+
+    // Arithmetic
+    int sum = 5 + 3 - 2 * 4 / 1;
+
+    // Comparison
+    if (sum < 10) {}
+    if (sum <= 10) {}
+    if (sum > 1) {}
+    if (sum >= 1) {}
+    if (sum == 6) {}
+    if (sum != 7) {}
+
+    // Logic
+    if (1 && 0 || 1) {}
+
+    // Assignment vs equality
+    sum = 10;
+    if (sum == 10) {}
+
+    // Insertion
+    cout << sum;
+
+    // Braces, parens, semis
+    { int x = (3); }
+
+    // Comments
+    // this is a line comment
+    /* this is a 
+       block comment */
+
+    // Unknown char (test BAD_TOKEN handling)
+    # $ @ ~ ` ^  // should trigger errors or be filtered out
 }

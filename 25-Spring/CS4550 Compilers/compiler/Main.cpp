@@ -250,6 +250,7 @@ void testInterpreter() {
     // add this
     std::cout << "Interpreting the parse tree...\n";
     root->Interpret();
+    std::cout << "\n";
 
     delete root;
     std::cout << "Finished interpretation and parse tree cleanup.\n";

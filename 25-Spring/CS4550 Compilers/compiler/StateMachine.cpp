@@ -37,6 +37,7 @@ StateMachineClass::StateMachineClass() {
     mLegalMoves[START_STATE][LCURLY_CHAR] = LCURLY_STATE;
     mLegalMoves[START_STATE][RCURLY_CHAR] = RCURLY_STATE;
     mLegalMoves[START_STATE][EQUAL_CHAR] = ASSIGNMENT_STATE;
+    mLegalMoves[ASSIGNMENT_STATE][EQUAL_CHAR] = EQUAL_STATE;
     mLegalMoves[START_STATE][LESS_CHAR] = LESS_STATE;
     mLegalMoves[START_STATE][GREATER_CHAR] = GREATER_STATE;
     mLegalMoves[START_STATE][NOT_CHAR] = NOTEQUAL_STATE;
@@ -89,6 +90,7 @@ StateMachineClass::StateMachineClass() {
     mCorrespondingTokenTypes[LCURLY_STATE] = LCURLY_TOKEN;
     mCorrespondingTokenTypes[RCURLY_STATE] = RCURLY_TOKEN;
     mCorrespondingTokenTypes[ASSIGNMENT_STATE] = ASSIGNMENT_TOKEN;
+    mCorrespondingTokenTypes[EQUAL_STATE] = EQUAL_TOKEN;
     mCorrespondingTokenTypes[LESS_STATE] = LESS_TOKEN;
     mCorrespondingTokenTypes[LESSEQUAL_STATE] = LESSEQUAL_TOKEN;
     mCorrespondingTokenTypes[INSERTION_STATE] = INSERTION_TOKEN;
