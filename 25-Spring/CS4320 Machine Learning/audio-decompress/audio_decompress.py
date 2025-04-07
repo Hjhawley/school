@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+""" #!/usr/bin/env python3
 #
 
 import sys
@@ -20,7 +20,7 @@ import model_creation
 #
 def do_cnn_fit(my_args):
     """
-    Create a new model, and fit it to the training data.
+    # Create a new model, and fit it to the training data.
     """
     X, y = open_data.load_batch(my_args.batch_number)
     model = model_creation.create_model(my_args, X.shape[1:])
@@ -97,3 +97,4 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv)
+ """
