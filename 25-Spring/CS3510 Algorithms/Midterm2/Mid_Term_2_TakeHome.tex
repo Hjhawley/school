@@ -43,6 +43,30 @@ An independent set $I$ in an undirected graph $G = (V, E)$ is a subset $I \subse
 
 Prove that this algorithm is incorrect by counterexample. Specifically, give an example of a graph on which this algorithm does not produce a largest size independent set. Show both the independent set that the algorithm finds and a larger independent set.
 
+\textbf{Solution:}
+
+The greedy algorithm does NOT always find the biggest possible independent set. Consider this graph:
+
+\begin{verbatim}
+    A   D
+     \ /
+      B
+     / \
+    C   E
+\end{verbatim}
+
+Edges: A-B, B-C, B-D, B-E
+
+\begin{itemize}
+  \item All outer nodes (A, C, D, E) have degree 1. B has degree 4.
+  \item Greedy would pick A first (lowest degree).
+  \item It then removes A and B.
+  \item We're left with C, D, and E. The final independent set is {C, D, E}.
+\end{itemize}
+
+But the actual largest solution is {A, C, D, E}. 4 nodes, and none are connected.
+Therefore, this greedy algorithm picked a smaller set than was possible.
+
 \subsection*{Problem 2 (10 pts)}
 Suppose $A$ is an array of $n$ integers that is a strictly decreasing sequence, followed by a strictly increasing sequence such as $[12, 9, 8, 6, 3, 4, 7, 9, 11]$. Give an $O(\log n)$ algorithm to find the minimum element of the array. Justify your algorithm is correct.
 
