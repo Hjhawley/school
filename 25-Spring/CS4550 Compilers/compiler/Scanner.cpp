@@ -66,6 +66,7 @@ TokenClass ScannerClass::GetNextToken() {
 
     // Create a TokenClass object with the lexeme and token type
     TokenClass token(previousTokenType, lexeme);
+    std::cout << "Returning token: " << token << std::endl;
     return token;
 }
 

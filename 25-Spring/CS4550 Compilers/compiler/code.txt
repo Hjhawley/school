@@ -3,7 +3,7 @@ void main() {
     int y = 3;
     int z = 1;
 
-    if (x < 3 && y != 2 || z == 1) {
+    if (x < 3 && y != 2) {
         cout << x;
     }
 }
