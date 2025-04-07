@@ -377,7 +377,7 @@ func main() {
 	}
 	log.Printf("final output database contains %d rows", total)
 
-	// show top 20 most frequent words
+	// show top 20 most frequent words for bonus points
 	rows, err := db.Query("select key, value from pairs order by cast(value as int) desc limit 20")
 	if err != nil {
 		log.Fatalf("query top results: %v", err)
