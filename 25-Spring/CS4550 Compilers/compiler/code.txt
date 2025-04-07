@@ -2,7 +2,7 @@ void main() {
     // Identifiers & keywords
     int _validIdentifier123 = 42;
     int voidReturn = 0;  // 'void' should not be mistaken inside identifier
-    int main = 1;
+    int x = 1;
 
     // Literals
     int num = 123456;
