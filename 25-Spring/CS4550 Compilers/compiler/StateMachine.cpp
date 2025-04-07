@@ -51,9 +51,9 @@ StateMachineClass::StateMachineClass() {
     mLegalMoves[DIVIDE_STATE][TIMES_CHAR] = BLOCK_COMMENT_1_STATE;
     // Logical operators
     mLegalMoves[START_STATE][AND_CHAR] = AND_STATE;
-    mLegalMoves[AND_STATE][AND_CHAR] = CANTMOVE_STATE;  // accept &&
+    mLegalMoves[AND_STATE][AND_CHAR] = AND_DONE_STATE; // &&
     mLegalMoves[START_STATE][OR_CHAR] = OR_STATE;
-    mLegalMoves[OR_STATE][OR_CHAR] = CANTMOVE_STATE;    // accept ||
+    mLegalMoves[OR_STATE][OR_CHAR] = OR_DONE_STATE; // ||
 
     // In a line comment, stay in the comment until we reach a newline or EOF
     for (int j = 0; j < LAST_CHAR; j++) {
@@ -95,8 +95,8 @@ StateMachineClass::StateMachineClass() {
     mCorrespondingTokenTypes[GREATER_STATE] = GREATER_TOKEN;
     mCorrespondingTokenTypes[GREATEREQUAL_STATE] = GREATEREQUAL_TOKEN;
     mCorrespondingTokenTypes[NOTEQUAL_STATE] = NOTEQUAL_TOKEN;
-    mCorrespondingTokenTypes[AND_STATE] = AND_TOKEN;
-    mCorrespondingTokenTypes[OR_STATE] = OR_TOKEN;
+    mCorrespondingTokenTypes[AND_DONE_STATE] = AND_TOKEN;
+    mCorrespondingTokenTypes[OR_DONE_STATE] = OR_TOKEN;
     mCorrespondingTokenTypes[ENDFILE_STATE] = ENDFILE_TOKEN;
     MSG("DFA initialized.");
 }

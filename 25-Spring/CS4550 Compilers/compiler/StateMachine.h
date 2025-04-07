@@ -27,10 +27,12 @@ enum MachineState {
     GREATEREQUAL_STATE,
     NOTEQUAL_STATE,
     ENDFILE_STATE,
-    AND_STATE,
-    OR_STATE,
-    CANTMOVE_STATE, // State when there's no valid transition
-    LAST_STATE      // Not an actual state; just represents the count
+    AND_STATE,        // Saw one '&'
+    AND_DONE_STATE,   // Saw '&&'
+    OR_STATE,         // Saw one '|'
+    OR_DONE_STATE,    // Saw '||'
+    CANTMOVE_STATE,
+    LAST_STATE
 };
 
 // Enum for character types

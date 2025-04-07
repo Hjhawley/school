@@ -1,4 +1,9 @@
 void main() {
-    if (x < 3 && y != 2 || z == 1)
-    cout << x;
+    int x = 2;
+    int y = 3;
+    int z = 1;
+
+    if (x < 3 && y != 2 || z == 1) {
+        cout << x;
+    }
 }
