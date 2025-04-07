@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+""" #!/usr/bin/env python3
 
 #
 # Keep the model creation code contained here
@@ -133,3 +133,4 @@ def create_model_c(my_args, input_shape):
         metrics=["accuracy"]
     )
     return model
+ """

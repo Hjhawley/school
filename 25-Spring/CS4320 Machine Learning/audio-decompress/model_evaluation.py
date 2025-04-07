@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+""" #!/usr/bin/env python3
 
 #
 # Evaluation of model performance
@@ -74,3 +74,4 @@ def show_score(my_args):
     print()
 
     return
+ """

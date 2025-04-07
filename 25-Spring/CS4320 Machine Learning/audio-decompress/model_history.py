@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+""" #!/usr/bin/env python3
 
 #
 # Display the model history.
@@ -49,3 +49,4 @@ def plot_history(my_args):
     plt.savefig(learning_curve_filename)
     plt.clf()
     return
+ """
