@@ -391,6 +391,30 @@ void WhileStatementNode::Interpret() {
     }
 }
 
+// AndNode
+AndNode::AndNode(ExpressionNode* left, ExpressionNode* right)
+    : BinaryOperatorNode(left, right) {}
+
+AndNode::~AndNode() {
+    MSG("~AndNode() called");
+}
+
+int AndNode::Evaluate() const {
+    return (mLeft->Evaluate() && mRight->Evaluate()) ? 1 : 0;
+}
+
+// OrNode
+OrNode::OrNode(ExpressionNode* left, ExpressionNode* right)
+    : BinaryOperatorNode(left, right) {}
+
+OrNode::~OrNode() {
+    MSG("~OrNode() called");
+}
+
+int OrNode::Evaluate() const {
+    return (mLeft->Evaluate() || mRight->Evaluate()) ? 1 : 0;
+}
+
 // EmptyStatementNode
 EmptyStatementNode::EmptyStatementNode() { 
     // do nothing

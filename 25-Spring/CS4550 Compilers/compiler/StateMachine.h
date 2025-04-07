@@ -27,6 +27,8 @@ enum MachineState {
     GREATEREQUAL_STATE,
     NOTEQUAL_STATE,
     ENDFILE_STATE,
+    AND_STATE,
+    OR_STATE,
     CANTMOVE_STATE, // State when there's no valid transition
     LAST_STATE      // Not an actual state; just represents the count
 };
@@ -50,6 +52,8 @@ enum CharacterType {
     LESS_CHAR,
     GREATER_CHAR,
     NOT_CHAR,
+    AND_CHAR,
+    OR_CHAR,
     ENDFILE_CHAR,
     BAD_CHAR, // For invalid input
     LAST_CHAR // Not an actual type; just represents the count

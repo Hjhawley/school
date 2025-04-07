@@ -65,6 +65,12 @@ private:
     // <Identifier> -> IDENTIFIER_TOKEN
     IdentifierNode* Identifier();
 
+    // <Expression> -> <LogicalOr>
+    ExpressionNode* LogicalOr();
+
+    // <Expression> -> <LogicalAnd>
+    ExpressionNode* LogicalAnd();
+
     // <Integer> -> INTEGER_TOKEN
     IntegerNode* Integer();
 

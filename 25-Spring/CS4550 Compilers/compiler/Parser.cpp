@@ -147,9 +147,9 @@ StatementNode* ParserClass::WhileStatement() {
     return new WhileStatementNode(cond, body);
 }
 
-// <Expression> -> <Relational>
+// <Expression> -> <LogicalOr>
 ExpressionNode* ParserClass::Expression() {
-    return Relational();
+    return LogicalOr();
 }
 
 // <Relational> -> <PlusMinus> [ a single relational operator <PlusMinus> ]
@@ -241,6 +241,8 @@ ExpressionNode* ParserClass::Factor() {
         return expr;
     }
     else {
+        std::cerr << "Factor() saw unexpected token: "
+                  << mScanner->PeekNextToken() << std::endl;
         std::cerr << "Error in Factor(): Expected IDENTIFIER, INTEGER, or LPAREN" << std::endl;
         exit(1);
     }
@@ -260,6 +262,28 @@ IntegerNode* ParserClass::Integer() {
     std::string lex = tk.GetLexeme();
     int val = std::atoi(lex.c_str()); // or std::stoi(lex)
     return new IntegerNode(val);
+}
+
+// <LogicalOr> -> <LogicalAnd> { || <LogicalAnd> }
+ExpressionNode* ParserClass::LogicalOr() {
+    ExpressionNode* current = LogicalAnd();
+    while (mScanner->PeekNextToken().GetTokenType() == OR_TOKEN) {
+        Match(OR_TOKEN);
+        ExpressionNode* right = LogicalAnd();
+        current = new OrNode(current, right);
+    }
+    return current;
+}
+
+// <LogicalAnd> -> <Relational> { && <Relational> }
+ExpressionNode* ParserClass::LogicalAnd() {
+    ExpressionNode* current = Relational();
+    while (mScanner->PeekNextToken().GetTokenType() == AND_TOKEN) {
+        Match(AND_TOKEN);
+        ExpressionNode* right = Relational();
+        current = new AndNode(current, right);
+    }
+    return current;
 }
 
 // The Match() method remains the same except for returning the matched token

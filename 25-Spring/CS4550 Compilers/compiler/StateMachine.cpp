@@ -49,6 +49,12 @@ StateMachineClass::StateMachineClass() {
     // Comments
     mLegalMoves[DIVIDE_STATE][DIVIDE_CHAR] = LINE_COMMENT_STATE;
     mLegalMoves[DIVIDE_STATE][TIMES_CHAR] = BLOCK_COMMENT_1_STATE;
+    // Logical operators
+    mLegalMoves[START_STATE][AND_CHAR] = AND_STATE;
+    mLegalMoves[AND_STATE][AND_CHAR] = CANTMOVE_STATE;  // accept &&
+    mLegalMoves[START_STATE][OR_CHAR] = OR_STATE;
+    mLegalMoves[OR_STATE][OR_CHAR] = CANTMOVE_STATE;    // accept ||
+
     // In a line comment, stay in the comment until we reach a newline or EOF
     for (int j = 0; j < LAST_CHAR; j++) {
         mLegalMoves[LINE_COMMENT_STATE][j] = LINE_COMMENT_STATE;
@@ -89,6 +95,8 @@ StateMachineClass::StateMachineClass() {
     mCorrespondingTokenTypes[GREATER_STATE] = GREATER_TOKEN;
     mCorrespondingTokenTypes[GREATEREQUAL_STATE] = GREATEREQUAL_TOKEN;
     mCorrespondingTokenTypes[NOTEQUAL_STATE] = NOTEQUAL_TOKEN;
+    mCorrespondingTokenTypes[AND_STATE] = AND_TOKEN;
+    mCorrespondingTokenTypes[OR_STATE] = OR_TOKEN;
     mCorrespondingTokenTypes[ENDFILE_STATE] = ENDFILE_TOKEN;
     MSG("DFA initialized.");
 }
@@ -114,6 +122,8 @@ CharacterType StateMachineClass::GetCharacterType(char c) {
         case '<': return LESS_CHAR;
         case '>': return GREATER_CHAR;
         case '!': return NOT_CHAR;
+        case '&': return AND_CHAR;
+        case '|': return OR_CHAR;
         default: return BAD_CHAR;
     }
 }

@@ -268,6 +268,22 @@ private:
 };
 
 
+class AndNode : public BinaryOperatorNode {
+    public:
+        AndNode(ExpressionNode* left, ExpressionNode* right);
+        virtual ~AndNode();
+        virtual int Evaluate() const override;
+    };
+
+
+class OrNode : public BinaryOperatorNode {
+public:
+    OrNode(ExpressionNode* left, ExpressionNode* right);
+    virtual ~OrNode();
+    virtual int Evaluate() const override;
+};
+
+
 class EmptyStatementNode : public StatementNode {
 public:
     EmptyStatementNode();

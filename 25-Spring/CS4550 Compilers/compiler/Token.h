@@ -15,6 +15,8 @@ enum TokenType {
 	// Other characters:
 	SEMICOLON_TOKEN, LPAREN_TOKEN, RPAREN_TOKEN, LCURLY_TOKEN,
 	RCURLY_TOKEN,
+    // Logic
+    AND_TOKEN, OR_TOKEN,
 	// Other token types:
 	IDENTIFIER_TOKEN, INTEGER_TOKEN,
 	BAD_TOKEN, ENDFILE_TOKEN
@@ -27,6 +29,7 @@ const std::string gTokenTypeNames[] = {
 "NOTEQUAL",
 "INSERTION", "ASSIGNMENT", "PLUS", "MINUS", "TIMES", "DIVIDE",
 "SEMICOLON", "LPAREN", "RPAREN", "LCURLY", "RCURLY",
+"AND", "OR",
 "IDENTIFIER", "INTEGER",
 "BAD", "ENDFILE"
 };
