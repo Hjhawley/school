@@ -26,54 +26,49 @@ ScannerClass::~ScannerClass() {
 TokenClass ScannerClass::GetNextToken() {
     MSG("Scanning for the next token...");
 
-    StateMachineClass stateMachine; // Instance of the DFA
-    std::string lexeme;             // Stores the current token lexeme
-    MachineState currentState = START_STATE;  // Ensure initialized
-    TokenType previousTokenType = BAD_TOKEN;  // Start with BAD
+    StateMachineClass stateMachine;
+    std::string lexeme;
+    MachineState currentState = START_STATE;
+    TokenType previousTokenType = BAD_TOKEN;
 
     while (true) {
-        // Check for end-of-file before reading
+        // Check for true EOF before reading
         if (mFin.peek() == EOF) {
             return TokenClass(ENDFILE_TOKEN, "EOF");
         }
 
         char c = mFin.get();
-        lexeme.push_back(c);
-
         currentState = stateMachine.UpdateState(c, previousTokenType);
 
         if (c == '\n') {
             mLineNumber++;
         }
 
-        // If the state machine resets, we clear and keep scanning
+        if (currentState == CANTMOVE_STATE) {
+            mFin.unget(); // Put back the bad character
+            break;
+        }
+
+        // Whitespace, comment, etc — reset
         if (currentState == START_STATE || currentState == ENDFILE_STATE) {
             lexeme.clear();
             continue;
         }
 
-        if (currentState == CANTMOVE_STATE) {
-            break;
-        }
+        lexeme.push_back(c);
     }
 
-    // Back up one character (which caused failure)
     if (!lexeme.empty()) {
         if (lexeme.back() == '\n') {
             mLineNumber--;
         }
-        lexeme.pop_back();
         mFin.unget();
-    }
-
-    // If we got nothing valid, return EOF
-    if (lexeme.empty()) {
-        return TokenClass(ENDFILE_TOKEN, "EOF");
+        // Keep the bad char in lexeme for error reporting
     }
 
     if (previousTokenType == BAD_TOKEN) {
-        std::cerr << "Error: BAD_TOKEN from lexeme \"" << lexeme << "\"" << std::endl;
-        std::exit(1);
+        std::cerr << "Lexical error on line " << mLineNumber << ": invalid token \"" << lexeme << "\"" << std::endl;
+        std::exit(1); // Hard fail — don’t return to parser
     }
 
     TokenClass token(previousTokenType, lexeme);
