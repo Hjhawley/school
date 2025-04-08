@@ -25,48 +25,55 @@ ScannerClass::~ScannerClass() {
 
 TokenClass ScannerClass::GetNextToken() {
     MSG("Scanning for the next token...");
+    // Check for end-of-file before doing anything
+    if (mFin.peek() == EOF) {
+        return TokenClass(ENDFILE_TOKEN, "EOF");
+    }
 
-    StateMachineClass stateMachine;
-    std::string lexeme;
-    MachineState currentState = START_STATE;
-    TokenType previousTokenType = BAD_TOKEN;
+    StateMachineClass stateMachine; // Instance of the DFA
+    std::string lexeme;             // Stores the current token lexeme
+    MachineState currentState;      // Current state of the DFA
+    TokenType previousTokenType;    // The token type associated with the previous state
 
-    while (true) {
-        if (mFin.peek() == EOF) {
-            return TokenClass(ENDFILE_TOKEN, "EOF");
-        }
+    // Read characters and update the DFA state
+    do {
+        char c = mFin.get(); // Read the next character
+        lexeme.push_back(c); // Append it to the lexeme
 
-        char c = mFin.get();
-        MachineState nextState = stateMachine.UpdateState(c, previousTokenType);
+        // Update the DFA state
+        currentState = stateMachine.UpdateState(c, previousTokenType);
 
+        // If we read a newline, increment the line number
         if (c == '\n') {
             mLineNumber++;
         }
 
-        if (nextState == CANTMOVE_STATE) {
-            mFin.unget();
-            break;
-        }
-
-        if (nextState == START_STATE || nextState == ENDFILE_STATE) {
+        // If the state resets (due to whitespace), clear the lexeme and check EOF again
+        if (currentState == START_STATE || currentState == ENDFILE_STATE) {
             lexeme.clear();
-            continue;
+            if (mFin.peek() == EOF) {
+                return TokenClass(ENDFILE_TOKEN, "EOF");
+            }
         }
 
-        currentState = nextState;
-        lexeme.push_back(c);
-    }
+    } while (currentState != CANTMOVE_STATE); // Continue until no valid transition exists
 
+    // The last character read caused CANT_MOVE. Remove it from the lexeme
+    // If that character is a newline, it will be re-read later so decrement the line count
+    // to avoid double counting
     if (!lexeme.empty() && lexeme.back() == '\n') {
         mLineNumber--;
     }
+    lexeme.pop_back();
+    mFin.unget(); // Put the last character back into the input stream
 
+    // If the token type is BAD_TOKEN, report an error and exit
     if (previousTokenType == BAD_TOKEN) {
-        std::cerr << "Lexical error on line " << mLineNumber
-                  << ": invalid token \"" << lexeme << "\"" << std::endl;
+        std::cerr << "Error: BAD_TOKEN from lexeme \"" << lexeme << "\"" << std::endl;
         std::exit(1);
     }
 
+    // Create a TokenClass object with the lexeme and token type
     TokenClass token(previousTokenType, lexeme);
     MSG("Returning token: " << token << std::endl);
     return token;
@@ -91,5 +98,7 @@ TokenClass ScannerClass::PeekNextToken() {
     // Restore line number
     mLineNumber = oldLineNumber;
 
+    // Return the token we got
     return tc;
 }
+

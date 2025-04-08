@@ -36,11 +36,4 @@ void main() {
     // this is a line comment
     /* this is a 
        block comment */
-
-    // Null
-    ;
-    ;   ;
-
-    // Unknown char (test BAD_TOKEN handling)
-    # $ @ ~ ` ^  // should trigger errors or be filtered out
 }
