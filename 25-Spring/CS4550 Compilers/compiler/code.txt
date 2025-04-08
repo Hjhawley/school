@@ -3,6 +3,7 @@ void main() {
     int _validIdentifier123 = 42;
     int voidReturn = 0;  // 'void' should not be mistaken inside identifier
     int x = 1;
+    cout << x;
 
     // Literals
     int num = 123456;
@@ -29,12 +30,16 @@ void main() {
     cout << sum;
 
     // Braces, parens, semis
-    { int x = (3); }
+    { x = (3); }
 
     // Comments
     // this is a line comment
     /* this is a 
        block comment */
+
+    // Null
+    ;
+    ;   ;
 
     // Unknown char (test BAD_TOKEN handling)
     # $ @ ~ ` ^  // should trigger errors or be filtered out
