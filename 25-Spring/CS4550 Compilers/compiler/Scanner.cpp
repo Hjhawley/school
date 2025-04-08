@@ -32,43 +32,39 @@ TokenClass ScannerClass::GetNextToken() {
     TokenType previousTokenType = BAD_TOKEN;
 
     while (true) {
-        // Check for true EOF before reading
         if (mFin.peek() == EOF) {
             return TokenClass(ENDFILE_TOKEN, "EOF");
         }
 
         char c = mFin.get();
-        currentState = stateMachine.UpdateState(c, previousTokenType);
+        MachineState nextState = stateMachine.UpdateState(c, previousTokenType);
 
         if (c == '\n') {
             mLineNumber++;
         }
 
-        if (currentState == CANTMOVE_STATE) {
-            mFin.unget(); // Put back the bad character
+        if (nextState == CANTMOVE_STATE) {
+            mFin.unget();
             break;
         }
 
-        // Whitespace, comment, etc — reset
-        if (currentState == START_STATE || currentState == ENDFILE_STATE) {
+        if (nextState == START_STATE || nextState == ENDFILE_STATE) {
             lexeme.clear();
             continue;
         }
 
+        currentState = nextState;
         lexeme.push_back(c);
     }
 
-    if (!lexeme.empty()) {
-        if (lexeme.back() == '\n') {
-            mLineNumber--;
-        }
-        mFin.unget();
-        // Keep the bad char in lexeme for error reporting
+    if (!lexeme.empty() && lexeme.back() == '\n') {
+        mLineNumber--;
     }
 
     if (previousTokenType == BAD_TOKEN) {
-        std::cerr << "Lexical error on line " << mLineNumber << ": invalid token \"" << lexeme << "\"" << std::endl;
-        std::exit(1); // Hard fail — don’t return to parser
+        std::cerr << "Lexical error on line " << mLineNumber
+                  << ": invalid token \"" << lexeme << "\"" << std::endl;
+        std::exit(1);
     }
 
     TokenClass token(previousTokenType, lexeme);
