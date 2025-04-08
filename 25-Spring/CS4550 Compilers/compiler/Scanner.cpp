@@ -25,6 +25,11 @@ ScannerClass::~ScannerClass() {
 
 TokenClass ScannerClass::GetNextToken() {
     MSG("Scanning for the next token...");
+    // Check for end-of-file before doing anything
+    if (mFin.peek() == EOF) {
+        return TokenClass(ENDFILE_TOKEN, "EOF");
+    }
+
     StateMachineClass stateMachine; // Instance of the DFA
     std::string lexeme;             // Stores the current token lexeme
     MachineState currentState;      // Current state of the DFA
@@ -43,10 +48,14 @@ TokenClass ScannerClass::GetNextToken() {
             mLineNumber++;
         }
 
-        // If the state resets (e.g., due to whitespace), clear the lexeme
+        // If the state resets (due to whitespace), clear the lexeme and check EOF again
         if (currentState == START_STATE || currentState == ENDFILE_STATE) {
             lexeme.clear();
+            if (mFin.peek() == EOF) {
+                return TokenClass(ENDFILE_TOKEN, "EOF");
+            }
         }
+
     } while (currentState != CANTMOVE_STATE); // Continue until no valid transition exists
 
     // The last character read caused CANT_MOVE. Remove it from the lexeme
