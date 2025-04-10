@@ -3,8 +3,8 @@ import keras
 
 def create_model(args, input_shape):
     """
-    Control function to select a model variant by name (like "a", "b", etc).
-    Returns a compiled model.
+    Control function to select a model variant by name ("a", "b", "c")
+    Returns a compiled model
     """
     create_functions = {
         "a": create_unet_baseline,
@@ -20,7 +20,7 @@ def create_model(args, input_shape):
 
 def create_unet_baseline(args, input_shape):
     """
-    Basic encoder-decoder CNN for audio spectrogram denoising.
+    Basic encoder-decoder CNN for audio spectrogram denoising
     Input/Output shapes: (freq, time, 1)
     """
     inputs = keras.layers.Input(shape=input_shape)
@@ -38,7 +38,7 @@ def create_unet_baseline(args, input_shape):
     x = keras.layers.UpSampling2D((2, 2), interpolation="nearest")(x)
     x = keras.layers.Conv2D(128, (3, 3), padding="same", activation="relu")(x)
     x = keras.layers.UpSampling2D((2, 2), interpolation="nearest")(x)
-    x = keras.layers.Cropping2D(((1, 2), (1, 1)))(x)  # Crop to (513, 862)
+    x = keras.layers.Cropping2D(((1, 2), (1, 1)))(x)  # Crop to (513, 862) to match
     x = keras.layers.Conv2D(64, (3, 3), padding="same", activation="relu")(x)
 
     # Output layer
@@ -56,5 +56,5 @@ def create_unet_baseline(args, input_shape):
 # Test
 if __name__ == "__main__":
     class Args: model_name = "a"
-    dummy_input_shape = (513, 862, 1)  # match your actual spectrogram shape
+    dummy_input_shape = (513, 862, 1)  # match the spectrogram shape
     model = create_model(Args(), dummy_input_shape)
