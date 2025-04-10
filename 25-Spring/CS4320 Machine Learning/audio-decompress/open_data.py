@@ -60,7 +60,8 @@ def get_streaming_dataset(degraded_dir, clean_dir, batch_size=8, shuffle_buffer=
 # Test the generator with a batch and save PNGs of the first sample
 if __name__ == "__main__":
     train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean")
-    for X_batch, y_batch in train_ds.take(1):
+
+    for i, (X_batch, y_batch) in enumerate(train_ds.take(1)):
         print("X_batch shape:", X_batch.shape)
         print("y_batch shape:", y_batch.shape)
 
@@ -68,24 +69,27 @@ if __name__ == "__main__":
         clean = y_batch[0].numpy().squeeze()
 
         import matplotlib.pyplot as plt
+        import librosa.display
 
-        # Save degraded spectrogram
+        # Calculate time axis in seconds
+        num_frames = degraded.shape[1]
+        times = librosa.frames_to_time(np.arange(num_frames), sr=SAMPLE_RATE, hop_length=HOP_LENGTH)
+
+        # Degraded Spectrogram
         plt.figure(figsize=(10, 4))
-        plt.imshow(degraded, aspect='auto', origin='lower', cmap='viridis')
+        librosa.display.specshow(degraded, sr=SAMPLE_RATE, hop_length=HOP_LENGTH,
+                                 x_axis='time', y_axis='linear', cmap='viridis')
         plt.title("Degraded Spectrogram (Sample 0)")
-        plt.xlabel("Time")
-        plt.ylabel("Frequency Bin")
         plt.colorbar(label="Normalized dB")
         plt.tight_layout()
         plt.savefig("degraded_sample_0.png")
         plt.close()
 
-        # Save clean spectrogram
+        # Clean Spectrogram
         plt.figure(figsize=(10, 4))
-        plt.imshow(clean, aspect='auto', origin='lower', cmap='viridis')
+        librosa.display.specshow(clean, sr=SAMPLE_RATE, hop_length=HOP_LENGTH,
+                                 x_axis='time', y_axis='linear', cmap='viridis')
         plt.title("Clean Spectrogram (Sample 0)")
-        plt.xlabel("Time")
-        plt.ylabel("Frequency Bin")
         plt.colorbar(label="Normalized dB")
         plt.tight_layout()
         plt.savefig("clean_sample_0.png")
