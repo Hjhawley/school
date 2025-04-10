@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 
-# === CONFIG ===
+# config
 SAMPLE_RATE = 44100  # Audio sample rate (standard CD quality)
 N_FFT = 1024         # FFT window size for Short-Time Fourier Transform (STFT)
 HOP_LENGTH = 256     # Hop length for STFT (overlap control)
@@ -91,3 +91,16 @@ def get_datasets(X, y, val_split=0.15, batch_size=8):
     val_ds = val_ds.batch(batch_size).prefetch(tf.data.AUTOTUNE)
 
     return train_ds, val_ds
+
+
+# check that this link in the chain actually works
+if __name__ == "__main__":
+    X, y = load_dataset("data/train/cut/degraded", "data/train/cut/clean")
+    print("Shape of X:", X.shape)
+    print("Shape of y:", y.shape)
+
+    import matplotlib.pyplot as plt
+    plt.imshow(X[0][:, :, 0], aspect='auto', origin='lower')
+    plt.title("Degraded Spectrogram (Sample 0)")
+    plt.colorbar()
+    plt.show()
