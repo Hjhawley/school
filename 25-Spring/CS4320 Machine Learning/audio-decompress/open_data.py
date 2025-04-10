@@ -5,6 +5,7 @@ import librosa
 import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 
 # config
 SAMPLE_RATE = 44100  # Audio sample rate (standard CD quality)
@@ -64,6 +65,7 @@ def load_dataset(degraded_dir, clean_dir):
 
         # Load and preprocess the pair
         spec_deg, spec_cln = load_audio_pair(path_deg, path_cln)
+        print(f"Loading and preprocessing: {path_deg} and {path_cln}")
         X.append(spec_deg)
         y.append(spec_cln)
 
@@ -99,8 +101,26 @@ if __name__ == "__main__":
     print("Shape of X:", X.shape)
     print("Shape of y:", y.shape)
 
-    import matplotlib.pyplot as plt
-    plt.imshow(X[0][:, :, 0], aspect='auto', origin='lower')
+    # Save degraded spectrogram (input)
+    plt.figure(figsize=(10, 4))
+    plt.imshow(X[0][:, :, 0], aspect='auto', origin='lower', cmap='viridis')
     plt.title("Degraded Spectrogram (Sample 0)")
-    plt.colorbar()
-    plt.show()
+    plt.xlabel("Time")
+    plt.ylabel("Frequency Bin")
+    plt.colorbar(label="Normalized dB")
+    plt.tight_layout()
+    plt.savefig("degraded_sample_0.png")
+    plt.close()
+
+    # Save clean spectrogram (label)
+    plt.figure(figsize=(10, 4))
+    plt.imshow(y[0][:, :, 0], aspect='auto', origin='lower', cmap='viridis')
+    plt.title("Clean Spectrogram (Sample 0)")
+    plt.xlabel("Time")
+    plt.ylabel("Frequency Bin")
+    plt.colorbar(label="Normalized dB")
+    plt.tight_layout()
+    plt.savefig("clean_sample_0.png")
+    plt.close()
+
+    print("Saved degraded_sample_0.png and clean_sample_0.png")
