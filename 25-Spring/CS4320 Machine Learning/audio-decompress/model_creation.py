@@ -1,5 +1,4 @@
-import tensorflow as tf
-from tensorflow import keras
+import keras
 
 
 def create_model(args, input_shape):
@@ -28,17 +27,17 @@ def create_unet_baseline(args, input_shape):
 
     # Encoder
     x = keras.layers.Conv2D(64, (3, 3), padding="same", activation="relu")(inputs)
-    x = keras.layers.MaxPooling2D((2, 2))(x)
+    x = keras.layers.AveragePooling2D((2, 2), padding="same")(x)
     x = keras.layers.Conv2D(128, (3, 3), padding="same", activation="relu")(x)
-    x = keras.layers.MaxPooling2D((2, 2))(x)
+    x = keras.layers.AveragePooling2D((2, 2), padding="same")(x)
 
     # Bottleneck
     x = keras.layers.Conv2D(256, (3, 3), padding="same", activation="relu")(x)
 
     # Decoder
-    x = keras.layers.UpSampling2D((2, 2))(x)
+    x = keras.layers.UpSampling2D((2, 2), interpolation="nearest")(x)
     x = keras.layers.Conv2D(128, (3, 3), padding="same", activation="relu")(x)
-    x = keras.layers.UpSampling2D((2, 2))(x)
+    x = keras.layers.UpSampling2D((2, 2), interpolation="nearest")(x)
     x = keras.layers.Conv2D(64, (3, 3), padding="same", activation="relu")(x)
 
     # Output layer
