@@ -14,8 +14,8 @@
 
 \begin{document}
 
-\noindent CS-3510-(write here your section number) Algorithms, Spring 2025\hfill Homework 4\\
-Name: \hfill Collaborator(s):
+\noindent CS-3510-02 Algorithms, Spring 2025\hfill Homework 4\\
+Name: Hayden Hawley \hfill Collaborator(s):
 
 \hrulefill
 
@@ -99,7 +99,7 @@ In all cases you can assume it takes O(1) time to solve instances of size 1. Wha
     T(n) = 4T(n - 4) + O(1)
     \]
     
-    \textbf{Unrolling the Recurrence:}
+    \textbf{Unroll the Recurrence:}
     \begin{align*}
     T(n) &= 4T(n - 4) + O(1) \\
          &= 4^2 T(n - 8) + 4O(1) + O(1) \\
@@ -126,6 +126,53 @@ Solve the following recurrences by unrolling the recurrence.
 \begin{enumerate}[label=(\alph*)]
     \item (5 pts) $T(n) = 4T(n/3) + n^{3/2}$ for $n\ge2; T(1)=1;$
     \item (5 pts) $T(n) = T(3n/4) + n$ for $n \ge 2; T(1)=1;$
+\end{enumerate}
+
+\subsection*{Solution}
+\begin{enumerate}[label=(\alph*)]
+    \item \(T(n) = 4T(n/3) + n^{3/2}\)
+
+    Unroll the recurrence:
+    \begin{align*}
+    T(n) &= 4T(n/3) + n^{3/2} \\
+         &= 4[4T(n/9) + (n/3)^{3/2}] + n^{3/2} \\
+         &= 4^2T(n/9) + 4(n/3)^{3/2} + n^{3/2} \\
+         &= 4^2T(n/9) + n^{3/2}(4 \cdot 3^{-3/2} + 1) \\
+         &\dots \\
+         &= 4^k T(n/3^k) + n^{3/2} \sum_{i=0}^{k-1} 4^i \cdot 3^{-3i/2}
+    \end{align*}
+
+    The sum is geometric:
+    \[
+    \sum_{i=0}^{k-1} \left(\frac{4}{3^{3/2}}\right)^i
+    \]
+
+    Since \(\frac{4}{3^{3/2}} < 1\), the sum converges to a constant.  
+
+    \[
+    T(n) = \Theta(1) + n^{3/2} \cdot \Theta(1) = \boxed{\Theta(n^{3/2})}
+    \]
+
+    \item \(T(n) = T(3n/4) + n\)
+
+    Unroll the recurrence:
+    \begin{align*}
+    T(n) &= T(3n/4) + n \\
+         &= T((3/4)^2 n) + (3n/4) + n \\
+         &= T((3/4)^3 n) + (3^2 n / 4^2) + (3n/4) + n \\
+         &\dots \\
+         &= T((3/4)^k n) + n \sum_{i=0}^{k-1} \left(\frac{3}{4}\right)^i
+    \end{align*}
+
+    The sum is geometric:
+    \[
+    \sum_{i=0}^{k-1} \left(\frac{3}{4}\right)^i = \frac{1 - (3/4)^k}{1 - 3/4} = 4\left(1 - \left(\frac{3}{4}\right)^k\right)
+    \]
+
+    So:
+    \[
+    T(n) = T(1) + n \cdot \Theta(1) = \boxed{\Theta(n)}
+    \]
 \end{enumerate}
 
 \subsection*{Problem 3 (10 pts)}
