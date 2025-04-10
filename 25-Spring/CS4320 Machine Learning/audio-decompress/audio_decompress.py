@@ -2,9 +2,14 @@
 
 from open_data import get_streaming_dataset
 from model_creation import create_model
+import tensorflow as tf
+
+print("Num GPUs Available:", len(tf.config.list_physical_devices('GPU')))
+print("Using GPU:", tf.test.is_gpu_available(cuda_only=True))
 
 class Args:
     model_name = "a"
+
 
 # Load streaming training data
 train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean", batch_size=8)
