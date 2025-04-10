@@ -28,8 +28,101 @@ Suppose you are choosing between the following three algorithms:
 \end{enumerate}
 In all cases you can assume it takes O(1) time to solve instances of size 1. What are the running times of each of these algorithms? Justify your answers. You can use the Master Theorem in your answers.
 
+\subsection*{Solution}
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Algorithm A:}
+    
+    \textbf{Divide:} Splits the problem into 7 subproblems, each of size \(n/2\).\\
+    \textbf{Conquer:} Solves each subproblem recursively.\\
+    \textbf{Combine:} Merges the results in \(O(n)\) time.
+    
+    \textbf{Recurrence Relation:}
+    \[
+    T(n) = 7T\left(\frac{n}{2}\right) + O(n)
+    \]
+    
+    \textbf{Master Theorem:}
+    \[
+    T(n) = aT\left(\frac{n}{b}\right) + f(n)
+    \]
+
+    \[
+    a = 7,\quad b = 2,\quad f(n) = O(n)
+    \]
+    
+    \[
+    n^{\log_b a} = n^{\log_2 7} \approx n^{2.807}
+    \]
+    
+    Since \(f(n) = O(n)\) is smaller than \(n^{\log_2 7}\), this fits Case 1 of the Master Theorem
+    \[
+    \boxed{T(n) = \Theta(n^{\log_2 7}) \approx \Theta(n^{2.807})}
+    \]
+    
+    Therefore, overall time is worse than quadratic but a little better than cubic.
+    
+    \item \textbf{Algorithm B:}
+    
+    \textbf{Divide:} Breaks the problem into 25 subproblems, each of size \(n/5\).\\
+    \textbf{Conquer:} Solves each subproblem recursively.\\
+    \textbf{Combine:} Takes \(O(n^2)\) to combine the results.
+    
+    \textbf{Recurrence Relation:}
+    \[
+    T(n) = 25T\left(\frac{n}{5}\right) + O(n^2)
+    \]
+    
+    \textbf{Master Theorem:}
+    \[
+    a = 25,\quad b = 5,\quad f(n) = O(n^2)
+    \]
+    
+    \[
+    n^{\log_b a} = n^{\log_5 25} = n^2
+    \]
+    
+    Since \(f(n) = \Theta(n^2)\) matches \(n^{\log_b a}\), this fits Case 2 of the Master Theorem:
+    \[
+    \boxed{T(n) = \Theta(n^2 \log n)}
+    \]
+    
+    The recursion and the combining step are equally slow, so the overall time is slightly worse than quadratic.
+    
+    \item \textbf{Algorithm C:}
+    
+    \textbf{Divide:} Splits into 4 subproblems, each of size \(n - 4\).\\
+    \textbf{Conquer:} Recursively solves all 4.\\
+    \textbf{Combine:} Spends only constant time, or \(O(1)\).
+    
+    \textbf{Recurrence Relation:}
+    \[
+    T(n) = 4T(n - 4) + O(1)
+    \]
+    
+    \textbf{Unrolling the Recurrence:}
+    \begin{align*}
+    T(n) &= 4T(n - 4) + O(1) \\
+         &= 4^2 T(n - 8) + 4O(1) + O(1) \\
+         &= 4^3 T(n - 12) + 4^2O(1) + 4O(1) + O(1) \\
+         &\dots \\
+         &= 4^k T(n - 4k) + \sum_{i=0}^{k-1} 4^i \cdot O(1)
+    \end{align*}
+    
+    The sum is a geometric series, so
+    \[
+    T(n) = \Theta(4^{n/4}) = \Theta\left(2^{n/2}\right)
+    \]
+    
+    \textbf{Final Answer:}
+    \[
+    \boxed{T(n) = \Theta(2^{n/2})}
+    \]
+    
+    This grows exponentially. Since the problem size only shrinks by 4 each step but spawns 4 new calls, the total work grows very fast.
+\end{enumerate}
+
 \subsection*{Problem 2 (10 pts)}
-Solve the following recurrences by unrolling the recurrence. \textbf{DO NOT apply the Master Theorem}:
+Solve the following recurrences by unrolling the recurrence.
 \begin{enumerate}[label=(\alph*)]
     \item (5 pts) $T(n) = 4T(n/3) + n^{3/2}$ for $n\ge2; T(1)=1;$
     \item (5 pts) $T(n) = T(3n/4) + n$ for $n \ge 2; T(1)=1;$
