@@ -38,6 +38,7 @@ def create_unet_baseline(args, input_shape):
     x = keras.layers.UpSampling2D((2, 2), interpolation="nearest")(x)
     x = keras.layers.Conv2D(128, (3, 3), padding="same", activation="relu")(x)
     x = keras.layers.UpSampling2D((2, 2), interpolation="nearest")(x)
+    x = keras.layers.Cropping2D(((1, 2), (1, 1)))(x)  # Crop to (513, 862)
     x = keras.layers.Conv2D(64, (3, 3), padding="same", activation="relu")(x)
 
     # Output layer
