@@ -80,7 +80,7 @@ def test_multiplication():
 
         correct = matrices_equal(C_naive, C_strassen)
 
-        print(f"{n:<8}{naive_time:<18.5f}{strassen_time:<20.5f}{'Yes' if correct else 'No'}")
+        print(f"{n:<8}{naive_time:<16.5f}{strassen_time:<24.5f}{'Yes' if correct else 'No'}")
 
 if __name__ == "__main__":
     test_multiplication()
