@@ -1,126 +1,65 @@
-#!/usr/bin/env python3
-
 import os
 import librosa
 import numpy as np
 import tensorflow as tf
-from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
 
 # config
 SAMPLE_RATE = 44100  # Audio sample rate (standard CD quality)
 N_FFT = 1024         # FFT window size for Short-Time Fourier Transform (STFT)
 HOP_LENGTH = 256     # Hop length for STFT (overlap control)
 WIN_LENGTH = 1024    # Window length for STFT
-CLIP_DURATION = 5    # Duration of each audio clip in seconds
 
 
 def load_audio_pair(path_degraded, path_clean):
-    """
-    Load a pair of audio files (degraded and clean),
-    compute their spectrograms, convert to log scale,
-    normalize, and return as float32 tensors with shape (freq, time, 1)
-    """
-    # Load audio files and resample to the target sample rate, convert to mono
     y_deg, _ = librosa.load(path_degraded, sr=SAMPLE_RATE, mono=True)
     y_cln, _ = librosa.load(path_clean, sr=SAMPLE_RATE, mono=True)
 
-    # Compute magnitude spectrograms via STFT
     S_deg = np.abs(librosa.stft(y_deg, n_fft=N_FFT, hop_length=HOP_LENGTH, win_length=WIN_LENGTH))
     S_cln = np.abs(librosa.stft(y_cln, n_fft=N_FFT, hop_length=HOP_LENGTH, win_length=WIN_LENGTH))
 
-    # Convert amplitude to log-decibel scale for better perceptual modeling
     log_deg = librosa.amplitude_to_db(S_deg, ref=np.max)
     log_cln = librosa.amplitude_to_db(S_cln, ref=np.max)
 
-    # Normalize values to range [0, 1] to help the neural network train more stably
-    norm_deg = (log_deg + 80) / 80  # Assumes dB values fall somewhere between [-80, 0]
+    norm_deg = (log_deg + 80) / 80
     norm_cln = (log_cln + 80) / 80
 
-    # Add channel dimension to match expected model input: (freq, time, 1)
     norm_deg = norm_deg[..., np.newaxis].astype(np.float32)
     norm_cln = norm_cln[..., np.newaxis].astype(np.float32)
 
     return norm_deg, norm_cln
 
 
-def load_dataset(degraded_dir, clean_dir):
-    """
-    Load and preprocess all matching pairs of degraded/clean audio files.
-    Returns two numpy arrays: X (inputs), y (targets).
-    """
-    X = []
-    y = []
-
-    # Load all filenames from the degraded directory
+def audio_pair_generator(degraded_dir, clean_dir):
     filenames = sorted(f for f in os.listdir(degraded_dir) if f.endswith(".wav"))
     for fname in filenames:
         path_deg = os.path.join(degraded_dir, fname)
         path_cln = os.path.join(clean_dir, fname)
-
-        # Skip files that are missing their matching pair
         if not os.path.exists(path_cln):
-            print(f"Skipping {fname}: no matching clean file")
+            print(f"Missing clean file for {fname}, skipping.")
             continue
-
-        # Load and preprocess the pair
-        spec_deg, spec_cln = load_audio_pair(path_deg, path_cln)
-        print(f"Loading and preprocessing: {path_deg} and {path_cln}")
-        X.append(spec_deg)
-        y.append(spec_cln)
-
-    # Convert list of arrays to single stacked numpy arrays
-    X = np.array(X)
-    y = np.array(y)
-    print(f"Loaded {len(X)} samples. Input shape: {X[0].shape}")
-    return X, y
+        try:
+            yield load_audio_pair(path_deg, path_cln)
+        except Exception as e:
+            print(f"Error loading {fname}: {e}, skipping.")
 
 
-def get_datasets(X, y, val_split=0.15, batch_size=8):
-    """
-    Split the dataset into training and validation sets,
-    and return them as TensorFlow data pipelines.
-    """
-    # Split the full dataset into training and validation sets
-    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=val_split, random_state=42)
+def get_streaming_dataset(degraded_dir, clean_dir, batch_size=8, shuffle_buffer=500):
+    sample_shape = (513, 862, 1)
 
-    # Wrap in tf.data.Dataset objects
-    train_ds = tf.data.Dataset.from_tensor_slices((X_train, y_train))
-    val_ds = tf.data.Dataset.from_tensor_slices((X_val, y_val))
+    dataset = tf.data.Dataset.from_generator(
+        lambda: audio_pair_generator(degraded_dir, clean_dir),
+        output_signature=(
+            tf.TensorSpec(shape=sample_shape, dtype=tf.float32),
+            tf.TensorSpec(shape=sample_shape, dtype=tf.float32),
+        )
+    )
 
-    # Shuffle and batch the training set; just batch the validation set
-    train_ds = train_ds.shuffle(1000).batch(batch_size).prefetch(tf.data.AUTOTUNE)
-    val_ds = val_ds.batch(batch_size).prefetch(tf.data.AUTOTUNE)
-
-    return train_ds, val_ds
+    return dataset.shuffle(shuffle_buffer).batch(batch_size).prefetch(tf.data.AUTOTUNE)
 
 
-# check that this link in the chain actually works
+# Test the generator with a batch
 if __name__ == "__main__":
-    X, y = load_dataset("data/train/cut/degraded", "data/train/cut/clean")
-    print("Shape of X:", X.shape)
-    print("Shape of y:", y.shape)
-
-    # Save degraded spectrogram (input)
-    plt.figure(figsize=(10, 4))
-    plt.imshow(X[0][:, :, 0], aspect='auto', origin='lower', cmap='viridis')
-    plt.title("Degraded Spectrogram (Sample 0)")
-    plt.xlabel("Time")
-    plt.ylabel("Frequency Bin")
-    plt.colorbar(label="Normalized dB")
-    plt.tight_layout()
-    plt.savefig("degraded_sample_0.png")
-    plt.close()
-
-    # Save clean spectrogram (label)
-    plt.figure(figsize=(10, 4))
-    plt.imshow(y[0][:, :, 0], aspect='auto', origin='lower', cmap='viridis')
-    plt.title("Clean Spectrogram (Sample 0)")
-    plt.xlabel("Time")
-    plt.ylabel("Frequency Bin")
-    plt.colorbar(label="Normalized dB")
-    plt.tight_layout()
-    plt.savefig("clean_sample_0.png")
-    plt.close()
-
-    print("Saved degraded_sample_0.png and clean_sample_0.png")
+    train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean")
+    for X_batch, y_batch in train_ds.take(1):
+        print("X_batch shape:", X_batch.shape)
+        print("y_batch shape:", y_batch.shape)
