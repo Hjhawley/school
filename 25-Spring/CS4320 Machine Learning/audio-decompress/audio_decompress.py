@@ -2,10 +2,15 @@
 
 from open_data import get_streaming_dataset
 from model_creation import create_model
+import os
+os.environ["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
 import tensorflow as tf
 
 # Check for GPU
 gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
 print("Num GPUs Available:", len(gpus))
 print("Using GPU:", bool(gpus))
 
@@ -14,7 +19,7 @@ class Args:
 
 
 # Load streaming training data
-train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean", batch_size=8)
+train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean", batch_size=1)
 
 # Inspect shape of a single batch to infer input shape
 for X_batch, y_batch in train_ds.take(1):
