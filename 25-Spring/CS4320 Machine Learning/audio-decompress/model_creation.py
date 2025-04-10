@@ -53,7 +53,7 @@ def create_unet_baseline(args, input_shape):
     return model
 
 
-# check that this link in the chain actually works
+# Test
 if __name__ == "__main__":
     class Args: model_name = "a"
     dummy_input_shape = (513, 862, 1)  # match your actual spectrogram shape
