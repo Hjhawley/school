@@ -4,8 +4,10 @@ from open_data import get_streaming_dataset
 from model_creation import create_model
 import tensorflow as tf
 
-print("Num GPUs Available:", len(tf.config.list_physical_devices('GPU')))
-print("Using GPU:", tf.test.is_gpu_available(cuda_only=True))
+# Check for GPU
+gpus = tf.config.list_physical_devices('GPU')
+print("Num GPUs Available:", len(gpus))
+print("Using GPU:", bool(gpus))
 
 class Args:
     model_name = "a"
