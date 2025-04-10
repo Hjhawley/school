@@ -6,8 +6,10 @@ def naiveMultiply(A, B):
     C = np.zeros((n, n), dtype=A.dtype)
     for i in range(n):
         for j in range(n):
+            s = 0
             for k in range(n):
-                C[i, j] += A[i, k] * B[k, j]
+                s += A[i, k] * B[k, j]
+            C[i, j] = s
     return C
 
 def add(A, B):
@@ -16,18 +18,20 @@ def add(A, B):
 def subtract(A, B):
     return A - B
 
-def strassenMultiply(A, B, threshold=64):
+def strassenMultiply(A, B, threshold=128):  # increased threshold
     n = A.shape[0]
     if n <= threshold:
         return naiveMultiply(A, B)
 
     mid = n // 2
 
+    # Partition the matrices into quadrants
     A11, A12 = A[:mid, :mid], A[:mid, mid:]
     A21, A22 = A[mid:, :mid], A[mid:, mid:]
     B11, B12 = B[:mid, :mid], B[:mid, mid:]
     B21, B22 = B[mid:, :mid], B[mid:, mid:]
 
+    # Compute the 7 products (recursively)
     M1 = strassenMultiply(add(A11, A22), add(B11, B22), threshold)
     M2 = strassenMultiply(add(A21, A22), B11, threshold)
     M3 = strassenMultiply(A11, subtract(B12, B22), threshold)
@@ -36,12 +40,13 @@ def strassenMultiply(A, B, threshold=64):
     M6 = strassenMultiply(subtract(A21, A11), add(B11, B12), threshold)
     M7 = strassenMultiply(subtract(A12, A22), add(B21, B22), threshold)
 
+    # Combine the 7 products into the final quadrants of matrix C
     C11 = add(subtract(add(M1, M4), M5), M7)
     C12 = add(M3, M5)
     C21 = add(M2, M4)
     C22 = add(subtract(add(M1, M3), M2), M6)
 
-    # Combine submatrices
+    # Combine quadrants into a single matrix
     top = np.hstack((C11, C12))
     bottom = np.hstack((C21, C22))
     return np.vstack((top, bottom))
@@ -55,21 +60,21 @@ def test_multiplication():
     print(f"{'Size':<8}{'Naive Time (s)':<18}{'Strassen Time (s)':<20}{'Correct?'}")
     print('-' * 60)
     for n in [64, 128, 256, 512]:
+        # Create random matrices
         A = np.random.randint(0, 10, size=(n, n))
         B = np.random.randint(0, 10, size=(n, n))
-
-        start = time.time()
+        
+        # Use time.perf_counter() for more accurate measurements
+        start = time.perf_counter()
         C_naive = naiveMultiply(A, B)
-        naive_time = time.time() - start
+        naive_time = time.perf_counter() - start
 
-        start = time.time()
+        start = time.perf_counter()
         C_strassen = strassenMultiply(A, B)
-        strassen_time = time.time() - start
+        strassen_time = time.perf_counter() - start
 
         correct = matrices_equal(C_naive, C_strassen)
-
         print(f"{n:<8}{naive_time:<18.5f}{strassen_time:<20.5f}{'Yes' if correct else 'No'}")
 
-# Run it
 if __name__ == "__main__":
     test_multiplication()
