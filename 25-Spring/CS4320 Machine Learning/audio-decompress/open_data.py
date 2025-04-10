@@ -32,6 +32,7 @@ def load_audio_pair(path_degraded, path_clean):
 def audio_pair_generator(degraded_dir, clean_dir):
     filenames = sorted(f for f in os.listdir(degraded_dir) if f.endswith(".wav"))
     for fname in filenames:
+        print(f"Processing {fname}")  # <-- sanity check
         path_deg = os.path.join(degraded_dir, fname)
         path_cln = os.path.join(clean_dir, fname)
         if not os.path.exists(path_cln):
