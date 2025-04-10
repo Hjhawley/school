@@ -57,9 +57,38 @@ def get_streaming_dataset(degraded_dir, clean_dir, batch_size=8, shuffle_buffer=
     return dataset.shuffle(shuffle_buffer).batch(batch_size).prefetch(tf.data.AUTOTUNE)
 
 
-# Test the generator with a batch
+# Test the generator with a batch and save PNGs of the first sample
 if __name__ == "__main__":
     train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean")
     for X_batch, y_batch in train_ds.take(1):
         print("X_batch shape:", X_batch.shape)
         print("y_batch shape:", y_batch.shape)
+
+        degraded = X_batch[0].numpy().squeeze()
+        clean = y_batch[0].numpy().squeeze()
+
+        import matplotlib.pyplot as plt
+
+        # Save degraded spectrogram
+        plt.figure(figsize=(10, 4))
+        plt.imshow(degraded, aspect='auto', origin='lower', cmap='viridis')
+        plt.title("Degraded Spectrogram (Sample 0)")
+        plt.xlabel("Time")
+        plt.ylabel("Frequency Bin")
+        plt.colorbar(label="Normalized dB")
+        plt.tight_layout()
+        plt.savefig("degraded_sample_0.png")
+        plt.close()
+
+        # Save clean spectrogram
+        plt.figure(figsize=(10, 4))
+        plt.imshow(clean, aspect='auto', origin='lower', cmap='viridis')
+        plt.title("Clean Spectrogram (Sample 0)")
+        plt.xlabel("Time")
+        plt.ylabel("Frequency Bin")
+        plt.colorbar(label="Normalized dB")
+        plt.tight_layout()
+        plt.savefig("clean_sample_0.png")
+        plt.close()
+
+        print("Saved degraded_sample_0.png and clean_sample_0.png")
