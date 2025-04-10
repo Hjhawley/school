@@ -180,6 +180,65 @@ You are given two sorted lists of integers of length $m$ and $n$ (no ties exist 
 
 Show the pseudo-code for your proposed algorithm and include any necessary justifications. \textbf{You need to analyze} the time complexity of your algorithm to show that it is $O(\log m + \log n)$
 
+\subsection*{Solution}
+
+We use a binary search on the smaller array to find the k-th smallest element in the union of the two sorted arrays. Let the arrays be \(A[0..m-1]\) and \(B[0..n-1]\) and assume \(m \leq n\).
+
+- Take \(i\) elements from \(A\)
+
+- Take \(k - i\) elements from \(B\)
+
+- We want the max of the left halves \(\leq\) the min of the right halves
+
+\textbf{Pseudo code:}
+\begin{verbatim}
+function find_Kth(A, B, k):
+    if len(A) > len(B):
+        return find_Kth(B, A, k)
+    m = len(A)
+    n = len(B)
+
+    low = max(0, k - n)
+    high = min(k, m)
+
+    while low <= high:
+        i = (low + high) // 2
+        j = k - i
+
+        A_left = A[i - 1] if i > 0 else -infinity
+        A_right = A[i] if i < m else +infinity
+        B_left = B[j - 1] if j > 0 else -infinity
+        B_right = B[j] if j < n else +infinity
+
+        if A_left <= B_right and B_left <= A_right:
+            return max(A_left, B_left)
+        elif A_left > B_right:
+            high = i - 1
+        else:
+            low = i + 1
+\end{verbatim}
+
+- Bbinary search on array \(A\), checking if we can make a valid partition.
+
+- If \(A[i-1] > B[k-i]\), then we picked too many from \(A\), so reduce \(i\).
+
+- If \(B[k-i-1] > A[i]\), then we picked too few from \(A\), so increase \(i\).
+
+- Stop when the left parts from both arrays are smaller than the right parts.
+
+- If one partition is empty (e.g., \(i = 0\) or \(i = m\)), we use \(\pm\infty\) to avoid out-of-bounds errors.
+
+- k must be between 1 and \(m + n\)
+
+\textbf{Time analysis:}
+- Binary search on the smaller array \(A\) takes \(O(\log m)\)
+
+- Each iteration computes constant-time comparisons.
+
+- No search on \(B\) since \(j = k - i\) is derived.
+
+- Total runtime: \(\boxed{O(\log m + \log n)}\)
+
 \subsection*{Problem 4 (10 pts)}
 Strassen’s algorithm is a classic example of using the divide‐and‐conquer paradigm to reduce the asymptotic time complexity of matrix multiplication from $O(n^3)$ to approximately $O(n^{\log_2 7}) \approx O(n^{2.8074})$. In practice, Strassen’s method has larger constant factors and can introduce more overhead than the standard algorithm for smaller matrices, but it remains an important illustration of how clever partitioning can speed up large matrix multiplications.\\
 
