@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
-from open_data import get_streaming_dataset
-from model_creation import create_model
 import os
 os.environ["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
-import tensorflow as tf
 
-# Check for GPU
+from open_data import get_streaming_dataset
+from model_creation import create_model
+import tensorflow as tf
+import keras
+
+
+# Enable memory growth
 gpus = tf.config.list_physical_devices('GPU')
 if gpus:
     for gpu in gpus:
@@ -17,21 +20,62 @@ print("Using GPU:", bool(gpus))
 class Args:
     model_name = "a"
 
-# Load streaming training data (limit to 1000 batches)
-train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean", batch_size=1)
-train_ds = train_ds.take(1000)
 
-# Inspect shape of a single batch to infer input shape
+# Load training dataset
+train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean", batch_size=1)
+
+# Limit dataset per run (uncomment to allow chunking)
+# samples_per_run = 500
+# run_index = 0  # Update this if i need to
+# train_ds = train_ds.skip(run_index * samples_per_run).take(samples_per_run)
+
+# Inspect a batch to infer input shape
 for X_batch, y_batch in train_ds.take(1):
-    input_shape = X_batch.shape[1:]  # Drop batch dim, keep (513, 862, 1)
+    input_shape = X_batch.shape[1:]  # (513, 862, 1)
     break
 
-# Create model
-model = create_model(Args(), input_shape=input_shape)
 
-# Train and save model after each epoch
-for epoch in range(3):
-    print(f"\nStarting epoch {epoch + 1}")
-    model.fit(train_ds, epochs=1)
-    model.save(f"models/audio_decompressor_epoch{epoch + 1}.keras")
-    print(f"Saved model: models/audio_decompressor_epoch{epoch + 1}.keras")
+# Load last saved model if exists
+model_path = "models/audio_decompressor_latest.keras"
+if os.path.exists(model_path):
+    print(f"Loading model from {model_path}")
+    model = tf.keras.models.load_model(model_path)
+else:
+    model = create_model(Args(), input_shape=input_shape)
+
+
+# Load last epoch if available
+progress_path = "training_progress.txt"
+if os.path.exists(progress_path):
+    with open(progress_path, "r") as f:
+        loaded_epoch = int(f.read().strip())
+        print(f"Resuming from epoch {loaded_epoch}")
+else:
+    loaded_epoch = 0
+
+
+# Save checkpoints after each epoch
+checkpoint_cb = keras.callbacks.ModelCheckpoint(
+    filepath=model_path,
+    save_best_only=False,
+    save_weights_only=False,
+    verbose=1
+)
+
+
+# Set how many epochs to run this session
+epochs_this_run = 1
+
+# Train
+model.fit(
+    train_ds,
+    epochs=loaded_epoch + epochs_this_run,
+    initial_epoch=loaded_epoch,
+    callbacks=[checkpoint_cb]
+)
+
+# Update progress
+with open(progress_path, "w") as f:
+    f.write(str(loaded_epoch + epochs_this_run))
+
+print(f"Model saved and progress updated to epoch {loaded_epoch + epochs_this_run}")
