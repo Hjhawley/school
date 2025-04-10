@@ -1,136 +1,53 @@
-""" #!/usr/bin/env python3
-
-#
-# Keep the model creation code contained here
-#
 import tensorflow as tf
-import keras
+from tensorflow import keras
 
-def create_model(my_args, input_shape):
+
+def create_model(args, input_shape):
     """
-    Control function.
-    Selects the correct function to build a model, based on the model name
-    from the command line arguments.
-
-    Assumes my_args.model_name is set.
+    Control function to select a model variant by name (like "a", "b", etc).
+    Returns a compiled model.
     """
     create_functions = {
-        "a": create_model_a,
-        "b": create_model_b,
-        "c": create_model_c
+        "a": create_unet_baseline,
     }
-    if my_args.model_name not in create_functions:
-        raise ValueError("Invalid model name: {} not in {}".format(my_args.model_name, list(create_functions.keys())))
-        
-    model = create_functions[my_args.model_name](my_args, input_shape)
+
+    if args.model_name not in create_functions:
+        raise ValueError(f"Invalid model name: {args.model_name} not in {list(create_functions.keys())}")
+
+    model = create_functions[args.model_name](args, input_shape)
     print(model.summary())
     return model
 
 
-### Various model architectures
+def create_unet_baseline(args, input_shape):
+    """
+    Basic encoder-decoder CNN for audio spectrogram denoising.
+    Input/Output shapes: (freq, time, 1)
+    """
+    inputs = keras.layers.Input(shape=input_shape)
 
-def create_model_a(my_args, input_shape):
-    model = keras.models.Sequential()
-    model.add(keras.layers.Input(shape=input_shape))
-    model.add(keras.layers.Conv2D(filters=64, kernel_size=(7,7), activation="relu", kernel_initializer="he_normal", padding="same"))
-    model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
-    model.add(keras.layers.Conv2D(filters=128, kernel_size=(3,3), activation="relu", kernel_initializer="he_normal", padding="same"))
-    model.add(keras.layers.Conv2D(filters=128, kernel_size=(3,3), activation="relu", kernel_initializer="he_normal", padding="same"))
-    model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
-    model.add(keras.layers.Flatten())
-    model.add(keras.layers.Dense(64, activation="relu", kernel_initializer="he_normal"))
-    model.add(keras.layers.Dropout(0.5))
-    model.add(keras.layers.Dense(10, activation="softmax"))
+    # Encoder
+    x = keras.layers.Conv2D(64, (3, 3), padding="same", activation="relu")(inputs)
+    x = keras.layers.MaxPooling2D((2, 2))(x)
+    x = keras.layers.Conv2D(128, (3, 3), padding="same", activation="relu")(x)
+    x = keras.layers.MaxPooling2D((2, 2))(x)
 
-    model.compile(loss="categorical_crossentropy", metrics=["accuracy"], optimizer=keras.optimizers.Adam())
-    return model
+    # Bottleneck
+    x = keras.layers.Conv2D(256, (3, 3), padding="same", activation="relu")(x)
 
-def create_model_b(my_args, input_shape):
-    model = keras.models.Sequential()
-    model.add(keras.layers.Input(shape=input_shape))
+    # Decoder
+    x = keras.layers.UpSampling2D((2, 2))(x)
+    x = keras.layers.Conv2D(128, (3, 3), padding="same", activation="relu")(x)
+    x = keras.layers.UpSampling2D((2, 2))(x)
+    x = keras.layers.Conv2D(64, (3, 3), padding="same", activation="relu")(x)
 
-    # Add batch norm early to stabilize activations
-    model.add(keras.layers.Conv2D(32, (3, 3), padding="same", kernel_initializer="he_normal"))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Activation("relu"))
+    # Output layer
+    outputs = keras.layers.Conv2D(1, (1, 1), activation="sigmoid", padding="same")(x)
 
-    model.add(keras.layers.Conv2D(32, (3, 3), padding="same", kernel_initializer="he_normal"))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Activation("relu"))
-    model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
-    model.add(keras.layers.Dropout(0.25))
-
-    model.add(keras.layers.Conv2D(64, (3, 3), padding="same", kernel_initializer="he_normal"))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Activation("relu"))
-
-    model.add(keras.layers.Conv2D(64, (3, 3), padding="same", kernel_initializer="he_normal"))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Activation("relu"))
-    model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
-    model.add(keras.layers.Dropout(0.25))
-
-    model.add(keras.layers.Flatten())
-    model.add(keras.layers.Dense(256, kernel_initializer="he_normal"))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Activation("relu"))
-    model.add(keras.layers.Dropout(0.5))
-
-    model.add(keras.layers.Dense(10, activation="softmax"))
-
+    model = keras.models.Model(inputs, outputs)
     model.compile(
-        loss="categorical_crossentropy",
         optimizer=keras.optimizers.Adam(learning_rate=0.001),
-        metrics=["accuracy"]
+        loss="mse",
+        metrics=["mae"]
     )
     return model
-
-def create_model_c(my_args, input_shape):
-    model = keras.models.Sequential()
-    model.add(keras.layers.Input(shape=input_shape))
-
-    # Block 1
-    model.add(keras.layers.Conv2D(64, (3, 3), padding="same", kernel_initializer="he_normal"))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Activation("relu"))
-
-    model.add(keras.layers.Conv2D(64, (3, 3), padding="same", kernel_initializer="he_normal"))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Activation("relu"))
-    model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
-    model.add(keras.layers.Dropout(0.35))
-
-    # Block 2
-    model.add(keras.layers.Conv2D(128, (3, 3), padding="same", kernel_initializer="he_normal"))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Activation("relu"))
-
-    model.add(keras.layers.Conv2D(128, (3, 3), padding="same", kernel_initializer="he_normal"))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Activation("relu"))
-    model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
-    model.add(keras.layers.Dropout(0.4))
-
-    # Block 3
-    model.add(keras.layers.Conv2D(256, (3, 3), padding="same", kernel_initializer="he_normal"))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Activation("relu"))
-    model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
-    model.add(keras.layers.Dropout(0.45))
-
-    # Dense layers
-    model.add(keras.layers.Flatten())
-    model.add(keras.layers.Dense(512, kernel_initializer="he_normal"))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Activation("relu"))
-    model.add(keras.layers.Dropout(0.5))
-
-    model.add(keras.layers.Dense(10, activation="softmax"))
-
-    model.compile(
-        loss="categorical_crossentropy",
-        optimizer=keras.optimizers.Adam(learning_rate=0.001),
-        metrics=["accuracy"]
-    )
-    return model
- """
