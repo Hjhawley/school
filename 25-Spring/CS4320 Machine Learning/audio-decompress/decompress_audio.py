@@ -5,9 +5,6 @@ import soundfile as sf
 import tensorflow as tf
 import subprocess
 from scipy.signal.windows import hann
-import tkinter as tk
-from tkinter import filedialog, messagebox
-from tkinter import ttk
 
 # config
 SAMPLE_RATE = 44100
@@ -64,7 +61,6 @@ def restore_audio(input_path, output_path):
     os.remove(temp_wav)
 
 
-# GUI
 def launch_gui():
     def select_input():
         path = filedialog.askopenfilename(filetypes=[("Audio files", "*.mp3 *.wav")])
@@ -115,5 +111,31 @@ def launch_gui():
     root.mainloop()
 
 
+def launch_cli():
+    parser = argparse.ArgumentParser(description="Restore degraded MP3 or WAV using trained audio model.")
+    parser.add_argument("input", help="Path to degraded input audio file (MP3 or WAV)")
+    parser.add_argument("output", help="Path to save restored MP3 output")
+    args = parser.parse_args()
+
+    if not os.path.exists(args.input):
+        print(f"Error: Input file does not exist: {args.input}")
+        return
+
+    try:
+        print("Restoring audio...")
+        restore_audio(args.input, args.output)
+        print(f"Restored MP3 saved to: {args.output}")
+    except Exception as e:
+        print(f"Failed to restore audio: {e}")
+
+
+GUI = False
 if __name__ == "__main__":
-    launch_gui()
+    if GUI:
+        import tkinter as tk
+        from tkinter import filedialog, messagebox
+        from tkinter import ttk
+        launch_gui()
+    else:
+        import argparse
+        launch_cli()
