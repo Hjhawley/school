@@ -26,7 +26,6 @@ def evaluate_model(model_file, degraded_dir, clean_dir, batch_size=10, seed=None
 
 if __name__ == "__main__":
     MODEL_PATH = "models/audio_decompressor_latest.keras"
-    DEGRADED_DIR = "data/val/degraded"
-    CLEAN_DIR = "data/val/clean"
-
+    DEGRADED_DIR = "data/train/cut/degraded"
+    CLEAN_DIR = "data/train/cut/clean"
     evaluate_model(MODEL_PATH, DEGRADED_DIR, CLEAN_DIR, batch_size=10)
