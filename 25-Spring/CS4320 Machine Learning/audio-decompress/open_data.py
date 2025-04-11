@@ -46,16 +46,25 @@ def audio_pair_generator(degraded_dir, clean_dir, start=0, end=None):
             print(f"Error loading {fname}: {e}, skipping.")
 
 
-def get_streaming_dataset(degraded_dir, clean_dir, batch_size=8, shuffle_buffer=500, start=0, end=None):
-    sample_shape = (513, 862, 1)
+def get_cached_dataset(folder, batch_size=8, shuffle=True):
+    files = sorted([os.path.join(folder, f) for f in os.listdir(folder) if f.endswith(".npz")])
 
+    def generator():
+        for fpath in files:
+            data = np.load(fpath)
+            yield data["degraded"], data["clean"]
+
+    output_shape = (513, 862, 1)  # replace 862 with whatever your T axis ends up being
     dataset = tf.data.Dataset.from_generator(
-        lambda: audio_pair_generator(degraded_dir, clean_dir, start=start, end=end),
+        generator,
         output_signature=(
-            tf.TensorSpec(shape=sample_shape, dtype=tf.float32),
-            tf.TensorSpec(shape=sample_shape, dtype=tf.float32),
+            tf.TensorSpec(shape=output_shape, dtype=tf.float32),
+            tf.TensorSpec(shape=output_shape, dtype=tf.float32)
         )
     )
+
+    if shuffle:
+        dataset = dataset.shuffle(buffer_size=1000)
 
     return dataset.batch(batch_size).prefetch(tf.data.AUTOTUNE)
 
@@ -94,7 +103,7 @@ def get_random_validation_batch(degraded_dir, clean_dir, batch_size=10, seed=42)
 
 # Test the generator with a batch and save PNGs of the first sample
 if __name__ == "__main__":
-    train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean")
+    train_ds = get_cached_datasett("data/train/cut/degraded", "data/train/cut/clean")
 
     for i, (X_batch, y_batch) in enumerate(train_ds.take(1)):
         print("X_batch shape:", X_batch.shape)

@@ -6,7 +6,7 @@ import os
 os.environ["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # suppress unimportant info
 
-from open_data import get_streaming_dataset, get_random_validation_batch
+from open_data import get_cached_dataset, get_random_validation_batch
 from model_creation import create_model
 import tensorflow as tf
 import keras
@@ -48,7 +48,7 @@ else:
 # Load dataset and apply chunking
 start_idx = run_index * samples_per_run
 end_idx = start_idx + samples_per_run
-train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean", batch_size=1, start=start_idx, end=end_idx)
+train_ds = get_cached_dataset("data/train/cut/degraded", "data/train/cut/clean", batch_size=1, start=start_idx, end=end_idx)
 
 
 # Inspect a batch to infer input shape
