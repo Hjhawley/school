@@ -48,7 +48,7 @@ else:
 # Load dataset and apply chunking
 start_idx = run_index * samples_per_run
 end_idx = start_idx + samples_per_run
-train_ds = get_cached_dataset("data/train/cut/degraded", "data/train/cut/clean", batch_size=1, start=start_idx, end=end_idx)
+train_ds = get_cached_dataset("data/cached_pairs", batch_size=1)
 
 
 # Inspect a batch to infer input shape

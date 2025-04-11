@@ -103,7 +103,7 @@ def get_random_validation_batch(degraded_dir, clean_dir, batch_size=10, seed=42)
 
 # Test the generator with a batch and save PNGs of the first sample
 if __name__ == "__main__":
-    train_ds = get_cached_datasett("data/train/cut/degraded", "data/train/cut/clean")
+    train_ds = get_cached_dataset("data/cached_pairs")
 
     for i, (X_batch, y_batch) in enumerate(train_ds.take(1)):
         print("X_batch shape:", X_batch.shape)
