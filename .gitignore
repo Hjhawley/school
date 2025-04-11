@@ -53,9 +53,9 @@ __pycache__/
 *.synctex.gz
 
 # Machine Learning
-
 *.joblib
 *.keras
+*.npz
 
 # WAV files
 *.wav
