@@ -92,9 +92,10 @@ epochs_this_run = 5
 
 # Train, validate, and save history
 X_val, y_val = get_random_validation_batch("data/train/cut/degraded", "data/train/cut/clean", batch_size=4)
+val_data = (X_val, y_val)
 history = model.fit(
     train_ds,
-    validation_data=(X_val, y_val),
+    validation_data=val_data,
     epochs=loaded_epoch + epochs_this_run,
     initial_epoch=loaded_epoch,
     callbacks=[checkpoint_cb, early_stopping_cb]
@@ -120,5 +121,5 @@ print(f"Model saved, epoch {loaded_epoch + epochs_this_run} complete, chunk #{ru
 # Evaluate on random validation batch
 print("Running validation on a random training subset...")
 with tf.device('/CPU:0'):
-    val_loss, val_mae = model.evaluate(X_val, y_val, verbose=1)
+    val_loss, val_mae = model.evaluate(*val_data, verbose=1)
     print(f"Validation Results:\n - Loss: {val_loss:.4f}\n - MAE: {val_mae:.4f}")
