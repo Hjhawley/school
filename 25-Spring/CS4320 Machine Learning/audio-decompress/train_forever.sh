@@ -5,7 +5,7 @@
 
 while true; do
     echo "===== Starting training chunk ====="
-    python3 audio_decompress.py
+    python3 model_training.py
     if [ $? -ne 0 ]; then
         echo "!!! Script crashed. Retrying in 15 seconds..."
         sleep 15
