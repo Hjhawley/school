@@ -4,7 +4,7 @@ import os
 os.environ["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # suppress unimportant info
 
-from open_data import get_streaming_dataset
+from open_data import get_streaming_dataset, get_random_validation_batch
 from model_creation import create_model
 import tensorflow as tf
 import keras
@@ -104,3 +104,9 @@ joblib.dump(history.history, f"{model_path.replace('.keras', '')}.history")
 plot_history(model_path.replace(".keras", ""))
 
 print(f"Model saved, epoch {loaded_epoch + epochs_this_run} complete, chunk #{run_index} done.")
+
+# Evaluate on random validation batch
+print("Running validation on a random training subset...")
+X_val, y_val = get_random_validation_batch("data/train/cut/degraded", "data/train/cut/clean", batch_size=10)
+val_loss, val_mae = model.evaluate(X_val, y_val, verbose=1)
+print(f"Validation Results:\n - Loss: {val_loss:.4f}\n - MAE: {val_mae:.4f}")

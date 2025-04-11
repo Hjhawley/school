@@ -1,4 +1,5 @@
 import os
+import random
 import librosa
 import numpy as np
 import tensorflow as tf
@@ -58,40 +59,34 @@ def get_streaming_dataset(degraded_dir, clean_dir, batch_size=8, shuffle_buffer=
     return dataset.shuffle(shuffle_buffer).batch(batch_size).prefetch(tf.data.AUTOTUNE)
 
 
-def get_static_batch_dataset(degraded_dir, clean_dir, batch_size=8, skip=0):
+def get_random_validation_batch(degraded_dir, clean_dir, batch_size=10, seed=42):
     """
-    Loads a static batch of audio pairs into memory for evaluation.
-
-    Args:
-        degraded_dir (str): Path to degraded audio files.
-        clean_dir (str): Path to clean audio files.
-        batch_size (int): Number of samples to return.
-        skip (int): Number of files to skip before starting (useful for testing different chunks).
-
-    Returns:
-        Tuple of (X_batch, y_batch) as numpy arrays.
+    Randomly selects a batch of audio samples from the training set for validation.
+    This enables cross-validation without separating files manually.
     """
-    generator = audio_pair_generator(degraded_dir, clean_dir)
+    filenames = sorted(f for f in os.listdir(degraded_dir) if f.endswith(".wav") and os.path.exists(os.path.join(clean_dir, f)))
     
-    # Skip first N files if needed
-    for _ in range(skip):
-        try:
-            next(generator)
-        except StopIteration:
-            raise ValueError("Skip value exceeds available files.")
+    if seed is not None:
+        random.seed(seed)
 
+    if len(filenames) < batch_size:
+        raise ValueError("Not enough samples to create validation batch.")
+
+    sampled_files = random.sample(filenames, batch_size)
     X_batch, y_batch = [], []
-    
-    for _ in range(batch_size):
+
+    for fname in sampled_files:
         try:
-            x, y = next(generator)
+            path_deg = os.path.join(degraded_dir, fname)
+            path_cln = os.path.join(clean_dir, fname)
+            x, y = load_audio_pair(path_deg, path_cln)
             X_batch.append(x)
             y_batch.append(y)
-        except StopIteration:
-            break
+        except Exception as e:
+            print(f"Error loading {fname}: {e}, skipping.")
 
     if not X_batch:
-        raise ValueError("No data loaded. Check directories and skip/batch_size values.")
+        raise ValueError("Failed to load any samples.")
 
     return np.stack(X_batch), np.stack(y_batch)
 
