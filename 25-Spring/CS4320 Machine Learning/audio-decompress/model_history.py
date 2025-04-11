@@ -1,52 +1,27 @@
-""" #!/usr/bin/env python3
+#!/usr/bin/env python3
 
-#
-# Display the model history.
-#
-
+import os
 import joblib
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def plot_history(my_args):
-    """
-    Plot the history of the model training.
+def plot_history(model_file="models/audio_decompressor_latest"):
+    history_file = f"{model_file}.history"
+    if not os.path.exists(history_file):
+        raise FileNotFoundError(f"Missing {history_file}")
     
-    Assumes model_file.history has the fit history.
-    Assumes that the there are equal number of training and validation values.
-    """
-
-    history = joblib.load("{}.history".format(my_args.model_file))
+    history = joblib.load(history_file)
     epochs = len(history["loss"])
-    learning_curve_filename = "{}.learning_curve.png".format(my_args.model_file)
-
-    #
-    # Display the learning curves
-    #
-    line_count = len(history.keys())
-    if line_count == 2:
-        line_style = ["r--+", 
-                      "b-+"]
-    elif line_count == 4:
-        line_style = ["r--*", "r--+", 
-                      "b-*", "b-+"]
-    elif line_count == 6:
-        line_style = ["r--", "r--*", "r--+", 
-                      "b-", "b-*", "b-+"]
-    elif line_count == 8:
-        line_style = ["r--", "r--*", "r--+", "r--x", 
-                      "b-", "b-*", "b-+", "b-x"]
-    elif line_count == 10:
-        line_style = ["r--", "r--*", "r--+", "r--x", "r--1", 
-                      "b-", "b-*", "b-+", "b-x", "b-1"]
-    else:
-        raise Exception("Invalid line count: {}".format(line_count))
-
+    
     pd.DataFrame(history).plot(
-        figsize=(8, 5), xlim=[0, epochs-1], grid=True, xlabel="Epoch",
-        style=line_style)
-    # plt.show()
-    plt.savefig(learning_curve_filename)
+        figsize=(8, 5), xlim=[0, epochs - 1], grid=True, xlabel="Epoch",
+        style=["r--", "b-"] * ((len(history.keys()) + 1) // 2)
+    )
+    plt.title("Training Progress (Loss & MAE)")
+    plt.ylabel("Metric Value")
+    plt.savefig(f"{model_file}.learning_curve.png")
     plt.clf()
-    return
- """
+
+if __name__ == "__main__":
+    plot_history()
+    

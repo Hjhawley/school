@@ -8,6 +8,9 @@ from open_data import get_streaming_dataset
 from model_creation import create_model
 import tensorflow as tf
 import keras
+import joblib
+
+from model_history import plot_history
 
 
 # Enable memory growth
@@ -68,7 +71,7 @@ checkpoint_cb = keras.callbacks.ModelCheckpoint(
 epochs_this_run = 1
 
 # Train
-model.fit(
+history = model.fit(
     train_ds,
     epochs=loaded_epoch + epochs_this_run,
     initial_epoch=loaded_epoch,
@@ -80,3 +83,6 @@ with open(progress_path, "w") as f:
     f.write(str(loaded_epoch + epochs_this_run))
 
 print(f"Model saved and progress updated to epoch {loaded_epoch + epochs_this_run}")
+
+joblib.dump(history.history, "models/audio_decompressor_latest.history")
+plot_history("models/audio_decompressor_latest")
