@@ -47,8 +47,11 @@ def restore_audio(input_path, output_path):
 
         output_spec = model.predict(input_spec)[0]
         y_hat = postprocess_spectrogram(output_spec.squeeze())
-
-        y_hat = y_hat[:window_size]
+        # Fix length mismatch
+        if len(y_hat) > window_size:
+            y_hat = y_hat[:window_size]
+        elif len(y_hat) < window_size:
+            y_hat = np.pad(y_hat, (0, window_size - len(y_hat)), mode='constant')
         output[start:start + window_size] += y_hat * hann_window
         weight[start:start + window_size] += hann_window
 
