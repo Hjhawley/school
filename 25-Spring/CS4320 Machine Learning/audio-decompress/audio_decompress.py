@@ -77,7 +77,7 @@ checkpoint_cb = keras.callbacks.ModelCheckpoint(
 
 
 # Set how many epochs to run this session
-epochs_this_run = 1
+epochs_this_run = 5
 
 
 # Train
