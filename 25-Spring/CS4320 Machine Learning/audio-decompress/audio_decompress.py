@@ -27,6 +27,12 @@ class Args:
     model_name = "a"
 
 
+# Early stopping
+early_stop_counter_path = "early_stop_counter.txt"
+best_val_loss_path = "best_val_loss.txt"
+PATIENCE = 5
+
+
 # Set how many samples to use per run
 samples_per_run = 20
 
@@ -72,7 +78,7 @@ else:
 # Early stopping
 early_stopping_cb = keras.callbacks.EarlyStopping(
     monitor="val_loss",
-    patience=5,
+    patience=PATIENCE,
     restore_best_weights=True
 )
 
@@ -123,3 +129,33 @@ print("Running validation on a random training subset...")
 with tf.device('/CPU:0'):
     val_loss, val_mae = model.evaluate(*val_data, verbose=1)
     print(f"Validation Results:\n - Loss: {val_loss:.4f}\n - MAE: {val_mae:.4f}")
+
+# Early stopping across runs
+if os.path.exists(best_val_loss_path):
+    with open(best_val_loss_path, "r") as f:
+        best_val_loss = float(f.read().strip())
+else:
+    best_val_loss = float("inf")
+
+if val_loss < best_val_loss:
+    print("Validation loss improved. Resetting early stop counter.")
+    with open(best_val_loss_path, "w") as f:
+        f.write(str(val_loss))
+    with open(early_stop_counter_path, "w") as f:
+        f.write("0")
+else:
+    if os.path.exists(early_stop_counter_path):
+        with open(early_stop_counter_path, "r") as f:
+            counter = int(f.read().strip())
+    else:
+        counter = 0
+
+    counter += 1
+    print(f"No improvement. Early stop counter = {counter}/{PATIENCE}")
+
+    with open(early_stop_counter_path, "w") as f:
+        f.write(str(counter))
+
+    if counter >= PATIENCE:
+        print("Early stopping triggered. No improvement for 5 chunks.")
+        exit(0)
