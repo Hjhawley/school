@@ -58,6 +58,44 @@ def get_streaming_dataset(degraded_dir, clean_dir, batch_size=8, shuffle_buffer=
     return dataset.shuffle(shuffle_buffer).batch(batch_size).prefetch(tf.data.AUTOTUNE)
 
 
+def get_static_batch_dataset(degraded_dir, clean_dir, batch_size=8, skip=0):
+    """
+    Loads a static batch of audio pairs into memory for evaluation.
+
+    Args:
+        degraded_dir (str): Path to degraded audio files.
+        clean_dir (str): Path to clean audio files.
+        batch_size (int): Number of samples to return.
+        skip (int): Number of files to skip before starting (useful for testing different chunks).
+
+    Returns:
+        Tuple of (X_batch, y_batch) as numpy arrays.
+    """
+    generator = audio_pair_generator(degraded_dir, clean_dir)
+    
+    # Skip first N files if needed
+    for _ in range(skip):
+        try:
+            next(generator)
+        except StopIteration:
+            raise ValueError("Skip value exceeds available files.")
+
+    X_batch, y_batch = [], []
+    
+    for _ in range(batch_size):
+        try:
+            x, y = next(generator)
+            X_batch.append(x)
+            y_batch.append(y)
+        except StopIteration:
+            break
+
+    if not X_batch:
+        raise ValueError("No data loaded. Check directories and skip/batch_size values.")
+
+    return np.stack(X_batch), np.stack(y_batch)
+
+
 # Test the generator with a batch and save PNGs of the first sample
 if __name__ == "__main__":
     train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean")
