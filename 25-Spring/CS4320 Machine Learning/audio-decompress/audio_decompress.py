@@ -2,6 +2,7 @@
 
 import os
 os.environ["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2" # quiet down some unimportant info
 
 from open_data import get_streaming_dataset
 from model_creation import create_model
@@ -25,9 +26,9 @@ class Args:
 train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean", batch_size=1)
 
 # Limit dataset per run (uncomment to allow chunking)
-# samples_per_run = 500
-# run_index = 0  # Update this if i need to
-# train_ds = train_ds.skip(run_index * samples_per_run).take(samples_per_run)
+samples_per_run = 20
+run_index = 0
+train_ds = train_ds.skip(run_index * samples_per_run).take(samples_per_run)
 
 # Inspect a batch to infer input shape
 for X_batch, y_batch in train_ds.take(1):
