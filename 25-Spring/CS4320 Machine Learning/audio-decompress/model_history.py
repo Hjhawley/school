@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# save and display model history
+
 import os
 import joblib
 import pandas as pd

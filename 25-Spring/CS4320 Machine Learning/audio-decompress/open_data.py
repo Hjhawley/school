@@ -4,7 +4,7 @@ import librosa
 import numpy as np
 import tensorflow as tf
 
-# config
+# Config
 SAMPLE_RATE = 44100  # Audio sample rate (standard CD quality)
 N_FFT = 1024         # FFT window size for Short-Time Fourier Transform (STFT)
 HOP_LENGTH = 256     # Hop length for STFT (overlap control)

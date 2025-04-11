@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# main script - train the model
+
 import os
 os.environ["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # suppress unimportant info

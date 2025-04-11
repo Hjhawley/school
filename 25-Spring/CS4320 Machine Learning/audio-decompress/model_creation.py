@@ -18,6 +18,7 @@ def create_model(args, input_shape):
     return model
 
 
+# model A
 def create_unet_baseline(args, input_shape):
     """
     Basic encoder-decoder CNN for audio spectrogram denoising

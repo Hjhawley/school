@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Evaluation script for audio decompression model
+# Evaluate performance
 
 import os
 import numpy as np
