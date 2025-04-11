@@ -14,7 +14,10 @@ def plot_history(model_file="models/audio_decompressor_latest"):
     epochs = len(history["loss"])
     
     pd.DataFrame(history).plot(
-        figsize=(8, 5), xlim=[0, epochs - 1], grid=True, xlabel="Epoch",
+        figsize=(8, 5),
+        xlim=[0, max(1, epochs - 1)],
+        grid=True,
+        xlabel="Epoch",
         style=["r--", "b-"] * ((len(history.keys()) + 1) // 2)
     )
     plt.title("Training Progress (Loss & MAE)")

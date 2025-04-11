@@ -2,14 +2,13 @@
 
 import os
 os.environ["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2" # quiet down some unimportant info
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # suppress unimportant info
 
 from open_data import get_streaming_dataset
 from model_creation import create_model
 import tensorflow as tf
 import keras
 import joblib
-
 from model_history import plot_history
 
 
@@ -21,17 +20,27 @@ if gpus:
 print("Num GPUs Available:", len(gpus))
 print("Using GPU:", bool(gpus))
 
+
 class Args:
     model_name = "a"
 
 
-# Load training dataset
-train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean", batch_size=1)
-
-# Limit dataset per run (uncomment to allow chunking)
+# Set how many samples to use per run
 samples_per_run = 20
-run_index = 0
+
+# Load run index (auto-increments each run)
+run_index_path = "run_index.txt"
+if os.path.exists(run_index_path):
+    with open(run_index_path, "r") as f:
+        run_index = int(f.read().strip())
+else:
+    run_index = 0
+
+
+# Load dataset and apply chunking
+train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean", batch_size=1)
 train_ds = train_ds.skip(run_index * samples_per_run).take(samples_per_run)
+
 
 # Inspect a batch to infer input shape
 for X_batch, y_batch in train_ds.take(1):
@@ -70,6 +79,7 @@ checkpoint_cb = keras.callbacks.ModelCheckpoint(
 # Set how many epochs to run this session
 epochs_this_run = 1
 
+
 # Train
 history = model.fit(
     train_ds,
@@ -78,11 +88,19 @@ history = model.fit(
     callbacks=[checkpoint_cb]
 )
 
-# Update progress
+
+# Update epoch progress
 with open(progress_path, "w") as f:
     f.write(str(loaded_epoch + epochs_this_run))
 
-print(f"Model saved and progress updated to epoch {loaded_epoch + epochs_this_run}")
+# Update run index
+with open(run_index_path, "w") as f:
+    f.write(str(run_index + 1))
 
-joblib.dump(history.history, "models/audio_decompressor_latest.history")
-plot_history("models/audio_decompressor_latest")
+# Save training history
+joblib.dump(history.history, f"{model_path.replace('.keras', '')}.history")
+
+# Plot learning curve
+plot_history(model_path.replace(".keras", ""))
+
+print(f"Model saved, epoch {loaded_epoch + epochs_this_run} complete, chunk #{run_index} done.")
