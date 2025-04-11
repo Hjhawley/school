@@ -30,10 +30,11 @@ def load_audio_pair(path_degraded, path_clean):
     return norm_deg, norm_cln
 
 
-def audio_pair_generator(degraded_dir, clean_dir):
+def audio_pair_generator(degraded_dir, clean_dir, start=0, end=None):
     filenames = sorted(f for f in os.listdir(degraded_dir) if f.endswith(".wav"))
+    filenames = filenames[start:end]  # make sure i'm using different samples each run
     for fname in filenames:
-        print(f"Processing {fname}")  # <-- sanity check
+        print(f"Processing {fname}")  # sanity check
         path_deg = os.path.join(degraded_dir, fname)
         path_cln = os.path.join(clean_dir, fname)
         if not os.path.exists(path_cln):
@@ -45,18 +46,18 @@ def audio_pair_generator(degraded_dir, clean_dir):
             print(f"Error loading {fname}: {e}, skipping.")
 
 
-def get_streaming_dataset(degraded_dir, clean_dir, batch_size=8, shuffle_buffer=500):
+def get_streaming_dataset(degraded_dir, clean_dir, batch_size=8, shuffle_buffer=500, start=0, end=None):
     sample_shape = (513, 862, 1)
 
     dataset = tf.data.Dataset.from_generator(
-        lambda: audio_pair_generator(degraded_dir, clean_dir),
+        lambda: audio_pair_generator(degraded_dir, clean_dir, start=start, end=end),
         output_signature=(
             tf.TensorSpec(shape=sample_shape, dtype=tf.float32),
             tf.TensorSpec(shape=sample_shape, dtype=tf.float32),
         )
     )
 
-    return dataset.shuffle(shuffle_buffer).batch(batch_size).prefetch(tf.data.AUTOTUNE)
+    return dataset.batch(batch_size).prefetch(tf.data.AUTOTUNE)
 
 
 def get_random_validation_batch(degraded_dir, clean_dir, batch_size=10, seed=42):

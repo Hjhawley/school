@@ -46,8 +46,9 @@ else:
 
 
 # Load dataset and apply chunking
-train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean", batch_size=1)
-train_ds = train_ds.skip(run_index * samples_per_run).take(samples_per_run)
+start_idx = run_index * samples_per_run
+end_idx = start_idx + samples_per_run
+train_ds = get_streaming_dataset("data/train/cut/degraded", "data/train/cut/clean", batch_size=1, start=start_idx, end=end_idx)
 
 
 # Inspect a batch to infer input shape
