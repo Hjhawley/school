@@ -4,7 +4,6 @@
 
 import os
 import numpy as np
-import keras
 import tensorflow as tf
 from open_data import get_random_validation_batch
 
@@ -14,7 +13,7 @@ def evaluate_model(model_file, degraded_dir, clean_dir, batch_size=10, seed=None
         raise FileNotFoundError(f"Model file '{model_file}' not found")
 
     print(f"Loading model from {model_file}...")
-    model = keras.models.load_model(model_file)
+    model = tf.keras.models.load_model(model_file)
 
     print("Sampling validation batch from training data...")
     X_val, y_val = get_random_validation_batch(degraded_dir, clean_dir, batch_size=batch_size, seed=seed)

@@ -9,7 +9,6 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # suppress unimportant info
 from open_data import get_cached_dataset, get_random_validation_batch
 from model_creation import create_model
 import tensorflow as tf
-import keras
 import joblib
 from model_history import plot_history
 
@@ -77,7 +76,7 @@ else:
 
 
 # Early stopping
-early_stopping_cb = keras.callbacks.EarlyStopping(
+early_stopping_cb = tf.keras.callbacks.EarlyStopping(
     monitor="val_loss",
     patience=PATIENCE,
     restore_best_weights=True
@@ -85,7 +84,7 @@ early_stopping_cb = keras.callbacks.EarlyStopping(
 
 
 # Save checkpoints after each epoch
-checkpoint_cb = keras.callbacks.ModelCheckpoint(
+checkpoint_cb = tf.keras.callbacks.ModelCheckpoint(
     filepath=model_path,
     save_best_only=False,
     save_weights_only=False,

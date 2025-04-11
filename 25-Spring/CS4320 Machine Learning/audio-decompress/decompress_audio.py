@@ -2,7 +2,7 @@ import os
 import numpy as np
 import librosa
 import soundfile as sf
-import tensorflow as tf
+import keras
 import subprocess
 from scipy.signal.windows import hann
 import tkinter as tk
@@ -33,7 +33,7 @@ def postprocess_spectrogram(mag_spec):
 
 
 def restore_audio(input_path, output_path):
-    model = tf.keras.models.load_model(MODEL_PATH)
+    model = keras.models.load_model(MODEL_PATH)
     y, _ = librosa.load(input_path, sr=SAMPLE_RATE, mono=True)
     total_samples = len(y)
     window_size = int(WINDOW_DURATION * SAMPLE_RATE)
